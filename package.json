@@ -1,0 +1,41 @@
+{
+  "name": "antcal",
+  "version": "0.1.0",
+  "description": "Antenna Calculator",
+  "keywords": [
+    "antenna"
+  ],
+  "author": "Atlanswer",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atlanswer/AntCal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atlanswer/AntCal/issues"
+  },
+  "homepage": "https://antcal.atlanswer.com/",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "clean": "turbo clean",
+    "lint": "turbo lint",
+    "prettier": "prettier"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "~7.1.1",
+    "@typescript-eslint/parser": "~7.1.1",
+    "eslint": "~8.57.0",
+    "eslint-config-prettier": "~9.1.0",
+    "prettier": "~3.2.5",
+    "prettier-plugin-tailwindcss": "~0.5.12",
+    "turbo": "~1.12.5",
+    "typescript": "~5.4.2"
+  },
+  "packageManager": "pnpm@8.15.4",
+  "engines": {
+    "node": ">=20"
+  }
+}

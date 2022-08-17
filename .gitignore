@@ -1,0 +1,30 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Node
+node_modules
+
+# Env
+.env
+venv
+
+# Build
+build
+dist
+
+# Python
+__pycache__
+projects
+playground
+.ruff_cache
+
+# PyPi
+.pypirc
+
+# autodoc2
+apidocs
+
+# log
+*.log*
+
+# Python stubs
+typings
