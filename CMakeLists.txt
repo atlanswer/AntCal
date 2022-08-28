@@ -19,25 +19,8 @@ project(AntCal VERSION ${VERSION_STR}
     LANGUAGES CXX)
 
 # Find packages here.
-find_package(Git QUIET)
 find_package(fmt CONFIG REQUIRED)
 find_package(doctest CONFIG REQUIRED)
-
-# Update submodules
-if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-    option(GIT_SUBMODULE "Checkout submodules during build" ON)
-
-    if(GIT_SUBMODULE)
-        message(STATUS "Updating submodules")
-        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            RESULT_VARIABLE GIT_SUBMODULE_RESULT)
-
-        if(NOT GIT_SUBMODULE_RESULT EQUAL "0")
-            message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMODULE_RESULT}")
-        endif()
-    endif()
-endif()
 
 # Enable IDE folder support.
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
