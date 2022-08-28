@@ -14,6 +14,10 @@ file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/include/antcal/version.hpp"
 # Replace the captured version.
 string(REGEX REPLACE ${VERSION_REGEX} "\\1" VERSION_STR "${VERSION_STR}")
 
+if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
+    set(VCPKG_TARGET_TRIPLET "x64-windows-static" CACHE STRING "Vcpkg target triplet")
+endif()
+
 project(AntCal VERSION ${VERSION_STR}
     DESCRIPTION "Antenna Calculator"
     LANGUAGES CXX)
@@ -57,6 +61,7 @@ target_include_directories(antcal PUBLIC
 )
 target_link_libraries(antcal PRIVATE doctest::doctest)
 target_compile_features(antcal PUBLIC cxx_std_20)
+set_target_properties(antcal PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 add_executable(cli)
 target_sources(cli PUBLIC
@@ -64,6 +69,7 @@ target_sources(cli PUBLIC
 )
 target_link_libraries(cli PRIVATE antcal fmt::fmt)
 target_compile_features(cli PUBLIC cxx_std_20)
+set_target_properties(cli PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 if(BUILD_TESTING)
     add_executable(doctest)
@@ -79,8 +85,5 @@ if(BUILD_TESTING)
     )
     target_compile_features(doctest PUBLIC cxx_std_20)
     doctest_discover_tests(doctest)
+    set_target_properties(doctest PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
-
-# set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-# set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-# include(CPack)
