@@ -40,7 +40,7 @@ jobs:
           configurePreset: ninja-multi-config
           buildPreset: ninja-debug
           testPreset: doctest
-      - name: Configure, build and test ⚙️⚒️🧪
+      - name: Configure, build and test (Windows ClangCL) ⚙️⚒️🧪
         if: ${{ runner.os == 'Windows' }}
         uses: lukka/run-cmake@v10
         with:

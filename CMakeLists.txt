@@ -74,6 +74,9 @@ if(BUILD_TESTING)
         antcal
         doctest::doctest
         fmt::fmt)
+    target_include_directories(doctest PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )
     target_compile_features(doctest PUBLIC cxx_std_20)
     doctest_discover_tests(doctest)
 endif()
