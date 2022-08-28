@@ -3,7 +3,8 @@ name: Build & test
 on:
   push:
     branches:
-    - main
+      - dev
+      - cpplib
   pull_request:
     branches:
     - main
