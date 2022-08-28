@@ -1,17 +1,17 @@
 {
-    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
-    "name": "antcal",
-    "description": "Antenna Calculator",
-    "version-semver": "0.0.1",
-    "dependencies": [
-        {
-            "name": "doctest",
-            "version>=": "2.4.8"
-        },
-        {
-            "name": "fmt",
-            "version>=": "9.0.0"
-        }
-    ],
-    "builtin-baseline": ""
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+  "name": "antcal",
+  "description": "Antenna Calculator",
+  "version-semver": "0.0.1",
+  "dependencies": [
+    {
+      "name": "doctest",
+      "version>=": "2.4.9"
+    },
+    {
+      "name": "fmt",
+      "version>=": "9.0.0"
+    }
+  ],
+  "builtin-baseline": "e2a71489b17ae1f5fd29d5fc74c2cdb03fd83f9e"
 }
