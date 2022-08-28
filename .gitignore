@@ -1,0 +1,17 @@
+# Env
+.env
+venv
+
+# Build
+build
+dist
+
+# Python
+__pycache__
+playground
+
+# PyPi
+.pypirc
+
+# autodoc2
+apidocs

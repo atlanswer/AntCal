@@ -1,0 +1,28 @@
+// VSCode settings are kept for consistency
+// between different development environment
+{
+  "cSpell.words": [
+    "aedt",
+    "conda",
+    "Eigen",
+    "Eigenmode",
+    "Genening",
+    "ipykernel",
+    "ipython",
+    "ipywidgets",
+    "MSVC",
+    "nbformat",
+    "ndarray",
+    "numpy",
+    "odesktop",
+    "orjson",
+    "pyright",
+    "structlog",
+    "VCPKG"
+  ],
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+  "cmake.sourceDirectory": "${workspaceFolder}/cpp",
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportShadowedImports": "information"
+  }
+}

@@ -1,0 +1,81 @@
+[project]
+name = "antcal"
+dynamic = ["version"]
+description = "Antenna calculator"
+readme = "../README.md"
+requires-python = ">=3.10"
+license = { file = "../LICENSE" }
+keywords = ["Antenna", "DRA"]
+authors = [{ name = "Atlanswer", email = "atlanswer@gmail.com" }]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: C++",
+    "Development Status :: 1 - Planning",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Intended Audience :: Science/Research",
+]
+dependencies = [
+    "pyaedt",
+    "plotly",
+    "pandas",
+    "numpy",
+    "loguru",
+    "rich",
+    "colorama",
+    "orjson",
+]
+
+[project.optional-dependencies]
+dev = ["hatch", "conda-lock", "black", "ipython", "ipykernel"]
+docs = [
+    "sphinx",
+    "myst-parser",
+    "sphinx-rtd-theme",
+    "sphinx-autodoc2",
+    "sphinx-copybutton",
+    "sphinx-autobuild",
+]
+vis = ["ipywidgets", "nbformat", "python-kaleido"]
+
+[project.urls]
+Homepage = "https://github.com/atlanswer/AntCal"
+Repository = "https://github.com/atlanswer/AntCal.git"
+Documentation = "https://github.com/atlanswer/AntCal#readme"
+Issues = "https://github.com/atlanswer/AntCal/issue"
+
+# [project.scripts]
+# cli-name = ""
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/antcal/__init__.py"
+
+[tool.hatch.build]
+only-packages = true
+
+[tool.hatch.envs.default.scripts]
+format = "black ."
+
+[tool.hatch.envs.docs]
+features = ["docs"]
+
+[tool.hatch.envs.docs.scripts]
+dev = "sphinx-autobuild docs docs/build --watch src --ignore docs/apidocs -j auto -n"
+build = "sphinx-build docs docs/build -j auto -n"
+
+[tool.conda-lock]
+channels = ["conda-forge"]
+platforms = ["win-64", "linux-64"]
+
+[tool.conda-lock.dependencies]
+sphinx-autodoc2 = { source = "pypi" }
