@@ -65,26 +65,33 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(doctest)
 endif()
 
-add_library(antcal STATIC
-    src/antcal.cpp
-    include/antcal/antcal.hpp
-    include/antcal/version.hpp
+add_library(antcal STATIC)
+target_sources(antcal PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/antcal.cpp
 )
-target_include_directories(antcal PUBLIC include)
+target_include_directories(antcal PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 target_link_libraries(antcal PRIVATE doctest::doctest)
 target_compile_features(antcal PUBLIC cxx_std_20)
 
-add_executable(cli apps/cli.cpp)
+add_executable(cli)
+target_sources(cli PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/apps/cli.cpp
+)
+target_link_libraries(cli PRIVATE antcal fmt::fmt)
 target_compile_features(cli PUBLIC cxx_std_20)
-target_link_libraries(cli PRIVATE libName fmt::fmt)
 
 if(BUILD_TESTING)
-    add_executable(doctest tests/test.cpp)
-    target_compile_features(doctest PUBLIC cxx_std_20)
+    add_executable(doctest)
+    target_sources(doctest PRIVATE
+        tests/test.cpp
+    )
     target_link_libraries(doctest PRIVATE
         antcal
         doctest::doctest
         fmt::fmt)
+    target_compile_features(doctest PUBLIC cxx_std_20)
     doctest_discover_tests(doctest)
 endif()
 
