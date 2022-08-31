@@ -7,7 +7,7 @@ on:
       - cpplib
   pull_request:
     branches:
-    - main
+      - main
 
 jobs:
   build_testing:
@@ -15,6 +15,14 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
+        include:
+          - configurePreset: ninja-multi-config
+            buildPreset: ninja-debug
+            testPreset: doctest
+          - os: windows-latest
+            configurePreset: windows-clang-cl
+            buildPreset: windows-debug
+            testPreset: windows-debug
       fail-fast: false
     runs-on: ${{ matrix.os }}
     env:
@@ -34,16 +42,8 @@ jobs:
         with:
           vcpkgDirectory: ${{ github.workspace }}/extern/vcpkg
       - name: Configure, build and test ⚙️⚒️🧪
-        if: ${{ runner.os != 'Windows' }}
         uses: lukka/run-cmake@v10
         with:
-          configurePreset: ninja-multi-config
-          buildPreset: ninja-debug
-          testPreset: doctest
-      - name: Configure, build and test (Windows ClangCL) ⚙️⚒️🧪
-        if: ${{ runner.os == 'Windows' }}
-        uses: lukka/run-cmake@v10
-        with:
-          configurePreset: windows-clang-cl
-          buildPreset: windows-debug
-          testPreset: windows-debug
+          configurePreset: ${{ matrix.configurePreset }}
+          buildPreset: ${{ matrix.buildPreset }}
+          testPreset: ${{ matrix.testPreset }}
