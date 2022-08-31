@@ -61,7 +61,6 @@ target_include_directories(antcal PUBLIC
 )
 target_link_libraries(antcal PRIVATE doctest::doctest)
 target_compile_features(antcal PUBLIC cxx_std_20)
-set_target_properties(antcal PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 add_executable(cli)
 target_sources(cli PUBLIC
@@ -69,7 +68,9 @@ target_sources(cli PUBLIC
 )
 target_link_libraries(cli PRIVATE antcal fmt::fmt)
 target_compile_features(cli PUBLIC cxx_std_20)
-set_target_properties(cli PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+# MSVC runtime library static link
+set_target_properties(antcal cli PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 if(BUILD_TESTING)
     add_executable(doctest)
