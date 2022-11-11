@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
   "name": "antcal",
   "description": "Antenna Calculator",
-  "version-semver": "0.0.1",
+  "version-semver": "0.0.2",
   "dependencies": [
     {
       "name": "doctest",
@@ -13,5 +13,5 @@
       "version>=": "9.0.0"
     }
   ],
-  "builtin-baseline": "e2a71489b17ae1f5fd29d5fc74c2cdb03fd83f9e"
+  "builtin-baseline": "2871ddd918cecb9cb642bcb9c56897f397283192"
 }
