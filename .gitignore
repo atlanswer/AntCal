@@ -1,6 +1,9 @@
 # Editor configs
 .vscode
 
+# Env
+.env
+
 # Build
 build
 dist
