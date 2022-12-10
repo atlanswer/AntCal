@@ -3,6 +3,10 @@
 
 # Build
 build
+dist
 
 # Python
 __pycache__
+
+# PyPi
+.pypirc
