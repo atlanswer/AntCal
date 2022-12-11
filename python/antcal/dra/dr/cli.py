@@ -3,8 +3,9 @@ from types import ModuleType
 
 import typer
 
-from .. import __version__
-from . import rect, cyl, hemi, ring
+from . import cyl, hemi, rect, ring
+
+from ... import __version__
 
 epilog = """
     Made with ❤ . Cli app supported by `Typer`.
@@ -23,9 +24,9 @@ def add_command(dra_type: str):
     (module, name) = dra_types[dra_type]
     app.add_typer(
         module.app,
-        name=dra_type,
-        help=f"**Design**/**analyze** a **{name}** resonator.",
+        help=f"""**Deign**/**analyze** a {name} resonator.""",
         no_args_is_help=True,
+        invoke_without_command=True,
         epilog=epilog,
     )
 
@@ -53,7 +54,7 @@ def main(
     ),
 ):
     """
-    🧮 DRA Calculator
+    🧮 Dielectric Resonator (DR) Calculator
 
     Run **cli COMMAND --help** to show command usage.
     """
