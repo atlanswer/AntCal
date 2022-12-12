@@ -126,7 +126,7 @@ def solve_TExd11(
     p_rad = 10 * k0**4 * np.linalg.norm(pm) ** 2
     q = 4 * np.pi * f * 1e7 * we / p_rad
 
-    return q
+    return w, d, h, q
 
 
 app = typer.Typer()
@@ -173,14 +173,14 @@ def cli_design(
         prompt="""5. Enter DR's dielectric constant""",
     ),
     wh: str = typer.Option(
-        2,
+        "1,0.1,2",
         help="""Width/height ratio of the resonator (facultative)""",
-        prompt="""Enter the **width**/**height** (w/h) ratio of the DR""",
+        prompt="""Enter the **width**/**height** (w/h) ratio of the DR (e.g.: 1,0.1,2)""",
     ),
     dh: str = typer.Option(
-        2,
+        "1,0.1,2",
         help="""Depth/height ratio of the resonator (facultative)""",
-        prompt="""Enter the **depth**/**height** (d/h) ratio of the DR""",
+        prompt="""Enter the **depth**/**height** (d/h) ratio of the DR (e.g.: 1,0.1,2)""",
     ),
 ):
     """**Design** a rectangular resonator."""
@@ -190,51 +190,63 @@ def cli_design(
     bandwidth = np.double(bw)
     v = np.double(vswr)
     epsilon_r = np.double(er)
-    # Image effect
-    wh_list = np.array(wh.split(","), dtype=np.double) / 2
-    dh_list = np.array(dh.split(","), dtype=np.double) / 2
+    wh_list = np.array(wh.split(","), dtype=np.double)
+    dh_list = np.array(dh.split(","), dtype=np.double)
     w_h = d_h = np.double(0)
+    w_h_step = d_h_step = np.double(0)
     w_h_min = w_h_max = d_h_min = d_h_max = np.double(0)
-    if len(wh_list) > 2:
+    if len(wh_list) > 3:
         raise typer.Exit(1)
-    elif len(wh_list) == 2:
-        [w_h_min, w_h_max] = wh_list
+    elif len(wh_list) == 3:
+        [w_h_min, w_h_step, w_h_max] = wh_list
     elif len(wh_list) == 1:
         [w_h] = wh_list
-    if len(dh_list) > 2:
+    if len(dh_list) > 3:
         raise typer.Exit(1)
-    elif len(dh_list) == 2:
-        [d_h_min, d_h_max] = dh_list
+    elif len(dh_list) == 3:
+        [d_h_min, d_h_step, d_h_max] = dh_list
     elif len(dh_list) == 1:
         [d_h] = dh_list
+    # Image effect
+    w_h_min = w_h_min / 2
+    w_h_max = w_h_max / 2
+    d_h_min = w_h_min / 2
+    d_h_max = d_h_max / 2
 
     # Maximum Q factor for the minimum bandwidth and VSWR
     q_max = (v - 1) / (np.sqrt(v) * bandwidth)
 
     k0 = 2 * np.pi * f * 1e7 / c
 
-    q = solve_TExd11(f, epsilon_r, w_h, d_h, k0)
+    result_data = np.array([])
 
-    if q > q_max:
-        print(
-            """The desired bandwidth cannot be achieved for this mode
-            with the specified dielectric constant and dimensions."""
-        )
-        raise typer.Exit(1)
-
-    bw_actual = (v - 1) / (np.sqrt(v) * q) * 100
-    
-    result_data = [q, bw_actual]
+    if len(wh_list) == len(dh_list) == 3:
+        for k in np.arange(w_h_min, w_h_max, w_h_step):
+            for l in np.arange(d_h_min, d_h_max, d_h_step):
+                if mode == OpMode.TExd11:
+                    w, d, h, q = solve_TExd11(f, epsilon_r, k, l, k0)
+                    if q > q_max:
+                        print(
+                            """The desired bandwidth cannot be achieved in this mode
+                            with the specified dielectric constant and dimensions."""
+                        )
+                        raise typer.Exit(1)
+                    bw_actual = (v - 1) / (np.sqrt(v) * q) * 100
+                    result_data = np.append(
+                        result_data, [k**2, l**2, w, d, h, q, bw_actual]
+                    )
 
     result = Table(title="Design Result")
-    # result.add_column("depth/height")
-    # result.add_column("width (mm)")
-    # result.add_column("depth (mm)")
-    # result.add_column("height (mm)")
+    result.add_column("width/height")
+    result.add_column("depth/height")
+    result.add_column("width (mm)")
+    result.add_column("depth (mm)")
+    result.add_column("height (mm)")
     result.add_column("Q factor", justify="right", style="cyan")
     result.add_column("bandwidth", justify="right", style="magenta")
 
-    result.add_row(result_data[0], result_data[1])
+    for result_row in result_data:
+        result.add_row(result_row)
 
     print(result)
 
