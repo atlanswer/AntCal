@@ -2,6 +2,9 @@ import typer
 
 app = typer.Typer()
 
+@app.callback()
+def cyl():
+    ...
 
 @app.command()
 def design():

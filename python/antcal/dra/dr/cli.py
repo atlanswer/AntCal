@@ -24,7 +24,7 @@ def add_command(dra_type: str):
     (module, name) = dra_types[dra_type]
     app.add_typer(
         module.app,
-        help=f"""**Deign**/**analyze** a {name} resonator.""",
+        help=f"""**Deign**/**analyze** a **{name}** resonator.""",
         no_args_is_help=True,
         invoke_without_command=True,
         epilog=epilog,

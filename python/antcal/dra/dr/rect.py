@@ -3,8 +3,10 @@ import typer
 from enum import StrEnum
 from rich import print
 from rich.panel import Panel
+from rich.table import Table
 import numpy as np
 from scipy.constants import c, epsilon_0 as e0
+from typing import Union
 
 
 welcome_horse = r"""
@@ -20,22 +22,22 @@ welcome_horse = r"""
 """
 
 rect_dr_graph = r"""
-                      ----------------------------|                
-                     /                           /|                
-                    /   Rectangular Resonator   / |                
-                   /                           /  |                
-                ^ |---------------------------/   |                
-        --------|--                           |   |----------------
-       /        | |                           |   -              / 
-      /         | |            ε_r            |  /  ^           /  
-     /   height | |                           | /  /           /   
-    /           | |                           |/  / depth     /    
-   /            v ----------------------------/  v           /     
-  /               <--------------------------->             /      
- /                           width                         /       
-/---------------------------------------------------------/        
-                                                                   
-                   infinite ground plane                           
+                              ----------------------------|                
+                             /                           /|                
+                            /   Rectangular Resonator   / |                
+                           /                           /  |                
+                        ^ |---------------------------/   |                
+                --------|--                           |   |----------------
+               /        | |                           |   -              / 
+ z            /         | |            ε_r            |  /  ^           /  
+             /   height | |                           | /  /           /   
+ ^          /           | |                           |/  / depth     /    
+ |    y    /            v ----------------------------/  v           /     
+ |   ^    /               <--------------------------->             /      
+ |  /    /                           width                         /       
+ | /    /---------------------------------------------------------/        
+ |/                                                                        
+ |---------> x             infinite ground plane                           
 """
 
 
@@ -66,7 +68,20 @@ def print_graph():
 def solve_TExd11(
     f: np.double, epsilon_r: np.double, w_h: np.double, d_h: np.double, k0: np.double
 ):
-    """Solve TExd11 mode"""
+    """Solve TE(x)d11 mode.
+
+    Args:
+    -----
+        - f (np.double): frequency
+        - epsilon_r (np.double): dielectric constant
+        - w_h (np.double): width/height ratio
+        - d_h (np.double): depth/height ratio
+        - k0 (np.double): wave number
+
+    Returns:
+    --------
+        - _type_: _description_
+    """
     d = 0
     for n in np.arange(0, np.Inf, 0.0001):
         ky = np.pi * d_h / w_h / n
@@ -107,9 +122,11 @@ def solve_TExd11(
         / kz
         * np.sin(kx * d / 2)
     )
-    k0 = np.sqrt((kx ** 2 + ky ** 2 + kz ** 2) / epsilon_r)
-    p_rad = 10 * k0 ** 4 * np.linalg.norm(pm) ** 2
+    k0 = np.sqrt((kx**2 + ky**2 + kz**2) / epsilon_r)
+    p_rad = 10 * k0**4 * np.linalg.norm(pm) ** 2
     q = 4 * np.pi * f * 1e7 * we / p_rad
+
+    return q
 
 
 app = typer.Typer()
@@ -155,12 +172,12 @@ def cli_design(
         help="Material dielectric constant",
         prompt="""5. Enter DR's dielectric constant""",
     ),
-    wh: float = typer.Option(
+    wh: str = typer.Option(
         2,
         help="""Width/height ratio of the resonator (facultative)""",
         prompt="""Enter the **width**/**height** (w/h) ratio of the DR""",
     ),
-    dh: float = typer.Option(
+    dh: str = typer.Option(
         2,
         help="""Depth/height ratio of the resonator (facultative)""",
         prompt="""Enter the **depth**/**height** (d/h) ratio of the DR""",
@@ -174,13 +191,52 @@ def cli_design(
     v = np.double(vswr)
     epsilon_r = np.double(er)
     # Image effect
-    w_h = np.double(wh) / 2
-    d_h = np.double(dh) / 2
+    wh_list = np.array(wh.split(","), dtype=np.double) / 2
+    dh_list = np.array(dh.split(","), dtype=np.double) / 2
+    w_h = d_h = np.double(0)
+    w_h_min = w_h_max = d_h_min = d_h_max = np.double(0)
+    if len(wh_list) > 2:
+        raise typer.Exit(1)
+    elif len(wh_list) == 2:
+        [w_h_min, w_h_max] = wh_list
+    elif len(wh_list) == 1:
+        [w_h] = wh_list
+    if len(dh_list) > 2:
+        raise typer.Exit(1)
+    elif len(dh_list) == 2:
+        [d_h_min, d_h_max] = dh_list
+    elif len(dh_list) == 1:
+        [d_h] = dh_list
 
     # Maximum Q factor for the minimum bandwidth and VSWR
-    max_q = (v - 1) / (np.sqrt(v) * bandwidth)
+    q_max = (v - 1) / (np.sqrt(v) * bandwidth)
 
     k0 = 2 * np.pi * f * 1e7 / c
+
+    q = solve_TExd11(f, epsilon_r, w_h, d_h, k0)
+
+    if q > q_max:
+        print(
+            """The desired bandwidth cannot be achieved for this mode
+            with the specified dielectric constant and dimensions."""
+        )
+        raise typer.Exit(1)
+
+    bw_actual = (v - 1) / (np.sqrt(v) * q) * 100
+    
+    result_data = [q, bw_actual]
+
+    result = Table(title="Design Result")
+    # result.add_column("depth/height")
+    # result.add_column("width (mm)")
+    # result.add_column("depth (mm)")
+    # result.add_column("height (mm)")
+    result.add_column("Q factor", justify="right", style="cyan")
+    result.add_column("bandwidth", justify="right", style="magenta")
+
+    result.add_row(result_data[0], result_data[1])
+
+    print(result)
 
 
 @app.command(name="analyze")
