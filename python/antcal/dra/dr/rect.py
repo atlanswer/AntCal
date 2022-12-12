@@ -226,11 +226,12 @@ def cli_design(
                 if mode == OpMode.TExd11:
                     w, d, h, q = solve_TExd11(f, epsilon_r, k, l, k0)
                     if q > q_max:
-                        print(
-                            """The desired bandwidth cannot be achieved in this mode
-                            with the specified dielectric constant and dimensions."""
-                        )
-                        raise typer.Exit(1)
+                        # print(
+                        #     """The desired bandwidth cannot be achieved in this mode
+                        #     with the specified dielectric constant and dimensions."""
+                        # )
+                        # raise typer.Exit(1)
+                        continue
                     bw_actual = (v - 1) / (np.sqrt(v) * q) * 100
                     result_data = np.append(
                         result_data, [k**2, l**2, w, d, h, q, bw_actual]
