@@ -2,6 +2,8 @@
 
 Antenna calculator
 
+**Note**: This project is still in the early development phase.
+
 ## Roadmap
 
 - Included features: [#1](https://github.com/atlanswer/AntCal/issues/1)
@@ -27,3 +29,6 @@ C++ implementation is on the branch `cpplib`. A build environment is required. A
   ```shell
   > ctest --preset <preset>
   ```
+
+Python implemantation is on the brach `dra`.
+Currently focusing on implementing DR calculator feature.
