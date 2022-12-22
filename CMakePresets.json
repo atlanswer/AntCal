@@ -1,0 +1,83 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "ninja-multi-config",
+      "displayName": "Config: Base Ninja Multi-Config",
+      "description": "Default config using the Ninja Multi-Config generator",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "environment": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "true"
+      },
+      "toolchainFile": "${sourceDir}/extern/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    },
+    {
+      "name": "windows-clang-cl",
+      "inherits": "ninja-multi-config",
+      "displayName": "Config: Windows with Ninja Multi-Config",
+      "description": "Windows x64 with Ninja Multi-Config (clang-cl)",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "clang-cl"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ninja-debug",
+      "configurePreset": "ninja-multi-config",
+      "displayName": "Build: Base Ninja Multi-Config",
+      "description": "Default build with Ninja Multi-Config generator",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-debug",
+      "configurePreset": "windows-clang-cl",
+      "displayName": "Build: Windows x64 Debug with Ninja Multi-Config",
+      "description": "Windows debug build with Ninja Multi-Config (clang-cl)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-release",
+      "inherits": "windows-debug",
+      "displayName": "Build: Windows x64 Release with Ninja Multi-Config",
+      "description": "Windows release build with Ninja Multi-Config (clang-cl)",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "doctest",
+      "configurePreset": "ninja-multi-config",
+      "output": { "outputOnFailure": true },
+      "execution": { "noTestsAction": "error" },
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-debug",
+      "inherits": "doctest",
+      "configurePreset": "windows-clang-cl",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-release",
+      "inherits": "windows-debug",
+      "configuration": "Release"
+    }
+  ],
+  "vendor": {
+    "microsoft.com/VisualStudioSettings/CMake/3.22": {
+      "intelliSenseMode": "windows-clang-x64"
+    }
+  }
+}

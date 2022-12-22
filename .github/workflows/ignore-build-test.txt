@@ -1,0 +1,49 @@
+name: Build & test
+
+on:
+  push:
+    branches:
+      - dev
+      - cpplib
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_testing:
+    name: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        include:
+          - configurePreset: ninja-multi-config
+            buildPreset: ninja-debug
+            testPreset: doctest
+          - os: windows-latest
+            configurePreset: windows-clang-cl
+            buildPreset: windows-debug
+            testPreset: windows-debug
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    env:
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/extern/vcpkg/archives
+    steps:
+      - name: Checkout 📂
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Prepare CMake & Ninja 🛒
+        uses: lukka/get-cmake@latest
+      - name: Create vcpkg binary cache 📁
+        run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
+        shell: bash
+      - name: Restore vcpkg 🧳
+        uses: lukka/run-vcpkg@v10
+        with:
+          vcpkgDirectory: ${{ github.workspace }}/extern/vcpkg
+      - name: Configure, build and test ⚙️⚒️🧪
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: ${{ matrix.configurePreset }}
+          buildPreset: ${{ matrix.buildPreset }}
+          testPreset: ${{ matrix.testPreset }}

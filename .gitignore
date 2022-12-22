@@ -1,2 +1,15 @@
 # Editor configs
 .vscode
+
+# Env
+.env
+
+# Build
+build
+dist
+
+# Python
+__pycache__
+
+# PyPi
+.pypirc
