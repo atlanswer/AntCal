@@ -1,18 +1,18 @@
-import typer
+# import typer
 
-app = typer.Typer()
-
-
-@app.callback()
-def ring():
-    ...
+# app = typer.Typer()
 
 
-@app.command()
-def design():
-    """**Design** a ring resonator."""
+# @app.callback()
+# def ring():
+#     ...
 
 
-@app.command()
-def analyze():
-    """**Analyze** a ring resonator."""
+# @app.command()
+# def design():
+#     """**Design** a ring resonator."""
+
+
+# @app.command()
+# def analyze():
+#     """**Analyze** a ring resonator."""
