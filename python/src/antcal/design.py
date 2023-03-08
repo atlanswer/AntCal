@@ -1,4 +1,5 @@
 # %% Import
+from antcal.sim.hfss import HFSS, SOLUTIONS
 
 # %% Class
 class EMDesign:
