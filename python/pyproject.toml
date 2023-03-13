@@ -22,6 +22,14 @@ dependencies = ["pyaedt", "plotly", "pandas", "numpy", "orjson"]
 
 [project.optional-dependencies]
 dev = ["hatch", "black", "ipython", "ipykernel"]
+docs = [
+    "sphinx",
+    "myst-parser",
+    "furo",
+    "sphinx-autodoc2",
+    "sphinx-copybutton",
+    "sphinx-autobuild",
+]
 vis = ["ipywidgets", "nbformat", "python-kaleido"]
 
 [project.urls]
@@ -43,6 +51,19 @@ path = "src/antcal/__init__.py"
 [tool.hatch.build]
 only-packages = true
 
+[tool.hatch.envs.default.scripts]
+format = "black ."
+
+[tool.hatch.envs.docs]
+features = ["docs"]
+
+[tool.hatch.envs.docs.scripts]
+dev = "sphinx-autobuild docs docs/build --watch src --ignore docs/apidocs -j auto -n"
+build = "sphinx-build docs docs/build -j auto -n"
+
 [tool.conda-lock]
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64"]
+
+[tool.conda-lock.dependencies]
+sphinx-autodoc2 = { source = "pypi" }

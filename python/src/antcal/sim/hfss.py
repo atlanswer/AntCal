@@ -16,18 +16,20 @@ class SOLUTIONS:
     """Provides the names of default solution types."""
 
     class Hfss(Enum):
-        """Provides HFSS solution types."""
+        """Provides HFSS solution types.
+        Copied from PyAEDT definition.
+        """
 
-        DrivenModal = ("Modal",)
-        DrivenTerminal = ("Terminal",)
-        EigenMode = ("Eigenmode",)
-        Transient = ("Transient Network",)
-        SBR = ("SBR+",)
-        Characteristic = ("Characteristic",)
+        DrivenModal = "Modal"
+        DrivenTerminal = "Terminal"
+        EigenMode = "Eigenmode"
+        Transient = "Transient Network"
+        SBR = "SBR+"
+        Characteristic = "Characteristic"
 
 
 class HFSS:
-    """Represents a HFSS design"""
+    """Represents the Pyaedt HFSS application."""
 
     def __init__(
         self,
@@ -37,7 +39,14 @@ class HFSS:
         project_name: str = "project.aedt",
         project_dir: str = "projectfiles",
     ) -> None:
-        """Initialize HFSS"""
+        """Initialize HFSS.
+
+        :param bool non_graphical: Start without GUI or not.
+        :param str design_name: Default design name.
+        :param SOLUTIONS.Hfss solution_type: Solution type.
+        :param str project_name: Project file name, defaults to "project.aedt"
+        :param str project_dir: Project file path, defaults to "projectfiles"
+        """
         self._project_dir = path.join(getcwd(), project_dir)
         if not path.exists(self._project_dir):
             mkdir(self._project_dir)
@@ -55,10 +64,14 @@ class HFSS:
         print("[antcal.design.HFSS] HFSS initialized.")
 
     def __enter__(self) -> HFSS:
+        """Return self in the context manager.
+
+        :return HFSS: The object itself.
+        """
         return self
 
-    def __exit__(self) -> bool | None:
-        """Release HFSS"""
+    def __exit__(self) -> None:
+        """Release HFSS when leaving the context manager."""
         print("[antcal.design.HFSS] Releasing HFSS...")
         res = self.release()
         if res:
@@ -68,31 +81,37 @@ class HFSS:
         return None
 
     def __del__(self) -> None:
-        """Release HFSS"""
+        """Release HFSS when there's no more reference."""
         self.__exit__()
 
     def release(self) -> bool:
-        """Release HFSS"""
+        """`release_desktop()` in PyAEDT."""
         return self.hfss.release_desktop()
 
     @property
     def hfss(self) -> Hfss:
-        """Return HFSS handle"""
+        """Return the HFSS application."""
         return self._hfss
 
     @property
     def name(self) -> str:
-        """Return HFSS design name"""
+        """Return the current HFSS design name."""
         return cast(str, self.hfss.design_name)
 
     @property
     def setup_name(self) -> str:
-        """Return current setup name"""
+        """Return the current setup name"""
         return cast(str, self.hfss.analysis_setup)
 
     @property
     def variables(self) -> dict[str, str]:
-        """Return design variables"""
+        """Return the design variables.
+
+        :Example:
+        ```py
+        {"xl_gnd": "10 mm"}
+        ```
+        """
         return {
             k: v.evaluated_value
             for k, v in self.variable_manager.design_variables.items()
@@ -100,23 +119,23 @@ class HFSS:
 
     @variables.setter
     def variables(self, variables: dict[str, str]) -> None:
-        """Assign design variables"""
+        """Assign the design variables."""
         for item in variables.items():
             self.variable_manager.set_variable(*item)
 
     @property
     def modeler(self) -> Modeler3D:
-        """Return modeler"""
+        """Return the modeler."""
         return cast(Modeler3D, self.hfss.modeler)
 
     @property
     def materials(self) -> Materials:
-        """Return materials"""
+        """Return the materials."""
         return self.hfss.modeler.materials
 
     @property
     def post(self) -> PostProcessor:
-        """Return post processor"""
+        """Return the post processor."""
         return cast(PostProcessor, self.hfss.post)
 
     @property
@@ -127,7 +146,9 @@ class HFSS:
         return variable_manager
 
     def solve(self, setup_name: str) -> None:
-        """Solve current setup"""
+        """Solve the current setup.
+        
+        :param str setup_name: The name of the setup to solve."""
         self.hfss.save_project()
         assert self.hfss.validate_simple()
         self.hfss.analyze_setup(setup_name)
