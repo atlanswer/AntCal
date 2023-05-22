@@ -23,7 +23,6 @@ classifiers = [
 ]
 dependencies = [
     "pyaedt",
-    "plotly",
     "pandas",
     "numpy",
     "loguru",
