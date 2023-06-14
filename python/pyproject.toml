@@ -23,9 +23,9 @@ classifiers = [
 ]
 dependencies = [
     "pyaedt",
-    "plotly",
-    "pandas",
     "numpy",
+    "pandas",
+    "matplotlib",
     "loguru",
     "rich",
     "colorama",
@@ -33,7 +33,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["hatch", "conda-lock", "black", "ipython", "ipykernel"]
+dev = ["hatch", "conda-lock", "black", "ruff", "ipython", "ipykernel"]
 docs = [
     "sphinx",
     "myst-parser",
@@ -76,6 +76,3 @@ build = "sphinx-build docs docs/build -j auto -n"
 [tool.conda-lock]
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64"]
-
-[tool.conda-lock.dependencies]
-sphinx-autodoc2 = { source = "pypi" }

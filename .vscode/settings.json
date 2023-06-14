@@ -6,7 +6,6 @@
     "conda",
     "Eigen",
     "Eigenmode",
-    "Genening",
     "ipykernel",
     "ipython",
     "ipywidgets",
@@ -17,12 +16,13 @@
     "odesktop",
     "orjson",
     "pyright",
+    "Qwik",
     "structlog",
     "VCPKG"
   ],
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "cmake.sourceDirectory": "${workspaceFolder}/cpp",
   "python.analysis.diagnosticSeverityOverrides": {
-    "reportShadowedImports": "information"
+    "reportShadowedImports": "none"
   }
 }
