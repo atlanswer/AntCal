@@ -1,0 +1,9 @@
+{
+  "name": "tailwind-config",
+  "private": true,
+  "type": "module",
+  "main": "tailwind.config.cjs",
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  }
+}

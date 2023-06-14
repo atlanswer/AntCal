@@ -1,0 +1,26 @@
+{
+  "name": "antcal",
+  "version": "0.0.1",
+  "description": "Antenna Calculator",
+  "keywords": [],
+  "author": "Atlanswer",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "clean": "turbo clean",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{cjs,ts,tsx,md,mdx}\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "eslint": "^8.42.0",
+    "eslint-config-custom": "workspace:*",
+    "prettier": "^2.8.8",
+    "prettier-plugin-tailwindcss": "^0.3.0",
+    "turbo": "^1.10.2"
+  },
+  "packageManager": "pnpm@8.6.1"
+}
