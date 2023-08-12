@@ -76,5 +76,3 @@ build = "sphinx-build docs docs/build -j auto -n"
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64"]
 
-[tool.conda-lock.dependencies]
-sphinx-autodoc2 = { source = "pypi" }
