@@ -5,7 +5,7 @@ description = "Antenna calculator"
 readme = "../README.md"
 requires-python = ">=3.10"
 license = { file = "../LICENSE" }
-keywords = ["Antenna", "DRA"]
+keywords = ["antenna", "DRA", "simulation"]
 authors = [{ name = "Atlanswer", email = "atlanswer@gmail.com" }]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -63,7 +63,17 @@ path = "src/antcal/__init__.py"
 [tool.hatch.build]
 only-packages = true
 
+[tool.hatch.env]
+requires = ["hatch-conda"]
+
+[tool.hatch.envs.default]
+type = "conda"
+command = "mamba"
+conda-forge = true
+features = ["dev"]
+
 [tool.hatch.envs.default.scripts]
+lint = "ruff check ."
 format = "black ."
 
 [tool.hatch.envs.docs]
@@ -76,3 +86,16 @@ build = "sphinx-build docs docs/build -j auto -n"
 [tool.conda-lock]
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64"]
+
+[tool.black]
+line-length = 80
+target-version = ["py310", "py311"]
+
+[tool.ruff]
+line-length = 80
+target-version = "py310"
+
+[tool.pyright]
+typeCheckingMode = "strict"
+reportShadowedImports = false
+reportUnknownMemberType = false
