@@ -99,3 +99,5 @@ target-version = "py310"
 typeCheckingMode = "strict"
 reportShadowedImports = false
 reportUnknownMemberType = false
+reportUnknownVariableType = false
+reportMissingTypeStubs = false
