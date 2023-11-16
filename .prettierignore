@@ -1,14 +1,6 @@
 **/*.log
-**/.DS_Store
-*.
-.vscode/settings.json
 .history
 .yarn
-bazel-*
-bazel-bin
-bazel-out
-bazel-qwik
-bazel-testlogs
 dist
 dist-dev
 lib
@@ -24,7 +16,6 @@ output
 rollup.config.js
 build
 .cache
-.vscode
 .rollup.cache
 dist
 tsconfig.tsbuildinfo
@@ -35,4 +26,7 @@ vite.config.ts
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
-server
+cpp/extern/vcpkg
+.next
+.turbo
+conda-lock.yml

@@ -21,5 +21,5 @@
     "VCPKG"
   ],
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-  "cmake.sourceDirectory": "${workspaceFolder}/cpp",
+  "cmake.sourceDirectory": "${workspaceFolder}/cpp"
 }

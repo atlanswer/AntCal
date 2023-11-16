@@ -22,7 +22,7 @@ def add_to_class(cls: type):
     ```py
     class A:
         def __init__(self) -> None:
-            pass
+            ...
 
     @add_to_class(A)
     def print_hi(self: A) -> None:

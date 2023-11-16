@@ -35,7 +35,7 @@ pip install antcal
   ```shell
   cd python
   hatch build
-  ``` 
+  ```
 - Publish
   ```shell
   cd python
