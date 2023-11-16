@@ -9,8 +9,8 @@
 from datetime import date
 from typing import Any
 
-from sphinx import pygments_styles
-from antcal import __version__  # pyright: reportMissingImports=false
+# from sphinx import pygments_styles
+from antcal import __version__
 
 project = "AntCal"
 copyright = f"{date.today().year}, Atlanswer"

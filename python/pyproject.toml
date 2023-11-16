@@ -1,10 +1,9 @@
 [project]
 name = "antcal"
-dynamic = ["version"]
-description = "Antenna calculator"
-readme = "../README.md"
+dynamic = ["version", "description"]
+readme = "README.md"
 requires-python = ">=3.10"
-license = { file = "../LICENSE" }
+license = { file = "LICENSE" }
 keywords = ["antenna", "DRA", "simulation"]
 authors = [{ name = "Atlanswer", email = "atlanswer@gmail.com" }]
 classifiers = [
@@ -33,7 +32,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["hatch", "conda-lock", "black", "ruff", "ipython", "ipykernel"]
+dev = ["flit", "conda-lock", "black", "ruff", "ipython", "ipykernel"]
 docs = [
     "sphinx",
     "myst-parser",
@@ -54,11 +53,8 @@ Issues = "https://github.com/atlanswer/AntCal/issue"
 # cli-name = ""
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.version]
-path = "src/antcal/__init__.py"
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
 
 [tool.hatch.build]
 only-packages = true
