@@ -9,7 +9,7 @@ authors = [{ name = "Atlanswer", email = "atlanswer@gmail.com" }]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: C++",
     "Development Status :: 1 - Planning",
@@ -85,11 +85,11 @@ platforms = ["win-64", "linux-64"]
 
 [tool.black]
 line-length = 80
-target-version = ["py310", "py311"]
+target-version = ["py311"]
 
 [tool.ruff]
 line-length = 80
-target-version = "py310"
+target-version = "py311"
 
 [tool.pyright]
 typeCheckingMode = "strict"
