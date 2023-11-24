@@ -32,7 +32,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["flit", "conda-lock", "black", "ruff", "ipython", "ipykernel"]
+dev = ["flit", "conda-lock", "ruff", "ipython", "ipykernel"]
 docs = [
     "sphinx",
     "myst-parser",

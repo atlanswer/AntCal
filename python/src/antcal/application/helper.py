@@ -4,6 +4,15 @@ import sys
 from pyaedt.generic.desktop_sessions import _desktop_sessions  # pyright: ignore [reportPrivateUsage]
 from pyaedt.hfss import Hfss
 from pyaedt.generic.settings import settings
+from types import MethodType
+
+
+def __exit__(self: Hfss) -> None:
+    self.close_desktop()
+
+
+def close_desktop(self: Hfss) -> None:
+    self.odesktop.QuitApplication()
 
 
 def new_hfss_session(non_graphical: bool = False) -> Hfss:
@@ -36,7 +45,10 @@ def new_hfss_session(non_graphical: bool = False) -> Hfss:
     d = sys.modules["__main__"].oDesktop
     desktop_install_dir = sys.modules["__main__"].sDesktopinstallDirectory
     h._odesktop = d  # pyright: ignore [reportPrivateUsage]
-    h._desktop_class = d  # pyright: ignore [reportPrivateUsage]
+    # h._odesktop.aedt_version_id = h.odesktop.GetVersion()[0:6]  # pyright: ignore[reportPrivateUsage]
     h._desktop_install_dir = desktop_install_dir  # pyright: ignore [reportPrivateUsage]
+
+    h.close_desktop = MethodType(close_desktop, h)
+    h.__exit__ = MethodType(__exit__, h)
 
     return h
