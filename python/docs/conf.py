@@ -35,10 +35,7 @@ intersphinx_mapping = {
     "sphinx": ("https://www.sphinx-doc.org/en/master", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/docs/", None),
-    "pyaedt": (
-        "https://aedt.docs.pyansys.com/dev/",
-        "https://raw.githubusercontent.com/pyansys/pyaedt/gh-pages/release/0.6/objects.inv",
-    ),
+    "pyaedt": ("https://aedt.docs.pyansys.com/version/stable/", None),
 }
 
 templates_path = ["_templates"]

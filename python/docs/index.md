@@ -5,8 +5,8 @@
 :caption: Package Reference
 :glob:
 
-apidocs/*
-pyaedt/*
+apidocs/index
+pyaedt/index
 ```
 
 ---

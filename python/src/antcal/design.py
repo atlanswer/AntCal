@@ -1,20 +1,6 @@
-# spell-checker:ignore checkifmaterialexists
-
 """Design tools.
 """
 
-# %% Class
-class EMDesign:
-    """Represents a EM design"""
-
-    def __init__(self) -> None:
-        pass
-
-#%% Import
-
-
-#%% Functions
-from pyaedt.hfss import Hfss
 from pyaedt.modules.MaterialLib import Materials
 
 
