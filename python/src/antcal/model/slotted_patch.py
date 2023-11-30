@@ -2,23 +2,79 @@
 
 # %%
 from importlib import reload
+from queue import Queue
+
 import numpy as np
+import numpy.typing as npt
 from pyaedt.hfss import Hfss
 from pyaedt.modeler.cad.object3d import Object3d
 from pyaedt.modeler.modeler3d import Modeler3D
-from pyaedt.modules.SolveSetup import SetupHFSS
 from pyaedt.modules.solutions import SolutionData
+from pyaedt.modules.SolveSetup import SetupHFSS
+
 import antcal.pyaedt.hfss
 
 reload(antcal.pyaedt.hfss)
 from antcal.pyaedt.hfss import (
+    check_materials,
     new_hfss_session,
     update_variables,
-    check_materials,
+)
+
+# %%
+N_DIMS_SLOTTED_PATCH = 10
+VAR_BOUNDS = (
+    [30.0, 30.0, 1.0, 1.0, 1.0, -10.0, 7.5, 5.0, 0.0, 0.0],
+    [70.0, 70.0, 10.0, 10.0, 50.0, 10.0, 70.0, 35.0, 30.0, 10.0],
 )
 
 
-# %%
+def check_constrains(v: npt.NDArray[np.float32]) -> bool:
+    if v.shape[0] != N_DIMS_SLOTTED_PATCH:
+        raise ValueError("v does not contain 10 elements.")
+    w = v[0]
+    L = v[1]
+    wr = v[2]
+    wu = v[3]
+    lr = v[4]
+    pr = v[5]
+    lh = v[6]
+    lv = v[7]
+    fx = v[8]
+    fy = v[9]
+    if not fx < L / 2:
+        return False
+    if not fy < lv - wu:
+        return False
+    if not lh < L:
+        return False
+    if not lr < L:
+        return False
+    if not L < w / 2 - wr / 2 + pr:
+        return False
+    return True
+
+
+def convert_to_variables(v: npt.NDArray[np.float32]) -> dict[str, str]:
+    variables = {
+        "h": "3.175 mm",
+        "W": f"{v[0]} mm",
+        "L": f"{v[1]} mm",
+        "Wr": f"{v[2]} mm",
+        "Wu": f"{v[3]} mm",
+        "Lr": f"{v[4]} mm",
+        "Pr": f"{v[5]} mm",
+        "Lh": f"{v[6]} mm",
+        "Lv": f"{v[7]} mm",
+        "fx": f"{v[8]} mm",
+        "fy": f"{v[9]} mm",
+        "Lg": "L+6*h",
+        "Wg": "W+6*h",
+    }
+
+    return variables
+
+
 def create_slotted_patch(hfss: Hfss, variables: dict[str, str]) -> None:
     materials = ["pec", "Rogers RT/duroid 5880 (tm)", "Teflon (tm)"]
 
@@ -143,7 +199,9 @@ def solve(hfss: Hfss) -> SolutionData:
     return solution_data
 
 
-def obj_fn(hfss: Hfss, variables: dict[str, str]) -> np.float32:
+def obj_fn(hfss: Hfss, v: npt.NDArray[np.float32]) -> np.float32:
+    variables = convert_to_variables(v)
+
     create_slotted_patch(hfss, variables)
     assert hfss.validate_full_design()[1]
 
@@ -155,22 +213,22 @@ def obj_fn(hfss: Hfss, variables: dict[str, str]) -> np.float32:
     return np.max(s11)
 
 
+def obj_fn_queue(
+    params: tuple[Queue[Hfss], npt.NDArray[np.float32]]
+) -> np.float32:
+    """Distribute objective function evaluation in parallel with queue."""
+    aedt_queue = params[0]
+    v = params[1]
+    hfss = aedt_queue.get()
+    result = obj_fn(hfss, v)
+    aedt_queue.put(hfss)
+    return result
+
+
 # %%
 if __name__ == "__main__":
     h1 = new_hfss_session()
-    variables = {
-        "h": "3.175mm",
-        "L": "57.57mm",
-        "W": "67.84mm",
-        "Lg": "L+6*h",
-        "Wg": "W+6*h",
-        "Lr": "2.66mm",
-        "Wr": "5.98mm",
-        "Lh": "52.81mm",
-        "Lv": "25.47mm",
-        "Wu": "5.68mm",
-        "fx": "22.15mm",
-        "fy": "8.95mm",
-        "Pr": "-3.22mm",
-    }
-    print(obj_fn(h1, variables))
+    v = np.array(
+        [67.84, 57.57, 5.98, 5.68, 2.66, -3.22, 52.81, 25.47, 22.15, 8.95]
+    )
+    print(obj_fn(h1, v))

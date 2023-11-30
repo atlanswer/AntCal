@@ -6,7 +6,7 @@ from pyaedt.modules.AdvancedPostProcessing import PostProcessor
 from typing import cast
 
 from pyaedt.modules.solutions import SolutionData
-from antcal.application.hfss import SOLUTIONS
+from pyaedt.generic.constants import SOLUTIONS
 
 
 # %% Functions

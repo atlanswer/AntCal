@@ -1,5 +1,5 @@
 """AntCal: Antenna Calculator.
 """
 
-__version__ = "0.0.12"
+__version__ = "0.0.14"
 """Package version string."""
