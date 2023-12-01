@@ -1,5 +1,4 @@
 """Utilities.
-
 """
 
 from concurrent.futures import ProcessPoolExecutor
@@ -10,6 +9,8 @@ from typing import Any, Callable
 import numpy as np
 import numpy.typing as npt
 from pyaedt.hfss import Hfss
+
+from antcal.pyaedt.hfss import new_hfss_session
 
 
 # %%
@@ -56,26 +57,33 @@ def add_to_class(cls: type) -> Callable[..., Callable[..., Any]]:
     return decorator
 
 
+def aedt_process_initializer() -> None:
+    """Assign an instance of {py:class}`pyaedt.hfss.Hfss`
+    to the global variable `hfss`.
+
+    This function should be run in a separate process.
+    """
+
+    global hfss
+    if "hfss" in globals():
+        return
+    hfss = new_hfss_session()
+
+
 # %%
 def submit_tasks(
-    aedt_list: list[Hfss],
-    variable_list: npt.NDArray[np.float32],
+    vs: npt.NDArray[np.float32],
     task: Callable[[tuple[Queue[Hfss], npt.NDArray[np.float32]]], np.float32],
+    max_workers: int = 3,
 ) -> npt.NDArray[np.float32]:
     """Distribute simulation tasks to multiple AEDT sessions.
 
     :return: Results
     """
 
-    # n_available_desktop = len(aedt_list)
+    with ProcessPoolExecutor(
+        max_workers, initializer=aedt_process_initializer
+    ) as executor:
+        result = list(executor.map(task, vs))
 
-    # def param_list(
-    #     aedt_queue: Queue[Hfss], variable_list: npt.NDArray[np.float32]
-    # ):
-    #     for variables in variable_list:
-    #         yield (aedt_queue, variables)
-
-    # with ThreadPoolExecutor(n_available_desktop) as executor:
-    #     result = list(executor.map(task, param_list(aedt_queue, variable_list)))
-
-    # return np.array(result)
+    return np.array(result)

@@ -1,9 +1,6 @@
 """Slotted Patch"""
 
 # %%
-from importlib import reload
-from queue import Queue
-
 import numpy as np
 import numpy.typing as npt
 from pyaedt.hfss import Hfss
@@ -13,11 +10,6 @@ from pyaedt.modeler.modeler3d import Modeler3D
 from pyaedt.modules.solutions import SolutionData
 from pyaedt.modules.SolveSetup import SetupHFSS
 
-from pythoncom import CoInitializeEx, CoUninitialize, COINIT_MULTITHREADED
-
-import antcal.pyaedt.hfss
-
-reload(antcal.pyaedt.hfss)
 from antcal.pyaedt.hfss import (
     check_materials,
     new_hfss_session,
@@ -231,19 +223,16 @@ def obj_fn(hfss: Hfss, v: npt.NDArray[np.float32]) -> np.float32:
     return np.max(s11)
 
 
-def obj_fn_queue(
-    params: tuple[Queue[Hfss], npt.NDArray[np.float32]]
-) -> np.float32:
-    """Distribute objective function evaluation in parallel with queue."""
+def obj_fn_mp(vs: npt.NDArray[np.float32]) -> np.float32:
+    """Distribute objective function evaluation in parallel
+    with multiprocessing.
 
-    aedt_queue, v = params
-    hfss = aedt_queue.get()
-    try:
-        CoInitializeEx(COINIT_MULTITHREADED)
-        result = obj_fn(hfss, v)
-        CoUninitialize()
-    finally:
-        aedt_queue.put(hfss)
+    Requires a global `hfss` instance.
+    """
+
+    global hfss
+    result = obj_fn(hfss, v)  # pyright: ignore[reportUnboundVariable]
+
     return result
 
 
