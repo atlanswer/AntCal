@@ -2,7 +2,7 @@
 
 """
 
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 from functools import wraps
 from queue import Queue
 from typing import Any, Callable
@@ -58,25 +58,24 @@ def add_to_class(cls: type) -> Callable[..., Callable[..., Any]]:
 
 # %%
 def submit_tasks(
-    aedt_queue: Queue[Hfss],
+    aedt_list: list[Hfss],
     variable_list: npt.NDArray[np.float32],
-    task: Callable[
-        [Queue[Hfss], npt.NDArray[np.float32]], npt.NDArray[np.float32]
-    ],
+    task: Callable[[tuple[Queue[Hfss], npt.NDArray[np.float32]]], np.float32],
 ) -> npt.NDArray[np.float32]:
     """Distribute simulation tasks to multiple AEDT sessions.
 
     :return: Results
     """
-    n_available_desktop = aedt_queue.qsize()
 
-    def param_list(
-        aedt_queue: Queue[Hfss], variable_list: npt.NDArray[np.float32]
-    ):
-        for variables in variable_list:
-            yield (aedt_queue, variables)
+    # n_available_desktop = len(aedt_list)
 
-    with ThreadPoolExecutor(n_available_desktop) as executor:
-        result = list(executor.map(task, param_list(aedt_queue, variable_list)))
+    # def param_list(
+    #     aedt_queue: Queue[Hfss], variable_list: npt.NDArray[np.float32]
+    # ):
+    #     for variables in variable_list:
+    #         yield (aedt_queue, variables)
 
-    return np.array(result)
+    # with ThreadPoolExecutor(n_available_desktop) as executor:
+    #     result = list(executor.map(task, param_list(aedt_queue, variable_list)))
+
+    # return np.array(result)

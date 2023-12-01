@@ -7,10 +7,13 @@ from queue import Queue
 import numpy as np
 import numpy.typing as npt
 from pyaedt.hfss import Hfss
+from pyaedt.modeler.cad.elements3d import FacePrimitive
 from pyaedt.modeler.cad.object3d import Object3d
 from pyaedt.modeler.modeler3d import Modeler3D
 from pyaedt.modules.solutions import SolutionData
 from pyaedt.modules.SolveSetup import SetupHFSS
+
+from pythoncom import CoInitializeEx, CoUninitialize, COINIT_MULTITHREADED
 
 import antcal.pyaedt.hfss
 
@@ -27,9 +30,12 @@ VAR_BOUNDS = (
     [30.0, 30.0, 1.0, 1.0, 1.0, -10.0, 7.5, 5.0, 0.0, 0.0],
     [70.0, 70.0, 10.0, 10.0, 50.0, 10.0, 70.0, 35.0, 30.0, 10.0],
 )
+"""`(lower_bounds, upper_bounds)`"""
 
 
 def check_constrains(v: npt.NDArray[np.float32]) -> bool:
+    """Return `False` if dimensions are invalid."""
+
     if v.shape[0] != N_DIMS_SLOTTED_PATCH:
         raise ValueError("v does not contain 10 elements.")
     w = v[0]
@@ -157,13 +163,23 @@ def create_slotted_patch(hfss: Hfss, variables: dict[str, str]) -> None:
     assert isinstance(probe_ins, Object3d)
     probe_out.subtract(probe_ins)
     probe_ins.subtract(probe_in)
-    hfss.lumped_port(
-        probe_in,
-        probe_out,
-        True,
-        name="1",
-        renormalize=False,
+    port_face = probe_ins.bottom_face_z
+    assert isinstance(port_face, FacePrimitive)
+    assert port_face.is_planar
+    port = modeler.create_object_from_face(port_face)
+    hfss.create_lumped_port_to_sheet(
+        port,
+        [port_face.edges[1].midpoint, port_face.edges[0].midpoint],  # pyright: ignore
+        portname="1",
+        renorm=False,
     )
+    # hfss.lumped_port(
+    #     probe_in,
+    #     probe_out,
+    #     True,
+    #     name="1",
+    #     renormalize=False,
+    # )
 
     setup_name = "Auto1"
     setup = hfss.get_setup(setup_name)
@@ -207,6 +223,8 @@ def obj_fn(hfss: Hfss, v: npt.NDArray[np.float32]) -> np.float32:
 
     solution_data = solve(hfss)
 
+    hfss.close_project(save_project=False)
+
     s11 = solution_data.data_real()
     assert isinstance(s11, list)
 
@@ -217,11 +235,15 @@ def obj_fn_queue(
     params: tuple[Queue[Hfss], npt.NDArray[np.float32]]
 ) -> np.float32:
     """Distribute objective function evaluation in parallel with queue."""
-    aedt_queue = params[0]
-    v = params[1]
+
+    aedt_queue, v = params
     hfss = aedt_queue.get()
-    result = obj_fn(hfss, v)
-    aedt_queue.put(hfss)
+    try:
+        CoInitializeEx(COINIT_MULTITHREADED)
+        result = obj_fn(hfss, v)
+        CoUninitialize()
+    finally:
+        aedt_queue.put(hfss)
     return result
 
 

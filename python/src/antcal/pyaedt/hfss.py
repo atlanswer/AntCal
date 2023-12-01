@@ -12,16 +12,20 @@ from types import MethodType
 
 def __exit__(self: Hfss) -> None:
     """Release HFSS when leaving the context manager."""
+
     self.close_desktop()
 
 
 def __del__(self: Hfss) -> None:
     """Release HFSS when there's no more reference."""
+
     self.close_desktop()
 
 
 def close_desktop(self: Hfss) -> None:
-    """Close desktop."""
+    """Close desktop without saving the project."""
+
+    self.close_project(save_project=False)
     self.odesktop.QuitApplication()
 
 
@@ -88,6 +92,7 @@ def update_variables(hfss: Hfss, variables: dict[str, str]) -> None:
 
 def check_materials(hfss: Hfss, materials: str | list[str]) -> None:
     """If the material exists and is not in the materials database, it is added to this database."""
+
     mat = hfss.materials
     if isinstance(materials, str):
         materials = [materials]
