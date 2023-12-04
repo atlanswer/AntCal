@@ -289,9 +289,10 @@ async def obj_fn(
 
     t_finish = time.time()
 
-    logger.debug(
-        f"HFSS ({process_id}) solved in {time.strftime(r"%M min %S sec", time.localtime(t_finish - t_start))}."
+    time_str = time.strftime(
+        r"%M min %S sec", time.localtime(t_finish - t_start)
     )
+    logger.debug(f"HFSS ({process_id}) solved in {time_str}.")
 
     s11 = solution_data.data_real()
     assert isinstance(s11, list)
