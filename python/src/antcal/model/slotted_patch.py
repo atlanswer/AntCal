@@ -1,8 +1,11 @@
 """Slotted Patch"""
 
 # %%
+import sys
+
 import numpy as np
 import numpy.typing as npt
+from loguru import logger
 from pyaedt.hfss import Hfss
 from pyaedt.modeler.cad.elements3d import FacePrimitive
 from pyaedt.modeler.cad.object3d import Object3d
@@ -215,23 +218,37 @@ def obj_fn(hfss: Hfss, v: npt.NDArray[np.float32]) -> np.float32:
 
     solution_data = solve(hfss)
 
-    hfss.close_project(save_project=False)
-
     s11 = solution_data.data_real()
     assert isinstance(s11, list)
 
     return np.max(s11)
 
 
-def obj_fn_mp(vs: npt.NDArray[np.float32]) -> np.float32:
+def obj_fn_vs(
+    hfss: Hfss, vs: npt.NDArray[np.float32]
+) -> npt.NDArray[np.float32]:
+    vY = np.array([])
+    for v in vs:
+        result = obj_fn(hfss, v)
+        vY = np.append(vY, result)
+    return vY
+
+
+def obj_fn_mp(v: npt.NDArray[np.float32]) -> np.float32:
     """Distribute objective function evaluation in parallel
     with multiprocessing.
 
     Requires a global `hfss` instance.
     """
 
-    global hfss
-    result = obj_fn(hfss, v)  # pyright: ignore[reportUnboundVariable]
+    main_module = sys.modules["__main__"]
+    hfss = main_module.hfss
+    assert isinstance(hfss, Hfss)
+
+    process_id = hfss.odesktop.GetProcessID()
+    logger.debug(f"HFSS ({process_id}) received a new task: {v}")
+
+    result = obj_fn(hfss, v)
 
     return result
 

@@ -1,13 +1,15 @@
 """Utilities.
 """
 
+import sys
 from concurrent.futures import ProcessPoolExecutor
 from functools import wraps
-from queue import Queue
+from time import sleep
 from typing import Any, Callable
 
 import numpy as np
 import numpy.typing as npt
+from loguru import logger
 from pyaedt.hfss import Hfss
 
 from antcal.pyaedt.hfss import new_hfss_session
@@ -64,16 +66,26 @@ def aedt_process_initializer() -> None:
     This function should be run in a separate process.
     """
 
-    global hfss
-    if "hfss" in globals():
+    main_module = sys.modules["__main__"]
+    if "hfss" in dir(main_module):
+        process_id = main_module.hfss.odesktop.GetProcessID()
+        logger.error(f"HFSS ({process_id}) already exists.")
+        assert isinstance(main_module.hfss, Hfss)
         return
-    hfss = new_hfss_session()
+    main_module.hfss = new_hfss_session()  # pyright: ignore
+
+    process_id = main_module.hfss.odesktop.GetProcessID()
+    logger.debug(
+        f"HFSS launched | process id: {process_id} | object address: {id(main_module.hfss)} | oDesktop address: {id(main_module.hfss.odesktop)}"
+    )
+
+    sleep(3)
 
 
 # %%
 def submit_tasks(
+    task: Callable[[npt.NDArray[np.float32]], np.float32],
     vs: npt.NDArray[np.float32],
-    task: Callable[[tuple[Queue[Hfss], npt.NDArray[np.float32]]], np.float32],
     max_workers: int = 3,
 ) -> npt.NDArray[np.float32]:
     """Distribute simulation tasks to multiple AEDT sessions.
@@ -84,6 +96,6 @@ def submit_tasks(
     with ProcessPoolExecutor(
         max_workers, initializer=aedt_process_initializer
     ) as executor:
-        result = list(executor.map(task, vs))
+        result = list(executor.map(task, vs, chunksize=1))
 
     return np.array(result)
