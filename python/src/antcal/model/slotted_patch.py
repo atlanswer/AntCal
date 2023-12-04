@@ -1,7 +1,16 @@
-"""Slotted Patch"""
+"""Slotted Patch.
+
+Reference: A. Papathanasopoulos,
+P. A. Apostolopoulos and Y. Rahmat-Samii,
+"Optimization Assisted by Neural Network-Based
+Machine Learning in Electromagnetic Applications,"
+_IEEE Transactions on Antennas and Propagation_,
+doi: 10.1109/TAP.2023.3269883.
+"""
 
 # %%
-import sys
+import asyncio
+import time
 
 import numpy as np
 import numpy.typing as npt
@@ -26,6 +35,19 @@ VAR_BOUNDS = (
     [70.0, 70.0, 10.0, 10.0, 50.0, 10.0, 70.0, 35.0, 30.0, 10.0],
 )
 """`(lower_bounds, upper_bounds)`"""
+SUGGESTED_PARAMS = [
+    67.84,
+    57.57,
+    5.98,
+    5.68,
+    2.66,
+    -3.22,
+    52.81,
+    25.47,
+    22.15,
+    8.95,
+]
+"""Suggested parameters from the paper"""
 
 
 def check_constrains(v: npt.NDArray[np.float32]) -> bool:
@@ -196,11 +218,13 @@ def create_slotted_patch(hfss: Hfss, variables: dict[str, str]) -> None:
     # sweeps = h1.get_sweeps(setup_name)
 
 
-def solve(hfss: Hfss) -> SolutionData:
+def solve_sync(hfss: Hfss) -> SolutionData:
+    """Synchronously solve and return solution data."""
+
     setup_name = "Auto1"
     setup = hfss.get_setup(setup_name)
     assert isinstance(setup, SetupHFSS)
-    setup.analyze(16, 3, 0, use_auto_settings=False)
+    setup.analyze(10, 3, use_auto_settings=True)
 
     solution_data = setup.get_solution_data(
         "dB(S(1,1))", f"{setup_name} : LastAdaptive"
@@ -210,13 +234,34 @@ def solve(hfss: Hfss) -> SolutionData:
     return solution_data
 
 
-def obj_fn(hfss: Hfss, v: npt.NDArray[np.float32]) -> np.float32:
+async def solve(hfss: Hfss) -> SolutionData:
+    """Asynchronously solve and return solution data."""
+
+    setup_name = "Auto1"
+    setup = hfss.get_setup(setup_name)
+    assert isinstance(setup, SetupHFSS)
+    setup.analyze(10, 3, use_auto_settings=True, blocking=False)
+
+    while hfss.are_there_simulations_running:
+        await asyncio.sleep(5)
+
+    solution_data = setup.get_solution_data(
+        "dB(S(1,1))", f"{setup_name} : LastAdaptive"
+    )
+    assert isinstance(solution_data, SolutionData)
+
+    return solution_data
+
+
+def obj_fn_sync(hfss: Hfss, v: npt.NDArray[np.float32]) -> np.float32:
+    """Object function (synchronous)."""
+
     variables = convert_to_variables(v)
 
     create_slotted_patch(hfss, variables)
     assert hfss.validate_full_design()[1]
 
-    solution_data = solve(hfss)
+    solution_data = solve_sync(hfss)
 
     s11 = solution_data.data_real()
     assert isinstance(s11, list)
@@ -224,33 +269,36 @@ def obj_fn(hfss: Hfss, v: npt.NDArray[np.float32]) -> np.float32:
     return np.max(s11)
 
 
-def obj_fn_vs(
-    hfss: Hfss, vs: npt.NDArray[np.float32]
-) -> npt.NDArray[np.float32]:
-    vY = np.array([])
-    for v in vs:
-        result = obj_fn(hfss, v)
-        vY = np.append(vY, result)
-    return vY
+async def obj_fn(
+    aedt_queue: asyncio.Queue[Hfss], v: npt.NDArray[np.float32]
+) -> np.float32:
+    """Object function (asynchronous)."""
 
-
-def obj_fn_mp(v: npt.NDArray[np.float32]) -> np.float32:
-    """Distribute objective function evaluation in parallel
-    with multiprocessing.
-
-    Requires a global `hfss` instance.
-    """
-
-    main_module = sys.modules["__main__"]
-    hfss = main_module.hfss
-    assert isinstance(hfss, Hfss)
-
+    hfss = await aedt_queue.get()
     process_id = hfss.odesktop.GetProcessID()
-    logger.debug(f"HFSS ({process_id}) received a new task: {v}")
+    logger.debug(f"HFSS ({process_id}) received task: {v}.")
 
-    result = obj_fn(hfss, v)
+    variables = convert_to_variables(v)
 
-    return result
+    create_slotted_patch(hfss, variables)
+    assert hfss.validate_full_design()[1]
+
+    t_start = time.time()
+
+    solution_data = await solve(hfss)
+
+    t_finish = time.time()
+
+    logger.debug(
+        f"HFSS ({process_id}) solved in {time.strftime(r"%M min %S sec", time.localtime(t_finish - t_start))}."
+    )
+
+    s11 = solution_data.data_real()
+    assert isinstance(s11, list)
+
+    await aedt_queue.put(hfss)
+
+    return np.max(s11)
 
 
 # %%
