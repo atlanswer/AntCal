@@ -52,10 +52,12 @@ async def submit_tasks(
     logger.debug("Simulation task queue completed.")
     results = np.array([task.result() for task in tasks])
 
-    if not aedt_list:
-        while not aedt_queue.empty():
+    while not aedt_queue.empty():
+        if not aedt_list:
             hfss = await aedt_queue.get()
             hfss.close_desktop()
+        else:
+            await aedt_queue.get()
 
     return results
 
@@ -77,6 +79,24 @@ async def refresh_aedt_queue(aedt_queue: asyncio.Queue[Hfss]) -> None:
 
     for _ in range(n_simulators):
         await aedt_queue.put(new_hfss_session(non_graphical))
+
+
+def refresh_aedt_list(aedt_list: list[Hfss]) -> None:
+    """Close all AEDTs in the list and top it up with new ones."""
+
+    n_simulators = len(aedt_list)
+    if aedt_list[0].desktop_class:
+        non_graphical = aedt_list[0].desktop_class.non_graphical
+    else:
+        non_graphical = False
+
+    for hfss in aedt_list:
+        hfss.close_desktop()
+
+    aedt_list.clear()
+
+    for _ in range(n_simulators):
+        aedt_list.append(new_hfss_session(non_graphical))
 
 
 # %%
