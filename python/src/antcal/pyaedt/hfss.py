@@ -69,7 +69,9 @@ def new_hfss_session(non_graphical: bool = False) -> Hfss:
     h.__exit__ = MethodType(__exit__, h)
 
     # My preferences
-    h.autosave_enable()
+    # h.autosave_enable()
+    h.autosave_disable()
+    h.logger.disable_stdout_log()  # pyright: ignore[reportGeneralTypeIssues]
     # h.change_material_override()
 
     return h
