@@ -1,6 +1,7 @@
 import asyncio
 from loguru import logger
 from random import random
+import numpy as np
 
 
 async def solve(workers: asyncio.Queue[int], input: int) -> int:
@@ -10,7 +11,7 @@ async def solve(workers: asyncio.Queue[int], input: int) -> int:
 
     while progress < 1:
         work = random()
-        await asyncio.sleep(work * 10)
+        await asyncio.sleep(work)
         progress += work
         logger.info(f"{progress=:.2f}")
 
@@ -28,9 +29,9 @@ async def orchestrator(n_workers: int, inputs: list[int]):
     async with asyncio.TaskGroup() as tg:
         tasks = [tg.create_task(solve(workers, i)) for i in inputs]
 
-    results = [task.result() for task in tasks]
+    results = np.vstack([task.result() for task in tasks])
 
-    logger.info(f"All tasks finished, {results=}")
+    logger.info(f"All tasks finished, {results=}, {results.shape=}")
 
 
 def main():

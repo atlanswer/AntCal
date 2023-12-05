@@ -47,7 +47,7 @@ async def submit_tasks(
         tasks = [tg.create_task(task_fn(aedt_queue, v)) for v in vs]
 
     logger.debug("Simulation task queue completed.")
-    results = np.vstack([task.result() for task in tasks])
+    results = np.array([task.result() for task in tasks])
 
     return results
 

@@ -114,7 +114,7 @@ def create_slotted_patch(hfss: Hfss, variables: dict[str, str]) -> None:
 
     check_materials(hfss, materials)
 
-    current_objects = modeler.object_names
+    current_objects = modeler.object_names  # pyright: ignore[reportUnknownVariableType]
     if "RadiatingSurface" in current_objects:
         current_objects.remove("RadiatingSurface")
     modeler.delete(current_objects)
@@ -180,10 +180,10 @@ def create_slotted_patch(hfss: Hfss, variables: dict[str, str]) -> None:
     assert isinstance(probe_ins, Object3d)
     probe_out.subtract(probe_ins)
     probe_ins.subtract(probe_in)
-    port_face = probe_ins.bottom_face_z
+    port_face = probe_ins.bottom_face_z  # pyright: ignore[reportUnknownVariableType]
     assert isinstance(port_face, FacePrimitive)
     assert port_face.is_planar
-    port = modeler.create_object_from_face(port_face)
+    port = modeler.create_object_from_face(port_face)  # pyright: ignore[reportUnknownVariableType]
     hfss.create_lumped_port_to_sheet(
         port,
         [port_face.edges[1].midpoint, port_face.edges[0].midpoint],  # pyright: ignore
@@ -226,7 +226,7 @@ def solve_sync(hfss: Hfss) -> SolutionData:
     assert isinstance(setup, SetupHFSS)
     setup.analyze(10, 3, use_auto_settings=True)
 
-    solution_data = setup.get_solution_data(
+    solution_data = setup.get_solution_data(  # pyright: ignore[reportUnknownVariableType]
         "dB(S(1,1))", f"{setup_name} : LastAdaptive"
     )
     assert isinstance(solution_data, SolutionData)
@@ -245,7 +245,7 @@ async def solve(hfss: Hfss) -> SolutionData:
     while hfss.are_there_simulations_running:
         await asyncio.sleep(5)
 
-    solution_data = setup.get_solution_data(
+    solution_data = setup.get_solution_data(  # pyright: ignore[reportUnknownVariableType]
         "dB(S(1,1))", f"{setup_name} : LastAdaptive"
     )
     assert isinstance(solution_data, SolutionData)
@@ -263,7 +263,7 @@ def obj_fn_sync(hfss: Hfss, v: npt.NDArray[np.float32]) -> np.float32:
 
     solution_data = solve_sync(hfss)
 
-    s11 = solution_data.data_real()
+    s11 = solution_data.data_real()  # pyright: ignore[reportUnknownVariableType]
     assert isinstance(s11, list)
 
     return np.max(s11)
@@ -292,10 +292,11 @@ async def obj_fn(
     time_str = time.strftime(
         r"%M min %S sec", time.localtime(t_finish - t_start)
     )
-    logger.debug(f"HFSS ({process_id}) solved in {time_str}.")
 
-    s11 = solution_data.data_real()
+    s11 = solution_data.data_real()  # pyright: ignore[reportUnknownVariableType]
     assert isinstance(s11, list)
+
+    logger.debug(f"HFSS ({process_id}) solved in {time_str}, {s11=}.")
 
     await aedt_queue.put(hfss)
 
@@ -308,4 +309,4 @@ if __name__ == "__main__":
     v = np.array(
         [67.84, 57.57, 5.98, 5.68, 2.66, -3.22, 52.81, 25.47, 22.15, 8.95]
     )
-    print(obj_fn(h1, v))
+    print(obj_fn_sync(h1, v))
