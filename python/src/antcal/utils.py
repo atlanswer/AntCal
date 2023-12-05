@@ -24,30 +24,38 @@ async def submit_tasks(
     task_fn: TaskFn,
     vs: npt.NDArray[np.float32],
     n_workers: int = 3,
-    aedt_queue: asyncio.Queue[Hfss] | None = None,
+    aedt_list: list[Hfss] | None = None,
 ) -> npt.NDArray[np.float32]:
     """Distribute simulation tasks to multiple AEDT sessions.
 
     :param task_fn: Task to run.
     :param vs: Input matrix, each row is one sample.
     :param n_workers: Number of AEDT to create, ignored if `aedt_queue` is provided.
-    :param aedt_queue: AEDT worker queue, for long running simulation tasks.
+    :param aedt_list: List of AEDT workers, for long running simulation tasks.
     :return: Results.
     """
 
-    if not aedt_queue:
-        logger.debug("aedt_queue not provided, using self-hosted AEDT workers.")
-        aedt_queue = asyncio.Queue()
+    aedt_queue: asyncio.Queue[Hfss] = asyncio.Queue()
+
+    if not aedt_list:
+        logger.debug("aedt_list not provided, using self-hosted AEDT workers.")
         for _ in range(n_workers):
             await aedt_queue.put(new_hfss_session())
     else:
-        logger.debug("Using provided aedt_queue.")
+        logger.debug("Using provided aedt_list.")
+        for hfss in aedt_list:
+            await aedt_queue.put(hfss)
 
     async with asyncio.TaskGroup() as tg:
         tasks = [tg.create_task(task_fn(aedt_queue, v)) for v in vs]
 
     logger.debug("Simulation task queue completed.")
     results = np.array([task.result() for task in tasks])
+
+    if not aedt_list:
+        while not aedt_queue.empty():
+            hfss = await aedt_queue.get()
+            hfss.close_desktop()
 
     return results
 
