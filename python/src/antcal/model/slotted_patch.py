@@ -117,8 +117,10 @@ def create_slotted_patch(hfss: Hfss, variables: dict[str, str]) -> None:
     current_objects = modeler.object_names  # pyright: ignore[reportUnknownVariableType]
     if "RadiatingSurface" in current_objects:
         current_objects.remove("RadiatingSurface")
+    modeler.purge_history(current_objects)
     modeler.delete(current_objects)
     modeler.cleanup_objects()
+    modeler.refresh()
 
     substrate = modeler.create_box(
         ["-Lg/2", "-Wg/2", "0 mm"],
@@ -186,7 +188,7 @@ def create_slotted_patch(hfss: Hfss, variables: dict[str, str]) -> None:
     port = modeler.create_object_from_face(port_face)  # pyright: ignore[reportUnknownVariableType]
     hfss.create_lumped_port_to_sheet(
         port,
-        [port_face.edges[1].midpoint, port_face.edges[0].midpoint],  # pyright: ignore
+        [port_face.edges[0].midpoint, port_face.edges[1].midpoint],  # pyright: ignore
         portname="1",
         renorm=False,
     )
@@ -250,6 +252,8 @@ async def solve(hfss: Hfss) -> SolutionData:
     )
     assert isinstance(solution_data, SolutionData)
 
+    hfss.logger.clear_messages()  # pyright: ignore[reportGeneralTypeIssues]
+
     return solution_data
 
 
@@ -265,6 +269,8 @@ def obj_fn_sync(hfss: Hfss, v: npt.NDArray[np.float32]) -> np.float32:
 
     s11 = solution_data.data_real()  # pyright: ignore[reportUnknownVariableType]
     assert isinstance(s11, list)
+
+    hfss.cleanup_solution(entire_solution=False, field=True)
 
     return np.max(s11)
 
@@ -295,6 +301,8 @@ async def obj_fn(
 
     s11 = solution_data.data_real()  # pyright: ignore[reportUnknownVariableType]
     assert isinstance(s11, list)
+
+    hfss.cleanup_solution(entire_solution=False, field=True)
 
     logger.debug(f"HFSS ({process_id}) solved in {time_str}, {s11=}.")
 
