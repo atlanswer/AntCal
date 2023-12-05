@@ -60,6 +60,25 @@ async def submit_tasks(
     return results
 
 
+async def refresh_aedt_queue(aedt_queue: asyncio.Queue[Hfss]) -> None:
+    """Close all AEDTs in the queue and top it up with new ones."""
+
+    n_simulators = aedt_queue.qsize()
+    hfss = await aedt_queue.get()
+    if hfss.desktop_class:
+        non_graphical = hfss.desktop_class.non_graphical
+    else:
+        non_graphical = False
+    hfss.close_desktop()
+
+    while not aedt_queue.empty():
+        hfss = await aedt_queue.get()
+        hfss.close_desktop()
+
+    for _ in range(n_simulators):
+        await aedt_queue.put(new_hfss_session(non_graphical))
+
+
 # %%
 def add_to_class(cls: type) -> Callable[..., Callable[..., Any]]:
     """A decorator that add the decorated function

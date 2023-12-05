@@ -252,7 +252,7 @@ async def solve(hfss: Hfss) -> SolutionData:
     )
     assert isinstance(solution_data, SolutionData)
 
-    hfss.logger.clear_messages()  # pyright: ignore[reportGeneralTypeIssues]
+    hfss.logger.clear_messages("", "")  # pyright: ignore[reportGeneralTypeIssues]
 
     return solution_data
 
