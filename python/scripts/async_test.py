@@ -36,7 +36,7 @@ async def orchestrator(n_workers: int, inputs: list[int]):
 
 def main():
     inputs = [i for i in range(100, 105)]
-    asyncio.run(orchestrator(3, inputs))
+    asyncio.run(orchestrator(3, inputs), debug=True)
 
 
 if __name__ == "__main__":

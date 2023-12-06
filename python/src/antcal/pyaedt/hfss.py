@@ -4,10 +4,14 @@ for convenience.
 """
 
 import sys
-from pyaedt.generic.desktop_sessions import _desktop_sessions  # pyright: ignore [reportPrivateUsage]
-from pyaedt.hfss import Hfss
-from pyaedt.generic.settings import settings
 from types import MethodType
+
+from loguru import logger
+from pyaedt.generic.desktop_sessions import (
+    _desktop_sessions,  # pyright: ignore [reportPrivateUsage]
+)
+from pyaedt.generic.settings import settings
+from pyaedt.hfss import Hfss
 
 
 def __exit__(self: Hfss) -> None:
@@ -25,7 +29,11 @@ def __del__(self: Hfss) -> None:
 def close_desktop(self: Hfss) -> None:
     """Close desktop without saving the project."""
 
-    self.close_project(save_project=False)
+    try:
+        self.close_project(save_project=False)
+    except Exception as e:
+        logger.error(f"Exception occurred during closing: {e}.")
+
     self.odesktop.QuitApplication()
 
 
@@ -71,7 +79,7 @@ def new_hfss_session(non_graphical: bool = False) -> Hfss:
     # My preferences
     # h.autosave_enable()
     h.autosave_disable()
-    h.logger.disable_stdout_log()  # pyright: ignore[reportGeneralTypeIssues]
+    # h.logger.disable_stdout_log()  # pyright: ignore[reportGeneralTypeIssues]
     # h.change_material_override()
 
     return h

@@ -90,10 +90,9 @@ def refresh_aedt_list(aedt_list: list[Hfss]) -> None:
     else:
         non_graphical = False
 
-    for hfss in aedt_list:
+    while len(aedt_list) > 0:
+        hfss = aedt_list.pop()
         hfss.close_desktop()
-
-    aedt_list.clear()
 
     for _ in range(n_simulators):
         aedt_list.append(new_hfss_session(non_graphical))

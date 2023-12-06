@@ -242,10 +242,21 @@ async def solve(hfss: Hfss) -> SolutionData:
     setup_name = "Auto1"
     setup = hfss.get_setup(setup_name)
     assert isinstance(setup, SetupHFSS)
-    setup.analyze(10, 3, use_auto_settings=True, blocking=False)
 
-    while hfss.are_there_simulations_running:
-        await asyncio.sleep(5)
+    while not setup.is_solved:
+        setup.analyze(10, 3, use_auto_settings=True, blocking=False)
+
+        t_start = time.time()
+
+        while hfss.are_there_simulations_running:
+            await asyncio.sleep(5)
+            t_current = time.time()
+            t_mins = int((t_current - t_start) // 60)
+
+            if t_mins > 0 and t_mins % 3:
+                logger.info(
+                    f"Simulation has been running for {t_mins} minutes."
+                )
 
     solution_data = setup.get_solution_data(  # pyright: ignore[reportUnknownVariableType]
         "dB(S(1,1))", f"{setup_name} : LastAdaptive"
@@ -282,7 +293,7 @@ async def obj_fn(
 
     hfss = await aedt_queue.get()
     process_id = hfss.odesktop.GetProcessID()
-    logger.debug(f"HFSS ({process_id}) received task: {v}.")
+    logger.debug(f"HFSS ({process_id}) receives task: {v}.")
 
     variables = convert_to_variables(v)
 
