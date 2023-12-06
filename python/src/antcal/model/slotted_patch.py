@@ -243,12 +243,7 @@ async def solve(hfss: Hfss) -> SolutionData:
     setup = hfss.get_setup(setup_name)
     assert isinstance(setup, SetupHFSS)
 
-    while not setup.is_solved:
-        setup.analyze(10, 3, use_auto_settings=True, blocking=False)
-
-        t_start = time.time()
-        t_mins = 0
-
+    async def wait(t_start: float, t_mins: int):
         while hfss.are_there_simulations_running:
             await asyncio.sleep(5)
             t_current = time.time()
@@ -261,10 +256,22 @@ async def solve(hfss: Hfss) -> SolutionData:
                 )
 
             if t_mins > 8:
-                hfss.stop_simulations()
+                hfss.stop_simulations(False)
                 logger.error(
                     "Simulation aborted for running for over 8 minutes."
                 )
+                while hfss.are_there_simulations_running:
+                    await asyncio.sleep(5)
+                    logger.debug("Waiting for simulation termination.")
+                return
+
+    while not setup.is_solved:
+        t_start = time.time()
+        t_mins = 0
+
+        setup.analyze(10, 3, use_auto_settings=True, blocking=False)
+
+        await wait(t_start, t_mins)
 
     solution_data = setup.get_solution_data(  # pyright: ignore[reportUnknownVariableType]
         "dB(S(1,1))", f"{setup_name} : LastAdaptive"
