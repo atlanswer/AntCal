@@ -247,15 +247,23 @@ async def solve(hfss: Hfss) -> SolutionData:
         setup.analyze(10, 3, use_auto_settings=True, blocking=False)
 
         t_start = time.time()
+        t_mins = 0
 
         while hfss.are_there_simulations_running:
             await asyncio.sleep(5)
             t_current = time.time()
-            t_mins = int((t_current - t_start) // 60)
+            t_mins_new = int((t_current - t_start) // 60)
 
-            if t_mins > 0 and t_mins % 3:
+            if t_mins_new > t_mins:
+                t_mins = t_mins_new
                 logger.info(
                     f"Simulation has been running for {t_mins} minutes."
+                )
+
+            if t_mins > 8:
+                hfss.stop_simulations()
+                logger.error(
+                    "Simulation aborted for running for over 8 minutes."
                 )
 
     solution_data = setup.get_solution_data(  # pyright: ignore[reportUnknownVariableType]
