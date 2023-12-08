@@ -26,9 +26,9 @@ dependencies = [
     "pandas",
     "matplotlib",
     "loguru",
-    "rich",
-    "colorama",
-    "orjson",
+#   "rich",
+#   "colorama",
+#   "orjson",
 ]
 
 [project.optional-dependencies]
