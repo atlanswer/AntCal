@@ -205,9 +205,6 @@ def create_slotted_patch(hfss: Hfss, variables: dict[str, str]) -> None:
     assert isinstance(setup, SetupHFSS)
     setup.enable()
 
-    if "MultipleAdaptiveFreqsSetup" not in setup.props:
-        setup.props["MultipleAdaptiveFreqsSetup"] = {}
-
     setup.enable_adaptive_setup_multifrequency([1.9, 2.4], 0.02)
     setup.update({"MaximumPasses": 20})
 
@@ -255,7 +252,7 @@ async def solve(hfss: Hfss) -> SolutionData:
                     f"Simulation has been running for {t_mins} minutes."
                 )
 
-            if t_mins > 8:
+            if t_mins > 7:
                 hfss.stop_simulations(False)
                 logger.error(
                     "Simulation aborted for running for over 8 minutes."

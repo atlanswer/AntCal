@@ -15,6 +15,7 @@ dist
 __pycache__
 projects
 playground
+.ruff_cache
 
 # PyPi
 .pypirc
