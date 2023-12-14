@@ -5,6 +5,7 @@ for convenience.
 
 import sys
 from types import MethodType
+from typing import Mapping
 
 from loguru import logger
 from pyaedt.generic.desktop_sessions import (
@@ -92,11 +93,19 @@ def get_variables(hfss: Hfss) -> dict[str, str]:
     return {k: v.evaluated_value for k, v in vm.design_variables.items()}
 
 
-def update_variables(hfss: Hfss, variables: dict[str, str]) -> None:
+def update_variables(
+    hfss: Hfss,
+    variables: Mapping[str, str],
+    constants: Mapping[str, str | float] | None = None,
+) -> None:
     vm = hfss.variable_manager
     if not vm:
         return
     for item in variables.items():
+        vm.set_variable(*item)
+    if not constants:
+        return
+    for item in constants.items():
         vm.set_variable(*item)
 
 

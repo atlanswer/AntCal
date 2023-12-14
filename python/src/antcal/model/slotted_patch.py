@@ -5,7 +5,7 @@ P. A. Apostolopoulos and Y. Rahmat-Samii,
 "Optimization Assisted by Neural Network-Based
 Machine Learning in Electromagnetic Applications,"
 _IEEE Transactions on Antennas and Propagation_,
-doi: 10.1109/TAP.2023.3269883.
+Jan. 2023, doi: 10.1109/TAP.2023.3269883.
 """
 
 # %%
@@ -104,7 +104,7 @@ def create_slotted_patch(hfss: Hfss, variables: dict[str, str]) -> None:
     hfss.solution_type = hfss.SolutionTypes.Hfss.DrivenModal
     hfss.set_auto_open()
     hfss.odesign.SetDesignSettings(  # pyright:ignore[reportOptionalMemberAccess]
-        ["NAME:Design Settings Data", "Port Validation Settings:=", "Extended"],
+        ["NAME:Design Settings Data", "Port Validation Settings:=", "Extended"]
     )
     # hfss.change_material_override()
     update_variables(hfss, variables)
@@ -226,7 +226,7 @@ def solve_sync(hfss: Hfss) -> SolutionData:
     setup.analyze(10, 3, use_auto_settings=True)
 
     solution_data = setup.get_solution_data(  # pyright: ignore[reportUnknownVariableType]
-        "dB(S(1,1))", f"{setup_name} : LastAdaptive"
+        "dB(S(1,1))", "Sweep"
     )
     assert isinstance(solution_data, SolutionData)
 

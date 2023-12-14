@@ -26,6 +26,7 @@ dependencies = [
     "pandas",
     "matplotlib",
     "loguru",
+    "pyvista",
 #   "rich",
 #   "colorama",
 #   "orjson",
@@ -65,17 +66,13 @@ channels = ["conda-forge"]
 # platforms = ["win-64", "linux-64"]
 platforms = ["win-64"]
 
-[tool.black]
-line-length = 80
-target-version = ["py311"]
-
 [tool.ruff]
 line-length = 80
 target-version = "py311"
 
 [tool.pyright]
 typeCheckingMode = "strict"
-reportShadowedImports = false
+reportMissingTypeStubs = false
 reportUnknownMemberType = false
 reportUnknownVariableType = false
-reportMissingTypeStubs = false
+reportUnknownArgumentType = false
