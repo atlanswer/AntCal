@@ -7,6 +7,7 @@
 
 apidocs/index
 pyaedt/index
+notes/index
 ```
 
 ---

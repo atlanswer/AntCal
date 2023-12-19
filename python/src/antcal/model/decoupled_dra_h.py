@@ -9,8 +9,6 @@ doi: 10.1109/tap.2022.3177547.
 
 # %%
 # import time
-
-from ast import pattern
 from importlib import reload
 from typing import Literal, get_args
 
@@ -24,6 +22,7 @@ from pyaedt.modules.Material import Material
 from pyaedt.modules.SolveSetup import SetupHFSS
 from pyaedt.modules.SolveSweeps import SweepHFSS
 from pyaedt.modules.solutions import SolutionData
+from pyaedt.modules.AdvancedPostProcessing import PostProcessor
 
 import antcal.pyaedt.hfss
 
@@ -116,6 +115,7 @@ def create_decoupled_dra_h(hfss: Hfss, variables: dict[str, str]) -> None:
 
     gnd = modeler.create_object_from_face(sub1.top_face_z)
     assert isinstance(gnd, Object3d)
+    gnd.name = "gnd"
 
     slot1 = modeler.create_rectangle(
         hfss.PLANE.XY, ["-ls/2", "-ws/2", "-tc"], ["ls", "ws"], "slot1"
@@ -127,10 +127,12 @@ def create_decoupled_dra_h(hfss: Hfss, variables: dict[str, str]) -> None:
 
     gnd.subtract(slot2, False)
     modeler.thicken_sheet(gnd, "tc")
-    gnd.name = "gnd"
     gnd.material_name = "copper"
 
-    modeler.create_box(["-a/4", "-b/2", 0], ["a", "b", "h"], "sub2", "mat_sub2")
+    modeler.create_box(
+        ["-a/4", "-b/2", 0], ["a/2", "b", "h"], "dr1", "mat_sub2"
+    )
+    modeler.create_box(["a/4", "-b/2", 0], ["a/2", "b", "h"], "dr2", "mat_sub2")
 
     feed1 = modeler.create_box(
         ["-w4/2", "-wg/2", "-ts-tc*2"], ["w4", "l4", "tc"], "feed1", "copper"
@@ -250,12 +252,14 @@ def get_patterns(hfss: Hfss, plane: PLANES_LITERAL) -> SolutionData:
 
 # %%
 def run():
+    h1.logger.clear_messages("", "", 3)  # type: ignore
+
     variables = convert_to_variables(SUGGESTED_PARAMS)
-    create_decoupled_dra_h(h1, variables)  # type: ignore  # noqa: F821
+    create_decoupled_dra_h(h1, variables)
 
     logger.debug(h1.validate_full_design())
 
-    solve_sync(h1)  # type: ignore # noqa: F821
+    solve_sync(h1)
 
 
 if __name__ == "__main__":
@@ -264,6 +268,25 @@ if __name__ == "__main__":
 
 # %%
 def run2():
+    s_params = get_s_params(h1)
+
+    import matplotlib.pyplot as plt
+
+    plt.style.use(["default", "seaborn-v0_8-paper"])
+
+    fig, ax = plt.subplots()
+    ax.grid()
+    ax.plot(s_params.primary_sweep_values, s_params.data_db20("S(1,1)"))
+    ax.plot(s_params.primary_sweep_values, s_params.data_db20("S(1,2)"))
+    fig.show()
+
+
+if __name__ == "__main__":
+    run2()
+
+
+# %%
+def run3():
     patterns = get_patterns(h1, "h")
 
     import matplotlib.pyplot as plt
@@ -271,14 +294,24 @@ def run2():
     plt.style.use(["default", "seaborn-v0_8-paper"])
 
     fig, ax = plt.subplots()
+    ax.grid()
     ax.plot(patterns.primary_sweep_values, patterns.data_db10("GainPhi"))
     ax.plot(patterns.primary_sweep_values, patterns.data_db10("GainTheta"))
     fig.show()
 
 
 if __name__ == "__main__":
-    run2()
+    run3()
 
+
+# %%
+def get_power_flow(hfss: Hfss):
+    post = hfss.post
+    assert isinstance(post, PostProcessor)
+
+
+if __name__ == "__main__":
+    get_power_flow(h1)
 
 # %%
 if __name__ == "__main__":
