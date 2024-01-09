@@ -15,15 +15,15 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/node": "^20.10.6",
-    "@types/react": "^18.2.46",
+    "@types/node": "^20.10.7",
+    "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.16",
-    "cssnano": "^6.0.2",
+    "cssnano": "^6.0.3",
     "eslint-config-custom": "workspace:*",
-    "postcss": "^8.4.32",
+    "postcss": "^8.4.33",
     "tailwind-config": "workspace:*",
-    "tailwindcss": "^3.4.0",
+    "tailwindcss": "^3.4.1",
     "tsconfig": "workspace:*",
     "typescript": "^5.3.3"
   }
