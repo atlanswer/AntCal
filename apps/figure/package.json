@@ -1,6 +1,6 @@
 {
   "name": "@antcal/figure",
-  "version": "0.4.3",
+  "version": "0.0.1",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": "true",
@@ -14,28 +14,14 @@
   },
   "homepage": "https://antcal.atlanswer.com/",
   "scripts": {
-    "dev": "vite",
-    "lint": "eslint .",
-    "build": "vite build",
-    "serve": "vite preview"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "devDependencies": {
-    "@builder.io/partytown": "~0.10.0",
-    "@solidjs/meta": "~0.29.3",
-    "@solidjs/router": "~0.13.0",
-    "@tailwindcss/typography": "~0.5.10",
-    "autoprefixer": "~10.4.18",
-    "comlink": "~4.4.1",
-    "cssnano": "~6.1.0",
-    "eslint-plugin-solid": "~0.13.1",
-    "postcss": "~8.4.35",
-    "pyodide": "~0.25.0",
-    "solid-devtools": "~0.29.3",
-    "solid-js": "~1.8.15",
-    "tailwindcss": "~3.4.1",
-    "typescript": "~5.4.2",
-    "vite": "~5.1.5",
-    "vite-plugin-solid": "~2.10.1",
-    "vite-tsconfig-paths": "~4.3.1"
+    "@astrojs/check": "~0.5.6",
+    "astro": "~4.4.15"
   }
 }

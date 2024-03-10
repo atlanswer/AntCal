@@ -18,7 +18,9 @@
     "pyright",
     "Qwik",
     "structlog",
-    "VCPKG"
+    "VCPKG",
+    "astro",
+    "astrojs"
   ],
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "cmake.sourceDirectory": "${workspaceFolder}/cpp"
