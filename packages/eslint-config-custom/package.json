@@ -5,9 +5,9 @@
   "type": "module",
   "dependencies": {
     "eslint-config-prettier": "~9.1.0",
-    "eslint-config-turbo": "~1.11.3"
+    "eslint-config-turbo": "~1.12.5"
   },
   "devDependencies": {
-    "@types/eslint": "~8.56.2"
+    "@types/eslint": "~8.56.5"
   }
 }
