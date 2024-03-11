@@ -13,9 +13,8 @@ dist
 
 # Python
 __pycache__
-projects
-playground
 .ruff_cache
+typings
 
 # PyPi
 .pypirc
@@ -26,5 +25,5 @@ apidocs
 # log
 *.log*
 
-# Python stubs
-typings
+# Turbo
+.turbo

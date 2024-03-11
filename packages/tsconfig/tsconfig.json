@@ -6,9 +6,11 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "allowJs": true,
     "composite": true,
     "declaration": true,
     "declarationMap": true,
-    "noEmit": true,
-  },
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true
+  }
 }

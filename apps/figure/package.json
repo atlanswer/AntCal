@@ -1,6 +1,6 @@
 {
   "name": "@antcal/figure",
-  "version": "0.0.1",
+  "version": "0.14.1",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": "true",
@@ -21,7 +21,10 @@
     "astro": "astro"
   },
   "devDependencies": {
-    "@astrojs/check": "~0.5.6",
-    "astro": "~4.4.15"
+    "@astrojs/check": "~0.5.7",
+    "@astrojs/tailwind": "~5.1.0",
+    "@tailwindcss/typography": "~0.5.10",
+    "astro": "~4.5.1",
+    "tailwindcss": "~3.4.1"
   }
 }
