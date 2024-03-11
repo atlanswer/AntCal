@@ -21,7 +21,7 @@ classifiers = [
     "Intended Audience :: Science/Research",
 ]
 dependencies = [
-    "pyaedt >=0.7.8",
+    "pyaedt >=0.8.0",
     "numpy",
     "pandas",
     "matplotlib",
