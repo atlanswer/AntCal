@@ -3,6 +3,8 @@
 {
   "cSpell.words": [
     "aedt",
+    "astro",
+    "astrojs",
     "conda",
     "Eigen",
     "Eigenmode",
@@ -15,12 +17,11 @@
     "numpy",
     "odesktop",
     "orjson",
+    "Pyodide",
     "pyright",
     "Qwik",
     "structlog",
-    "VCPKG",
-    "astro",
-    "astrojs"
+    "VCPKG"
   ],
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "cmake.sourceDirectory": "${workspaceFolder}/cpp",
