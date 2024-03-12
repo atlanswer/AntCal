@@ -22,11 +22,13 @@
     "build": "turbo build",
     "clean": "turbo clean",
     "lint": "turbo lint",
-    "prettier": "prettier"
+    "prettier": "prettier",
+    "turbo": "turbo"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "~7.1.1",
-    "@typescript-eslint/parser": "~7.1.1",
+    "@antcal/tsconfig": "workspace:*",
+    "@typescript-eslint/eslint-plugin": "~7.2.0",
+    "@typescript-eslint/parser": "~7.2.0",
     "eslint": "~8.57.0",
     "eslint-config-prettier": "~9.1.0",
     "prettier": "~3.2.5",
