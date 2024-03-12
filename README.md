@@ -10,14 +10,11 @@
 
 Antenna calculator: https://antcal.readthedocs.io
 
-## Roadmap
-
-- Included features: [#1](https://github.com/atlanswer/AntCal/issues/1)
-- Implemantation: [#2](https://github.com/atlanswer/AntCal/issues/2)
+Figure: https://antcal.atlanswer.com
 
 ## Usage
 
-### Python
+### Python Package
 
 #### Install
 
@@ -25,7 +22,14 @@ Antenna calculator: https://antcal.readthedocs.io
 pip install antcal
 ```
 
-## Build
+## Development
+
+### Figure
+
+```shell
+pnpm turbo run dev -F figure
+pnpm turbo run build -F figure
+```
 
 ### Python package
 
