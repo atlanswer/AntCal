@@ -27,7 +27,7 @@ importers:
         specifier: ~3.2.5
         version: 3.2.5
       prettier-plugin-astro:
-        specifier: ^0.13.0
+        specifier: ~0.13.0
         version: 0.13.0
       prettier-plugin-tailwindcss:
         specifier: ~0.5.12
