@@ -1,0 +1,17 @@
+---
+import Layout from "~/layouts/Layout.astro";
+const { pathname } = Astro.url;
+---
+
+<Layout title="404">
+  <article
+    class="prose flex h-full max-w-none flex-col place-content-center place-items-center dark:prose-invert"
+  >
+    <p>You are visiting <code>{pathname}</code>.</p>
+    <p>
+      404 - Not Found.&nbsp;<a href="/" class="underline underline-offset-4"
+        >Back home</a
+      >
+    </p>
+  </article>
+</Layout>
