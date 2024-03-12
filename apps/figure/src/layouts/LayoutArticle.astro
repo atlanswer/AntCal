@@ -1,0 +1,18 @@
+---
+interface Props {
+  frontmatter?: {
+    title: string;
+  };
+  title: string;
+}
+
+const { title } = Astro.props.frontmatter || Astro.props;
+
+import Layout from "~/layouts/Layout.astro";
+---
+
+<Layout title={title}>
+  <article class="prose dark:prose-invert">
+    <slot />
+  </article>
+</Layout>

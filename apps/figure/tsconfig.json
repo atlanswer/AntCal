@@ -1,5 +1,5 @@
 {
-  "extends": ["@antcal/tsconfig/tsconfig", "astro/tsconfigs/strictest"],
+  "extends": ["astro/tsconfigs/strictest", "@antcal/tsconfig/tsconfig"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

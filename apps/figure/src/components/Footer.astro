@@ -15,7 +15,7 @@ import IconGitHub from "~/components/icons/IconGitHub.astro";
       <a
         href="https://github.com/atlanswer"
         target="_blank"
-        class="font-medium underline underline-offset-4"
+        class="font-medium underline underline-offset-4 transition-[text-underline-offset] hover:underline-offset-8"
       >
         @atlanswer
       </a>
@@ -26,7 +26,10 @@ import IconGitHub from "~/components/icons/IconGitHub.astro";
       class="flex place-items-center gap-1"
     >
       <IconStatus />
-      <span class="underline underline-offset-4">Status</span>
+      <span
+        class="underline underline-offset-4 transition-[text-underline-offset] hover:underline-offset-8"
+        >Status</span
+      >
     </a>
     <span class="flex place-items-center gap-1">
       <IconTime />
@@ -40,7 +43,10 @@ import IconGitHub from "~/components/icons/IconGitHub.astro";
         class="flex place-items-center gap-1.5"
       >
         <IconGitHub />
-        <span class="underline underline-offset-4">Source</span>
+        <span
+          class="underline underline-offset-4 transition-[text-underline-offset] hover:underline-offset-8"
+          >Source</span
+        >
       </a>
     </span>
   </div>
