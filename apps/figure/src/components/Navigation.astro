@@ -1,9 +1,24 @@
 ---
-
+const pages: { name: string; href: string }[] = [
+  { name: "Figure", href: "/" },
+  { name: "Report", href: "/report" },
+  { name: "About", href: "/about" },
+] as const;
 ---
 
-<nav>
-  <a href="/">Home</a>
-  <a href="/report">Report</a>
-  <a href="/about">About</a>
+<nav
+  class="flex flex-1 font-medium leading-loose text-black sm:place-content-center dark:text-white"
+>
+  <span class="inline-block [&>:not(:first-child)]:ml-6">
+    {
+      pages.map((page) => (
+        <a
+          href={page.href}
+          class="inline-block border-sky-500 px-1 py-4 focus-visible:outline-none focus-visible:ring [&.active]:border-b-2 [&.inactive]:hover:border-b-2 [&.inactive]:hover:border-neutral-300 dark:[&.inactive]:hover:border-neutral-700"
+        >
+          {page.name}
+        </a>
+      ))
+    }
+  </span>
 </nav>

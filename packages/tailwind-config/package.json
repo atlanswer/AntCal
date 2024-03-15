@@ -2,7 +2,7 @@
   "name": "@antcal/tailwind-config",
   "private": true,
   "type": "module",
-  "main": "tailwind.config.cjs",
+  "main": "tailwind.config.js",
   "devDependencies": {
     "tailwindcss": "^3.4.1"
   }

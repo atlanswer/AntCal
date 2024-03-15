@@ -1,0 +1,58 @@
+---
+import IconLight from "~/components/icons/IconLight.astro";
+// import IconDark from "~/components/icons/IconDark.astro";
+---
+
+<button
+  id="theme-toggle"
+  title="Switch theme"
+  class="h-8 w-8 rounded p-1 text-neutral-500 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring dark:hover:text-neutral-300"
+  aria-label="Toggle light/dark theme"
+>
+  <IconLight />
+</button>
+
+<script>
+  declare global {
+    type Theme = "light" | "dark" | "system";
+    interface Window {
+      getThemeLocal: () => Theme;
+    }
+  }
+  window.getThemeLocal = () => {
+    const themeLocal = localStorage.getItem("theme");
+    switch (themeLocal) {
+      case "light":
+        return themeLocal;
+      case "dark":
+        return themeLocal;
+      default:
+        localStorage.setItem("theme", "dark");
+        return "dark";
+    }
+  };
+
+  const themeLocal = window.getThemeLocal();
+  const htmlElm = document.documentElement;
+
+  if (themeLocal === "light") {
+    htmlElm.classList.remove("dark");
+  }
+  if (themeLocal === "dark") {
+    htmlElm.classList.add("dark");
+  }
+</script>
+
+<script>
+  const themeToggle = document.getElementById("theme-toggle");
+  const htmlElm = document.documentElement;
+
+  themeToggle!.onclick = () => {
+    const currentThemeLocal = window.getThemeLocal();
+    localStorage.setItem(
+      "theme",
+      currentThemeLocal === "light" ? "dark" : "light",
+    );
+    htmlElm.classList.toggle("dark");
+  };
+</script>
