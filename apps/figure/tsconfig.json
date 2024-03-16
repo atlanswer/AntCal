@@ -1,10 +1,13 @@
 {
-  "extends": ["astro/tsconfigs/strictest", "@antcal/tsconfig/tsconfig"],
+  "extends": ["@antcal/tsconfig"],
   "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": ["vinxi/client", "vite/client"],
     "baseUrl": ".",
+    "rootDir": ".",
     "paths": {
-      "~/*": ["src/*"],
-      "@/*": ["public/*"]
+      "~/*": ["./src/*"]
     }
   }
 }

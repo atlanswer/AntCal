@@ -1,8 +1,7 @@
-import typography from "@tailwindcss/typography";
+import baseConfig from "@antcal/tailwind-config";
 
-/** @type {import("tailwindcss").Config} */
+/** @type {import("@antcal/tailwind-config").Config} */
 export default {
-  content: ["./src/**/*.{astro,tsx,ts,md,mdx,css}"],
-  darkMode: "class",
-  plugins: [typography],
+  content: ["./src/**/*.{tsx,ts,css,md}"],
+  presets: [baseConfig],
 };

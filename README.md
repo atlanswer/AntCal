@@ -27,8 +27,9 @@ pip install antcal
 ### Figure
 
 ```shell
-pnpm turbo run dev -F figure
-pnpm turbo run build -F figure
+pnpm i
+pnpm dev:figure
+pnpm build
 ```
 
 ### Python package

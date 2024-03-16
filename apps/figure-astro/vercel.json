@@ -1,7 +1,6 @@
 {
   "cleanUrls": true,
-  "framework": "vite",
-  "outputDirectory": ".output/public",
+  "framework": "astro",
   "regions": ["hkg1"],
   "trailingSlash": false
 }

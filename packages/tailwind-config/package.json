@@ -2,8 +2,21 @@
   "name": "@antcal/tailwind-config",
   "private": true,
   "type": "module",
-  "main": "tailwind.config.js",
+  "exports": {
+    ".": {
+      "import": "./tailwind.config.js",
+      "types": "./tailwind.config.d.ts",
+      "default": "./tailwind.config.js"
+    },
+    "./postcss": {
+      "import": "./postcss.config.js",
+      "types": "./postcss.config.d.ts",
+      "default": "./postcss.config.js"
+    }
+  },
   "devDependencies": {
-    "tailwindcss": "^3.4.1"
+    "@tailwindcss/typography": "~0.5.10",
+    "postcss-load-config": "~5.0.3",
+    "tailwindcss": "~3.4.1"
   }
 }
