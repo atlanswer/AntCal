@@ -1,5 +1,5 @@
 {
-  "name": "@antcal/figure",
+  "name": "@antcal/figure2",
   "version": "0.14.1",
   "description": "Generate publication quality figures",
   "license": "MIT",
@@ -14,16 +14,17 @@
   },
   "homepage": "https://antcal.atlanswer.com/",
   "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "vinxi start",
-    "version": "vinxi version"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
-  "dependencies": {
-    "@solidjs/meta": "~0.29.2",
-    "@solidjs/router": "~0.13.0",
-    "@solidjs/start": "~0.7.5",
-    "solid-js": "~1.8.15",
-    "vinxi": "~0.3.10"
+  "devDependencies": {
+    "@astrojs/check": "~0.5.9",
+    "@astrojs/tailwind": "~5.1.0",
+    "@tailwindcss/typography": "~0.5.10",
+    "astro": "~4.5.5",
+    "tailwindcss": "~3.4.1"
   }
 }
