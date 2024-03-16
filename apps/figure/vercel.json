@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
-  "framework": "solidstart",
+  "framework": "vite",
+  "outputDirectory": ".output/public",
   "regions": ["hkg1"],
   "trailingSlash": false
 }
