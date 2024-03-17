@@ -1,13 +1,11 @@
 {
-  "name": "@antcal/eslint-config-custom",
+  "name": "@antcal/eslint-config",
   "main": "eslint.config.js",
   "private": true,
   "type": "module",
-  "dependencies": {
+  "devDependencies": {
+    "@types/eslint": "~8.56.5",
     "eslint-config-prettier": "~9.1.0",
     "eslint-config-turbo": "~1.12.5"
-  },
-  "devDependencies": {
-    "@types/eslint": "~8.56.5"
   }
 }
