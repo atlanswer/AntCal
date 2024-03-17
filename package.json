@@ -19,6 +19,7 @@
   "homepage": "https://antcal.atlanswer.com/",
   "scripts": {
     "dev": "turbo dev",
+    "dev:figure": "turbo -F figure dev",
     "build": "turbo build",
     "clean": "turbo clean",
     "lint": "turbo lint",
