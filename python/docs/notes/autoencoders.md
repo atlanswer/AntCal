@@ -12,9 +12,11 @@ Types:
 
 Learning: minimize the loss function
 
-$$\begin{equation}
+$$
+\begin{equation}
 L(x,g(f(x)))
-\end{equation}$$
+\end{equation}
+$$
 
 ## Regularized Autoencoders
 
@@ -22,9 +24,11 @@ L(x,g(f(x)))
 
 The training criterion involves a sparsity penalty $\Omega(h)$:
 
-$$\begin{equation}
+$$
+\begin{equation}
 L(x,g(f(x))) + \Omega(h)
-\end{equation}$$
+\end{equation}
+$$
 
 Approximating maximum likelihood training of a generative
 model that has latent variables.
@@ -34,17 +38,21 @@ model that has latent variables.
 
 Joint distribution:
 
-$$\begin{equation}
+$$
+\begin{equation}
 p_\text{model}(x,h)=p_\text{model}(h)p_\text{model}(x|h)
-\end{equation}$$
+\end{equation}
+$$
 
 ### Denoising Autoencoders
 
 DAE minimizes
 
-$$\begin{equation}
+$$
+\begin{equation}
 L(x,g(f(\tilde{x})))
-\end{equation}$$
+\end{equation}
+$$
 
 where $\tilde{x}$ is $x + \text{noise}$.
 
@@ -52,15 +60,19 @@ where $\tilde{x}$ is $x + \text{noise}$.
 
 Use a different penalty $\Omega$:
 
-$$\begin{equation}
+$$
+\begin{equation}
 L(x,g(f(x))) + \Omega(h,x)
-\end{equation}$$
+\end{equation}
+$$
 
 and
 
-$$\begin{equation}
+$$
+\begin{equation}
 \Omega(h,x) = \lambda\sum_i ||\nabla_x h_i||^2
-\end{equation}$$
+\end{equation}
+$$
 
 ## Deep Autoencoders
 
