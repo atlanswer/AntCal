@@ -4,6 +4,8 @@
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "types": ["vinxi/client", "vite/client"],
+    "baseUrl": ".",
+    "rootDir": ".",
     "paths": {
       "~/*": ["./src/*"]
     }

@@ -2,7 +2,12 @@
   "name": "@antcal/tailwind-config",
   "private": true,
   "type": "module",
-  "main": "tailwind.config.js",
+  "exports": {
+    ".": {
+      "import": "./tailwind.config.js",
+      "types": "./tailwind.config.d.ts"
+    }
+  },
   "devDependencies": {
     "@tailwindcss/typography": "~0.5.10",
     "autoprefixer": "~10.4.18",

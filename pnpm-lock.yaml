@@ -46,7 +46,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/tailwind-config
       '@antcal/tsconfig':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/tsconfig
       vite:
         specifier: ~5.1.6
