@@ -3,8 +3,6 @@
 {
   "cSpell.words": [
     "aedt",
-    "solidjs",
-    "vinxi",
     "astro",
     "astrojs",
     "conda",
@@ -22,11 +20,13 @@
     "Pyodide",
     "pyright",
     "Qwik",
+    "solidjs",
     "structlog",
-    "VCPKG"
+    "tsbuildinfo",
+    "VCPKG",
+    "vinxi"
   ],
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "cmake.sourceDirectory": "${workspaceFolder}/cpp",
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "prettier.configPath": ".prettierrc.yaml"
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

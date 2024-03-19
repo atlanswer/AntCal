@@ -4,9 +4,10 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
+      "env": ["NODE_ENV"],
       "outputs": ["dist/**"]
     },
-    "lint": {
+    "//#lint:all": {
       "outputs": []
     },
     "dev": {
