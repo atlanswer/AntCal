@@ -20,6 +20,9 @@ importers:
       eslint-plugin-solid:
         specifier: ~0.13.1
         version: 0.13.1(eslint@8.57.0)(typescript@5.4.2)
+      globals:
+        specifier: ^14.0.0
+        version: 14.0.0
       prettier:
         specifier: ~3.2.5
         version: 3.2.5
@@ -54,9 +57,6 @@ importers:
         specifier: ~0.3.10
         version: 0.3.10
     devDependencies:
-      '@antcal/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
       '@antcal/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/tailwind-config
@@ -96,27 +96,6 @@ importers:
       tailwindcss:
         specifier: ~3.4.1
         version: 3.4.1
-
-  packages/eslint-config:
-    devDependencies:
-      '@types/eslint':
-        specifier: ~8.56.6
-        version: 8.56.6
-      '@typescript-eslint/eslint-plugin':
-        specifier: ~7.3.1
-        version: 7.3.1(@typescript-eslint/parser@7.3.1)(eslint@8.57.0)(typescript@5.4.2)
-      '@typescript-eslint/parser':
-        specifier: ~7.3.1
-        version: 7.3.1(eslint@8.57.0)(typescript@5.4.2)
-      eslint:
-        specifier: ~8.57.0
-        version: 8.57.0
-      eslint-config-prettier:
-        specifier: ~9.1.0
-        version: 9.1.0(eslint@8.57.0)
-      eslint-config-turbo:
-        specifier: ~1.12.5
-        version: 1.12.5(eslint@8.57.0)
 
   packages/tailwind-config:
     devDependencies:
@@ -1789,13 +1768,6 @@ packages:
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
     dependencies:
       '@types/ms': 0.7.34
-    dev: true
-
-  /@types/eslint@8.56.6:
-    resolution: {integrity: sha512-ymwc+qb1XkjT/gfoQwxIeHZ6ixH23A+tCT2ADSA/DPVKzAjwYkTXBMCQ/f6fe4wEa85Lhp26VPeUxI7wMhAi7A==}
-    dependencies:
-      '@types/estree': 1.0.5
-      '@types/json-schema': 7.0.15
     dev: true
 
   /@types/estree@1.0.5:
@@ -4076,6 +4048,11 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       type-fest: 0.20.2
+    dev: true
+
+  /globals@14.0.0:
+    resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
+    engines: {node: '>=18'}
     dev: true
 
   /globby@11.1.0:

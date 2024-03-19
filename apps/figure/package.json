@@ -15,7 +15,6 @@
   "homepage": "https://antcal.atlanswer.com/",
   "scripts": {
     "dev": "vinxi dev",
-    "lint": "eslint .",
     "build": "vinxi build",
     "start": "vinxi start",
     "version": "vinxi version"
@@ -28,7 +27,6 @@
     "vinxi": "~0.3.10"
   },
   "devDependencies": {
-    "@antcal/eslint-config": "workspace:*",
     "@antcal/tailwind-config": "workspace:*",
     "@antcal/tsconfig": "workspace:*",
     "autoprefixer": "~10.4.18",
