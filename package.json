@@ -27,9 +27,15 @@
     "turbo": "turbo"
   },
   "devDependencies": {
+    "eslint": "~8.57.0",
+    "eslint-config-prettier": "~9.1.0",
+    "eslint-config-turbo": "~1.12.5",
+    "eslint-plugin-solid": "~0.13.1",
     "prettier": "~3.2.5",
     "prettier-plugin-tailwindcss": "~0.5.12",
-    "turbo": "~1.12.5"
+    "turbo": "~1.12.5",
+    "typescript": "~5.4.2",
+    "typescript-eslint": "~7.3.1"
   },
   "packageManager": "pnpm@8.15.5",
   "engines": {

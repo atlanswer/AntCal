@@ -1,41 +1,29 @@
-/* eslint-disable */
-// @ts-nocheck Too early for flat config
+// @ts-expect-error No type provided
 import { FlatCompat } from "@eslint/eslintrc";
-import js from "@eslint/js";
+// @ts-expect-error No type provided
+import eslint from "@eslint/js";
+// @ts-expect-error No type provided
 import prettier from "eslint-config-prettier";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+// @ts-expect-error No type provided
+import solid from "eslint-plugin-solid/configs/typescript.js";
+import tsEslint from "typescript-eslint";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const compat = new FlatCompat();
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  resolvePluginRelativeTo: __dirname,
-});
-
-export default [
-  js.configs.recommended,
-  ...compat.config({
-    root: true,
-    env: {
-      browser: true,
-      esnext: true,
-    },
-    parser: "@typescript-eslint/parser",
-    parserOptions: {
-      project: true,
-      tsconfigRotDir: __dirname,
-    },
-    plugins: ["@typescript-eslint", "solid"],
-    extends: [
-      "plugin:@typescript-eslint/recommended-type-checked",
-      "plugin:solid/typescript",
-      "turbo",
-    ],
-  }),
+export default tsEslint.config(
+  eslint.configs.recommended,
+  ...tsEslint.configs.recommendedTypeChecked,
   {
-    ignores: [".output", ".turbo", ".vinxi", "public", "venv"],
+    ...solid,
+    languageOptions: {
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
   },
+  ...compat.config({ extends: ["turbo"] }),
+  { ignores: ["eslint.config.js"] },
+  { ignores: [".output", ".turbo", ".vinxi", "public", "venv"] },
   prettier,
-];
+);

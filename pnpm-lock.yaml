@@ -8,6 +8,18 @@ importers:
 
   .:
     devDependencies:
+      eslint:
+        specifier: ~8.57.0
+        version: 8.57.0
+      eslint-config-prettier:
+        specifier: ~9.1.0
+        version: 9.1.0(eslint@8.57.0)
+      eslint-config-turbo:
+        specifier: ~1.12.5
+        version: 1.12.5(eslint@8.57.0)
+      eslint-plugin-solid:
+        specifier: ~0.13.1
+        version: 0.13.1(eslint@8.57.0)(typescript@5.4.2)
       prettier:
         specifier: ~3.2.5
         version: 3.2.5
@@ -17,6 +29,12 @@ importers:
       turbo:
         specifier: ~1.12.5
         version: 1.12.5
+      typescript:
+        specifier: ~5.4.2
+        version: 5.4.2
+      typescript-eslint:
+        specifier: ~7.3.1
+        version: 7.3.1(eslint@8.57.0)(typescript@5.4.2)
 
   apps/figure:
     dependencies:
@@ -45,30 +63,12 @@ importers:
       '@antcal/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
-      '@typescript-eslint/eslint-plugin':
-        specifier: ~7.3.1
-        version: 7.3.1(@typescript-eslint/parser@7.3.1)(eslint@8.57.0)(typescript@5.4.2)
-      '@typescript-eslint/parser':
-        specifier: ~7.3.1
-        version: 7.3.1(eslint@8.57.0)(typescript@5.4.2)
       autoprefixer:
         specifier: ~10.4.18
         version: 10.4.18(postcss@8.4.36)
       cssnano:
         specifier: ~6.1.0
         version: 6.1.0(postcss@8.4.36)
-      eslint:
-        specifier: ~8.57.0
-        version: 8.57.0
-      eslint-config-prettier:
-        specifier: ~9.1.0
-        version: 9.1.0(eslint@8.57.0)
-      eslint-config-turbo:
-        specifier: ~1.12.5
-        version: 1.12.5(eslint@8.57.0)
-      eslint-plugin-solid:
-        specifier: ~0.13.1
-        version: 0.13.1(eslint@8.57.0)(typescript@5.4.2)
       postcss:
         specifier: ~8.4.36
         version: 8.4.36
@@ -7511,6 +7511,24 @@ packages:
     resolution: {integrity: sha512-+laqe5SFL1vN62FPOOJSUDTZxtgsoOXjneYOXIpx5rQ4UMiN89NAtJLpqLqyebv9fgQ/IMeeTX+mQyRnwvJzvg==}
     dependencies:
       semver: 7.6.0
+    dev: true
+
+  /typescript-eslint@7.3.1(eslint@8.57.0)(typescript@5.4.2):
+    resolution: {integrity: sha512-psqcnHPRCdVIDbgj6RvfpwUKqMcNxIw7eizgxYi46X2BmXK6LxYqPD+SbDfPuA9JW+yPItY6aKJLRNbW7lZ4rA==}
+    engines: {node: ^18.18.0 || >=20.0.0}
+    peerDependencies:
+      eslint: ^8.56.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@typescript-eslint/eslint-plugin': 7.3.1(@typescript-eslint/parser@7.3.1)(eslint@8.57.0)(typescript@5.4.2)
+      '@typescript-eslint/parser': 7.3.1(eslint@8.57.0)(typescript@5.4.2)
+      eslint: 8.57.0
+      typescript: 5.4.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /typescript@5.4.2:
