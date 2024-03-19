@@ -9,18 +9,16 @@ import solid from "eslint-plugin-solid/configs/typescript.js";
 import globals from "globals";
 import tsEslint from "typescript-eslint";
 
-// const compat = new FlatCompat({
-// baseDirectory: "apps/figure",
-// });
-
 const ts = tsEslint.configs.recommendedTypeChecked;
+const compat = new FlatCompat();
+const turbo = compat.config({ extends: ["turbo"] });
 
 export default tsEslint.config(
   eslint.configs.recommended,
   ...tsEslint.configs.recommended,
   {
     files: ["apps/figure/**/*.{js,ts,tsx}"],
-    plugins: ts[0].plugins,
+    plugins: { ...ts[0].plugins, ...solid.plugins },
     languageOptions: {
       parser: ts[0].languageOptions.parser,
       sourceType: ts[0].languageOptions.sourceType,
@@ -33,9 +31,8 @@ export default tsEslint.config(
     rules: {
       ...ts[1].rules,
       ...ts[2].rules,
+      ...solid.rules,
     },
-    // ...solid,
-    // ...compat.config({ extends: ["turbo"] }),
   },
   {
     files: ["packages/**/*.js"],
@@ -43,6 +40,7 @@ export default tsEslint.config(
       globals: { ...globals.nodeBuiltin },
     },
   },
+  ...turbo,
   {
     ignores: [
       "eslint.config.js",
