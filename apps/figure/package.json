@@ -15,6 +15,7 @@
   "homepage": "https://antcal.atlanswer.com/",
   "scripts": {
     "dev": "vinxi dev",
+    "tsc": "tsc",
     "build": "vinxi build",
     "start": "vinxi start",
     "version": "vinxi version"

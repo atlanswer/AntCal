@@ -8,6 +8,8 @@
     "rootDir": ".",
     "paths": {
       "~/*": ["./src/*"]
-    }
-  }
+    },
+    "tsBuildInfoFile": ".output/tsconfig.tsbuildinfo"
+  },
+  "exclude": [".output", ".vinxi", "public", "venv"]
 }
