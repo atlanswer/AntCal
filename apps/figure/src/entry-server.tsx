@@ -1,4 +1,5 @@
-// @refresh reload
+// @refresh granular
+
 import { createHandler, StartServer } from "@solidjs/start/server";
 
 export default createHandler(() => (
@@ -8,6 +9,10 @@ export default createHandler(() => (
         <head>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta
+            name="description"
+            content="Create publication quality figures"
+          />
           <link rel="icon" type="image/svg+xml" href="/icon.svg" />
           <meta name="color-scheme" content="light dark" />
           <meta name="theme-color" content="#ffffff" />

@@ -1,3 +1,4 @@
+import { Config } from "postcss-load-config";
 export { Config } from "postcss-load-config";
-declare const baseConfig: Config;
+declare let baseConfig: Config;
 export default baseConfig;

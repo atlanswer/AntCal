@@ -1,3 +1,3 @@
+import { Config } from "tailwindcss";
 export { Config } from "tailwindcss";
-declare const baseConfig: Config;
-export default baseConfig;
+export default {} satisfies Partial<Config>;

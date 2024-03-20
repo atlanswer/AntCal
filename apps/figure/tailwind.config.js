@@ -1,4 +1,3 @@
-/* eslint-disable */
 import baseConfig from "@antcal/tailwind-config";
 
 /** @type {import("@antcal/tailwind-config").Config} */
