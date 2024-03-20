@@ -1,8 +1,5 @@
-// @ts-expect-error No type provided
 import { FlatCompat } from "@eslint/eslintrc";
-// @ts-expect-error No type provided
 import eslint from "@eslint/js";
-// @ts-expect-error No type provided
 import prettier from "eslint-config-prettier";
 // @ts-expect-error No type provided
 import solid from "eslint-plugin-solid/configs/typescript.js";
@@ -14,6 +11,7 @@ const compat = new FlatCompat();
 const turbo = compat.config({ extends: ["turbo"] });
 
 export default tsEslint.config(
+  // @ts-expect-error I don't know what happened
   eslint.configs.recommended,
   ...tsEslint.configs.recommended,
   {
@@ -24,6 +22,7 @@ export default tsEslint.config(
       sourceType: ts[0].languageOptions.sourceType,
       parserOptions: {
         project: true,
+        // @ts-expect-error There's no problem
         tsconfigRootDir: import.meta.dirname,
       },
       globals: { ...globals["shared-node-browser"] },
