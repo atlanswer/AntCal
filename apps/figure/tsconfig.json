@@ -7,7 +7,9 @@
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "@/*": ["*"],
+      "~/*": ["src/*"],
+      "/*": ["public/*"]
     },
     "tsBuildInfoFile": ".output/tsconfig.tsbuildinfo"
   },

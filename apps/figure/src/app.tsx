@@ -3,15 +3,17 @@ import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense, type ParentComponent } from "solid-js";
 import "~/app.css";
-import { Header } from "~/components/header";
+import { Footer } from "~/components/Footer";
+import { Header } from "~/components/Header";
 
 const Layout: ParentComponent = (props) => {
   return (
     <MetaProvider>
+      <Header />
       <main class="flex-auto">
-        <Header />
         <Suspense>{props.children}</Suspense>
       </main>
+      <Footer />
     </MetaProvider>
   );
 };
