@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
-  "framework": "solidstart",
+  "framework": null,
+  "buildCommand": "pnpm build",
   "regions": ["hkg1"],
   "trailingSlash": false
 }

@@ -21,8 +21,7 @@
     "dev": "turbo dev",
     "dev:figure": "turbo -F figure dev",
     "build": "turbo build",
-    "lint": "turbo lint:all",
-    "lint:all": "eslint .",
+    "lint": "turbo lint",
     "prettier": "prettier",
     "turbo": "turbo"
   },
