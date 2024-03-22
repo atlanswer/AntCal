@@ -1,3 +1,5 @@
+// @refresh granular
+
 import { MetaProvider } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
@@ -5,6 +7,10 @@ import { Suspense, type ParentComponent } from "solid-js";
 import "~/app.css";
 import { Footer } from "~/components/Footer";
 import { Header } from "~/components/Header";
+// import {
+//   VercelAnalytics,
+//   VercelSpeedInsight,
+// } from "~/components/vercel/Analytics";
 
 const Layout: ParentComponent = (props) => {
   return (
@@ -14,6 +20,8 @@ const Layout: ParentComponent = (props) => {
         <Suspense>{props.children}</Suspense>
       </main>
       <Footer />
+      {/* <VercelAnalytics /> */}
+      {/* <VercelSpeedInsight /> */}
     </MetaProvider>
   );
 };
