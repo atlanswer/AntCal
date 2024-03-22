@@ -48,7 +48,7 @@ importers:
         specifier: ~0.13.1
         version: 0.13.1(solid-js@1.8.16)
       '@solidjs/start':
-        specifier: 1.0.0-rc.0
+        specifier: ~1.0.0-rc.0
         version: 1.0.0-rc.0(solid-js@1.8.16)(vinxi@0.3.10)(vite@5.2.2)
       solid-js:
         specifier: ~1.8.16

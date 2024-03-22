@@ -1,6 +1,6 @@
 {
   "name": "@antcal/figure",
-  "version": "0.15.2",
+  "version": "0.15.3",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": "true",
@@ -16,6 +16,7 @@
   "scripts": {
     "dev": "vinxi dev",
     "tsc": "tsc",
+    "lint": "eslint .",
     "build": "vinxi build",
     "start": "vinxi start",
     "version": "vinxi version"
@@ -23,7 +24,7 @@
   "dependencies": {
     "@solidjs/meta": "~0.29.3",
     "@solidjs/router": "~0.13.1",
-    "@solidjs/start": "1.0.0-rc.0",
+    "@solidjs/start": "~1.0.0-rc.0",
     "solid-js": "~1.8.16",
     "vinxi": "~0.3.10"
   },

@@ -1,6 +1,6 @@
 // @refresh granular
 
-import { version } from "@/package.json";
+import { version } from "package.json";
 // import { useDrawPerf } from "~/components/contexts/draw-perf";
 
 export const Footer = () => {
