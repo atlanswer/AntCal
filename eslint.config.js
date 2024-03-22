@@ -43,7 +43,7 @@ export default tsEslint.config(
   {
     ignores: [
       "eslint.config.js",
-      "**/.output",
+      "**/.vercel",
       "**/.turbo",
       "**/.vinxi",
       "**/public",
