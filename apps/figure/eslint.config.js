@@ -21,6 +21,11 @@ export default tsEslint.config(
         project: true,
         tsconfigRootDir: import.meta.dirname,
       },
+    },
+  },
+  {
+    files: ["src/**/*.{js,ts,tsx}"],
+    languageOptions: {
       globals: { ...globals["shared-node-browser"] },
     },
     ...solid,
