@@ -1,10 +1,12 @@
 import typography from "@tailwindcss/typography";
 
-/** @type {import('tailwindcss').Config} */
-export default {
-  darkMode: ["class"],
+/** @type {Partial<import('tailwindcss').Config>} */
+export const sharedConfig = {
+  darkMode: "class",
   theme: {
     extend: {},
   },
   plugins: [typography],
 };
+
+export default sharedConfig;

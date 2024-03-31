@@ -1,3 +1,5 @@
-import { Config } from "tailwindcss";
-export { Config } from "tailwindcss";
-export default {} satisfies Partial<Config>;
+import type { Config } from "tailwindcss";
+export type { Config };
+
+declare const sharedConfig: Partial<Config>;
+export default sharedConfig;

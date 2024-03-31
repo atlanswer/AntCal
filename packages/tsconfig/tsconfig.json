@@ -1,13 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": ["@tsconfig/strictest/tsconfig"],
+  "extends": "@tsconfig/strictest/tsconfig",
   "display": "Default TSConfig",
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "allowJs": true,
-    "checkJs": true,
     "composite": true,
     "declaration": true,
     "declarationMap": true,
