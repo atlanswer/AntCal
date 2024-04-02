@@ -1,6 +1,6 @@
 {
   "name": "antcal",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Antenna Calculator",
   "keywords": [
     "antenna"
@@ -9,6 +9,10 @@
   "license": "MIT",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atlanswer/AntCal.git"
@@ -37,8 +41,7 @@
     "typescript": "~5.4.3",
     "typescript-eslint": "~7.4.0"
   },
-  "packageManager": "pnpm@8.15.5",
   "engines": {
-    "node": ">=20"
+    "bun": ">=1.1"
   }
 }
