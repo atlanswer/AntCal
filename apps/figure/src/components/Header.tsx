@@ -2,7 +2,7 @@
 
 import { A } from "@solidjs/router";
 import { For } from "solid-js";
-// import { ThemeToggle } from "~/components/theme-toggle";
+import { ThemeToggle } from "~/components/theme/toggle";
 
 const Navigator = () => {
   const routes: { route: string; name: string }[] = [
@@ -42,9 +42,9 @@ const Navigator = () => {
 export const Header = () => (
   <header class="sticky top-0 place-content-center bg-white px-8 text-black shadow dark:border-neutral-900 dark:bg-black dark:text-white">
     <div class="mx-auto flex max-w-screen-xl place-content-between place-items-center gap-8">
-      {/* <span class="hidden w-8 sm:inline" /> */}
+      <span class="hidden w-8 sm:inline" />
       <Navigator />
-      {/* <ThemeToggle /> */}
+      <ThemeToggle />
     </div>
   </header>
 );

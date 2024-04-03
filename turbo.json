@@ -1,12 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "experimentalUI": true,
   "pipeline": {
     "dev": {
       "cache": false,
-      "persistent": true,
-      "interactive": true
+      "persistent": true
     },
     "lint": {
       "outputs": []
