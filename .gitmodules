@@ -1,4 +1,0 @@
-[submodule "vcpkg"]
-	path = cpp/extern/vcpkg
-	url = ../../Microsoft/vcpkg.git
-	shallow = true
