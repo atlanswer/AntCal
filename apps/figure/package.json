@@ -1,6 +1,6 @@
 {
   "name": "@antcal/figure",
-  "version": "0.15.3",
+  "version": "0.15.4",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": "true",
