@@ -18,13 +18,13 @@
     "tsc": "tsc",
     "lint": "eslint .",
     "build": "vinxi build",
-    "start": "vinxi start",
+    "serve": "vinxi serve --dir .vercel/output/static",
     "version": "vinxi version"
   },
   "dependencies": {
     "@solidjs/meta": "~0.29.3",
     "@solidjs/router": "~0.13.1",
-    "@solidjs/start": "1.0.0-rc.0",
+    "@solidjs/start": "~1.0.0-rc.0",
     "solid-js": "~1.8.16",
     "vinxi": "~0.3.11"
   },

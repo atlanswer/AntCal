@@ -1,26 +1,55 @@
 // @refresh granular
 
-import { Switch, Match } from "solid-js";
+import {
+  Match,
+  Switch,
+  createRenderEffect,
+  createSignal,
+  onCleanup,
+} from "solid-js";
+import { isServer } from "solid-js/web";
+import { setTheme, theme } from "~/components/theme/context";
 
 export const ThemeToggle = () => {
-  //   const [theme, setTheme] = useTheme();
+  const [prefersDark, setPrefersDark] = createSignal<boolean>(true);
 
-  //   const toggleTheme = () => {
-  //     const systemTheme =
-  //       window.matchMedia("(prefers-color-scheme: dark)").matches ?
-  //         "dark"
-  //       : "light";
-  //     switch (theme()) {
-  //       case "light":
-  //         setTheme(systemTheme === "light" ? "dark" : "system");
-  //         break;
-  //       case "dark":
-  //         setTheme(systemTheme === "light" ? "system" : "light");
-  //         break;
-  //       case "system":
-  //         setTheme(systemTheme === "light" ? "dark" : "light");
-  //     }
-  //   };
+  if (!isServer) {
+    const matchPrefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const syncPrefersColorScheme = () =>
+      setPrefersDark(matchPrefersDark.matches ? true : false);
+
+    createRenderEffect(() => {
+      if (theme() === "system") {
+        matchPrefersDark.addEventListener("change", syncPrefersColorScheme);
+      } else {
+        matchPrefersDark.removeEventListener("change", syncPrefersColorScheme);
+      }
+    });
+
+    onCleanup(() =>
+      matchPrefersDark.removeEventListener("change", syncPrefersColorScheme),
+    );
+
+    createRenderEffect(() => {
+      const body = document.body;
+      switch (theme()) {
+        case "system":
+          if (prefersDark()) {
+            body.classList.add("dark");
+          } else {
+            body.classList.remove("dark");
+          }
+          break;
+        case "light":
+          body.classList.remove("dark");
+          break;
+        case "dark":
+          body.classList.add("dark");
+          break;
+      }
+    });
+  }
 
   const IconLight = () => (
     <svg
@@ -61,20 +90,37 @@ export const ThemeToggle = () => {
     <button
       title="Switch theme"
       class="h-8 w-8 rounded p-1 text-neutral-500 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring dark:hover:text-neutral-300"
-      //   onClick={toggleTheme}
+      onClick={() => {
+        if (isServer) {
+          return;
+        }
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        setTheme((prev) => {
+          switch (prev) {
+            case "system":
+              return prefersDark ? "light" : "dark";
+            case "light":
+              return prefersDark ? "system" : "dark";
+            case "dark":
+              return prefersDark ? "light" : "system";
+          }
+        });
+      }}
       aria-label="Toggle light/dark theme"
     >
-      {/* <Switch> */}
-      {/* <Match when={theme() === "system"}> */}
-      <IconSystem />
-      {/* </Match> */}
-      {/* <Match when={theme() === "light"}> */}
-      {/* <IconLight /> */}
-      {/* </Match> */}
-      {/* <Match when={theme() === "dark"}> */}
-      {/* <IconDark /> */}
-      {/* </Match> */}
-      {/* </Switch> */}
+      <Switch>
+        <Match when={theme() === "system"}>
+          <IconSystem />
+        </Match>
+        <Match when={theme() === "light"}>
+          <IconLight />
+        </Match>
+        <Match when={theme() === "dark"}>
+          <IconDark />
+        </Match>
+      </Switch>
     </button>
   );
 };
