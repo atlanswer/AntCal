@@ -12,6 +12,7 @@ declare global {
 }
 
 export default function VercelSpeedInsight() {
+  "use client";
   window.si =
     window.si ||
     function (...params: unknown[]) {

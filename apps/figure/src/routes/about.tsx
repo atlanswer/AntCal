@@ -1,10 +1,12 @@
 import { Title } from "@solidjs/meta";
+import { Markdown } from "~/components/Markdown";
+import aboutMd from "~/md/about.md?raw";
 
-export default function Home() {
+export default function About() {
   return (
-    <main>
+    <article class="prose prose-neutral dark:prose-invert mx-auto max-w-screen-xl px-8 py-16 md:px-16">
       <Title>About | AntCal</Title>
-      <h1>About</h1>
-    </main>
+      <Markdown md={aboutMd} />;
+    </article>
   );
 }

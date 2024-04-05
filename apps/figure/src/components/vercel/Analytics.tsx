@@ -11,6 +11,7 @@ declare global {
 }
 
 export default function VercelAnalytics() {
+  "use client";
   window.va =
     window.va ||
     function (...params: unknown[]) {
