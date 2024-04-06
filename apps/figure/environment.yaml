@@ -1,0 +1,14 @@
+channels:
+  - conda-forge
+dependencies:
+  - python >=3.12
+  - pip
+  - ipython
+  - ipykernel
+  - ruff
+  - orjson
+  - numpy
+  - pandas
+  - matplotlib
+  - openpyxl
+

@@ -1,6 +1,6 @@
 {
   "name": "@antcal/figure",
-  "version": "0.15.6",
+  "version": "0.15.7",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": "true",
@@ -24,20 +24,20 @@
   "dependencies": {
     "@solidjs/meta": "~0.29.3",
     "@solidjs/router": "~0.13.1",
-    "@solidjs/start": "~1.0.0-rc.0",
+    "@solidjs/start": "~1.0.0-rc.1",
     "comlink": "~4.4.1",
     "micromark": "~4.0.0",
     "micromark-extension-gfm": "~3.0.0",
     "micromark-extension-math": "~3.0.0",
-    "solid-js": "~1.8.16",
+    "solid-js": "~1.8.17",
     "vinxi": "~0.3.11",
-    "zod": "~3.22.4"
+    "zod": "~3.23.6"
   },
   "devDependencies": {
     "@antcal/tailwind-config": "workspace:*",
     "@antcal/tsconfig": "workspace:*",
     "autoprefixer": "~10.4.19",
-    "cssnano": "~6.1.2",
+    "cssnano": "~7.0.0",
     "postcss": "~8.4.38",
     "pyodide": "~0.25.1",
     "tailwindcss": "~3.4.3",

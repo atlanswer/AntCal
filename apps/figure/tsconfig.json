@@ -8,9 +8,16 @@
     "rootDir": ".",
     "paths": {
       "~/*": ["src/*"],
-      "/*": ["public/*"]
+      "@/*": ["public/*"],
+      "python/*": ["src/python/*"]
     },
     "tsBuildInfoFile": ".output/tsconfig.tsbuildinfo"
   },
-  "exclude": [".output", ".vinxi", "public", "venv"]
+  "include": ["public/**/*", "src/**/*"],
+  "files": [
+    "app.config.ts",
+    "eslint.config.js",
+    "postcss.config.js",
+    "tailwind.config.js"
+  ]
 }
