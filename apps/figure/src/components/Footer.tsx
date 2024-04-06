@@ -80,7 +80,7 @@ export const Footer = () => {
         <span class="flex place-items-center gap-1.5 sm:ml-auto">
           <span>v{version}</span>
           <a
-            href="https://github.com/atlanswer/figure"
+            href="https://github.com/atlanswer/AntCal"
             target="_blank"
             class="flex place-items-center gap-1.5"
           >
