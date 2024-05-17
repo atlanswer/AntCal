@@ -8,11 +8,13 @@ from collections.abc import Mapping
 from types import MethodType
 
 from loguru import logger
+from pyaedt.application.Variables import Variable
 from pyaedt.generic.desktop_sessions import (
     _desktop_sessions,  # pyright: ignore [reportPrivateUsage]
 )
 from pyaedt.generic.settings import settings
 from pyaedt.hfss import Hfss
+from pyaedt.modeler.cad.object3d import Object3d
 
 
 def __exit__(self: Hfss) -> None:
@@ -35,7 +37,7 @@ def close_desktop(self: Hfss) -> None:
     except Exception as e:
         logger.error(f"Exception occurred during closing: {e}.")
 
-    self.odesktop.QuitApplication()
+    self.odesktop.QuitApplication()  # pyright: ignore[reportOptionalMemberAccess]
 
 
 def new_hfss_session(non_graphical: bool = False) -> Hfss:
@@ -120,3 +122,26 @@ def check_materials(hfss: Hfss, materials: str | list[str]) -> None:
         materials = [materials]
     for material in materials:
         mat.checkifmaterialexists(material)
+
+
+def set_material_appearance(
+    obj: Object3d, material_appearance: bool = True
+) -> None:
+    vMaterialAppearance = [
+        "NAME:Material Appearance",
+        "Value:=",
+        material_appearance,
+    ]
+    obj._change_property(vMaterialAppearance)  # pyright: ignore[reportPrivateUsage]
+
+
+class MyVariable(Variable):
+    def __init__(self, expression: str, name: str, hfss: Hfss):
+        super().__init__(expression, name=name, app=hfss)
+        self.expression = expression
+
+    def __str__(self) -> str:
+        name = self.name
+        assert isinstance(name, str)
+
+        return name

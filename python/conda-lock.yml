@@ -263,16 +263,16 @@ package:
   category: docs
   optional: true
 - name: astroid
-  version: 3.1.0
+  version: 3.2.1
   manager: conda
   platform: win-64
   dependencies:
     python: '>=3.11,<3.12.0a0'
     python_abi: 3.11.*
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/astroid-3.1.0-py311h1ea47a8_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/astroid-3.2.1-py311h1ea47a8_0.conda
   hash:
-    md5: f646e7e780b6765a7fe177168132f335
-    sha256: f43e5494efc991e7b1222842a68169eeef55eff451b0d2860b88f00d8ee9d5cd
+    md5: b5322b6982f2f73fe801779e40ade84a
+    sha256: fbdbd136be722be92c13800a1c8b25fbb42cddb1304356b420011fca9186502c
   category: docs
   optional: true
 - name: asttokens
@@ -1099,7 +1099,7 @@ package:
   category: main
   optional: false
 - name: cryptography
-  version: 42.0.6
+  version: 42.0.7
   manager: conda
   platform: win-64
   dependencies:
@@ -1110,10 +1110,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/cryptography-42.0.6-py311hfd75b31_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/cryptography-42.0.7-py311hfd75b31_0.conda
   hash:
-    md5: e56151f6be22940cb004968dcf840f20
-    sha256: 7aa41ccbc844af85aa164cea75da4e0ce5563a5fffc6a315894db12e1324b818
+    md5: e3cf35372ee6be14a67335fc2dfc8ca7
+    sha256: 379388f0f485838e6fc4c0543439324033829378870abd1cfccaaad3974f183e
   category: main
   optional: false
 - name: curl
@@ -2106,23 +2106,23 @@ package:
   category: main
   optional: false
 - name: glib
-  version: 2.80.0
+  version: 2.80.2
   manager: conda
   platform: win-64
   dependencies:
-    glib-tools: 2.80.0
+    glib-tools: 2.80.2
     libffi: '>=3.4,<4.0a0'
-    libglib: 2.80.0
+    libglib: 2.80.2
     libintl: '>=0.22.5,<1.0a0'
     libintl-devel: ''
     python: '*'
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/glib-2.80.0-h39d0aa6_6.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/glib-2.80.2-h0df6a38_0.conda
   hash:
-    md5: a4036d0bc6f499ebe9fef7b887f3ca0f
-    sha256: 25b3e8930540cfbb87c03feda23cd412eb1b01fd903f46d1bd067f7d39d5941d
+    md5: a728ca6f04c33ecb0f39eeda5fbd0e23
+    sha256: 8d4ebee8bfef919212e8c692f88cfa3f5f393501338ca1f1df83bbc2f0f3b6e7
   category: main
   optional: false
 - name: glib-tools
@@ -2141,19 +2141,19 @@ package:
   category: main
   optional: false
 - name: glib-tools
-  version: 2.80.0
+  version: 2.80.2
   manager: conda
   platform: win-64
   dependencies:
-    libglib: 2.80.0
+    libglib: 2.80.2
     libintl: '>=0.22.5,<1.0a0'
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/glib-tools-2.80.0-h0a98069_6.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/glib-tools-2.80.2-h2f9d560_0.conda
   hash:
-    md5: 40d452e4012c00f644b1dd6319fcdbcf
-    sha256: a7533a2e10fe95c8503e990da15933711843061e962450a1c7e753dc050f221b
+    md5: 42fc785d9db7ab051a206fbf882ecf2e
+    sha256: 2ac7b9cf3cf57a7cec3c431133a989cc783673858fb4225232c03e5ae28bd1db
   category: main
   optional: false
 - name: gmp
@@ -2648,7 +2648,7 @@ package:
   category: dev
   optional: true
 - name: ipython
-  version: 8.22.2
+  version: 8.24.0
   manager: conda
   platform: win-64
   dependencies:
@@ -2664,11 +2664,11 @@ package:
     python: '>=3.10'
     stack_data: ''
     traitlets: '>=5.13.0'
-    typing_extensions: ''
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/ipython-8.22.2-pyh7428d3b_0.conda
+    typing_extensions: '>=4.6'
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/ipython-8.24.0-pyh7428d3b_0.conda
   hash:
-    md5: f803d121b60dff8f4d8f9264b7c6e8bf
-    sha256: f7196ab6d5251505fd5b9c6ff63694eff09be7959a0a3421b8c2336638de9aaf
+    md5: 5c51b5f02a949233a2130284ff7fc416
+    sha256: 437b21b8d4dc3cc119deda857e2f180c470d956a30af41790f622d750021b51f
   category: dev
   optional: true
 - name: ipywidgets
@@ -2699,10 +2699,10 @@ package:
     python: '>=3.7'
     traitlets: '>=4.3.1'
     widgetsnbextension: '>=4.0.10,<4.1.0'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/ipywidgets-8.1.2-pyhd8ed1ab_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/ipywidgets-8.1.2-pyhd8ed1ab_1.conda
   hash:
-    md5: 67f86478c78637f68c1f3858973021f2
-    sha256: 0be846f1374faa2d9b6f5e100187d56afa9268221f7c7815265f30aa008da8ca
+    md5: 34072973a80ea997df2ee52c0f6fef78
+    sha256: 0123e54e4a5850baf2f50b5c03e4812274318ad26fcd130220b6ccedfad9bb07
   category: vis
   optional: true
 - name: jaraco.classes
@@ -2809,16 +2809,16 @@ package:
   category: dev
   optional: true
 - name: jinja2
-  version: 3.1.3
+  version: 3.1.4
   manager: conda
   platform: win-64
   dependencies:
     markupsafe: '>=2.0'
     python: '>=3.7'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/jinja2-3.1.3-pyhd8ed1ab_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/jinja2-3.1.4-pyhd8ed1ab_0.conda
   hash:
-    md5: e7d8df6509ba635247ff9aea31134262
-    sha256: fd517b7dd3a61eca34f8a6f9f92f306397149cae1204fce72ac3d227107dafdc
+    md5: 7b86ecb7d3557821c649b3c31e3eb9f2
+    sha256: 27380d870d42d00350d2d52598cddaf02f9505fb24be09488da0c9b8d1428f2d
   category: dev
   optional: true
 - name: jsoncpp
@@ -3054,7 +3054,7 @@ package:
   category: dev
   optional: true
 - name: keyring
-  version: 25.2.0
+  version: 25.2.1
   manager: conda
   platform: win-64
   dependencies:
@@ -3066,10 +3066,10 @@ package:
     jaraco.functools: ''
     python: '>=3.8'
     pywin32-ctypes: '>=0.2.0'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/keyring-25.2.0-pyh7428d3b_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/keyring-25.2.1-pyh7428d3b_0.conda
   hash:
-    md5: 33f009280144917e907939141af7cf7c
-    sha256: 2655d685a0ebcb664a136eb1a967ad0fe010f9f3370e39fff054ad742300ec75
+    md5: 70fb816c1b6ab81e048e4c6227ec922c
+    sha256: 3c7402db93f974fee3ef88f1208c8d9ab4009f33392a6b6d340516c96b3ae5b5
   category: dev
   optional: true
 - name: keyutils
@@ -3786,7 +3786,7 @@ package:
   category: main
   optional: false
 - name: libglib
-  version: 2.80.0
+  version: 2.80.2
   manager: conda
   platform: win-64
   dependencies:
@@ -3798,10 +3798,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/libglib-2.80.0-h39d0aa6_6.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/libglib-2.80.2-h0df6a38_0.conda
   hash:
-    md5: cd5c6efbe213c089f78575c98ab9a0ed
-    sha256: 87772cdcfb292a64ddd9e737c5deaaf671c7cd82b22ad70c8a8a9f1f34074fb5
+    md5: ef9ae80bb2a15aee7a30180c057678ea
+    sha256: 941bbe089a7a87fbe88324bfc7970a1688c7a765490e25b829ff73c7abc3fc5a
   category: main
   optional: false
 - name: libglu
@@ -4600,7 +4600,7 @@ package:
   category: main
   optional: false
 - name: libxml2
-  version: 2.12.6
+  version: 2.12.7
   manager: conda
   platform: win-64
   dependencies:
@@ -4609,10 +4609,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/libxml2-2.12.6-hc3477c8_2.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/libxml2-2.12.7-h283a6d9_0.conda
   hash:
-    md5: ac7af7a949db01dae61ddc48f4a93d79
-    sha256: 9a717cad6da52c84cfc490f7d52203c4cbc9e0e0389941fc6523273be5ccd17a
+    md5: 1451be68a5549561979125c1827b79ed
+    sha256: e246fefa745b56c022063ba1b69ff2965f280c6eee3de9821184e7c8f2475eab
   category: main
   optional: false
 - name: libzip
@@ -4954,7 +4954,7 @@ package:
     fonttools: '>=4.22.0'
     freetype: '>=2.12.1,<3.0a0'
     kiwisolver: '>=1.3.1'
-    numpy: '>=1.23.5,<2.0a0'
+    numpy: '>=1.21,<2'
     packaging: '>=20.0'
     pillow: '>=8'
     pyparsing: '>=2.3.1'
@@ -4964,10 +4964,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/matplotlib-base-3.8.4-py311h6e989c2_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/matplotlib-base-3.8.4-py311h9b31f6e_1.conda
   hash:
-    md5: e4118e9daeb3e773c5c277065c43bedf
-    sha256: 6d8381255a1d39067c3b77eb12b592909ea8614496127637e873df83a87641b1
+    md5: ded234673a12be500da7db914253c4d8
+    sha256: 2c5837f4d6898398833f95e501a4880345cae996661c3ee19a525f177fe77612
   category: main
   optional: false
 - name: matplotlib-inline
@@ -5010,16 +5010,16 @@ package:
   category: docs
   optional: true
 - name: mdit-py-plugins
-  version: 0.4.0
+  version: 0.4.1
   manager: conda
   platform: win-64
   dependencies:
     markdown-it-py: '>=1.0.0,<4.0.0'
     python: '>=3.8'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/mdit-py-plugins-0.4.0-pyhd8ed1ab_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/mdit-py-plugins-0.4.1-pyhd8ed1ab_0.conda
   hash:
-    md5: 6c5358a10873a15398b6f15f60cb5e1f
-    sha256: 1ddac8d2be448cd1fbe49d2ca09df7e10d99679d53146a917f8bb4899f76d0ca
+    md5: eb90dd178bcdd0260dfaa6e1cbccf042
+    sha256: 3525b8e4598ccaab913a2bcb8a63998c6e5cc1870d0c5a5b4e867aa69c720aa1
   category: docs
   optional: true
 - name: mdurl
@@ -5126,7 +5126,7 @@ package:
   category: dev
   optional: true
 - name: msgpack-python
-  version: 1.0.7
+  version: 1.0.8
   manager: conda
   platform: win-64
   dependencies:
@@ -5135,10 +5135,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/msgpack-python-1.0.7-py311h005e61a_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/msgpack-python-1.0.8-py311h3257749_0.conda
   hash:
-    md5: d2388fe3611502d1fc5e50d0702086b7
-    sha256: 59a9ad037d738a9bb1c3fb0cc8b5fdab8b46c5ced80039f9ea38d1ec2758e075
+    md5: 25ab436993969840e7c521197c044300
+    sha256: 5917104a6e00f51a28fd217709818d1b765eef3de898601e23b2fb364d824186
   category: main
   optional: false
 - name: msys2-conda-epoch
@@ -5904,15 +5904,15 @@ package:
   category: main
   optional: false
 - name: platformdirs
-  version: 4.2.1
+  version: 4.2.2
   manager: conda
   platform: win-64
   dependencies:
     python: '>=3.8'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/platformdirs-4.2.1-pyhd8ed1ab_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/platformdirs-4.2.2-pyhd8ed1ab_0.conda
   hash:
-    md5: d478a8a3044cdff1aa6e62f9269cefe0
-    sha256: 5718fef2954f016834058ae1d359e407ff8e2e847b35ab43d5d91bcf22d5578d
+    md5: 6f6cf28bf8e021933869bae3f84b8fc9
+    sha256: adc59384cf0b2fc6dc7362840151e8cb076349197a38f7230278252698a88442
   category: main
   optional: false
 - name: plumbum
@@ -6203,7 +6203,7 @@ package:
   category: main
   optional: false
 - name: pyaedt
-  version: 0.8.10
+  version: 0.9.1
   manager: conda
   platform: win-64
   dependencies:
@@ -6217,10 +6217,10 @@ package:
     pyvista: '>=0.34.1'
     pywin32: '>=303'
     rpyc: 5.0.1
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/pyaedt-0.8.10-py311h1ea47a8_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/pyaedt-0.9.1-py311h1ea47a8_0.conda
   hash:
-    md5: e39252eb36ad6dc211d5fe9d2c8efa43
-    sha256: 86d3789c3f7d574eb960c6d40afb0be82baffcffb7871302de857f42c5677486
+    md5: d2b5303e4b7931821c4257cbc9d48e0f
+    sha256: 95e6a5e64541ca8f2a2cbe242bf50e8d58b8719fb3c6abe3fb39ee7c8541e8b5
   category: main
   optional: false
 - name: pycparser
@@ -6683,7 +6683,7 @@ package:
   category: main
   optional: false
 - name: pyvista
-  version: 0.43.7
+  version: 0.43.8
   manager: conda
   platform: win-64
   dependencies:
@@ -6694,10 +6694,10 @@ package:
     python: '>=3.8'
     scooby: '>=0.5.1'
     vtk: ''
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/pyvista-0.43.7-pyhd8ed1ab_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/pyvista-0.43.8-pyhd8ed1ab_0.conda
   hash:
-    md5: 05d7f46094a154714cc4d0dad293127b
-    sha256: 1c6723be65fa3119a871d624272eed11c69e9a66b9c2a97f8453e597c680dc1c
+    md5: e0c5b99bd2a16284f55322d0fb28cb39
+    sha256: 3a7be5272e834bbf7248dbabe2c42bac4f2cc1821b04c569f43dce237b97b29f
   category: main
   optional: false
 - name: pywin32
@@ -6805,7 +6805,7 @@ package:
   category: dev
   optional: true
 - name: pyzmq
-  version: 26.0.2
+  version: 26.0.3
   manager: conda
   platform: win-64
   dependencies:
@@ -6816,10 +6816,10 @@ package:
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
     zeromq: '>=4.3.5,<4.3.6.0a0'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/pyzmq-26.0.2-py311h484c95c_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/pyzmq-26.0.3-py311h484c95c_0.conda
   hash:
-    md5: a599f2e8fbbd07a2779a198610569227
-    sha256: 6ad85b8c4a1d419062ea02286f5ef58bef5b3cea3395b9ebfb7d009ee51da01b
+    md5: f32e37cabb3bc68396d2bc7939ac333c
+    sha256: 9c5c301d6bbb041d8728dfde015be7bc3ca5159b8193013581c5aa2de7bb9e89
   category: dev
   optional: true
 - name: qt-main
@@ -6991,7 +6991,7 @@ package:
   category: vis
   optional: true
 - name: rpds-py
-  version: 0.18.0
+  version: 0.18.1
   manager: conda
   platform: win-64
   dependencies:
@@ -7000,10 +7000,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/rpds-py-0.18.0-py311hc37eb10_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/rpds-py-0.18.1-py311h533ab2d_0.conda
   hash:
-    md5: 9851ab425910f099cc2d512996fc01ce
-    sha256: 46766bb9b8df78ef7c8125f5a51f2cd77ddfbdc622a7db1a5c19c41b8d034965
+    md5: 6c14e6ed5dd4e5c51f5023f5c726ba38
+    sha256: 0ff4e957397fbfd6e803640ac1db9a449d9339f01ae4e4b3c668a3c9eb33441d
   category: vis
   optional: true
 - name: rpyc
@@ -7111,7 +7111,7 @@ package:
   category: dev
   optional: true
 - name: ruff
-  version: 0.4.3
+  version: 0.4.4
   manager: conda
   platform: win-64
   dependencies:
@@ -7120,10 +7120,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/ruff-0.4.3-py311ha637bb9_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/ruff-0.4.4-py311ha637bb9_0.conda
   hash:
-    md5: 177d8bb9390f794982c7f23e2ecb8b31
-    sha256: eefbc61fc69ca770a92eb15a1f4e26a15db5f7d1b05ddf6fab76c53caa39653b
+    md5: aa48d308400b3ac5f52cee7a13410e1b
+    sha256: 682509e4882b048b50618414e0f13da2168f9943f79a8a2fe1f2dea5a46bc80c
   category: dev
   optional: true
 - name: scooby
@@ -7931,15 +7931,15 @@ package:
   category: dev
   optional: true
 - name: tomlkit
-  version: 0.12.4
+  version: 0.12.5
   manager: conda
   platform: win-64
   dependencies:
     python: '>=3.7'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/tomlkit-0.12.4-pyha770c72_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/tomlkit-0.12.5-pyha770c72_0.conda
   hash:
-    md5: 37c47ea93ef00dd80d880fc4ba21256a
-    sha256: 8d45c266bf919788abacd9828f4a2101d7216f6d4fc7c8d3417034fe0d795a18
+    md5: e5dde5caf905e9d95895e05f94967e14
+    sha256: 5117eff35992d896ca177dfffc08be8a9b3bf3d306ddc3d8bf4b699cdf1e1b79
   category: dev
   optional: true
 - name: toolz
@@ -8206,7 +8206,7 @@ package:
   category: dev
   optional: true
 - name: virtualenv
-  version: 20.26.1
+  version: 20.26.2
   manager: conda
   platform: win-64
   dependencies:
@@ -8214,10 +8214,10 @@ package:
     filelock: <4,>=3.12.2
     platformdirs: <5,>=3.9.1
     python: '>=3.8'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/virtualenv-20.26.1-pyhd8ed1ab_0.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/noarch/virtualenv-20.26.2-pyhd8ed1ab_0.conda
   hash:
-    md5: 4e1cd2faf006a6e62c148f95cef0cac2
-    sha256: d603f8608f353a7aaa794c00bd3df71aafd5b56bf53af3e9c3dfe135203a4f33
+    md5: 7d36e7a485ea2f5829408813bdbbfb38
+    sha256: 1eefd180723fb2fd295352323b53777eeae5765b24d62ae75fc9f1e71b455f11
   category: dev
   optional: true
 - name: vs2015_runtime
@@ -8997,14 +8997,15 @@ package:
   manager: conda
   platform: win-64
   dependencies:
+    krb5: '>=1.21.2,<1.22.0a0'
     libsodium: '>=1.0.18,<1.0.19.0a0'
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/zeromq-4.3.5-he0c23c2_3.conda
+  url: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/win-64/zeromq-4.3.5-he1f189c_4.conda
   hash:
-    md5: a15710475b7ec416900e60560f6839ee
-    sha256: 8aecdcafccb73417d6a8d5c99b2b89644cd1e739e9419b70db2b97ddd344a58a
+    md5: b755eb545c2728b9a53729f02e627834
+    sha256: 0f375034a88659f764ce837f324698a883da227fcb517561ffaf6a89474211b4
   category: dev
   optional: true
 - name: zipp
