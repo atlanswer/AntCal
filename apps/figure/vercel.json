@@ -1,6 +1,12 @@
 {
   "cleanUrls": true,
   "framework": "solidstart-1",
-  "regions": ["hkg1"],
-  "trailingSlash": false
+  "trailingSlash": false,
+  "functions": {
+    "api/**/*.py": {
+      "includeFiles": "api/**/*",
+      "excludeFiles": "*,!api"
+    }
+  },
+  "regions": ["hkg1"]
 }
