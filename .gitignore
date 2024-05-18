@@ -5,7 +5,7 @@ node_modules
 
 # Env
 .env
-venv
+.venv
 
 # Build
 build
