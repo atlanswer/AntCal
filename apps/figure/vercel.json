@@ -5,7 +5,7 @@
   "functions": {
     "api/**/*.py": {
       "includeFiles": "api/**/*",
-      "excludeFiles": "*,!api"
+      "excludeFiles": "{node_modules,public,src,.vercel,.vinxi,.turbo}/**/*"
     }
   },
   "regions": ["hkg1"]
