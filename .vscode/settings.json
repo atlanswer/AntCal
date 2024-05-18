@@ -21,10 +21,11 @@
     "pyright",
     "Qwik",
     "solidjs",
-    "structlog",
     "tsbuildinfo",
     "VCPKG",
-    "vinxi"
+    "vinxi",
+    "sanic",
+    "openpyxl"
   ],
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "cmake.sourceDirectory": "${workspaceFolder}/cpp",

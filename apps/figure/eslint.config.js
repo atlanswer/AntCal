@@ -40,7 +40,7 @@ export default tsEslint.config(
       ".turbo",
       ".vinxi",
       "public",
-      "venv",
+      ".venv",
     ],
   },
   prettier,

@@ -2,13 +2,17 @@
 python_version = "3.12"
 
 [packages]
+sanic = { extras = ["ext"], version = "*" }
+setuptools = "*"
 numpy = "*"
 matplotlib = "*"
 pandas = "*"
 openpyxl = "*"
-orjson = "*"
 
 [dev-packages]
 ipython = "*"
 ipykernel = "*"
 ruff = "*"
+
+[scripts]
+dev = "sanic api.index:app --debug"
