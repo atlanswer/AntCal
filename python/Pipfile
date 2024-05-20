@@ -1,4 +1,5 @@
 [packages]
+antcal = { path = ".", editable = true }
 pyaedt = "*"
 numpy = "*"
 rich = "*"

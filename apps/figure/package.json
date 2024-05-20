@@ -24,7 +24,7 @@
   "dependencies": {
     "@solidjs/meta": "~0.29.3",
     "@solidjs/router": "~0.13.1",
-    "@solidjs/start": "~1.0.0-rc.1",
+    "@solidjs/start": "~1.0.0",
     "comlink": "~4.4.1",
     "micromark": "~4.0.0",
     "micromark-extension-gfm": "~3.0.0",

@@ -24,7 +24,6 @@ dependencies = [
     "numpy",
     "pandas",
     "matplotlib",
-    "pyvista",
     "rich",
 ]
 
@@ -62,3 +61,4 @@ select = ["E", "F", "UP", "B", "SIM", "I"]
 [tool.pyright]
 typeCheckingMode = "strict"
 reportMissingTypeStubs = false
+reportUnknownVariableType = "warning"

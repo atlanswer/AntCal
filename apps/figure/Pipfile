@@ -4,7 +4,7 @@ python_version = "3.12"
 [packages]
 fastapi = ">=0.111"
 numpy = "*"
-# matplotlib = "*"
+matplotlib = "*"
 # pandas = "*"
 # openpyxl = "*"
 

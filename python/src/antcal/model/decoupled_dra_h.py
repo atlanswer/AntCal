@@ -13,7 +13,6 @@ from typing import Literal, get_args
 
 import numpy as np
 import numpy.typing as npt
-from loguru import logger
 from pyaedt.hfss import Hfss
 from pyaedt.modeler.cad.object3d import Object3d
 from pyaedt.modeler.modeler3d import Modeler3D
@@ -24,8 +23,10 @@ from pyaedt.modules.SolveSetup import SetupHFSS
 from pyaedt.modules.SolveSweeps import SweepHFSS
 
 import antcal.pyaedt.hfss
+from antcal.log import log
 
 reload(antcal.pyaedt.hfss)
+
 from antcal.pyaedt.hfss import (
     check_materials,
     new_hfss_session,
@@ -201,7 +202,7 @@ def create_decoupled_dra_h(hfss: Hfss, variables: dict[str, str]) -> None:
     )
     assert isinstance(sweep, SweepHFSS)
 
-    logger.debug("Build completed.")
+    log.debug("Build completed.")
 
 
 def solve_sync(hfss: Hfss) -> None:
@@ -256,7 +257,7 @@ def run():
     variables = convert_to_variables(SUGGESTED_PARAMS)
     create_decoupled_dra_h(h1, variables)
 
-    logger.debug(h1.validate_full_design())
+    log.debug(h1.validate_full_design())
 
     solve_sync(h1)
 

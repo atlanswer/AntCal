@@ -2,10 +2,12 @@ import logging
 
 from rich.logging import RichHandler
 
-logging.basicConfig(
-    level="NOTSET",
-    format="%(message)s",
-    datefmt="[%m/%d %H:%M:%S]",
-    handlers=[RichHandler(markup=True)],
+log = logging.getLogger("antcal")
+handler = RichHandler(
+    log_time_format="[%m/%d %H:%M:%S]",
+    markup=True,
+    rich_tracebacks=True,
+    tracebacks_show_locals=True,
 )
-log = logging.getLogger("rich")
+log.setLevel(logging.DEBUG)
+log.addHandler(handler)

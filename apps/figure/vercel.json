@@ -3,10 +3,16 @@
   "framework": "solidstart-1",
   "trailingSlash": false,
   "functions": {
-    "api/*.py": {
+    "api/**/*.py": {
       "includeFiles": "{api,utils}/**/*",
       "excludeFiles": "{node_modules,public,src,.vercel,.vinxi,.turbo}/**/*"
     }
   },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/main/:path*"
+    }
+  ],
   "regions": ["hkg1"]
 }
