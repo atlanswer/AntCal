@@ -1,5 +1,4 @@
-"""Design tools.
-"""
+"""Design tools."""
 
 from pyaedt.modules.MaterialLib import Materials
 

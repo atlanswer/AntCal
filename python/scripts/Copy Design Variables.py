@@ -7,8 +7,8 @@ Description:
 """
 
 import os
-import ScriptEnv
 
+import ScriptEnv  # type: ignore
 
 oProject = oDesktop.GetActiveProject()
 oDesign = oProject.GetActiveDesign()

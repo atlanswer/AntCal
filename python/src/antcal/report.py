@@ -1,18 +1,19 @@
 """Generating report."""
 
 # %% Import
-import numpy as np
-from pyaedt.modules.AdvancedPostProcessing import PostProcessor
 from typing import cast
 
-from pyaedt.modules.solutions import SolutionData
+import numpy as np
+import numpy.typing as npt
 from pyaedt.generic.constants import SOLUTIONS
+from pyaedt.modules.AdvancedPostProcessing import PostProcessor
+from pyaedt.modules.solutions import SolutionData
 
 
 # %% Functions
 def get_s_params(
     post: PostProcessor, row: int, col: int, setup_name: str, sweep_name: str
-) -> np.ndarray:
+) -> npt.NDArray[np.float64]:
     """Fetch S parameters as an array.
 
     :param pyaedt.modules.AdvancedPostProcessing.PostProcessor post: Advanced post processor
@@ -27,7 +28,7 @@ def get_s_params(
             category = "Modal Solution Data"
         case SOLUTIONS.Hfss.DrivenTerminal:
             category = "Terminal Solution Data"
-        case _:
+        case _:  # pyright: ignore
             category = "Modal Solution Data"
 
     s = cast(

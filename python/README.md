@@ -31,10 +31,10 @@ pip install antcal
 
 ```shell
 cd python
-# Create lockfile
-conda-lock lock --mamba -e vis -e docs -f pyproject.toml
-# Restore `conda` environment
-conda-lock install --mamba --dev -E vis -E docs -p ./venv conda-lock.yml
+# Create virtual env
+pipenv sync -d
+# Update virtual env
+pipenv update -d
 # Build
 flit build
 ```

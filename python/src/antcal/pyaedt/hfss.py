@@ -7,14 +7,15 @@ import sys
 from collections.abc import Mapping
 from types import MethodType
 
-from loguru import logger
 from pyaedt.application.Variables import Variable
 from pyaedt.generic.desktop_sessions import (
-    _desktop_sessions,  # pyright: ignore [reportPrivateUsage]
+    _desktop_sessions,  # pyright: ignore
 )
 from pyaedt.generic.settings import settings
 from pyaedt.hfss import Hfss
 from pyaedt.modeler.cad.object3d import Object3d
+
+from antcal.log import log
 
 
 def __exit__(self: Hfss) -> None:
@@ -35,7 +36,7 @@ def close_desktop(self: Hfss) -> None:
     try:
         self.close_project(save_project=False)
     except Exception as e:
-        logger.error(f"Exception occurred during closing: {e}.")
+        log.error(f"Exception occurred during closing: {e}.")
 
     self.odesktop.QuitApplication()  # pyright: ignore[reportOptionalMemberAccess]
 
@@ -65,7 +66,7 @@ def new_hfss_session(non_graphical: bool = False) -> Hfss:
         try:
             del sys.modules["__main__"].oDesktop  # pyright: ignore
         except AttributeError:
-            logger.error("Failed to remove `oDesktop` from `__main__`")
+            log.error("Failed to remove `oDesktop` from `__main__`")
 
     # Create a new HFSS object
     h = Hfss(non_graphical=non_graphical, new_desktop_session=True)
@@ -94,7 +95,7 @@ def get_variables(hfss: Hfss) -> dict[str, str]:
     vm = hfss.variable_manager
     if not vm:
         return {}
-    return {k: v.evaluated_value for k, v in vm.design_variables.items()}
+    return {k: v.evaluated_value for k, v in vm.design_variables.items()}  # pyright: ignore
 
 
 def update_variables(
@@ -117,7 +118,7 @@ def check_materials(hfss: Hfss, materials: str | list[str]) -> None:
     """If the material exists and is not in the materials database,
     it is added to this database."""
 
-    mat = hfss.materials
+    mat = hfss.materials  # pyright: ignore
     if isinstance(materials, str):
         materials = [materials]
     for material in materials:
@@ -141,7 +142,7 @@ class MyVariable(Variable):
         self.expression = expression
 
     def __str__(self) -> str:
-        name = self.name
+        name = self.name  # pyright: ignore
         assert isinstance(name, str)
 
         return name

@@ -1,14 +1,14 @@
-"""Utilities.
-"""
+"""Utilities."""
 
 import asyncio
+from collections.abc import Callable, Coroutine
 from functools import wraps
-from typing import Any, Callable, Coroutine
+from typing import Any
 
 import numpy as np
 import numpy.typing as npt
-from loguru import logger
 from pyaedt.hfss import Hfss
+from antcal.log import log
 
 from antcal.pyaedt.hfss import new_hfss_session
 
@@ -38,18 +38,18 @@ async def submit_tasks(
     aedt_queue: asyncio.Queue[Hfss] = asyncio.Queue()
 
     if not aedt_list:
-        logger.debug("aedt_list not provided, using self-hosted AEDT workers.")
+        log.debug("aedt_list not provided, using self-hosted AEDT workers.")
         for _ in range(n_workers):
             await aedt_queue.put(new_hfss_session())
     else:
-        logger.debug("Using provided aedt_list.")
+        log.debug("Using provided aedt_list.")
         for hfss in aedt_list:
             await aedt_queue.put(hfss)
 
     async with asyncio.TaskGroup() as tg:
         tasks = [tg.create_task(task_fn(aedt_queue, v)) for v in vs]
 
-    logger.debug("Simulation task queue completed.")
+    log.debug("Simulation task queue completed.")
     results = np.array([task.result() for task in tasks])
 
     while not aedt_queue.empty():
@@ -68,7 +68,7 @@ async def refresh_aedt_queue(aedt_queue: asyncio.Queue[Hfss]) -> None:
     n_simulators = aedt_queue.qsize()
     hfss = await aedt_queue.get()
     if hfss.desktop_class:
-        non_graphical = hfss.desktop_class.non_graphical
+        non_graphical = hfss.desktop_class.non_graphical  # pyright: ignore
     else:
         non_graphical = False
     hfss.close_desktop()
@@ -86,7 +86,7 @@ def refresh_aedt_list(aedt_list: list[Hfss]) -> None:
 
     n_simulators = len(aedt_list)
     if aedt_list[0].desktop_class:
-        non_graphical = aedt_list[0].desktop_class.non_graphical
+        non_graphical = aedt_list[0].desktop_class.non_graphical  # pyright: ignore
     else:
         non_graphical = False
 
