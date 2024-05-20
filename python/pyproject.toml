@@ -2,14 +2,14 @@
 name = "antcal"
 dynamic = ["version", "description"]
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 license = { file = "LICENSE" }
 keywords = ["antenna", "DRA", "simulation"]
 authors = [{ name = "Atlanswer", email = "atlanswer@gmail.com" }]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "Development Status :: 2 - Pre-Alpha",
     "License :: OSI Approved :: MIT License",
@@ -20,19 +20,16 @@ classifiers = [
     "Intended Audience :: Science/Research",
 ]
 dependencies = [
-    "pyaedt >=0.8.10",
+    "pyaedt >=0.9",
     "numpy",
     "pandas",
     "matplotlib",
-    "loguru",
     "pyvista",
-#   "rich",
-#   "colorama",
-#   "orjson",
+    "rich",
 ]
 
 [project.optional-dependencies]
-dev = ["flit", "conda-lock", "ruff", "ipython", "ipykernel"]
+dev = ["flit", "ruff", "ipython", "ipykernel", "nbformat"]
 docs = [
     "sphinx",
     "myst-parser",
@@ -41,7 +38,6 @@ docs = [
     "sphinx-copybutton",
     "sphinx-autobuild",
 ]
-vis = ["ipywidgets", "nbformat", "python-kaleido"]
 
 [project.urls]
 Homepage = "https://github.com/atlanswer/AntCal"
@@ -56,25 +52,13 @@ Issues = "https://github.com/atlanswer/AntCal/issue"
 requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
-[tool.hatch.envs.docs.scripts]
-dev = "sphinx-autobuild docs docs/build --watch src --ignore docs/apidocs -j auto -n"
-build = "sphinx-build docs docs/build -j auto -n"
-
-[tool.conda-lock]
-channels = ["conda-forge"]
-# platforms = ["win-64", "linux-64"]
-platforms = ["win-64"]
-
 [tool.ruff]
 line-length = 80
-target-version = "py311"
+target-version = "py312"
 
 [tool.ruff.lint]
-select = [ "E", "F", "UP", "B", "SIM", "I" ]
+select = ["E", "F", "UP", "B", "SIM", "I"]
 
 [tool.pyright]
 typeCheckingMode = "strict"
 reportMissingTypeStubs = false
-reportUnknownMemberType = false
-reportUnknownVariableType = false
-reportUnknownArgumentType = false
