@@ -1,5 +1,5 @@
 [project]
-name = "antcal"
+name = "figure"
 dynamic = ["version", "description"]
 readme = "../README.md"
 requires-python = ">=3.12"
