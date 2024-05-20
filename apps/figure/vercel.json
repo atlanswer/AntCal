@@ -3,7 +3,7 @@
   "framework": "solidstart-1",
   "trailingSlash": false,
   "functions": {
-    "api/**/*.py": {
+    "api/index.py": {
       "includeFiles": "api/**/*",
       "excludeFiles": "{node_modules,public,src,.vercel,.vinxi,.turbo}/**/*"
     }
