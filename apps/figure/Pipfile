@@ -2,8 +2,7 @@
 python_version = "3.12"
 
 [packages]
-sanic = { extras = ["ext"], version = "*" }
-setuptools = "*"
+fastapi = ">=0.111"
 # numpy = "*"
 # matplotlib = "*"
 # pandas = "*"
@@ -15,4 +14,4 @@ ipykernel = "*"
 ruff = "*"
 
 [scripts]
-dev = "sanic api.index:app --debug"
+dev = "fastapi dev api/index.py"
