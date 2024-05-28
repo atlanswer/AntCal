@@ -3,15 +3,15 @@
   "framework": "solidstart-1",
   "trailingSlash": false,
   "functions": {
-    "api/**/*.py": {
-      "includeFiles": "{api,utils}/**/*",
-      "excludeFiles": "{node_modules,public,src,.vercel,.vinxi,.turbo}/**/*"
+    "api/*.py": {
+      "includeFiles": "api/**/*",
+      "excludeFiles": "{.turbo,.vercel,.venv,.vinxi,node_modules,public,src}/**/*"
     }
   },
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/main/:path*"
+      "source": "/api/(.*)",
+      "destination": "/api/main"
     }
   ],
   "regions": ["hkg1"]

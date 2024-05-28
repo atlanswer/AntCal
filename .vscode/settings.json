@@ -24,8 +24,8 @@
     "tsbuildinfo",
     "VCPKG",
     "vinxi",
-    "sanic",
-    "openpyxl"
+    "openpyxl",
+    "pipenv"
   ],
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "cmake.sourceDirectory": "${workspaceFolder}/cpp",
