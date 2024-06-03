@@ -11,7 +11,8 @@ app = FastAPI(
 
 router = APIRouter(prefix="/api")
 
-@router.get("/", response_class=PlainTextResponse)
+
+@router.get("", response_class=PlainTextResponse)
 async def get_root() -> str:
     return "Hello, world!"
 
