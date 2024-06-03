@@ -10,8 +10,8 @@
   },
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/main"
+      "source": "/api/:path*",
+      "destination": "/api/index"
     }
   ],
   "regions": ["hkg1"]

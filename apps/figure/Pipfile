@@ -14,4 +14,4 @@ ipykernel = "*"
 ruff = "*"
 
 [scripts]
-dev = "fastapi dev api/main.py"
+dev = "fastapi dev api/index.py"
