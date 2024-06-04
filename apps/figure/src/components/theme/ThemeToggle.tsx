@@ -1,69 +1,11 @@
 // @refresh granular
 
-import {
-  Match,
-  Switch,
-  createEffect,
-  createRenderEffect,
-  createSignal,
-  onCleanup,
-} from "solid-js";
+import { Match, Switch } from "solid-js";
 import { isServer } from "solid-js/web";
-import {
-  THEME_STORAGE_KEY,
-  setTheme,
-  theme,
-  zTheme,
-} from "~/components/theme/context";
+import { useTheme } from "~/components/theme/context";
 
 export const ThemeToggle = () => {
-  const [prefersDark, setPrefersDark] = createSignal<boolean>(true);
-
-  if (!isServer) {
-    const matchPrefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const syncPrefersColorScheme = () =>
-      setPrefersDark(matchPrefersDark.matches ? true : false);
-
-    createEffect(() => {
-      setTheme(zTheme.parse(localStorage.getItem(THEME_STORAGE_KEY)));
-    });
-
-    createEffect(() => {
-      localStorage.setItem(THEME_STORAGE_KEY, theme());
-    });
-
-    createRenderEffect(() => {
-      const body = document.body;
-      switch (theme()) {
-        case "system":
-          if (prefersDark()) {
-            body.classList.add("dark");
-          } else {
-            body.classList.remove("dark");
-          }
-          break;
-        case "light":
-          body.classList.remove("dark");
-          break;
-        case "dark":
-          body.classList.add("dark");
-          break;
-      }
-    });
-
-    createEffect(() => {
-      if (theme() === "system") {
-        matchPrefersDark.addEventListener("change", syncPrefersColorScheme);
-      } else {
-        matchPrefersDark.removeEventListener("change", syncPrefersColorScheme);
-      }
-    });
-
-    onCleanup(() =>
-      matchPrefersDark.removeEventListener("change", syncPrefersColorScheme),
-    );
-  }
+  const [theme, setTheme] = useTheme();
 
   const IconLight = () => (
     <svg

@@ -1,3 +1,5 @@
+// @refresh granular
+
 import { Title } from "@solidjs/meta";
 import { Markdown } from "~/components/Markdown";
 import aboutMd from "~/md/about.md?raw";

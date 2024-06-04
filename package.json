@@ -1,6 +1,6 @@
 {
   "name": "antcal",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Antenna Calculator",
   "keywords": [
     "antenna"
@@ -24,7 +24,6 @@
   "scripts": {
     "dev": "turbo dev",
     "dev:fig": "turbo -F figure dev",
-    "dev:fig:api": "turbo -F figure dev:api",
     "build": "turbo build",
     "lint": "turbo lint",
     "prettier": "prettier",

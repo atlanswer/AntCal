@@ -8,7 +8,6 @@ netlify
 .vinxi
 
 # Environment
-.env
 .env*.local
 
 # dependencies

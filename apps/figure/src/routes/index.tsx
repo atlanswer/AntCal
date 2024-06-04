@@ -1,3 +1,5 @@
+// @refresh granular
+
 import { Title } from "@solidjs/meta";
 import { FigureConfigs, zFigureConfigs } from "~/components/figure/context";
 
@@ -49,8 +51,9 @@ export default function Home() {
   return (
     <>
       <Title>Figure | AntCal</Title>
-      <h1 class="text-blue-500">Hello world!</h1>
-      <p>Homepage</p>
+      <p>Base URL: {import.meta.env.BASE_URL}</p>
+      <p>Mode: {import.meta.env.MODE}</p>
+      <p>API_URL: {import.meta.env["VITE_API_URL"]}</p>
     </>
   );
 }

@@ -7,15 +7,18 @@ import { Suspense, type ParentComponent } from "solid-js";
 import "~/app.css";
 import { Footer } from "~/components/Footer";
 import { Header } from "~/components/Header";
+import { ThemeProvider } from "~/components/theme/context";
 
 const Layout: ParentComponent = (props) => {
   return (
     <MetaProvider>
-      <Header />
-      <main class="flex-auto">
-        <Suspense>{props.children}</Suspense>
-      </main>
-      <Footer />
+      <ThemeProvider>
+        <Header />
+        <main class="flex-auto">
+          <Suspense>{props.children}</Suspense>
+        </main>
+        <Footer />
+      </ThemeProvider>
     </MetaProvider>
   );
 };
