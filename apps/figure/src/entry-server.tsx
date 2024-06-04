@@ -1,6 +1,7 @@
 // @refresh granular
 
 import { createHandler, StartServer } from "@solidjs/start/server";
+import PostHogSDK from "~/components/posthog/sdk";
 
 export default createHandler(() => (
   <StartServer
@@ -27,6 +28,7 @@ export default createHandler(() => (
             href="/app.webmanifest"
           />
           {assets}
+          <PostHogSDK />
         </head>
         <body
           id="app"
