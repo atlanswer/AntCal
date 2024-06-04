@@ -15,7 +15,7 @@ const Layout: ParentComponent = (props) => {
       <ThemeProvider>
         <Header />
         <main class="flex-auto">
-          <Suspense>{props.children}</Suspense>
+          <Suspense fallback={<p>Loading...</p>}>{props.children}</Suspense>
         </main>
         <Footer />
       </ThemeProvider>
