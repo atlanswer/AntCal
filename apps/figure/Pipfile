@@ -5,7 +5,7 @@ python_version = "3.12"
 fastapi = ">=0.111"
 numpy = "*"
 matplotlib = "*"
-pandas = "*"
+# pandas = "*"
 openpyxl = "*"
 
 [dev-packages]
