@@ -3,7 +3,6 @@
 import {
   createContext,
   createEffect,
-  createRenderEffect,
   createSignal,
   onCleanup,
   useContext,
@@ -31,8 +30,6 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider: ParentComponent = (props) => {
-  const [prefersDark, setPrefersDark] = createSignal<boolean>(true);
-
   if (!isServer) {
     setTheme(zTheme.parse(localStorage.getItem(THEME_STORAGE_KEY)));
 
@@ -41,11 +38,15 @@ export const ThemeProvider: ParentComponent = (props) => {
     const syncPrefersColorScheme = () =>
       setPrefersDark(matchPrefersDark.matches ? true : false);
 
+    const [prefersDark, setPrefersDark] = createSignal<boolean>(
+      matchPrefersDark.matches,
+    );
+
     createEffect(() => {
       localStorage.setItem(THEME_STORAGE_KEY, theme());
     });
 
-    createRenderEffect(() => {
+    createEffect(() => {
       const body = document.body;
       switch (theme()) {
         case "system":
