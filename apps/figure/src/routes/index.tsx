@@ -51,8 +51,6 @@ export default function Home() {
   return (
     <>
       <Title>Figure | AntCal</Title>
-      <p>Base URL: {import.meta.env.BASE_URL}</p>
-      <p>Mode: {import.meta.env.MODE}</p>
       <p>API_URL: {import.meta.env["VITE_API_URL"]}</p>
     </>
   );
