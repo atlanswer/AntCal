@@ -8,13 +8,15 @@ If you encountered any issue, please reach out to me.
 
 This web app is built with the following tools:
 
-- [Solid](https://solidjs.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Pyodide](https://pyodide.org/)
-- [Numpy](https://numpy.org/)
-- [Matplotlib](https://matplotlib.org/)
+- [SolidStart](https://start.solidjs.com)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Turborepo](https://turbo.build/repo)
+- [Bun](https://bun.sh)
+- [FastAPI](https://fastapi.tiangolo.com)
+- [Numpy](https://numpy.org)
+- [Matplotlib](https://matplotlib.org)
 
-And it's hosted on [Vercel](https://vercel.com/).
+And it's hosted on [Vercel](https://vercel.com).
 
 ## Notes
 
@@ -65,13 +67,13 @@ Upload data files to generate figures. Work in progress!
 
 ## Privacy
 
-This web app does not collect, store, or share any
-private data. The only data it processes are the
-files you choose to upload and your system
-theme, which are stored locally in your browser.
+[PostHog](https://posthog.com) is used to collect analytics,
+which contain but not limited to frontend events and your IP address.
+See their [terms](https://posthog.com/terms)
+and [privacy policy](https://posthog.com/privacy).
+It helps me improve this app.
 
-Analytics that contains your infomation are still
-being processed by the host provider Vercel.
+Your infomation can still being processed by the host provider Vercel.
 Their privacy policy can be found here:
 [Privacy Policy](https://vercel.com/legal/privacy-policy),
 [Web Analytics Privacy and Compliance](https://vercel.com/docs/analytics/privacy-policy),
@@ -79,7 +81,7 @@ Their privacy policy can be found here:
 
 ## Reference
 
-See [IEEE Author Center](https://journals.ieeeauthorcenter.ieee.org/).
+See [IEEE Author Center](https://journals.ieeeauthorcenter.ieee.org).
 
 > 10pt is used by the vast majority of papers.
 >

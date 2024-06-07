@@ -5,6 +5,7 @@ node_modules
 
 # Env
 .venv
+.env*.local
 
 # Build
 build
