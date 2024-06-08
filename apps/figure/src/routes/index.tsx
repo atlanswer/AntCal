@@ -2,7 +2,7 @@
 
 import { Title } from "@solidjs/meta";
 import { useSearchParams } from "@solidjs/router";
-import { createEffect, on, type Component } from "solid-js";
+import { For, createEffect, on, onMount, type Component } from "solid-js";
 import { createStore } from "solid-js/store";
 import { isServer } from "solid-js/web";
 import {
@@ -16,25 +16,25 @@ const FIGURE_CONFIGS_STORAGE_KEY = "figure-configs";
 
 const figureConfigsDefault = [
   {
-    title: "ME-Dipole",
     isDb: true,
     isGainTotal: false,
     sources: [
       { type: "E", direction: "Y", amplitude: 1, phase: 0 },
       { type: "M", direction: "X", amplitude: 1, phase: 0 },
     ],
+    title: "ME-Dipole",
   },
   {
-    title: "E-Dipole",
     isDb: true,
     isGainTotal: false,
     sources: [{ type: "E", direction: "Z", amplitude: 1, phase: 0 }],
+    title: "E-Dipole",
   },
   {
-    title: "M-Dipole",
     isDb: true,
     isGainTotal: false,
     sources: [{ type: "M", direction: "Z", amplitude: 1, phase: 0 }],
+    title: "M-Dipole",
   },
 ] as const satisfies FigureConfigs;
 
@@ -124,10 +124,14 @@ const AddFigure: Component = () => {
 };
 
 export default function () {
-  const [figureConfigs, setFigureConfigs] = createStore<FigureConfigs>(
-    getFigureConfigsFromSearchParameters() ??
-      getFigureConfigsFromLocalStorage(),
-  );
+  const [figureConfigs, setFigureConfigs] = createStore<FigureConfigs>([]);
+
+  onMount(() => {
+    setFigureConfigs(
+      getFigureConfigsFromSearchParameters() ??
+        getFigureConfigsFromLocalStorage(),
+    );
+  });
 
   const stringifiedFigureConfigs = () => JSON.stringify(figureConfigs);
 
@@ -149,8 +153,18 @@ export default function () {
         figureConfigs={figureConfigs}
         setFigureConfigs={setFigureConfigs}
       >
-        <p>{JSON.stringify(figureConfigs)}</p>
-        <AddFigure />
+        <div class="grid grid-cols-1 place-content-stretch divide-y-2 divide-neutral-200 px-4 sm:px-6 lg:px-8 dark:divide-neutral-800">
+          <For each={figureConfigs}>
+            {(figureConfig, idx) => {
+              return (
+                <p>
+                  idx: {idx()} {"=>"} {JSON.stringify(figureConfig, null, 2)}
+                </p>
+              );
+            }}
+          </For>
+          <AddFigure />
+        </div>
       </FigureConfigsProvider>
     </>
   );
