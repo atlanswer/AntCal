@@ -35,6 +35,30 @@ export type FigureConfig = z.infer<typeof zFigureConfig>;
 export const zFigureConfigs = z.array(zFigureConfig);
 export type FigureConfigs = z.infer<typeof zFigureConfigs>;
 
+export const figureConfigsDefault = [
+  {
+    isDb: true,
+    isGainTotal: false,
+    sources: [
+      { type: "E", direction: "Y", amplitude: 1, phase: 0 },
+      { type: "M", direction: "X", amplitude: 1, phase: 0 },
+    ],
+    title: "ME-Dipole",
+  },
+  {
+    isDb: true,
+    isGainTotal: false,
+    sources: [{ type: "E", direction: "Z", amplitude: 1, phase: 0 }],
+    title: "E-Dipole",
+  },
+  {
+    isDb: true,
+    isGainTotal: false,
+    sources: [{ type: "M", direction: "Z", amplitude: 1, phase: 0 }],
+    title: "M-Dipole",
+  },
+] as const satisfies FigureConfigs;
+
 const figureConfigsContext =
   createContext<ReturnType<typeof createStore<FigureConfigs>>>();
 

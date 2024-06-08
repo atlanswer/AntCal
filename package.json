@@ -1,6 +1,6 @@
 {
   "name": "antcal",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Antenna Calculator",
   "keywords": [
     "antenna"
@@ -32,11 +32,11 @@
   "devDependencies": {
     "eslint": "^9.4.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-config-turbo": "^2.0.2",
+    "eslint-config-turbo": "^2.0.3",
     "eslint-plugin-solid": "^0.14.0",
     "globals": "^15.4.0",
     "prettier": "^3.3.1",
-    "prettier-plugin-tailwindcss": "^0.6.1",
+    "prettier-plugin-tailwindcss": "^0.6.2",
     "turbo": "^2.0.3",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.12.0"
