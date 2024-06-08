@@ -2,6 +2,9 @@
   "$schema": "https://turbo.build/schema.json",
   "extends": ["//"],
   "tasks": {
+    "dev": {
+      "env": ["VITE_*"]
+    },
     "build": {
       "inputs": ["$TURBO_DEFAULT$", "!api/**"],
       "outputs": [".vinxi/**", ".vercel/**"]

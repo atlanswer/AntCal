@@ -1,7 +1,15 @@
 // @refresh granular
 
 import { Title } from "@solidjs/meta";
-import { FigureConfigs, zFigureConfigs } from "~/components/figure/context";
+import { useSearchParams } from "@solidjs/router";
+import { createEffect } from "solid-js";
+import { createStore, unwrap } from "solid-js/store";
+import { isServer } from "solid-js/web";
+import {
+  FigureConfigs,
+  FigureConfigsProvider,
+  zFigureConfigs,
+} from "~/components/figure/context";
 
 const FIGURE_CONFIGS_STORAGE_KEY = "figure-configs";
 
@@ -29,9 +37,9 @@ const figureConfigsDefault = [
   },
 ] as const satisfies FigureConfigs;
 
-const getFigureConfigsFromLocalStorage = (): FigureConfigs => {
-  const figureConfigsString = localStorage.getItem(FIGURE_CONFIGS_STORAGE_KEY);
-  if (figureConfigsString === null) return figureConfigsDefault;
+const convertStringToFigureConfigs = (
+  figureConfigsString: string,
+): FigureConfigs => {
   let figureConfigs: unknown;
   try {
     figureConfigs = JSON.parse(figureConfigsString);
@@ -47,11 +55,55 @@ const getFigureConfigsFromLocalStorage = (): FigureConfigs => {
   return parsedFigureConfigs;
 };
 
-export default function Home() {
+const getFigureConfigsFromSearchParameters = (): FigureConfigs | null => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const encodedFigureConfigs = searchParams["figureConfigs"];
+
+  if (!encodedFigureConfigs) return null;
+
+  const figureConfigsString = decodeURIComponent(encodedFigureConfigs);
+
+  setSearchParams({ ...searchParams, figureConfigs: null });
+
+  return convertStringToFigureConfigs(figureConfigsString);
+};
+
+const getFigureConfigsFromLocalStorage = (): FigureConfigs => {
+  if (isServer) return figureConfigsDefault;
+
+  const figureConfigsString = localStorage.getItem(FIGURE_CONFIGS_STORAGE_KEY);
+
+  if (figureConfigsString === null) return figureConfigsDefault;
+
+  return convertStringToFigureConfigs(figureConfigsString);
+};
+
+export default function () {
+  const [figureConfigs, setFigureConfigs] = createStore<FigureConfigs>(
+    getFigureConfigsFromSearchParameters() ??
+      getFigureConfigsFromLocalStorage(),
+  );
+
+  const stringifiedFigureConfigs = () => JSON.stringify(unwrap(figureConfigs));
+
+  createEffect(() =>
+    localStorage.setItem(
+      FIGURE_CONFIGS_STORAGE_KEY,
+      stringifiedFigureConfigs(),
+    ),
+  );
+
   return (
     <>
       <Title>Figure | AntCal</Title>
-      <p>API_URL: {import.meta.env["VITE_API_URL"]}</p>
+      <p>{JSON.stringify(figureConfigs)}</p>
+      <p>{encodeURI(JSON.stringify(figureConfigs))}</p>
+      <FigureConfigsProvider
+        figureConfigs={figureConfigs}
+        setFigureConfigs={setFigureConfigs}
+      >
+        <p>FigureConfigs</p>
+      </FigureConfigsProvider>
     </>
   );
 }

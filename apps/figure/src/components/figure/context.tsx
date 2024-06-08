@@ -1,5 +1,12 @@
 // @refresh granular
 
+import {
+  createContext,
+  untrack,
+  useContext,
+  type ParentComponent,
+} from "solid-js";
+import type { SetStoreFunction, Store, createStore } from "solid-js/store";
 import { z } from "zod";
 
 export const zSource = z.object({
@@ -27,3 +34,32 @@ export const zFigureConfig = zViewPlaneConfig
 export type FigureConfig = z.infer<typeof zFigureConfig>;
 export const zFigureConfigs = z.array(zFigureConfig);
 export type FigureConfigs = z.infer<typeof zFigureConfigs>;
+
+const figureConfigsContext =
+  createContext<ReturnType<typeof createStore<FigureConfigs>>>();
+
+export const useFigureConfigs = (): ReturnType<
+  typeof createStore<FigureConfigs>
+> => {
+  const context = useContext(figureConfigsContext);
+
+  if (!context) {
+    throw new Error("`figureConfigsContext` not provided.");
+  }
+
+  return context;
+};
+
+export const FigureConfigsProvider: ParentComponent<{
+  figureConfigs: Store<FigureConfigs>;
+  setFigureConfigs: SetStoreFunction<FigureConfigs>;
+}> = (props) => {
+  const figureConfigs = untrack(() => props.figureConfigs);
+  const setFigureConfigs = untrack(() => props.setFigureConfigs);
+
+  return (
+    <figureConfigsContext.Provider value={[figureConfigs, setFigureConfigs]}>
+      {props.children}
+    </figureConfigsContext.Provider>
+  );
+};

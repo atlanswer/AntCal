@@ -75,6 +75,9 @@ export const Footer = () => {
         <span class="flex place-items-center gap-1">
           {/* <IconTime /> */}
           {/* <span>{avgTime().toFixed()} ms</span> */}
+          <span>
+            <code>API_URL: {import.meta.env["VITE_API_URL"]}</code>
+          </span>
         </span>
         <span class="flex place-items-center gap-1.5 sm:ml-auto">
           <span>v{version}</span>

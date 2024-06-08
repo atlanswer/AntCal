@@ -2,7 +2,7 @@
 
 import { A } from "@solidjs/router";
 import { For } from "solid-js";
-import { ThemeToggle } from "~/components/theme/ThemeToggle";
+import { ThemeToggle } from "~/components/theme";
 
 const Navigator = () => {
   const routes: { route: string; name: string }[] = [

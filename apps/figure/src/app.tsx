@@ -3,11 +3,13 @@
 import { MetaProvider } from "@solidjs/meta";
 import { Router, type RouteSectionProps } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
-import { Suspense } from "solid-js";
+import { ErrorBoundary, Suspense } from "solid-js";
 import "~/app.css";
 import { Footer } from "~/components/Footer";
 import { Header } from "~/components/Header";
 import { ThemeProvider } from "~/components/theme/context";
+import { ErrorPage } from "./components/ErrorPage";
+import { LoadingPage } from "./components/LoadingPage";
 
 const Layout = (props: RouteSectionProps) => {
   return (
@@ -15,7 +17,9 @@ const Layout = (props: RouteSectionProps) => {
       <ThemeProvider>
         <Header />
         <main class="flex-auto">
-          <Suspense fallback={<p>Loading...</p>}>{props.children}</Suspense>
+          <ErrorBoundary fallback={ErrorPage}>
+            <Suspense fallback={LoadingPage}>{props.children}</Suspense>
+          </ErrorBoundary>
         </main>
         <Footer />
       </ThemeProvider>
