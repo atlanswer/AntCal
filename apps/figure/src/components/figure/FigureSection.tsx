@@ -1,7 +1,13 @@
 import { Show, type Accessor, type Component } from "solid-js";
-import { useFigureConfigs, type FigureConfig } from "./context";
 import { produce } from "solid-js/store";
-import { EditIcon } from "../icons/Edit";
+import { SourcesPanel } from "~/components/figure/SourcePanel";
+import { ViewPlane } from "~/components/figure/ViewPlane";
+import {
+  useFigureConfigs,
+  type FigureConfig,
+} from "~/components/figure/context";
+import { EditIcon } from "~/components/icons/Edit";
+import { RemoveIcon } from "~/components/icons/Remove";
 
 export const FigureSection: Component<{
   figureConfig: Accessor<FigureConfig>;
@@ -80,25 +86,14 @@ export const FigureSection: Component<{
                 )
               }
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="h-8 w-8"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M2.515 10.674a1.875 1.875 0 0 0 0 2.652L8.89 19.7c.352.351.829.549 1.326.549H19.5a3 3 0 0 0 3-3V6.75a3 3 0 0 0-3-3h-9.284c-.497 0-.974.198-1.326.55l-6.375 6.374ZM12.53 9.22a.75.75 0 1 0-1.06 1.06L13.19 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06l1.72-1.72 1.72 1.72a.75.75 0 1 0 1.06-1.06L15.31 12l1.72-1.72a.75.75 0 1 0-1.06-1.06l-1.72 1.72-1.72-1.72Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+              <RemoveIcon />
             </button>
           </Show>
         </figcaption>
         <div class="grid grid-flow-col place-items-center gap-4 overflow-x-auto rounded py-2 font-semibold">
-          {/* <ViewPlane cutPlane="YZ" {...props.figureConfig} /> */}
-          {/* <ViewPlane cutPlane="XZ" {...props.figureConfig} /> */}
-          {/* <ViewPlane cutPlane="XY" {...props.figureConfig} /> */}
+          <ViewPlane cutPlane="YZ" />
+          <ViewPlane cutPlane="XZ" />
+          <ViewPlane cutPlane="XY" />
         </div>
         <figcaption class="flex flex-wrap place-content-center place-items-center gap-8 text-black dark:text-white">
           <Show
@@ -120,9 +115,7 @@ export const FigureSection: Component<{
           </Show>
         </figcaption>
       </figure>
-      {/* <SourcesPanel
-        idx={props.idx}
-      /> */}
+      <SourcesPanel sources={props.figureConfig().sources} idx={props.idx} />
     </section>
   );
 };

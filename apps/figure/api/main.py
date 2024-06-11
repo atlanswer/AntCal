@@ -1,6 +1,8 @@
 from hashlib import md5
+from os import getenv
 
 from fastapi import APIRouter, FastAPI, Response
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse, PlainTextResponse
 
 from .plot import plot_blank
@@ -8,6 +10,12 @@ from .plot import plot_blank
 app = FastAPI(
     default_response_class=ORJSONResponse,
 )
+
+VITE_API_URL = getenv("VITE_API_URL")
+
+if VITE_API_URL is not None and "localhost" in VITE_API_URL:
+    app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:3000"])
+
 
 router = APIRouter(prefix="/api")
 
