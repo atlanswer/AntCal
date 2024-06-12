@@ -7,12 +7,16 @@ import { ThemeToggle } from "~/components/theme";
 const Navigator = () => {
   const routes: { route: string; name: string }[] = [
     {
-      name: "Figure",
+      name: "Radiation Pattern",
       route: "/",
     },
     {
       name: "Report",
       route: "/report",
+    },
+    {
+      name: "Docs",
+      route: "/docs",
     },
     {
       name: "About",

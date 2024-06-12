@@ -8,19 +8,19 @@ import "~/app.css";
 import { Footer } from "~/components/Footer";
 import { Header } from "~/components/Header";
 import { ThemeProvider } from "~/components/theme/context";
-import { ErrorPage } from "./components/ErrorPage";
-import { LoadingPage } from "./components/LoadingPage";
+import { ErrorPage } from "~/components/ErrorPage";
+import { LoadingPage } from "~/components/LoadingPage";
 
 const Layout = (props: RouteSectionProps) => {
   return (
     <MetaProvider>
       <ThemeProvider>
         <Header />
-        <main class="flex-auto">
-          <ErrorBoundary fallback={ErrorPage}>
+        <ErrorBoundary fallback={ErrorPage}>
+          <main class="flex-auto">
             <Suspense fallback={LoadingPage}>{props.children}</Suspense>
-          </ErrorBoundary>
-        </main>
+          </main>
+        </ErrorBoundary>
         <Footer />
       </ThemeProvider>
     </MetaProvider>
