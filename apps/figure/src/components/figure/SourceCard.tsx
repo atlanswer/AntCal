@@ -1,7 +1,15 @@
-import { Show, type Accessor, type Component } from "solid-js";
+import {
+  Index,
+  Show,
+  createUniqueId,
+  type Accessor,
+  type Component,
+} from "solid-js";
 import { produce } from "solid-js/store";
 import { useFigureConfigs, type Source } from "~/components/figure/context";
+import { DownArrow } from "~/components/icons/Down";
 import { MinusIcon } from "~/components/icons/Minus";
+import { UpArrow } from "~/components/icons/Up";
 
 export const SourceCard: Component<{
   source: Accessor<Source>;
@@ -77,27 +85,168 @@ export const SourceCard: Component<{
         class="flex flex-col gap-3"
         onSubmit={(event) => event.preventDefault()}
       >
-        {/* <DirectionSelector
-          direction={props.source.direction}
-          setFigureConfigs={props.setFigureConfigs}
-          figIdx={props.figIdx}
-          srcIdx={props.srcIdx}
-        />
+        <DirectionSelector figIdx={props.figIdx} srcIdx={props.srcIdx} />
         <ValueSelector
           type="amplitude"
-          value={props.source["amplitude"]}
-          setFigureConfigs={props.setFigureConfigs}
           figIdx={props.figIdx}
           srcIdx={props.srcIdx}
         />
         <ValueSelector
           type="phase"
-          value={props.source["phase"]}
-          setFigureConfigs={props.setFigureConfigs}
           figIdx={props.figIdx}
           srcIdx={props.srcIdx}
-        /> */}
+        />
       </form>
+    </div>
+  );
+};
+
+const DirectionSelector: Component<{
+  figIdx: number;
+  srcIdx: number;
+}> = (props) => {
+  const directions: Source["direction"][] = ["X", "Y", "Z"] as const;
+
+  const [figureConfigs, setFigureConfigs] = useFigureConfigs();
+
+  return (
+    <div class="flex place-content-between place-items-center gap-2">
+      <span class="text-sm">Direction</span>
+      <span class="flex place-items-center gap-2">
+        <span class="place-content-center place-items-stretch rounded bg-neutral-200 p-1 font-bold text-neutral-500 dark:bg-neutral-800 [&>.active]:bg-sky-500 [&>.active]:text-white">
+          <Index each={directions}>
+            {(direction) => (
+              <button
+                class="whitespace-nowrap rounded px-4"
+                classList={{
+                  active:
+                    figureConfigs[props.figIdx]?.sources[props.srcIdx]
+                      ?.direction === direction(),
+                }}
+                onClick={() =>
+                  setFigureConfigs(
+                    props.figIdx,
+                    "sources",
+                    props.srcIdx,
+                    "direction",
+                    direction,
+                  )
+                }
+              >
+                {direction()}
+              </button>
+            )}
+          </Index>
+        </span>
+      </span>
+    </div>
+  );
+};
+
+const ValueSelector: Component<{
+  type: "amplitude" | "phase";
+  figIdx: number;
+  srcIdx: number;
+}> = (props) => {
+  const [figureConfigs, setFigureConfigs] = useFigureConfigs();
+  const source = () => {
+    const maybeSource = figureConfigs[props.figIdx]?.sources[props.srcIdx];
+    if (maybeSource === undefined) {
+      throw new Error("`source` is undefined.");
+    }
+    return maybeSource;
+  };
+
+  const inputId = createUniqueId();
+  const displayType = () => props.type[0]?.toUpperCase() + props.type.slice(1);
+
+  const amplitudeDown = (amp: number) => {
+    const step = 0.1;
+    const res = amp - step;
+    return res >= 0 ? res : 0;
+  };
+  const amplitudeUp = (amp: number) => {
+    const step = 0.1;
+    return amp + step;
+  };
+
+  const phaseDown = (phase: number) => {
+    const step = 1;
+    const res = phase - step;
+    return res >= 0 ? res : 359;
+  };
+  const phaseUp = (phase: number) => {
+    const step = 1;
+    const res = phase + step;
+    return res > 359 ? 0 : res;
+  };
+
+  return (
+    <div class="flex place-content-between place-items-center gap-2">
+      <label for={inputId} class="text-sm">
+        {displayType()}
+      </label>
+      <div class="flex">
+        <button
+          type="button"
+          aria-label="Decrease value"
+          class="rounded-s border border-neutral-500 px-1"
+          onClick={() =>
+            setFigureConfigs(
+              props.figIdx,
+              "sources",
+              props.srcIdx,
+              props.type,
+              props.type === "amplitude" ?
+                amplitudeDown(source().amplitude)
+              : phaseDown(source().phase),
+            )
+          }
+        >
+          <DownArrow />
+        </button>
+        <input
+          id={inputId}
+          value={
+            props.type === "amplitude" ?
+              source().amplitude.toFixed(2)
+            : source().phase.toFixed()
+          }
+          type="number"
+          min="0"
+          max="359"
+          step={props.type === "amplitude" ? "0.01" : "1"}
+          class="w-16 border border-x-0 border-neutral-500 bg-transparent text-center focus-visible:outline-none"
+          required
+          onChange={(event) =>
+            setFigureConfigs(
+              props.figIdx,
+              "sources",
+              props.srcIdx,
+              props.type,
+              +event.target.value,
+            )
+          }
+        />
+        <button
+          type="button"
+          aria-label="Increase value"
+          class="rounded-e border border-neutral-500 px-1"
+          onClick={() =>
+            setFigureConfigs(
+              props.figIdx,
+              "sources",
+              props.srcIdx,
+              props.type,
+              props.type === "amplitude" ?
+                amplitudeUp(source().amplitude)
+              : phaseUp(source().phase),
+            )
+          }
+        >
+          <UpArrow />
+        </button>
+      </div>
     </div>
   );
 };
