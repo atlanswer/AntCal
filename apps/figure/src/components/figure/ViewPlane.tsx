@@ -52,12 +52,12 @@ export const ViewPlane: Component<{ cutPlane: CutPlane; figIdx: number }> = (
             sources: figureConfig().sources,
           }) satisfies ViewPlaneConfig,
       );
-      const apiEndpoint = new URL(`${import.meta.env["VITE_API_URL"]}/plot`);
-      apiEndpoint.searchParams.append(
-        "fig",
-        encodeURIComponent(JSON.stringify(viewPlaneConfig)),
+      const query = new URLSearchParams({
+        fig: encodeURIComponent(JSON.stringify(viewPlaneConfig)),
+      });
+      const res = await fetch(
+        `${import.meta.env["VITE_API_URL"]}/plot?${query.toString()}`,
       );
-      const res = await fetch(apiEndpoint);
       if (res.ok) {
         const svgData = await res.text();
         return {
