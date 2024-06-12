@@ -1,7 +1,8 @@
 {
-  "name": "Figure",
-  "short_name": "Figure",
-  "description": "Create publication-quality figures",
+  "name": "AntCal",
+  "short_name": "AntCal",
+  "description": "Antenna Calculator",
+  "id": "/",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#0ea5e9",
