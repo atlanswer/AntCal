@@ -18,7 +18,6 @@
     "app.config.ts",
     "eslint.config.js",
     "postcss.config.js",
-    "tailwind.config.js",
-    "./src/components/figure/FigureSection.1.tsx"
+    "tailwind.config.js"
   ]
 }

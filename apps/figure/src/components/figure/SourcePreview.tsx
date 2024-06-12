@@ -1,16 +1,16 @@
-import { Suspense, createResource, type Component } from "solid-js";
+import { Suspense, type Component } from "solid-js";
 import type { Source } from "~/components/figure/context";
 
-export const SourcePreview: Component<{ sources: Source[] }> = (props) => {
-  const [sourcesPreviewData] = createResource(
-    // () => JSON.stringify(props.sources),
-    // async () => {
-    //   const t_start = Date.now();
+export const SourcePreview: Component<{ sources: Source[] }> = () => {
+  // const [sourcesPreviewData] = createResource(
+  // () => JSON.stringify(props.sources),
+  // async () => {
+  //   const t_start = Date.now();
 
-    //   return `data:image/svg+xml,${encodeURIComponent(svgData)}`;
-    // },
-    () => "Source Preview",
-  );
+  //   return `data:image/svg+xml,${encodeURIComponent(svgData)}`;
+  // },
+  // () => "Source Preview is Under Construction",
+  // );
 
   return (
     <figure class="flex h-44 w-44 place-content-center place-items-center rounded-md bg-neutral-100 text-black shadow-md outline-1 outline-neutral-500 dark:bg-neutral-800 dark:text-white dark:outline">
@@ -22,7 +22,11 @@ export const SourcePreview: Component<{ sources: Source[] }> = (props) => {
           src={sourcesPreviewData.latest ?? ""}
           alt="Source Preview"
         /> */}
-        <p>{sourcesPreviewData.latest}</p>
+        <p class="text-center font-semibold">
+          Source Preview is
+          <br />
+          Under Construction
+        </p>
       </Suspense>
     </figure>
   );

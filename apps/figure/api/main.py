@@ -18,7 +18,9 @@ app = FastAPI(
 
 VITE_API_URL = getenv("VITE_API_URL")
 
-if VITE_API_URL is not None and "localhost" in VITE_API_URL:
+isDev = bool(VITE_API_URL is not None and "localhost" in VITE_API_URL)
+
+if isDev:
     app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:3000"])
 
 
@@ -31,8 +33,13 @@ async def get_root() -> str:
 
 
 @router.get("/figure-with-detail", response_class=ORJSONResponse)
-async def get_figure(fig: str):
+async def get_figure(fig: str, response: Response):
     viewPlaneConfig = ViewPlaneConfig.model_validate_json(unquote(fig))
+
+    response.headers.append(
+        "cache-control",
+        "no-cache" if isDev else "public, max-age=1440, s-maxage=1440",
+    )
 
     return plot_view_plane(viewPlaneConfig).model_dump()
 
