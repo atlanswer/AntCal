@@ -1,5 +1,5 @@
 # spell-checker:words xtick, ytick, mplot, verts3d, stix, cmap, azim
-# spell-checker:words xlim, ylim, zlim, zdir
+# spell-checker:words xlim, ylim, zlim, zdir, hpbw
 
 import io
 import logging
@@ -18,6 +18,7 @@ from mpl_toolkits.mplot3d.art3d import (
     pathpatch_2d_to_3d,  # pyright: ignore[reportUnknownVariableType]
 )
 from mpl_toolkits.mplot3d.axes3d import Axes3D
+from pydantic import BaseModel
 
 logging.getLogger("matplotlib.font_manager").setLevel(logging.WARNING)
 
@@ -48,6 +49,12 @@ mpl.rcParams["figure.figsize"] = 3.5, 3.5
 set1 = plt.get_cmap("Set1")
 
 
+class FigureWithDetailResponse(BaseModel):
+    maxD: int
+    hpbw: int
+    figData: str
+
+
 class Source(TypedDict):
     type: Literal["E", "M"]
     direction: Literal["X", "Y", "Z"]
@@ -58,7 +65,7 @@ class Source(TypedDict):
 CutPlane = Literal["XZ", "YZ", "XY"]
 
 
-class ViewPlaneConfig(TypedDict):
+class ViewPlaneConfig(BaseModel):
     cutPlane: CutPlane
     isDb: bool
     isGainTotal: bool
@@ -224,12 +231,12 @@ def plot_sources(sources: list[Source]):
     return f.getvalue().decode()
 
 
-def plot_view_plane(config: ViewPlaneConfig):
+def plot_view_plane(config: ViewPlaneConfig) -> FigureWithDetailResponse:
     db_min, db_max = -30, 10
     lin_min = 0
     n_samples = 361
 
-    match config["cutPlane"]:
+    match config.cutPlane:
         case "YZ":
             theta = np.linspace(0, np.pi * 2, n_samples)
             phi = np.pi / 2 * np.ones_like(n_samples)
@@ -245,7 +252,7 @@ def plot_view_plane(config: ViewPlaneConfig):
     phi_a = np.zeros(n_samples)
     phi_phase_a = np.zeros(n_samples)
 
-    for s in config["sources"]:
+    for s in config.sources:
         amplitude = s["amplitude"]
         phase_s = cast(np.float64, np.radians(s["phase"]))
         match s["type"], s["direction"]:
@@ -325,7 +332,7 @@ def plot_view_plane(config: ViewPlaneConfig):
     y_total_db[y_total_db < db_min] = db_min
     y_theta = np.abs(theta_a)
     y_phi = np.abs(phi_a)
-    if config["isDb"]:
+    if config.isDb:
         y_theta[y_theta < 10 ** (db_min / 10)] = 10 ** (db_min / 10)
         y_theta = 10 * np.log10(y_theta)
         y_theta[y_theta < db_min] = db_min
@@ -336,7 +343,7 @@ def plot_view_plane(config: ViewPlaneConfig):
     fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
     assert isinstance(ax, PolarAxes)
 
-    match config["cutPlane"], config["isDb"], config["isGainTotal"]:
+    match config.cutPlane, config.isDb, config.isGainTotal:
         case "XY", True, True:
             ax.plot(phi, y_total_db, clip_on=False)
         case "XY", False, True:
@@ -353,11 +360,11 @@ def plot_view_plane(config: ViewPlaneConfig):
             ax.plot(theta, y_phi, clip_on=False)
 
     r_locator = MaxNLocator(nbins=4)
-    if config["isDb"]:
+    if config.isDb:
         ax.set_rlim(db_min, db_max)
     else:
         lin_max = 0
-        for s in config["sources"]:
+        for s in config.sources:
             lin_max += s["amplitude"]
         ax.set_rlim(lin_min, lin_max)
     ax.yaxis.set_major_locator(r_locator)
@@ -393,7 +400,11 @@ def plot_view_plane(config: ViewPlaneConfig):
     plt.close(fig)
     f.seek(0)
 
-    return int(peak_idx), get_hpbw(), f.getvalue().decode()
+    return FigureWithDetailResponse(
+        maxD=int(peak_idx),
+        hpbw=get_hpbw(),
+        figData=f.getvalue().decode(),
+    )
 
 
 def plot_blank() -> bytes:

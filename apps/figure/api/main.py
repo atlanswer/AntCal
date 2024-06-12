@@ -1,11 +1,16 @@
 from hashlib import md5
 from os import getenv
+from urllib.parse import unquote
 
 from fastapi import APIRouter, FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse, PlainTextResponse
 
-from .plot import plot_blank
+from .plot import (
+    ViewPlaneConfig,
+    plot_blank,
+    plot_view_plane,
+)
 
 app = FastAPI(
     default_response_class=ORJSONResponse,
@@ -25,9 +30,11 @@ async def get_root() -> str:
     return "Hello, world!"
 
 
-@router.get("/graph", response_class=PlainTextResponse)
-async def get_graph() -> str:
-    return "Hello, world! graph"
+@router.get("/figure-with-detail", response_class=ORJSONResponse)
+async def get_figure(fig: str):
+    viewPlaneConfig = ViewPlaneConfig.model_validate_json(unquote(fig))
+
+    return plot_view_plane(viewPlaneConfig).model_dump()
 
 
 @router.get("/preview", response_class=PlainTextResponse)

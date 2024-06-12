@@ -8,17 +8,20 @@ import {
   untrack,
   type Component,
 } from "solid-js";
+import { z } from "zod";
 import {
   useFigureConfigs,
   type CutPlane,
   type ViewPlaneConfig,
 } from "~/components/figure/context";
 
-interface FigureWithDetail {
-  figData: string;
-  hpbw: number;
-  maxD: number;
-}
+const zFigureWithDetail = z.object({
+  figData: z.string(),
+  hpbw: z.number(),
+  maxD: z.number(),
+});
+
+type FigureWithDetail = z.infer<typeof zFigureWithDetail>;
 
 export const ViewPlane: Component<{ cutPlane: CutPlane; figIdx: number }> = (
   props,
@@ -56,14 +59,14 @@ export const ViewPlane: Component<{ cutPlane: CutPlane; figIdx: number }> = (
         fig: encodeURIComponent(JSON.stringify(viewPlaneConfig)),
       });
       const res = await fetch(
-        `${import.meta.env["VITE_API_URL"]}/plot?${query.toString()}`,
+        `${import.meta.env["VITE_API_URL"]}/figure-with-detail?${query.toString()}`,
       );
       if (res.ok) {
-        const svgData = await res.text();
+        const figureWithDetail = zFigureWithDetail.parse(await res.json());
         return {
-          maxD: 123,
-          hpbw: 456,
-          figData: `data:image/svg+xml,${encodeURIComponent(svgData)}`,
+          maxD: figureWithDetail.maxD,
+          hpbw: figureWithDetail.hpbw,
+          figData: `data:image/svg+xml,${encodeURIComponent(figureWithDetail.figData)}`,
         } satisfies FigureWithDetail;
       } else {
         throw new Error(
