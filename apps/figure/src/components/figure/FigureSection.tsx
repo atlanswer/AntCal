@@ -1,4 +1,4 @@
-import { Show, type Accessor, type Component } from "solid-js";
+import { ErrorBoundary, Show, type Accessor, type Component } from "solid-js";
 import { produce } from "solid-js/store";
 import { SourcesPanel } from "~/components/figure/SourcePanel";
 import { ViewPlane } from "~/components/figure/ViewPlane";
@@ -91,9 +91,15 @@ export const FigureSection: Component<{
           </Show>
         </figcaption>
         <div class="grid grid-flow-col place-items-center gap-4 overflow-x-auto rounded py-2 font-semibold">
-          <ViewPlane cutPlane="YZ" />
-          <ViewPlane cutPlane="XZ" />
-          <ViewPlane cutPlane="XY" />
+          <ErrorBoundary
+            fallback={(err: { toString: () => string }) => (
+              <p class="text-red-500">{err.toString()}</p>
+            )}
+          >
+            <ViewPlane cutPlane="YZ" figIdx={props.idx} />
+            <ViewPlane cutPlane="XZ" figIdx={props.idx} />
+            <ViewPlane cutPlane="XY" figIdx={props.idx} />
+          </ErrorBoundary>
         </div>
         <figcaption class="flex flex-wrap place-content-center place-items-center gap-8 text-black dark:text-white">
           <Show

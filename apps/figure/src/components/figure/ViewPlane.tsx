@@ -1,23 +1,75 @@
 // @refresh granular
 // spell-checker:words HPBW
 
-import { Show, Suspense, createResource, type Component } from "solid-js";
-import type { CutPlane, ViewPlaneConfig } from "~/components/figure/context";
+import {
+  Show,
+  Suspense,
+  createResource,
+  untrack,
+  type Component,
+} from "solid-js";
+import {
+  useFigureConfigs,
+  type CutPlane,
+  type ViewPlaneConfig,
+} from "~/components/figure/context";
 
-export const ViewPlane: Component<ViewPlaneConfig> = (props) => {
+interface FigureWithDetail {
+  figData: string;
+  hpbw: number;
+  maxD: number;
+}
+
+export const ViewPlane: Component<{ cutPlane: CutPlane; figIdx: number }> = (
+  props,
+) => {
+  const [figureConfigs] = useFigureConfigs();
+
+  const figureConfig = () => {
+    const maybeFigureConfig = figureConfigs[props.figIdx];
+    if (maybeFigureConfig === undefined) {
+      throw new Error("`figureConfig` is undefined.");
+    }
+    return maybeFigureConfig;
+  };
+
   const [viewPlaneData] = createResource(
     // TODO: optimize here
-    () => [props.isDb, props.isGainTotal, JSON.stringify(props.sources)],
-    async () => {
-      const res = await fetch(`${import.meta.env["VITE_API_URL"]}/blank`);
-      const svgData = await res.text();
+    () => {
       return [
-        123,
-        // maxD,
-        456,
-        // hpbw,
-        `data:image/svg+xml,${encodeURIComponent(svgData)}`,
-      ] as const;
+        figureConfig().isDb,
+        figureConfig().isGainTotal,
+        JSON.stringify(figureConfig().sources),
+      ];
+    },
+    async () => {
+      const viewPlaneConfig = untrack(
+        () =>
+          ({
+            cutPlane: props.cutPlane,
+            isDb: figureConfig().isDb,
+            isGainTotal: figureConfig().isGainTotal,
+            sources: figureConfig().sources,
+          }) satisfies ViewPlaneConfig,
+      );
+      const apiEndpoint = new URL(`${import.meta.env["VITE_API_URL"]}/plot`);
+      apiEndpoint.searchParams.append(
+        "fig",
+        encodeURIComponent(JSON.stringify(viewPlaneConfig)),
+      );
+      const res = await fetch(apiEndpoint);
+      if (res.ok) {
+        const svgData = await res.text();
+        return {
+          maxD: 123,
+          hpbw: 456,
+          figData: `data:image/svg+xml,${encodeURIComponent(svgData)}`,
+        } satisfies FigureWithDetail;
+      } else {
+        throw new Error(
+          `Error ploting figure: API response with status code ${res.status}.`,
+        );
+      }
     },
   );
 
@@ -48,8 +100,10 @@ export const ViewPlane: Component<ViewPlaneConfig> = (props) => {
         </Show>
       </div>
       <div class="flex place-content-between gap-4">
-        <span>Max Direction: {viewPlaneData.latest?.[0] ?? "-"}°</span>
-        <span>HPBW: {viewPlaneData.latest?.[1] ?? "-"}°</span>
+        <Suspense>
+          <span>Max Direction: {viewPlaneData.latest?.maxD ?? "-"}°</span>
+          <span>HPBW: {viewPlaneData.latest?.hpbw ?? "-"}°</span>
+        </Suspense>
       </div>
       <div class="flex h-[252px] w-[252px] flex-wrap place-content-center rounded outline outline-1 outline-neutral-100">
         <Suspense fallback={<ViewPlaneLoading />}>
@@ -57,7 +111,7 @@ export const ViewPlane: Component<ViewPlaneConfig> = (props) => {
             width="252"
             height="252"
             class="rounded"
-            src={viewPlaneData.latest?.[2] ?? ""}
+            src={viewPlaneData.latest?.figData ?? ""}
             alt={`${props.cutPlane} Plane`}
           />
         </Suspense>
