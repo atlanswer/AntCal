@@ -5,11 +5,12 @@ import { Router, type RouteSectionProps } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { ErrorBoundary, Suspense } from "solid-js";
 import "~/app.css";
+import { ErrorPage } from "~/components/ErrorPage";
 import { Footer } from "~/components/Footer";
 import { Header } from "~/components/Header";
-import { ThemeProvider } from "~/components/theme/context";
-import { ErrorPage } from "~/components/ErrorPage";
 import { LoadingPage } from "~/components/LoadingPage";
+import { ThemeProvider } from "~/components/theme/context";
+import VercelSpeedInsight from "~/components/vercel/SpeedInsight";
 
 const Layout = (props: RouteSectionProps) => {
   return (
@@ -22,6 +23,7 @@ const Layout = (props: RouteSectionProps) => {
           </main>
         </ErrorBoundary>
         <Footer />
+        <VercelSpeedInsight />
       </ThemeProvider>
     </MetaProvider>
   );
