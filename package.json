@@ -30,7 +30,7 @@
     "turbo": "turbo"
   },
   "devDependencies": {
-    "eslint": "^9.4.0",
+    "eslint": "^9.5.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-turbo": "^2.0.3",
     "eslint-plugin-solid": "^0.14.0",
