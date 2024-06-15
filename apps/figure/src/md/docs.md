@@ -1,3 +1,5 @@
+<!-- spell-checker:words lpwl, dcases -->
+
 # AntCal Documentation
 
 ## Radiation Pattern
@@ -39,21 +41,36 @@ Note: $\operatorname{atan2(y,\ x)}$ uses Numpy's [`arctan2`](https://numpy.org/d
 
 ## Demo
 
-If
+Module Parameters: $[lpwl\_, {theta\_, phi\_}, mesh\_, opac\_, step\_, pg\_]$
 
 $$
+\operatorname{fun} =
+\begin{dcases}
+\frac{\left|\pi Lpwl \sin{(\pi Lpwl \cos{\Xi})} \sin{\pi}\right|}{\cos{\Xi}}
+& \text{if }
+
 \frac{\left|\cos{(\pi Lpwl \cos{\Xi})}-\cos{(\pi Lpwl)}\right|}{\sin{\Xi}}
-= \text{Indeterminate}
+= \text{Indeterminate} \\
+
+\frac{\left|\cos{(\pi Lpwl \cos{\Xi})} - \cos{\pi Lpwl}\right|}{\sin{\Xi}}
+& \text{otherwise}
+\end{dcases}
+$$
+
+where $\Xi$ is $[0, \pi, \pi / 180]$.
+
+$$
+\operatorname{max} = \operatorname{Max(\operatorname{fun})}
 $$
 
 $$
-\text{fun} = \frac{\left|\pi Lpwl \sin{(\pi Lpwl \cos{\Xi})} \sin{\pi}\right|}{\cos{\Xi}}
+\operatorname{l}(th\_, ph\_) = [\sin(th\ deg)\cos(ph\ deg), \sin(th\ deg)\sin(ph\ deg), \cos(th\ deg)]
 $$
 
-else
-
 $$
-\text{fun} = \frac{\left|\cos{(\pi Lpwl \cos{\Xi})} - \cos{\pi Lpwl}\right|}{\sin{\Xi}}
+\operatorname{lr}(th\_, ph\_, t\_, f\_) = \sin(th\ deg)\cos(ph\ deg)\sin(t)\cos(f)
++ \sin(th\ deg)\sin(ph\ deg)\sin(t)\sin(f)
++ \cos(th\ deg)\cos(t)
 $$
 
 ## Report
