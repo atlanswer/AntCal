@@ -1017,11 +1017,11 @@
         },
         "pyedb": {
             "hashes": [
-                "sha256:aa4e703a199858e169f1c9791630a4b2f51a5cae83be05a06e02d621d077c9cf",
-                "sha256:b00f1cf8a73f64e6718f648511ed0abf66e2b808ca488bc301186e3371a59104"
+                "sha256:34af1a44376943b4a7318ee50af1cc17afdb170f15e546bc8ee5f7ce8c191b32",
+                "sha256:3859bda03b4f2440313f13fd61c91df135c9ce30c6db308dfe046120c104aaa1"
             ],
             "markers": "python_version >= '3.8' and python_version < '4'",
-            "version": "==0.14.0"
+            "version": "==0.14.1"
         },
         "pygments": {
             "hashes": [
@@ -1056,12 +1056,12 @@
         },
         "pyvista": {
             "hashes": [
-                "sha256:87d55ffe0efa6a8b15ca55f9f07f49a81980522c4a3ada29ca5caa2ab31179b7",
-                "sha256:f9f23baa74a8e2a4181c260e4c742ede00c73a7cc46e5275152f82a736f12c95"
+                "sha256:8eca6d039a2b1ae779189aa4109db5228ef3b3f65d873e95cbbecf161d83ae9b",
+                "sha256:925b3539d4c53727ae3cd8f31544fb8811f73a99040f75a36211ed5f26d20e8c"
             ],
             "index": "pip_conf_index_global",
             "markers": "python_version >= '3.8'",
-            "version": "==0.43.9"
+            "version": "==0.43.10"
         },
         "pywin32": {
             "hashes": [
@@ -1281,11 +1281,11 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:450b20ec296a467077128bff42b73080516e71b56ff59a60a02bef2232c4fa9d",
-                "sha256:d0570876c61ab9e520d776c38acbbb5b05a776d3f9ff98a5c8fd5162a444cf19"
+                "sha256:a448b2f64d686155468037e1ace9f2d2199776e17f0a46610480d311f73e3472",
+                "sha256:dd505485549a7a552833da5e6063639d0d177c04f23bc3864e41e5dc5f612168"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==2.2.1"
+            "version": "==2.2.2"
         },
         "vtk": {
             "hashes": [
@@ -1904,11 +1904,11 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:450b20ec296a467077128bff42b73080516e71b56ff59a60a02bef2232c4fa9d",
-                "sha256:d0570876c61ab9e520d776c38acbbb5b05a776d3f9ff98a5c8fd5162a444cf19"
+                "sha256:a448b2f64d686155468037e1ace9f2d2199776e17f0a46610480d311f73e3472",
+                "sha256:dd505485549a7a552833da5e6063639d0d177c04f23bc3864e41e5dc5f612168"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==2.2.1"
+            "version": "==2.2.2"
         },
         "wcwidth": {
             "hashes": [
