@@ -32,14 +32,14 @@
   "devDependencies": {
     "eslint": "^9.5.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-config-turbo": "^2.0.4",
+    "eslint-config-turbo": "^2.0.5",
     "eslint-plugin-solid": "^0.14.1",
     "globals": "^15.6.0",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
-    "turbo": "^2.0.4",
+    "turbo": "^2.0.5",
     "typescript": "^5.5.2",
-    "typescript-eslint": "^7.13.1"
+    "typescript-eslint": "^7.14.1"
   },
   "packageManager": "bun@1.1.12",
   "engines": {
