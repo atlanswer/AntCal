@@ -1,5 +1,7 @@
-# spell-checker:words lpwl, arange, dtype
+# spell-checker:words lpwl, arange, dtype, xyval, yzval, xzval
 
+from matplotlib import pyplot as plt
+from matplotlib.projections import PolarAxes
 import numpy as np
 import numpy.typing as npt
 from numpy import abs, cos, pi, sin, sqrt
@@ -32,8 +34,8 @@ def pol_to_car(
 
 
 def pol_to_car2(
-    theta: npt.NDArray[np.float64],
-    phi: npt.NDArray[np.float64],
+    theta: np.float64,
+    phi: np.float64,
     t: npt.NDArray[np.float64] | np.float64,
     f: npt.NDArray[np.float64] | np.float64,
 ) -> npt.NDArray[np.float64]:
@@ -45,9 +47,9 @@ def pol_to_car2(
 
 
 def EE(
-    length: npt.NDArray[np.float64],
-    theta: npt.NDArray[np.float64],
-    phi: npt.NDArray[np.float64],
+    length: np.float64,
+    theta: np.float64,
+    phi: np.float64,
     t: npt.NDArray[np.float64] | np.float64,
     f: npt.NDArray[np.float64] | np.float64,
 ) -> npt.NDArray[np.float64]:
@@ -66,9 +68,9 @@ def cf() -> npt.NDArray[np.float64]:
 
 
 def xyval(
-    lpwl: npt.NDArray[np.float64],
-    theta: npt.NDArray[np.float64],
-    phi: npt.NDArray[np.float64],
+    lpwl: np.float64,
+    theta: np.float64,
+    phi: np.float64,
 ) -> npt.NDArray[np.float64]:
     f = np.linspace(0, 2 * pi, 361, endpoint=True)
 
@@ -78,9 +80,9 @@ def xyval(
 
 
 def yzval1(
-    lpwl: npt.NDArray[np.float64],
-    theta: npt.NDArray[np.float64],
-    phi: npt.NDArray[np.float64],
+    lpwl: np.float64,
+    theta: np.float64,
+    phi: np.float64,
 ) -> npt.NDArray[np.float64]:
     t = np.linspace(0, pi, 181, endpoint=True)
 
@@ -90,9 +92,9 @@ def yzval1(
 
 
 def yzval2(
-    lpwl: npt.NDArray[np.float64],
-    theta: npt.NDArray[np.float64],
-    phi: npt.NDArray[np.float64],
+    lpwl: np.float64,
+    theta: np.float64,
+    phi: np.float64,
 ) -> npt.NDArray[np.float64]:
     t = np.linspace(0, pi, 181, endpoint=True)
 
@@ -102,9 +104,9 @@ def yzval2(
 
 
 def zxval1(
-    lpwl: npt.NDArray[np.float64],
-    theta: npt.NDArray[np.float64],
-    phi: npt.NDArray[np.float64],
+    lpwl: np.float64,
+    theta: np.float64,
+    phi: np.float64,
 ) -> npt.NDArray[np.float64]:
     t = np.linspace(0, pi, 181, endpoint=True)
 
@@ -112,10 +114,11 @@ def zxval1(
 
     return np.where(np.isclose(res, 0, atol=1e15), res, 0)
 
+
 def zxval2(
-    lpwl: npt.NDArray[np.float64],
-    theta: npt.NDArray[np.float64],
-    phi: npt.NDArray[np.float64],
+    lpwl: np.float64,
+    theta: np.float64,
+    phi: np.float64,
 ) -> npt.NDArray[np.float64]:
     t = np.linspace(0, pi, 181, endpoint=True)
 
@@ -123,9 +126,15 @@ def zxval2(
 
     return np.where(np.isclose(res, 0, atol=1e15), res, 0)
 
+
 if __name__ == "__main__":
     xi = np.linspace(0, pi, 181, endpoint=True, dtype=np.float64)
 
     f = fun(np.float64(0.5), xi)
 
-    print(f)
+    x = np.linspace(0, 2 * pi, 361, endpoint=True, dtype=np.float64)
+
+    y = yzval1(np.float64(0.5), np.float64(0), np.float64(0))
+
+    fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
+    assert isinstance(ax, PolarAxes)
