@@ -7,6 +7,7 @@ numpy = "*"
 matplotlib = "*"
 # pandas = "*"
 openpyxl = "*"
+d = "*"
 
 [dev-packages]
 ipython = "*"

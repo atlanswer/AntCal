@@ -28,7 +28,7 @@
     "@solidjs/start": "^1.0.2",
     "micromark": "^4.0.0",
     "micromark-extension-gfm": "^3.0.0",
-    "micromark-extension-math": "^3.0.0",
+    "micromark-extension-math": "^3.1.0",
     "solid-js": "^1.8.18",
     "vinxi": "^0.3.12",
     "zod": "^3.23.8"
@@ -37,10 +37,10 @@
     "@antcal/tailwind-config": "workspace:*",
     "@antcal/tsconfig": "workspace:*",
     "autoprefixer": "^10.4.19",
-    "cssnano": "^7.0.3",
+    "cssnano": "^7.0.4",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
-    "vite": "^5.3.2",
+    "vite": "^5.3.3",
     "vite-tsconfig-paths": "^4.3.2"
   }
 }
