@@ -24,13 +24,13 @@
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.13.6",
-    "@solidjs/start": "^1.0.2",
+    "@solidjs/router": "^0.14.1",
+    "@solidjs/start": "^1.0.3",
     "micromark": "^4.0.0",
     "micromark-extension-gfm": "^3.0.0",
     "micromark-extension-math": "^3.1.0",
     "solid-js": "^1.8.18",
-    "vinxi": "^0.3.12",
+    "vinxi": "^0.3.14",
     "zod": "^3.23.8"
   },
   "devDependencies": {

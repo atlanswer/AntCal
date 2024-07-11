@@ -13,33 +13,7 @@
 - Gain $θ$: $\sin(\theta)\cos(\phi)$
 - Gain $ϕ$: $\sin(\phi)$
 
-### M-dipole:
-
-- Gain $θ$: $\sin(\phi)$
-- Gain $ϕ$: $\sin(\theta)\cos(\phi)$
-
-### Linear Combination with Arbitrary Phase Shift [^wikipedia]
-
-We have
-
-$$
-a\sin(x+\theta_a)+b\sin(x+\theta_b)=c\sin(x+\varphi)
-$$
-
-where $c$ and $\varphi$ satisfy
-
-$$
-\begin{gather*}
-c=\sqrt{a^2+b^2+2ab\cos(\theta_a-\theta_b)}\text{,} \\
-\varphi=\operatorname{atan2}(a\cos\theta_a+b\cos\theta_b,\ a\sin\theta_a+b\sin\theta_b)\text{.}
-\end{gather*}
-$$
-
-Note: $\operatorname{atan2(y,\ x)}$ uses Numpy's [`arctan2`](https://numpy.org/doc/stable/reference/generated/numpy.arctan2.html) parameter order.
-
-[^wikipedia]: [Trigonometric Identities](https://en.wikipedia.org/wiki/List_of_trigonometric_identities#Arbitrary_phase_shift)
-
-## Demo
+#### Demo
 
 Module Parameters: $[lpwl\_, {theta\_, phi\_}, mesh\_, opac\_, step\_, pg\_]$
 
@@ -72,6 +46,32 @@ $$
 + \sin(th\ deg)\sin(ph\ deg)\sin(t)\sin(f)
 + \cos(th\ deg)\cos(t)
 $$
+
+### M-dipole:
+
+- Gain $θ$: $\sin(\phi)$
+- Gain $ϕ$: $\sin(\theta)\cos(\phi)$
+
+### Linear Combination with Arbitrary Phase Shift [^wikipedia]
+
+We have
+
+$$
+a\sin(x+\theta_a)+b\sin(x+\theta_b)=c\sin(x+\varphi)
+$$
+
+where $c$ and $\varphi$ satisfy
+
+$$
+\begin{gather*}
+c=\sqrt{a^2+b^2+2ab\cos(\theta_a-\theta_b)}\text{,} \\
+\varphi=\operatorname{atan2}(a\cos\theta_a+b\cos\theta_b,\ a\sin\theta_a+b\sin\theta_b)\text{.}
+\end{gather*}
+$$
+
+Note: $\operatorname{atan2(y,\ x)}$ uses Numpy's [`arctan2`](https://numpy.org/doc/stable/reference/generated/numpy.arctan2.html) parameter order.
+
+[^wikipedia]: [Trigonometric Identities](https://en.wikipedia.org/wiki/List_of_trigonometric_identities#Arbitrary_phase_shift)
 
 ## Report
 
