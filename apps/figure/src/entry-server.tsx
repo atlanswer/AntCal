@@ -32,7 +32,7 @@ export default createHandler(() => (
         </head>
         <body
           id="app"
-          class="flex h-full min-w-64 flex-col font-sans antialiased motion-reduce:transition-none"
+          class="flex min-h-full min-w-64 flex-col font-sans antialiased motion-reduce:transition-none"
         >
           <noscript>
             AntCal: You need to enable JavaScript to run this app.
