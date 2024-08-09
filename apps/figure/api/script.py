@@ -1,9 +1,10 @@
 # spell-checker:words lpwl, arange, dtype, xyval, yzval, xzval
 
-from matplotlib import pyplot as plt
-from matplotlib.projections import PolarAxes
 import numpy as np
 import numpy.typing as npt
+from matplotlib import pyplot as plt
+from matplotlib.axes import Axes
+from matplotlib.projections import PolarAxes
 from numpy import abs, cos, pi, sin, sqrt
 
 
@@ -136,5 +137,9 @@ if __name__ == "__main__":
 
     y = yzval1(np.float64(0.5), np.float64(0), np.float64(0))
 
-    fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
-    assert isinstance(ax, PolarAxes)
+    # fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
+    # assert isinstance(ax, PolarAxes)
+    fig, ax = plt.subplots()
+    assert ax, Axes
+
+    fig.show()
