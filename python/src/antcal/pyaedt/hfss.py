@@ -3,17 +3,17 @@
 for convenience.
 """
 
+# pyright: reportUnknownMemberType=false
+
 import sys
 from collections.abc import Mapping
 from types import MethodType
 
 from pyaedt.application.Variables import Variable
-from pyaedt.generic.desktop_sessions import (
-    _desktop_sessions,  # pyright: ignore
-)
 from pyaedt.generic.settings import settings
 from pyaedt.hfss import Hfss
 from pyaedt.modeler.cad.object3d import Object3d
+from pyaedt.modules.MaterialLib import Materials
 
 from antcal.log import log
 
@@ -34,7 +34,7 @@ def close_desktop(self: Hfss) -> None:
     """Close desktop without saving the project."""
 
     try:
-        self.close_project(save_project=False)
+        self.close_project(save=False)
     except Exception as e:
         log.error(f"Exception occurred during closing: {e}.")
 
@@ -59,8 +59,6 @@ def new_hfss_session(non_graphical: bool = False) -> Hfss:
 
     # Fallback to PythonNET
     settings.use_grpc_api = False
-    # Reset desktop session tracker
-    _desktop_sessions.clear()
     # Remove existing desktop handle
     if "oDesktop" in dir(sys.modules["__main__"]):
         try:
@@ -69,7 +67,7 @@ def new_hfss_session(non_graphical: bool = False) -> Hfss:
             log.error("Failed to remove `oDesktop` from `__main__`")
 
     # Create a new HFSS object
-    h = Hfss(non_graphical=non_graphical, new_desktop_session=True)
+    h = Hfss(non_graphical=non_graphical, new_desktop=True)
 
     # Rebind desktop properties
     d = sys.modules["__main__"].oDesktop
@@ -119,6 +117,7 @@ def check_materials(hfss: Hfss, materials: str | list[str]) -> None:
     it is added to this database."""
 
     mat = hfss.materials  # pyright: ignore
+    assert isinstance(mat, Materials)
     if isinstance(materials, str):
         materials = [materials]
     for material in materials:
