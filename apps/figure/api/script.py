@@ -134,12 +134,18 @@ if __name__ == "__main__":
     f = fun(np.float64(0.5), xi)
 
     x = np.linspace(0, 2 * pi, 361, endpoint=True, dtype=np.float64)
+    print(x.shape)
 
-    y = yzval1(np.float64(0.5), np.float64(0), np.float64(0))
+    y1 = yzval1(np.float64(0.5), np.float64(0), np.float64(0))
+    y2 = yzval2(np.float64(0.5), np.float64(0), np.float64(0))
+    
+    y = np.hstack((y1, y2))
 
     # fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
     # assert isinstance(ax, PolarAxes)
     fig, ax = plt.subplots()
-    assert ax, Axes
+    assert isinstance(ax, Axes)
+
+    ax.plot(y)
 
     fig.show()
