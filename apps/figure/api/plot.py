@@ -374,7 +374,7 @@ def plot_view_plane(config: ViewPlaneConfig) -> FigureWithDetailResponse:
 
     y_total **= 2
     y_total_db = 10 * np.log10(y_total)
-    peak: np.float64 = np.max(y_total_db)
+    peak = np.max(y_total_db)
     peak_idx = np.argmax(y_total_db)
     hp = np.subtract(peak, 3)
 
@@ -418,6 +418,14 @@ def plot_blank() -> bytes:
     buf.seek(0)
 
     return buf.getvalue()
+
+
+def create_rectangular_plot():
+    fig, ax = plt.subplots()
+    assert isinstance(ax, Axes)
+    ax.plot()
+
+    return fig, ax
 
 
 if __name__ == "__main__":

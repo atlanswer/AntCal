@@ -141,6 +141,8 @@ if __name__ == "__main__":
     
     y = np.hstack((y1, y2))
 
+    print(y.shape)
+
     # fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
     # assert isinstance(ax, PolarAxes)
     fig, ax = plt.subplots()
