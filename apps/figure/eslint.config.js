@@ -4,8 +4,7 @@ import { FlatCompat } from "@eslint/eslintrc";
 import eslint from "@eslint/js";
 // @ts-expect-error No types
 import prettier from "eslint-config-prettier";
-// @ts-expect-error ESLint can't import module
-import solid from "eslint-plugin-solid/configs/typescript.js";
+import solid from "eslint-plugin-solid/configs/typescript";
 import globals from "globals";
 import path from "path";
 import tsEslint from "typescript-eslint";
