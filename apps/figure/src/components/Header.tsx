@@ -11,6 +11,10 @@ const Navigator = () => {
       route: "/",
     },
     {
+      name: "New!",
+      route: "/new",
+    },
+    {
       name: "Report",
       route: "/report",
     },

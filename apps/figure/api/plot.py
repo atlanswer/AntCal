@@ -8,6 +8,7 @@ from typing import Any, Literal, TypedDict, cast
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.typing as npt
 from matplotlib.axes import Axes
 from matplotlib.backend_bases import RendererBase
 from matplotlib.patches import Arc, FancyArrow, FancyArrowPatch
@@ -424,6 +425,17 @@ def create_rectangular_plot():
     fig, ax = plt.subplots()
     assert isinstance(ax, Axes)
     ax.plot()
+
+    return fig, ax
+
+
+def create_polar_plot(
+    theta: npt.NDArray[np.float64], r: npt.NDArray[np.float64]
+):
+    fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
+    assert isinstance(ax, PolarAxes)
+
+    ax.plot(theta, r, clip_on=False)
 
     return fig, ax
 
