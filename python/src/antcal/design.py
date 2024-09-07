@@ -1,6 +1,6 @@
 """Design tools."""
 
-from pyaedt.modules.MaterialLib import Materials
+from ansys.aedt.core.modules.material_lib import Materials
 
 
 def import_materials(materials: Materials, material: str | list[str]) -> None:
@@ -12,4 +12,5 @@ def import_materials(materials: Materials, material: str | list[str]) -> None:
     if not isinstance(material, list):
         material = [material]
     for mat in material:
-        materials.checkifmaterialexists(mat)
+        # spell-checker: words checkifmaterialexists
+        materials.checkifmaterialexists(mat)  # pyright: ignore

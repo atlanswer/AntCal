@@ -7,7 +7,7 @@ from typing import Any
 
 import numpy as np
 import numpy.typing as npt
-from pyaedt.hfss import Hfss
+from ansys.aedt.core.hfss import Hfss
 
 from antcal.log import log
 from antcal.pyaedt.hfss import new_hfss_session

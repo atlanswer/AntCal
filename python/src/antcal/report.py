@@ -5,9 +5,9 @@ from typing import cast
 
 import numpy as np
 import numpy.typing as npt
-from pyaedt.generic.constants import SOLUTIONS
-from pyaedt.modules.AdvancedPostProcessing import PostProcessor
-from pyaedt.modules.solutions import SolutionData
+from ansys.aedt.core.generic.constants import SOLUTIONS
+from ansys.aedt.core.modules.advanced_post_processing import PostProcessor
+from ansys.aedt.core.modules.solutions import SolutionData
 
 
 # %% Functions
@@ -23,7 +23,7 @@ def get_s_params(
     :return np.ndarray: S parameters in dB
     """
 
-    match post.post_solution_type:
+    match post.post_solution_type:  # pyright: ignore
         case SOLUTIONS.Hfss.DrivenModal:
             category = "Modal Solution Data"
         case SOLUTIONS.Hfss.DrivenTerminal:
@@ -33,12 +33,12 @@ def get_s_params(
 
     s = cast(
         SolutionData,
-        post.get_solution_data(
+        post.get_solution_data(  # pyright: ignore
             f"dB(S({row},{col}))",
             f"{setup_name} : {sweep_name}",
             "Sweep",
             report_category=category,
         ),
     )
-    assert s.is_real_only(), "S parameters is not real only."
-    return np.array(s.data_real())
+    assert s.is_real_only(), "S parameters is not real only."  # pyright: ignore
+    return np.array(s.data_real())  # pyright: ignore

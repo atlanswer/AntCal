@@ -9,11 +9,11 @@ import sys
 from collections.abc import Mapping
 from types import MethodType
 
-from pyaedt.application.Variables import Variable
-from pyaedt.generic.settings import settings
-from pyaedt.hfss import Hfss
-from pyaedt.modeler.cad.object3d import Object3d
-from pyaedt.modules.MaterialLib import Materials
+from ansys.aedt.core.application.variables import Variable
+from ansys.aedt.core.generic.settings import settings
+from ansys.aedt.core.hfss import Hfss
+from ansys.aedt.core.modeler.cad.object_3d import Object3d
+from ansys.aedt.core.modules.material_lib import Materials
 
 from antcal.log import log
 
