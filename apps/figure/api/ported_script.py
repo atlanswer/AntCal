@@ -178,8 +178,8 @@ def zxval2(
 
 
 def plot_view_plane(config: ViewPlaneConfig):
-    db_min, db_max = -30, 10
-    lin_min = 0
+    # db_min, db_max = -30, 10
+    # lin_min = 0
     n_samples = 361
 
     source = config["source"][0]
