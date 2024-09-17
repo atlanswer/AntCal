@@ -24,13 +24,13 @@
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.14.3",
+    "@solidjs/router": "^0.14.5",
     "@solidjs/start": "^1.0.6",
     "micromark": "^4.0.0",
     "micromark-extension-gfm": "^3.0.0",
     "micromark-extension-math": "^3.1.0",
     "solid-js": "^1.8.22",
-    "vinxi": "^0.4.2",
+    "vinxi": "^0.4.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -38,9 +38,9 @@
     "@antcal/tsconfig": "workspace:*",
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.6",
-    "postcss": "^8.4.45",
+    "postcss": "^8.4.47",
     "tailwindcss": "^3.4.11",
-    "vite": "^5.4.4",
+    "vite": "^5.4.6",
     "vite-tsconfig-paths": "^5.0.1"
   }
 }
