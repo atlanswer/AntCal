@@ -7,14 +7,6 @@ export default defineConfig({
       target: ["esnext"],
     },
     plugins: [tsconfigPaths()],
-    assetsInclude: ["@/pyodide/**"],
-    worker: {
-      format: "es",
-      plugins: () => [tsconfigPaths()],
-      rollupOptions: {
-        external: ["@/pyodide"],
-      },
-    },
   },
   server: {
     esbuild: {
