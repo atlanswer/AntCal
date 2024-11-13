@@ -5,7 +5,7 @@ import { Router, type RouteSectionProps } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { inject } from "@vercel/analytics";
 import { injectSpeedInsights } from "@vercel/speed-insights";
-import { ErrorBoundary, Suspense } from "solid-js";
+import { ErrorBoundary, onMount, Suspense } from "solid-js";
 import { isServer } from "solid-js/web";
 import "~/app.css";
 import { ErrorPage } from "~/components/ErrorPage";
@@ -16,8 +16,10 @@ import { ThemeProvider } from "~/components/theme/context";
 
 const Layout = (props: RouteSectionProps) => {
   if (!isServer) {
-    inject();
-    injectSpeedInsights();
+    onMount(() => {
+      inject();
+      injectSpeedInsights();
+    });
   }
 
   return (
