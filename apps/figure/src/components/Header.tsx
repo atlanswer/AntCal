@@ -25,7 +25,7 @@ const Navigator = () => {
   ];
 
   return (
-    <nav class="flex flex-1 font-medium leading-loose text-black sm:place-content-center dark:text-white">
+    <nav class="flex flex-1 text-xl leading-loose text-black sm:place-content-center dark:text-white">
       <span class="inline-block [&>:not(:first-child)]:ml-6">
         <For each={routes}>
           {(route) => (
@@ -44,7 +44,7 @@ const Navigator = () => {
 };
 
 export const Header = () => (
-  <header class="sticky top-0 z-10 place-content-center bg-white px-8 text-black shadow dark:border-neutral-900 dark:bg-black dark:text-white">
+  <header class="saira-header sticky top-0 z-10 place-content-center bg-white px-8 text-black shadow dark:border-neutral-900 dark:bg-black dark:text-white">
     <div class="mx-auto flex max-w-screen-xl place-content-between place-items-center gap-8">
       <span class="hidden w-8 sm:inline" />
       <Navigator />

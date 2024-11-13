@@ -24,12 +24,13 @@ export const Footer = () => {
   // const [avgTime] = useDrawPerf();
 
   return (
-    <footer class="border-t border-neutral-300 bg-neutral-200 p-8 text-black dark:border-neutral-700 dark:bg-neutral-800 dark:text-white">
+    <footer class="saira-body border-t border-neutral-300 bg-neutral-200 p-8 text-lg text-black dark:border-neutral-700 dark:bg-neutral-800 dark:text-white">
       <div class="mx-auto flex max-w-screen-xl flex-col gap-4 sm:flex-row sm:gap-8">
         <span>
           Built by
           <span> </span>
           <a
+            rel="noopener"
             href="https://github.com/atlanswer"
             target="_blank"
             class="font-medium underline underline-offset-4"
@@ -38,6 +39,7 @@ export const Footer = () => {
           </a>
         </span>
         <a
+          rel="noopener"
           href="https://dev.antcal.atlanswer.com"
           target="_blank"
           class="flex place-items-center gap-1"
@@ -46,6 +48,7 @@ export const Footer = () => {
           <span class="underline underline-offset-4">Preview Build</span>
         </a>
         <a
+          rel="noopener"
           href="https://status.atlanswer.com"
           target="_blank"
           class="flex place-items-center gap-1"
@@ -63,6 +66,7 @@ export const Footer = () => {
         <span class="flex place-items-center gap-1.5 sm:ml-auto">
           <span>v{version}</span>
           <a
+            rel="noopener"
             href="https://github.com/atlanswer/AntCal"
             target="_blank"
             class="flex place-items-center gap-1.5"

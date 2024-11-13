@@ -2,6 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: "Saira Condensed";
+    src: url("/fonts/saira/Saira_Condensed-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Saira Condensed";
+    src: url("/fonts/saira/Saira_Condensed-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Saira Extra Condensed";
+    src: url("/fonts/saira/Saira_ExtraCondensed-ExtraBoldItalic.woff2")
+      format("woff2");
+    font-weight: 800;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Saira Extra Condensed";
+    src: url("/fonts/saira/Saira_ExtraCondensed-Italic.woff2") format("woff2");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Saira Extra Condensed";
+    src: url("/fonts/saira/Saira_ExtraCondensed-SemiBoldItalic.woff2")
+      format("woff2");
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  .saira-header {
+    @apply font-saira-extra-condensed font-extrabold italic;
+  }
+
+  .saira-body {
+    @apply font-saira-condensed;
+  }
+
+  .saira-button {
+    @apply font-saira-extra-condensed italic;
+  }
+}
+
 .math-display {
   overflow: auto;
 }

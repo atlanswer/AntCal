@@ -4,4 +4,10 @@ import sharedConfig from "@antcal/tailwind-config";
 export default {
   content: ["./src/**/*.{tsx,ts,css,md}"],
   presets: [sharedConfig],
+  theme: {
+    fontFamily: {
+      "saira-condensed": "Saira Condensed",
+      "saira-extra-condensed": "Saira Extra Condensed",
+    },
+  },
 };

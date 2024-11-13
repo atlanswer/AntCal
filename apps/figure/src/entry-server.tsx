@@ -1,5 +1,3 @@
-// @refresh granular
-
 import { createHandler, StartServer } from "@solidjs/start/server";
 
 export default createHandler(() => (
@@ -14,6 +12,7 @@ export default createHandler(() => (
             content="Create publication quality figures"
           />
           <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+          <link rel="apple-touch-icon" href="/ios/1024.png" />
           <meta name="color-scheme" content="light dark" />
           <meta name="theme-color" content="#ffffff" />
           <meta
