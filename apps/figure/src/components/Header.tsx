@@ -7,25 +7,25 @@ import { ThemeToggle } from "~/components/theme";
 const Navigator = () => {
   const routes: { route: string; name: string }[] = [
     {
-      name: "Radiation Pattern",
+      name: "PATTERN",
       route: "/",
     },
     {
-      name: "Report",
+      name: "REPORT",
       route: "/report",
     },
     {
-      name: "Docs",
+      name: "DOCS",
       route: "/docs",
     },
     {
-      name: "About",
+      name: "ABOUT",
       route: "/about",
     },
   ];
 
   return (
-    <nav class="flex flex-1 text-xl leading-loose text-black sm:place-content-center dark:text-white">
+    <nav class="flex flex-1 text-xl text-black sm:place-content-center dark:text-white">
       <span class="inline-block [&>:not(:first-child)]:ml-6">
         <For each={routes}>
           {(route) => (

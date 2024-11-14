@@ -23,13 +23,7 @@ Upload data files to generate figures. Work in progress!
 
 ## Privacy
 
-[PostHog](https://posthog.com) is used to collect analytics,
-which contain but not limited to frontend events and your IP address.
-See their [terms](https://posthog.com/terms)
-and [privacy policy](https://posthog.com/privacy).
-It helps me improve this app.
-
-Your infomation can still being processed by the host provider Vercel.
+Your information is processed by the host provider Vercel.
 Their privacy policy can be found here:
 [Privacy Policy](https://vercel.com/legal/privacy-policy),
 [Web Analytics Privacy and Compliance](https://vercel.com/docs/analytics/privacy-policy),

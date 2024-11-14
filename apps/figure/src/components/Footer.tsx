@@ -1,9 +1,7 @@
-// @refresh granular
-
 import { version } from "package.json";
 import { BeakerIcon } from "~/components/icons/Beaker";
-import { BoltIcon } from "~/components/icons/Bolt";
 import { GitHubIcon } from "~/components/icons/GitHub";
+import { PlugIcon } from "~/components/icons/Plug";
 
 export const Footer = () => {
   // const IconTime = () => (
@@ -25,24 +23,25 @@ export const Footer = () => {
 
   return (
     <footer class="saira-body border-t border-neutral-300 bg-neutral-200 p-8 text-lg text-black dark:border-neutral-700 dark:bg-neutral-800 dark:text-white">
-      <div class="mx-auto flex max-w-screen-xl flex-col gap-4 sm:flex-row sm:gap-8">
-        <span>
-          Built by
-          <span> </span>
-          <a
-            rel="noopener"
-            href="https://github.com/atlanswer"
-            target="_blank"
-            class="font-medium underline underline-offset-4"
-          >
-            @atlanswer
-          </a>
+      <div class="mx-auto flex max-w-screen-xl flex-col gap-4 md:flex-row">
+        <span class="flex flex-none place-items-center align-middle">
+          <span>
+            Built by{" "}
+            <a
+              rel="noopener"
+              href="https://github.com/atlanswer"
+              target="_blank"
+              class="font-medium underline underline-offset-4"
+            >
+              @atlanswer
+            </a>
+          </span>
         </span>
         <a
           rel="noopener"
           href="https://dev.antcal.atlanswer.com"
           target="_blank"
-          class="flex place-items-center gap-1"
+          class="flex flex-none place-items-center gap-1"
         >
           <BeakerIcon />
           <span class="underline underline-offset-4">Preview Build</span>
@@ -51,19 +50,19 @@ export const Footer = () => {
           rel="noopener"
           href="https://status.atlanswer.com"
           target="_blank"
-          class="flex place-items-center gap-1"
+          class="flex flex-none place-items-center gap-1"
         >
-          <BoltIcon />
+          <PlugIcon />
           <span class="underline underline-offset-4">Status</span>
         </a>
-        <span class="flex place-items-center gap-1">
+        <span class="flex place-items-center gap-1 text-base">
           {/* <IconTime /> */}
           {/* <span>{avgTime().toFixed()} ms</span> */}
-          <span>
-            <code>API_URL: {import.meta.env["VITE_API_URL"]}</code>
-          </span>
+          {/* <span> */}
+          <code>API_URL: {import.meta.env["VITE_API_URL"]}</code>
+          {/* </span> */}
         </span>
-        <span class="flex place-items-center gap-1.5 sm:ml-auto">
+        <span class="flex flex-none place-items-center gap-1.5 md:ml-auto">
           <span>v{version}</span>
           <a
             rel="noopener"
