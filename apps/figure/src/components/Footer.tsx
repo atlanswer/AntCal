@@ -39,12 +39,26 @@ export const Footer = () => {
         </span>
         <a
           rel="noopener"
-          href="https://dev.antcal.atlanswer.com"
+          href={
+            (
+              (import.meta.env.VITE_VERCEL_ENV ?? "development") ===
+              "production"
+            ) ?
+              "https://dev.antcal.atlanswer.com"
+            : "https://antcal.atlanswer.com"
+          }
           target="_blank"
           class="flex flex-none place-items-center gap-1"
         >
           <BeakerIcon />
-          <span class="underline underline-offset-4">Preview Build</span>
+          <span class="underline underline-offset-4">
+            {(
+              (import.meta.env.VITE_VERCEL_ENV ?? "development") ===
+              "production"
+            ) ?
+              "Preview Version"
+            : "Production Version"}
+          </span>
         </a>
         <a
           rel="noopener"

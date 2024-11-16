@@ -1,6 +1,6 @@
 {
   "name": "@antcal/figure",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": "true",
@@ -15,7 +15,7 @@
   "homepage": "https://antcal.atlanswer.com/",
   "scripts": {
     "dev": "vinxi dev",
-    "dev:api": "pipenv run dev",
+    "dev:api": "uv run fastapi dev api/main.py",
     "tsc": "tsc",
     "lint": "eslint .",
     "build": "vinxi build",
@@ -26,7 +26,7 @@
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.15.1",
     "@solidjs/start": "^1.0.10",
-    "micromark": "^4.0.0",
+    "micromark": "^4.0.1",
     "micromark-extension-gfm": "^3.0.0",
     "micromark-extension-math": "^3.1.0",
     "solid-js": "^1.9.3",
@@ -41,7 +41,7 @@
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.6",
     "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.14",
+    "tailwindcss": "^3.4.15",
     "vite": "^5.4.11",
     "vite-tsconfig-paths": "^5.1.2"
   }
