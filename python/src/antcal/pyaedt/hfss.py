@@ -142,23 +142,6 @@ def check_materials(hfss: Hfss, materials: str | list[str]) -> None:
         mat.checkifmaterialexists(material)
 
 
-def set_material_appearance(
-    obj: Object3d | list[Object3d], material_appearance: bool = True
-) -> None:
-    vMaterialAppearance = [
-        "NAME:Material Appearance",
-        "Value:=",
-        material_appearance,
-    ]
-
-    if isinstance(obj, Object3d):
-        obj._change_property(vMaterialAppearance)  # pyright: ignore[reportPrivateUsage]
-        return
-    else:
-        for i in obj:
-            i._change_property(vMaterialAppearance)  # pyright: ignore[reportPrivateUsage]
-
-
 def create_linear_structure(
     hfss: Hfss,
     type: Literal["hole", "via"],
