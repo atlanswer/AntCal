@@ -1,5 +1,3 @@
-// @refresh granular
-
 import { Title } from "@solidjs/meta";
 import { useSearchParams } from "@solidjs/router";
 import { Index, createEffect, on, onMount } from "solid-js";
@@ -38,7 +36,9 @@ const getFigureConfigsFromSearchParameters = (): FigureConfigs | null => {
   const [searchParams, setSearchParams] = useSearchParams();
   const encodedFigureConfigs = searchParams["figureConfigs"];
 
-  if (!encodedFigureConfigs) return null;
+  if (!encodedFigureConfigs || encodedFigureConfigs instanceof Array) {
+    return null;
+  }
 
   const figureConfigsString = decodeURIComponent(encodedFigureConfigs);
 

@@ -1,5 +1,3 @@
-// @refresh granular
-
 import {
   createContext,
   createEffect,

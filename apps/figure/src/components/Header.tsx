@@ -1,5 +1,3 @@
-// @refresh granular
-
 import { A } from "@solidjs/router";
 import { For } from "solid-js";
 import { ThemeToggle } from "~/components/theme";

@@ -15,6 +15,7 @@ export const AddSource: Component<{
         direction: "X",
         amplitude: 1,
         phase: 0,
+        lpwl: 0.5,
       } satisfies Source,
     ]);
   };
@@ -22,7 +23,8 @@ export const AddSource: Component<{
   return (
     <button
       title="Add new source"
-      class="rounded bg-sky-500 p-1 text-white shadow hover:bg-sky-700"
+      class="rounded bg-sky-500 px-4 py-1 text-white shadow hover:bg-sky-700"
+      type="button"
       onClick={addSource}
     >
       <AddIcon />

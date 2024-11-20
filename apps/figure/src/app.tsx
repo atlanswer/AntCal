@@ -1,5 +1,3 @@
-// @refresh granular
-
 import { MetaProvider } from "@solidjs/meta";
 import { Router, type RouteSectionProps } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
@@ -15,6 +13,7 @@ import { LoadingPage } from "~/components/LoadingPage";
 import { ThemeProvider } from "~/components/theme/context";
 
 const Layout = (props: RouteSectionProps) => {
+  // Inject Vercel Analytics
   if (!isServer) {
     onMount(() => {
       inject();

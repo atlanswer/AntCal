@@ -1,6 +1,7 @@
 import { ErrorBoundary, Show, type Accessor, type Component } from "solid-js";
 import { produce } from "solid-js/store";
 import { SourcesPanel } from "~/components/figure/SourcePanel";
+import { SourcePreview } from "~/components/figure/SourcePreview";
 import { ViewPlane } from "~/components/figure/ViewPlane";
 import {
   useFigureConfigs,
@@ -40,6 +41,7 @@ export const FigureSection: Component<{
               <button
                 class="whitespace-nowrap rounded px-2"
                 classList={{ active: props.figureConfig().isDb }}
+                type="button"
                 onClick={() => setFigureConfigs(props.idx, "isDb", true)}
               >
                 dB
@@ -47,6 +49,7 @@ export const FigureSection: Component<{
               <button
                 class="whitespace-nowrap rounded px-2"
                 classList={{ active: !props.figureConfig().isDb }}
+                type="button"
                 onClick={() => setFigureConfigs(props.idx, "isDb", false)}
               >
                 Linear
@@ -59,6 +62,7 @@ export const FigureSection: Component<{
               <button
                 class="whitespace-nowrap rounded px-2"
                 classList={{ active: !props.figureConfig().isGainTotal }}
+                type="button"
                 onClick={() =>
                   setFigureConfigs(props.idx, "isGainTotal", false)
                 }
@@ -68,6 +72,7 @@ export const FigureSection: Component<{
               <button
                 class="whitespace-nowrap rounded px-2"
                 classList={{ active: props.figureConfig().isGainTotal }}
+                type="button"
                 onClick={() => setFigureConfigs(props.idx, "isGainTotal", true)}
               >
                 Gain Total
@@ -77,7 +82,8 @@ export const FigureSection: Component<{
           <Show when={figureConfigs.length > 1}>
             <button
               title="Remove figure"
-              class="ml-auto text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
+              class="ml-auto text-neutral-500 hover:text-rose-500"
+              type="button"
               onClick={() =>
                 setFigureConfigs(
                   produce((figureConfigs) =>
@@ -93,12 +99,16 @@ export const FigureSection: Component<{
         <div class="grid grid-flow-col place-items-center gap-4 overflow-x-auto rounded py-2 font-semibold">
           <ErrorBoundary
             fallback={(err: { toString: () => string }) => (
-              <p class="text-red-500">{err.toString()}</p>
+              <div class="rounded bg-red-500 p-4 text-center text-white">
+                <p>{err.toString()}</p>
+                <p>Please try again by refreshing.</p>
+              </div>
             )}
           >
             <ViewPlane cutPlane="YZ" figIdx={props.idx} />
             <ViewPlane cutPlane="XZ" figIdx={props.idx} />
             <ViewPlane cutPlane="XY" figIdx={props.idx} />
+            <SourcePreview sources={props.figureConfig().sources} />
           </ErrorBoundary>
         </div>
         <figcaption class="flex flex-wrap place-content-center place-items-center gap-8 text-black dark:text-white">
