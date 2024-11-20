@@ -5,6 +5,11 @@
     "dev": {
       "env": ["VITE_*"]
     },
+    "dev:api": {
+      "cache": false,
+      "persistent": true,
+      "env": ["VITE_*"]
+    },
     "build": {
       "inputs": ["$TURBO_DEFAULT$", "!api/**"],
       "outputs": [".vinxi/**", ".vercel/**"]

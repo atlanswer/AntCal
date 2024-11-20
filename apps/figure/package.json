@@ -15,7 +15,7 @@
   "homepage": "https://antcal.atlanswer.com/",
   "scripts": {
     "dev": "vinxi dev",
-    "dev:api": "uv run fastapi dev api/main.py",
+    "dev:api": "uv run --env-file .env fastapi dev api/main.py",
     "tsc": "tsc",
     "lint": "eslint .",
     "build": "vinxi build",
