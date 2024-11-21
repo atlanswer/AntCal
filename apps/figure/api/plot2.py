@@ -3,7 +3,6 @@
 # spell-checker:words fonttype labelweight axisbelow linewidth
 # spell-checker:words labelsize mathtext fontset figsize
 
-import io
 import logging
 from typing import Any, Literal, TypedDict, cast
 
@@ -73,7 +72,7 @@ def pol_to_car(
     )
 
 
-def e_pattern(
+def pattern(
     lpwl: float,
     theta: float,
     phi: float,
@@ -127,6 +126,6 @@ if __name__ == "__main__":
 
     lpwl = 0.5
 
-    res = e_pattern(lpwl, theta, phi, f, t)
+    res = pattern(lpwl, theta, phi, f, t)
 
     fig = plot_polar(res)
