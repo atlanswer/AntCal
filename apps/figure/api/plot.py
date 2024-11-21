@@ -1,5 +1,7 @@
 # spell-checker:words xtick, ytick, mplot, verts3d, stix, cmap, azim
-# spell-checker:words xlim, ylim, zlim, zdir, hpbw
+# spell-checker:words xlim, ylim, zlim, zdir, hpbw, lpwl
+# spell-checker:words toolkits, fonttype, labelweight, labelsize
+# spell-checker:words axisbelow, mathtext, fontset, figsize, fontsize
 
 import io
 import logging
@@ -19,7 +21,8 @@ from mpl_toolkits.mplot3d.art3d import (
     pathpatch_2d_to_3d,  # pyright: ignore[reportUnknownVariableType]
 )
 from mpl_toolkits.mplot3d.axes3d import Axes3D
-from pydantic import BaseModel
+from numpy import cos, radians, sin
+from pydantic import BaseModel, RootModel
 
 logging.getLogger("matplotlib.font_manager").setLevel(logging.WARNING)
 
@@ -46,8 +49,41 @@ mpl.rcParams["mathtext.fontset"] = "stix"
 # mpl.rcParams["figure.figsize"] = 3.5 * sf, 3.5 * sf
 mpl.rcParams["figure.figsize"] = 3.5, 3.5
 
-
 set1 = plt.get_cmap("Set1")
+
+
+class Source(TypedDict):
+    type: Literal["E", "M"]
+    direction: Literal["+X", "+Y", "+Z"]
+    amplitude: float
+    phase: float
+    lpwl: float
+
+
+class Sources(RootModel[list[Source]]):
+    def __iter__(self):  # pyright: ignore[reportIncompatibleMethodOverride]
+        return iter(self.root)
+
+    def __getitem__(self, item: int):
+        return self.root[item]
+
+
+CutPlane = Literal["XZ", "YZ", "XY"]
+
+
+class ViewPlaneConfig(BaseModel):
+    cutPlane: list[CutPlane]
+    isDb: bool
+    isGainTotal: bool
+    sources: list[Source]
+
+
+class ViewPlaneConfigs(RootModel[list[ViewPlaneConfig]]):
+    def __iter__(self):  # pyright: ignore[reportIncompatibleMethodOverride]
+        return iter(self.root)
+
+    def __getitem__(self, item: int):
+        return self.root[item]
 
 
 class FigureWithDetailResponse(BaseModel):
@@ -56,21 +92,7 @@ class FigureWithDetailResponse(BaseModel):
     figData: str
 
 
-class Source(TypedDict):
-    type: Literal["E", "M"]
-    direction: Literal["X", "Y", "Z"]
-    amplitude: float
-    phase: float
-
-
-CutPlane = Literal["XZ", "YZ", "XY"]
-
-
-class ViewPlaneConfig(BaseModel):
-    cutPlane: CutPlane
-    isDb: bool
-    isGainTotal: bool
-    sources: list[Source]
+FiguresWithDetailResponse = RootModel[list[FigureWithDetailResponse]]
 
 
 class Arrow3D(FancyArrowPatch):
@@ -94,7 +116,7 @@ class Arrow3D(FancyArrowPatch):
         super().draw(renderer)
 
 
-def plot_sources(sources: list[Source]):
+def plot_source_preview(sources: Sources) -> str:
     scale_factor = 100
 
     fig, ax = plt.subplots(
@@ -112,13 +134,13 @@ def plot_sources(sources: list[Source]):
 
     for s in sources:
         match s["direction"]:
-            case "X":
+            case "+X":
                 theta = np.pi / 2
                 phi = 0
-            case "Y":
+            case "+Y":
                 theta = np.pi / 2
                 phi = np.pi / 2
-            case "Z":
+            case "+Z":
                 theta = 0
                 phi = 0
         amplitude = s["amplitude"] * scale_factor
@@ -232,6 +254,19 @@ def plot_sources(sources: list[Source]):
     return f.getvalue().decode()
 
 
+def plot_view_planes(
+    configs: ViewPlaneConfigs,
+) -> FiguresWithDetailResponse:
+    db_min, db_max = -30, 10
+    lin_min = 0
+    n_samples = 361
+
+    gain_theta = np.zeros(n_samples)
+    gain_theta_phase = np.zeros(n_samples)
+    gain_phi = np.zeros(n_samples)
+    gain_phi_phase = np.zeros(n_samples)
+
+
 def plot_view_plane(config: ViewPlaneConfig) -> FigureWithDetailResponse:
     db_min, db_max = -30, 10
     lin_min = 0
@@ -257,26 +292,24 @@ def plot_view_plane(config: ViewPlaneConfig) -> FigureWithDetailResponse:
         amplitude = s["amplitude"]
         phase_s = cast(np.float64, np.radians(s["phase"]))
         match s["type"], s["direction"]:
-            case "E", "X":
+            case "E", "+X":
                 theta_b = np.cos(theta) * np.cos(phi)
                 phi_b = np.sin(phi)
-            case "M", "X":
+            case "M", "+X":
                 theta_b = np.sin(phi)
                 phi_b = np.cos(theta) * np.cos(phi)
-            case "E", "Y":
+            case "E", "+Y":
                 theta_b = np.cos(theta) * np.sin(phi)
                 phi_b = np.cos(phi)
-            case "M", "Y":
+            case "M", "+Y":
                 theta_b = np.cos(phi)
                 phi_b = np.cos(theta) * np.sin(phi)
-            case "E", "Z":
+            case "E", "+Z":
                 theta_b = np.sin(theta)
                 phi_b = np.zeros(n_samples)
-            case "M", "Z":
+            case "M", "+Z":
                 theta_b = np.zeros(n_samples)
                 phi_b = np.sin(theta)
-            case _:
-                raise ValueError("Unknown source type or direction")
         theta_b *= amplitude
         phi_b *= amplitude
 
