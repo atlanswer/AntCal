@@ -31,6 +31,10 @@ class ViewPlaneConfig(BaseModel):
     isDb: bool
     isGainTotal: bool
     sources: list[Source]
+    db_min: int = -30
+    db_max: int = 10
+    lin_min: int = 0
+    axis_step_deg: float = 1
 
 
 class ViewPlaneConfigs(RootModel[list[ViewPlaneConfig]]):

@@ -4,5 +4,5 @@ Currently provides utilities for modeling
 and post-processing in ANSYS HFSS.
 """
 
-__version__ = "0.0.26"
+__version__ = "0.0.27"
 """Package version string"""

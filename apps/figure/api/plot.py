@@ -5,24 +5,24 @@
 
 import io
 import logging
-from typing import Any, Literal, TypedDict, cast
+from typing import cast
 
-import matplotlib as mpl
+# import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
 from matplotlib.axes import Axes
-from matplotlib.patches import Arc, FancyArrow, FancyArrowPatch
+from matplotlib.patches import Arc, FancyArrow
 from matplotlib.projections.polar import PolarAxes
 from matplotlib.ticker import MaxNLocator
 from mpl_toolkits.mplot3d.art3d import (
     pathpatch_2d_to_3d,  # pyright: ignore[reportUnknownVariableType]
 )
 from mpl_toolkits.mplot3d.axes3d import Axes3D
-from numpy import cos, radians, sin
-from pydantic import BaseModel, RootModel
+from numpy import cos, pi, radians, sin
 
 from .context import (
+    FiguresWithDetailResponse,
     FigureWithDetailResponse,
     Sources,
     ViewPlaneConfig,
@@ -31,28 +31,28 @@ from .context import (
 
 logging.getLogger("matplotlib.font_manager").setLevel(logging.WARNING)
 
-mpl.rcParams["backend"] = "SVG"
-plt.style.use(["default", "seaborn-v0_8-paper"])
-mpl.rcParams["svg.fonttype"] = "none"
-mpl.rcParams["font.family"] = "Arial"
-mpl.rcParams["font.weight"] = "bold"
-mpl.rcParams["axes.labelweight"] = "bold"
-mpl.rcParams["axes.grid"] = True
-mpl.rcParams["axes.axisbelow"] = True
-mpl.rcParams["grid.alpha"] = 0.5
-mpl.rcParams["grid.linewidth"] = 0.5
-mpl.rcParams["xtick.direction"] = "in"
-mpl.rcParams["xtick.labelsize"] = 10
-mpl.rcParams["ytick.direction"] = "in"
-mpl.rcParams["ytick.labelsize"] = 10
-mpl.rcParams["lines.linewidth"] = 2
-mpl.rcParams["mathtext.fontset"] = "stix"
+# mpl.rcParams["backend"] = "SVG"
+plt.style.use(["default", "seaborn-v0_8-paper", "./publication.mplstyle"])
+# mpl.rcParams["svg.fonttype"] = "none"
+# mpl.rcParams["font.family"] = "Arial"
+# mpl.rcParams["font.weight"] = "bold"
+# mpl.rcParams["axes.labelweight"] = "bold"
+# mpl.rcParams["axes.grid"] = True
+# mpl.rcParams["axes.axisbelow"] = True
+# mpl.rcParams["grid.alpha"] = 0.5
+# mpl.rcParams["grid.linewidth"] = 0.5
+# mpl.rcParams["xtick.direction"] = "in"
+# mpl.rcParams["xtick.labelsize"] = 10
+# mpl.rcParams["ytick.direction"] = "in"
+# mpl.rcParams["ytick.labelsize"] = 10
+# mpl.rcParams["lines.linewidth"] = 2
+# mpl.rcParams["mathtext.fontset"] = "stix"
 
 # sf = 3.5 / 3.5
 # """Scale factor"""
 
 # mpl.rcParams["figure.figsize"] = 3.5 * sf, 3.5 * sf
-mpl.rcParams["figure.figsize"] = 3.5, 3.5
+# mpl.rcParams["figure.figsize"] = 3.5, 3.5
 
 set1 = plt.get_cmap("Set1")
 
@@ -195,43 +195,35 @@ def plot_source_preview(sources: Sources) -> str:
     return f.getvalue().decode()
 
 
-def plot_view_planes(
-    configs: ViewPlaneConfigs,
-) -> FiguresWithDetailResponse:
-    db_min, db_max = -30, 10
-    lin_min = 0
-    n_samples = 361
+def plot_view_planes(config: ViewPlaneConfig) -> FigureWithDetailResponse:
+    db_min = config.db_min
+    db_max = config.db_max
+    lin_min = config.lin_min
+    axis_step = np.deg2rad(config.axis_step_deg)
 
-    gain_theta = np.zeros(n_samples)
-    gain_theta_phase = np.zeros(n_samples)
-    gain_phi = np.zeros(n_samples)
-    gain_phi_phase = np.zeros(n_samples)
+    x = np.arange(0, 2 * pi, axis_step, np.float64)
 
+    plane = config.cutPlane[0]
 
-def plot_view_plane(config: ViewPlaneConfig) -> FigureWithDetailResponse:
-    db_min, db_max = -30, 10
-    lin_min = 0
-    n_samples = 361
-
-    match config.cutPlane:
+    match plane:
         case "YZ":
-            theta = np.linspace(0, np.pi * 2, n_samples)
-            phi = np.pi / 2 * np.ones_like(n_samples)
+            axis_theta = x
+            axis_phi = pi / 2
         case "XZ":
-            theta = np.linspace(0, np.pi * 2, n_samples)
-            phi = np.zeros_like(n_samples)
+            axis_theta = x
+            axis_phi = 0
         case "XY":
-            phi = np.linspace(0, np.pi * 2, n_samples)
-            theta = np.pi / 2 * np.ones_like(n_samples)
+            axis_theta = pi / 2
+            axis_phi = x
 
-    theta_a = np.zeros(n_samples)
-    theta_phase_a = np.zeros(n_samples)
-    phi_a = np.zeros(n_samples)
-    phi_phase_a = np.zeros(n_samples)
+    gain_theta = 0
+    gain_theta_phase = 0
+    gain_phi = 0
+    gain_phi_phase = 0
 
     for s in config.sources:
         amplitude = s["amplitude"]
-        phase_s = cast(np.float64, np.radians(s["phase"]))
+        src_phase = cast(np.float64, np.deg2rad(s["phase"]))
         match s["type"], s["direction"]:
             case "E", "+X":
                 theta_b = np.cos(theta) * np.cos(phi)
@@ -254,30 +246,33 @@ def plot_view_plane(config: ViewPlaneConfig) -> FigureWithDetailResponse:
         theta_b *= amplitude
         phi_b *= amplitude
 
-        theta_phase_b = phase_s * np.ones(n_samples)
-        phi_phase_b = phase_s * np.ones(n_samples)
+        theta_phase_b = src_phase * np.ones(n_samples)
+        phi_phase_b = src_phase * np.ones(n_samples)
 
         theta_phase_b[theta_b < 0] += np.pi
         theta_b = np.abs(theta_b)
         phi_phase_b[phi_b < 0] += np.pi
         phi_b = np.abs(phi_b)
 
-        theta_phase_numerator = theta_a * np.sin(
-            theta_phase_a
+        theta_phase_numerator = gain_theta * np.sin(
+            gain_theta_phase
         ) + theta_b * np.sin(theta_phase_b)
-        theta_phase_denominator = theta_a * np.cos(
-            theta_phase_a
+        theta_phase_denominator = gain_theta * np.cos(
+            gain_theta_phase
         ) + theta_b * np.cos(theta_phase_b)
         # print(f"theta_a: [{theta_a[0], theta_a[180]}]")
         # print(f"theta_phase_a: [{theta_phase_a[0], theta_phase_a[180]}]")
         # print(f"theta_b: [{theta_b[0], theta_b[180]}]")
         # print(f"theta_phase_b: [{theta_phase_b[0], theta_phase_b[180]}]")
-        theta_a = np.sqrt(
-            theta_a**2
+        gain_theta = np.sqrt(
+            gain_theta**2
             + theta_b**2
-            + 2 * theta_a * theta_b * np.cos(theta_phase_a - theta_phase_b)
+            + 2
+            * gain_theta
+            * theta_b
+            * np.cos(gain_theta_phase - theta_phase_b)
         )
-        theta_phase_a = np.arctan2(
+        gain_theta_phase = np.arctan2(
             theta_phase_numerator,
             theta_phase_denominator,
         )
@@ -285,28 +280,28 @@ def plot_view_plane(config: ViewPlaneConfig) -> FigureWithDetailResponse:
         # print(f"theta_phase_a: [{theta_phase_a[0], theta_phase_a[180]}]")
         # print("----------")
 
-        phi_phase_numerator = phi_a * np.sin(phi_phase_a) + phi_b * np.sin(
-            phi_phase_b
-        )
-        phi_phase_denominator = phi_a * np.cos(phi_phase_a) + phi_b * np.cos(
-            phi_phase_b
-        )
-        phi_a = np.sqrt(
-            phi_a**2
+        phi_phase_numerator = gain_phi * np.sin(
+            gain_phi_phase
+        ) + phi_b * np.sin(phi_phase_b)
+        phi_phase_denominator = gain_phi * np.cos(
+            gain_phi_phase
+        ) + phi_b * np.cos(phi_phase_b)
+        gain_phi = np.sqrt(
+            gain_phi**2
             + phi_b**2
-            + 2 * phi_a * phi_b * np.cos(phi_phase_a - phi_phase_b)
+            + 2 * gain_phi * phi_b * np.cos(gain_phi_phase - phi_phase_b)
         )
-        phi_phase_a = np.arctan2(
+        gain_phi_phase = np.arctan2(
             phi_phase_numerator,
             phi_phase_denominator,
         )
 
-    y_total = np.sqrt(theta_a**2 + phi_a**2)
+    y_total = np.sqrt(gain_theta**2 + gain_phi**2)
     y_total[y_total < 10 ** (db_min / 10)] = 10 ** (db_min / 10)
     y_total_db = 10 * np.log10(y_total)
     y_total_db[y_total_db < db_min] = db_min
-    y_theta = np.abs(theta_a)
-    y_phi = np.abs(phi_a)
+    y_theta = np.abs(gain_theta)
+    y_phi = np.abs(gain_phi)
     if config.isDb:
         y_theta[y_theta < 10 ** (db_min / 10)] = 10 ** (db_min / 10)
         y_theta = 10 * np.log10(y_theta)

@@ -1,18 +1,23 @@
-figure.figsize: 3.5, 3
+backend: SVG
+svg.fonttype: none
+figure.figsize: 3.5, 3.5
+figure.facecolor: white
+figure.dpi: 72
 font.family: Arial
 font.weight: bold
 axes.labelweight: bold
-axes.facecolor: white
-figure.facecolor: white
-lines.solid_capstyle: round
-lines.dash_capstyle: round
-lines.linewidth: 1
-xtick.direction: in
-ytick.direction: in
 axes.grid: True
+axes.axisbelow: True
+axes.facecolor: white
 grid.alpha: 0.5
 grid.linewidth: 0.5
+lines.solid_capstyle: round
+lines.dash_capstyle: round
+lines.linewidth: 2
+xtick.direction: in
+xtick.labelsize: 10
+ytick.direction: in
+ytick.labelsize: 10
 legend.frameon: False
-svg.fonttype: none
 pdf.fonttype: 42
-figure.dpi: 72
+mathtext.fontset: stix
