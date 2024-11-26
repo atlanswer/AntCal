@@ -6,33 +6,33 @@ import { isServer } from "solid-js/web";
 import { AddFigure } from "~/components/figure/AddFigure";
 import { FigureSection } from "~/components/figure/FigureSection";
 import {
-  FigureConfigs,
-  FigureConfigsProvider,
-  figureConfigsDefault,
-  zFigureConfigs,
+  FigureArrayConf,
+  FigureArrayConfProvider,
+  figureConfArrayDefault,
+  zFigureArrayConf,
 } from "~/components/figure/context";
 
 const FIGURE_CONFIGS_STORAGE_KEY = "figure-configs";
 
 const convertStringToFigureConfigs = (
   figureConfigsString: string,
-): FigureConfigs => {
+): FigureArrayConf => {
   let figureConfigs: unknown;
   try {
     figureConfigs = JSON.parse(figureConfigsString);
   } catch {
-    return figureConfigsDefault;
+    return figureConfArrayDefault;
   }
-  let parsedFigureConfigs: FigureConfigs;
+  let parsedFigureConfigs: FigureArrayConf;
   try {
-    parsedFigureConfigs = zFigureConfigs.parse(figureConfigs);
+    parsedFigureConfigs = zFigureArrayConf.parse(figureConfigs);
   } catch {
-    return figureConfigsDefault;
+    return figureConfArrayDefault;
   }
   return parsedFigureConfigs;
 };
 
-const getFigureConfigsFromSearchParameters = (): FigureConfigs | null => {
+const getFigureConfigsFromSearchParameters = (): FigureArrayConf | null => {
   const [searchParams, setSearchParams] = useSearchParams();
   const encodedFigureConfigs = searchParams["figureConfigs"];
 
@@ -47,18 +47,18 @@ const getFigureConfigsFromSearchParameters = (): FigureConfigs | null => {
   return convertStringToFigureConfigs(figureConfigsString);
 };
 
-const getFigureConfigsFromLocalStorage = (): FigureConfigs => {
-  if (isServer) return figureConfigsDefault;
+const getFigureConfigsFromLocalStorage = (): FigureArrayConf => {
+  if (isServer) return figureConfArrayDefault;
 
   const figureConfigsString = localStorage.getItem(FIGURE_CONFIGS_STORAGE_KEY);
 
-  if (figureConfigsString === null) return figureConfigsDefault;
+  if (figureConfigsString === null) return figureConfArrayDefault;
 
   return convertStringToFigureConfigs(figureConfigsString);
 };
 
 export default function () {
-  const [figureConfigs, setFigureConfigs] = createStore<FigureConfigs>([]);
+  const [figureConfigs, setFigureConfigs] = createStore<FigureArrayConf>([]);
 
   onMount(() => {
     setFigureConfigs(
@@ -83,9 +83,9 @@ export default function () {
   return (
     <>
       <Title>Figure | AntCal</Title>
-      <FigureConfigsProvider
-        figureConfigs={figureConfigs}
-        setFigureConfigs={setFigureConfigs}
+      <FigureArrayConfProvider
+        figureArrayConf={figureConfigs}
+        setFigureArrayConf={setFigureConfigs}
       >
         <div class="grid grid-cols-1 place-content-stretch divide-y-2 divide-neutral-200 px-4 sm:px-6 lg:px-8 dark:divide-neutral-800">
           <Index each={figureConfigs}>
@@ -95,7 +95,7 @@ export default function () {
           </Index>
           <AddFigure />
         </div>
-      </FigureConfigsProvider>
+      </FigureArrayConfProvider>
     </>
   );
 }

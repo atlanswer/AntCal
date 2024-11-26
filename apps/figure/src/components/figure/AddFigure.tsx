@@ -1,18 +1,18 @@
 import type { Component } from "solid-js";
 import {
-  figureConfigsDefault,
-  useFigureConfigs,
+  figureConfArrayDefault,
+  useFigureArrayConf,
 } from "~/components/figure/context";
 
 export const AddFigure: Component = () => {
-  const [figureConfigs, setFigureConfigs] = useFigureConfigs();
+  const [figureConfigs, setFigureConfigs] = useFigureArrayConf();
 
   return (
     <button
       title="Add new figure"
       class="mb-12 mt-4 flex gap-1 place-self-center rounded border-none bg-sky-500 px-4 py-2 text-white shadow hover:bg-sky-700"
       onClick={() =>
-        setFigureConfigs(figureConfigs.length, figureConfigsDefault[1])
+        setFigureConfigs(figureConfigs.length, figureConfArrayDefault[1])
       }
     >
       <svg

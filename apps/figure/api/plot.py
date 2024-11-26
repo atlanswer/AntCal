@@ -22,11 +22,11 @@ from mpl_toolkits.mplot3d.axes3d import Axes3D
 from numpy import cos, pi, radians, sin
 
 from .context import (
-    FiguresWithDetailResponse,
-    FigureWithDetailResponse,
+    FigureArrayResponse,
+    FigureResponse,
     Sources,
-    ViewPlaneConfig,
-    ViewPlaneConfigs,
+    PlaneConf,
+    PlaneConfArray,
 )
 
 logging.getLogger("matplotlib.font_manager").setLevel(logging.WARNING)
@@ -195,7 +195,7 @@ def plot_source_preview(sources: Sources) -> str:
     return f.getvalue().decode()
 
 
-def plot_view_planes(config: ViewPlaneConfig) -> FigureWithDetailResponse:
+def plot_view_planes(config: PlaneConf) -> FigureResponse:
     db_min = config.db_min
     db_max = config.db_max
     lin_min = config.lin_min
@@ -203,7 +203,7 @@ def plot_view_planes(config: ViewPlaneConfig) -> FigureWithDetailResponse:
 
     x = np.arange(0, 2 * pi, axis_step, np.float64)
 
-    plane = config.cutPlane[0]
+    plane = config.plane[0]
 
     match plane:
         case "YZ":
@@ -222,8 +222,8 @@ def plot_view_planes(config: ViewPlaneConfig) -> FigureWithDetailResponse:
     gain_phi_phase = 0
 
     for s in config.sources:
-        amplitude = s["amplitude"]
-        src_phase = cast(np.float64, np.deg2rad(s["phase"]))
+        src_amp = s["amplitude"]
+        src_phase = np.deg2rad(s["phase"])
         match s["type"], s["direction"]:
             case "E", "+X":
                 theta_b = np.cos(theta) * np.cos(phi)
@@ -243,8 +243,8 @@ def plot_view_planes(config: ViewPlaneConfig) -> FigureWithDetailResponse:
             case "M", "+Z":
                 theta_b = np.zeros(n_samples)
                 phi_b = np.sin(theta)
-        theta_b *= amplitude
-        phi_b *= amplitude
+        theta_b *= src_amp
+        phi_b *= src_amp
 
         theta_phase_b = src_phase * np.ones(n_samples)
         phi_phase_b = src_phase * np.ones(n_samples)
@@ -302,7 +302,7 @@ def plot_view_planes(config: ViewPlaneConfig) -> FigureWithDetailResponse:
     y_total_db[y_total_db < db_min] = db_min
     y_theta = np.abs(gain_theta)
     y_phi = np.abs(gain_phi)
-    if config.isDb:
+    if config.db:
         y_theta[y_theta < 10 ** (db_min / 10)] = 10 ** (db_min / 10)
         y_theta = 10 * np.log10(y_theta)
         y_theta[y_theta < db_min] = db_min
@@ -313,7 +313,7 @@ def plot_view_planes(config: ViewPlaneConfig) -> FigureWithDetailResponse:
     fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
     assert isinstance(ax, PolarAxes)
 
-    match config.cutPlane, config.isDb, config.isGainTotal:
+    match config.plane, config.db, config.gainTotal:
         case "XY", True, True:
             ax.plot(phi, y_total_db, clip_on=False)
         case "XY", False, True:
@@ -330,7 +330,7 @@ def plot_view_planes(config: ViewPlaneConfig) -> FigureWithDetailResponse:
             ax.plot(theta, y_phi, clip_on=False)
 
     r_locator = MaxNLocator(nbins=4)
-    if config.isDb:
+    if config.db:
         ax.set_rlim(db_min, db_max)
     else:
         lin_max = 0
@@ -370,7 +370,7 @@ def plot_view_planes(config: ViewPlaneConfig) -> FigureWithDetailResponse:
     plt.close(fig)
     f.seek(0)
 
-    return FigureWithDetailResponse(
+    return FigureResponse(
         maxD=int(peak_idx),
         hpbw=get_hpbw(),
         figData=f.getvalue().decode(),

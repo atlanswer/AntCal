@@ -1,3 +1,5 @@
+// spell-checker:words lpwl, hpbw
+
 import {
   createContext,
   untrack,
@@ -9,85 +11,141 @@ import { z } from "zod";
 
 export const zSource = z.object({
   type: z.enum(["E", "M"]),
+  lpwl: z.number().nonnegative(),
   direction: z.enum(["+X", "+Y", "+Z"]),
+  x: z.number(),
+  y: z.number(),
+  z: z.number(),
   amplitude: z.number().nonnegative(),
   phase: z.number().nonnegative().max(359),
-  lpwl: z.number().nonnegative(),
 });
 export type Source = z.infer<typeof zSource>;
 
-export const zCutPlane = z.enum(["XZ", "YZ", "XY"]);
-export type CutPlane = z.infer<typeof zCutPlane>;
+export const zPlane = z.enum(["XZ", "YZ", "XY"]);
+export type Plane = z.infer<typeof zPlane>;
 
-export const zViewPlaneConfig = z.object({
-  cutPlane: z.array(zCutPlane),
-  isDb: z.boolean(),
-  isGainTotal: z.boolean(),
+export const zPlaneConf = z.object({
   sources: z.array(zSource),
+  plane: zPlane,
+  db: z.boolean(),
+  gainTotal: z.boolean(),
+  dbMin: z.number().default(10),
+  dbMax: z.number().default(-30),
+  linMin: z.number().default(0),
+  axisStepDeg: z.number().default(1),
 });
-export type ViewPlaneConfig = z.infer<typeof zViewPlaneConfig>;
+export type PlaneConf = z.infer<typeof zPlaneConf>;
 
-export const zFigureConfig = zViewPlaneConfig.extend({ title: z.string() });
-export type FigureConfig = z.infer<typeof zFigureConfig>;
-export const zFigureConfigs = z.array(zFigureConfig);
-export type FigureConfigs = z.infer<typeof zFigureConfigs>;
+export const zFigureConf = zPlaneConf
+  .extend({ title: z.string() })
+  .omit({ plane: true });
+export type FigureConf = z.infer<typeof zFigureConf>;
+export const zFigureArrayConf = z.array(zFigureConf);
+export type FigureArrayConf = z.infer<typeof zFigureArrayConf>;
 
-export const figureConfigsDefault = [
+export const figureConfArrayDefault = [
   {
-    isDb: true,
-    isGainTotal: false,
-    sources: [
-      { type: "E", direction: "+Y", amplitude: 1, phase: 0, lpwl: 0.5 },
-      { type: "M", direction: "+X", amplitude: 1, phase: 0, lpwl: 0.5 },
-    ],
-    cutPlane: ["YZ", "XZ", "XY"],
     title: "ME-Dipole",
+    sources: [
+      {
+        type: "E",
+        lpwl: 0.5,
+        direction: "+Y",
+        x: 0,
+        y: 0,
+        z: 0,
+        amplitude: 1,
+        phase: 0,
+      },
+      {
+        type: "M",
+        lpwl: 0.5,
+        direction: "+X",
+        x: 0,
+        y: 0,
+        z: 0,
+        amplitude: 1,
+        phase: 0,
+      },
+    ],
+    db: true,
+    gainTotal: false,
+    dbMin: -30,
+    dbMax: 10,
+    linMin: 0,
+    axisStepDeg: 1,
   },
   {
-    isDb: true,
-    isGainTotal: false,
-    sources: [
-      { type: "E", direction: "+Z", amplitude: 1, phase: 0, lpwl: 0.5 },
-    ],
-    cutPlane: ["YZ", "XZ", "XY"],
     title: "E-Dipole",
+    sources: [
+      {
+        type: "E",
+        lpwl: 0.5,
+        x: 0,
+        y: 0,
+        z: 0,
+        direction: "+Z",
+        amplitude: 1,
+        phase: 0,
+      },
+    ],
+    db: true,
+    gainTotal: false,
+    dbMin: -30,
+    dbMax: 10,
+    linMin: 0,
+    axisStepDeg: 1,
   },
   {
-    isDb: true,
-    isGainTotal: false,
-    sources: [
-      { type: "M", direction: "+Z", amplitude: 1, phase: 0, lpwl: 0.5 },
-    ],
-    cutPlane: ["YZ", "XZ", "XY"],
     title: "M-Dipole",
+    sources: [
+      {
+        type: "M",
+        lpwl: 0.5,
+        x: 0,
+        y: 0,
+        z: 0,
+        direction: "+Z",
+        amplitude: 1,
+        phase: 0,
+      },
+    ],
+    db: true,
+    gainTotal: false,
+    dbMin: -30,
+    dbMax: 10,
+    linMin: 0,
+    axisStepDeg: 1,
   },
-] as const satisfies FigureConfigs;
+] as const satisfies FigureArrayConf;
 
-const figureConfigsContext =
-  createContext<ReturnType<typeof createStore<FigureConfigs>>>();
+const figureArrayConfContext =
+  createContext<ReturnType<typeof createStore<FigureArrayConf>>>();
 
-export const useFigureConfigs = (): ReturnType<
-  typeof createStore<FigureConfigs>
+export const useFigureArrayConf = (): ReturnType<
+  typeof createStore<FigureArrayConf>
 > => {
-  const context = useContext(figureConfigsContext);
+  const context = useContext(figureArrayConfContext);
 
   if (!context) {
-    throw new Error("`figureConfigsContext` not provided.");
+    throw new Error("`figureArrayConfContext` not provided.");
   }
 
   return context;
 };
 
-export const FigureConfigsProvider: ParentComponent<{
-  figureConfigs: Store<FigureConfigs>;
-  setFigureConfigs: SetStoreFunction<FigureConfigs>;
+export const FigureArrayConfProvider: ParentComponent<{
+  figureArrayConf: Store<FigureArrayConf>;
+  setFigureArrayConf: SetStoreFunction<FigureArrayConf>;
 }> = (props) => {
-  const figureConfigs = untrack(() => props.figureConfigs);
-  const setFigureConfigs = untrack(() => props.setFigureConfigs);
+  const figureArrayConf = untrack(() => props.figureArrayConf);
+  const setFigureArrayConf = untrack(() => props.setFigureArrayConf);
 
   return (
-    <figureConfigsContext.Provider value={[figureConfigs, setFigureConfigs]}>
+    <figureArrayConfContext.Provider
+      value={[figureArrayConf, setFigureArrayConf]}
+    >
       {props.children}
-    </figureConfigsContext.Provider>
+    </figureArrayConfContext.Provider>
   );
 };

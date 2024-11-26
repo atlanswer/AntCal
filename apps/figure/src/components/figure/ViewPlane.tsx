@@ -10,9 +10,9 @@ import {
 } from "solid-js";
 import { z } from "zod";
 import {
-  useFigureConfigs,
-  type CutPlane,
-  type ViewPlaneConfig,
+  useFigureArrayConf,
+  type Plane,
+  type PlaneConf,
 } from "~/components/figure/context";
 
 const zFigureWithDetail = z.object({
@@ -23,10 +23,10 @@ const zFigureWithDetail = z.object({
 
 type FigureWithDetail = z.infer<typeof zFigureWithDetail>;
 
-export const ViewPlane: Component<{ cutPlane: CutPlane; figIdx: number }> = (
+export const ViewPlane: Component<{ cutPlane: Plane; figIdx: number }> = (
   props,
 ) => {
-  const [figureConfigs] = useFigureConfigs();
+  const [figureConfigs] = useFigureArrayConf();
 
   const figureConfig = () => {
     const maybeFigureConfig = figureConfigs[props.figIdx];
@@ -40,8 +40,8 @@ export const ViewPlane: Component<{ cutPlane: CutPlane; figIdx: number }> = (
     // TODO: optimize here
     () => {
       return [
-        figureConfig().isDb,
-        figureConfig().isGainTotal,
+        figureConfig().db,
+        figureConfig().gainTotal,
         JSON.stringify(figureConfig().sources),
       ];
     },
@@ -49,11 +49,11 @@ export const ViewPlane: Component<{ cutPlane: CutPlane; figIdx: number }> = (
       const viewPlaneConfig = untrack(
         () =>
           ({
-            cutPlane: props.cutPlane,
-            isDb: figureConfig().isDb,
-            isGainTotal: figureConfig().isGainTotal,
+            plane: props.cutPlane,
+            db: figureConfig().db,
+            gainTotal: figureConfig().gainTotal,
             sources: figureConfig().sources,
-          }) satisfies ViewPlaneConfig,
+          }) satisfies PlaneConf,
       );
       const query = new URLSearchParams({
         fig: encodeURIComponent(JSON.stringify(viewPlaneConfig)),
@@ -76,7 +76,7 @@ export const ViewPlane: Component<{ cutPlane: CutPlane; figIdx: number }> = (
     },
   );
 
-  const cutPlaneVar: { [K in CutPlane]: string } = {
+  const cutPlaneVar: { [K in Plane]: string } = {
     XZ: "θ",
     YZ: "θ",
     XY: "ϕ",

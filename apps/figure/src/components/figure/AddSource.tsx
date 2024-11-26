@@ -1,11 +1,11 @@
 import type { Component } from "solid-js";
-import { useFigureConfigs, type Source } from "~/components/figure/context";
+import { useFigureArrayConf, type Source } from "~/components/figure/context";
 import { AddIcon } from "~/components/icons/Add";
 
 export const AddSource: Component<{
   idx: number;
 }> = (props) => {
-  const [, setFigureConfigs] = useFigureConfigs();
+  const [, setFigureConfigs] = useFigureArrayConf();
 
   const addSource = () => {
     setFigureConfigs(props.idx, "sources", (sources) => [

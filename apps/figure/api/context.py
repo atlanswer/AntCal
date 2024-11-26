@@ -1,3 +1,5 @@
+# spell-checker:words lpwl, hpbw
+
 from typing import Any, Literal, TypedDict, cast
 
 from matplotlib.backend_bases import RendererBase
@@ -9,10 +11,13 @@ from pydantic import BaseModel, RootModel
 
 class Source(TypedDict):
     type: Literal["E", "M"]
+    lpwl: float
     direction: Literal["+X", "+Y", "+Z"]
+    x: float
+    y: float
+    z: float
     amplitude: float
     phase: float
-    lpwl: float
 
 
 class Sources(RootModel[list[Source]]):
@@ -23,21 +28,21 @@ class Sources(RootModel[list[Source]]):
         return self.root[item]
 
 
-CutPlane = Literal["XZ", "YZ", "XY"]
+Plane = Literal["XZ", "YZ", "XY"]
 
 
-class ViewPlaneConfig(BaseModel):
-    cutPlane: list[CutPlane]
-    isDb: bool
-    isGainTotal: bool
+class PlaneConf(BaseModel):
     sources: list[Source]
-    db_min: int = -30
-    db_max: int = 10
-    lin_min: int = 0
-    axis_step_deg: float = 1
+    plane: Plane
+    db: bool
+    gainTotal: bool
+    dbMin: int = -30
+    dbMax: int = 10
+    linMin: int = 0
+    axisStepDeg: float = 1
 
 
-class ViewPlaneConfigs(RootModel[list[ViewPlaneConfig]]):
+class PlaneConfArray(RootModel[list[PlaneConf]]):
     def __iter__(self):  # pyright: ignore[reportIncompatibleMethodOverride]
         return iter(self.root)
 
@@ -45,13 +50,13 @@ class ViewPlaneConfigs(RootModel[list[ViewPlaneConfig]]):
         return self.root[item]
 
 
-class FigureWithDetailResponse(BaseModel):
+class FigureResponse(BaseModel):
     maxD: int
     hpbw: int
     figData: str
 
 
-FiguresWithDetailResponse = RootModel[list[FigureWithDetailResponse]]
+FigureArrayResponse = RootModel[list[FigureResponse]]
 
 
 class Arrow3D(FancyArrowPatch):

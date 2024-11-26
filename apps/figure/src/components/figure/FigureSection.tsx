@@ -4,17 +4,17 @@ import { SourcesPanel } from "~/components/figure/SourcePanel";
 import { SourcePreview } from "~/components/figure/SourcePreview";
 import { ViewPlane } from "~/components/figure/ViewPlane";
 import {
-  useFigureConfigs,
-  type FigureConfig,
+  useFigureArrayConf,
+  type FigureConf,
 } from "~/components/figure/context";
 import { EditIcon } from "~/components/icons/Edit";
 import { RemoveIcon } from "~/components/icons/Remove";
 
 export const FigureSection: Component<{
-  figureConfig: Accessor<FigureConfig>;
+  figureConfig: Accessor<FigureConf>;
   idx: number;
 }> = (props) => {
-  const [figureConfigs, setFigureConfigs] = useFigureConfigs();
+  const [figureConfigs, setFigureConfigs] = useFigureArrayConf();
 
   return (
     <section class="flex flex-col place-items-center gap-4 py-8">
@@ -40,7 +40,7 @@ export const FigureSection: Component<{
             >
               <button
                 class="whitespace-nowrap rounded px-2"
-                classList={{ active: props.figureConfig().isDb }}
+                classList={{ active: props.figureConfig().db }}
                 type="button"
                 onClick={() => setFigureConfigs(props.idx, "isDb", true)}
               >
@@ -48,7 +48,7 @@ export const FigureSection: Component<{
               </button>
               <button
                 class="whitespace-nowrap rounded px-2"
-                classList={{ active: !props.figureConfig().isDb }}
+                classList={{ active: !props.figureConfig().db }}
                 type="button"
                 onClick={() => setFigureConfigs(props.idx, "isDb", false)}
               >
@@ -61,7 +61,7 @@ export const FigureSection: Component<{
             >
               <button
                 class="whitespace-nowrap rounded px-2"
-                classList={{ active: !props.figureConfig().isGainTotal }}
+                classList={{ active: !props.figureConfig().gainTotal }}
                 type="button"
                 onClick={() =>
                   setFigureConfigs(props.idx, "isGainTotal", false)
@@ -71,7 +71,7 @@ export const FigureSection: Component<{
               </button>
               <button
                 class="whitespace-nowrap rounded px-2"
-                classList={{ active: props.figureConfig().isGainTotal }}
+                classList={{ active: props.figureConfig().gainTotal }}
                 type="button"
                 onClick={() => setFigureConfigs(props.idx, "isGainTotal", true)}
               >
@@ -113,7 +113,7 @@ export const FigureSection: Component<{
         </div>
         <figcaption class="flex flex-wrap place-content-center place-items-center gap-8 text-black dark:text-white">
           <Show
-            when={props.figureConfig().isGainTotal}
+            when={props.figureConfig().gainTotal}
             fallback={
               <>
                 <span class="before:inline-block before:h-1 before:w-12 before:rounded before:bg-[#1f77b4] before:align-middle">

@@ -8,8 +8,8 @@ from fastapi.responses import ORJSONResponse, PlainTextResponse
 
 from .plot import (
     Sources,
-    ViewPlaneConfig,
-    ViewPlaneConfigs,
+    PlaneConf,
+    PlaneConfArray,
     plot_blank,
     plot_source_preview,
     plot_view_plane,
@@ -38,7 +38,7 @@ async def get_root() -> str:
 
 @router.get("/figure-with-detail", response_class=ORJSONResponse)
 async def get_figure(fig: str, response: Response):
-    viewPlaneConfig = ViewPlaneConfig.model_validate_json(unquote(fig))
+    viewPlaneConfig = PlaneConf.model_validate_json(unquote(fig))
 
     response.headers.append(
         "cache-control",
@@ -50,7 +50,7 @@ async def get_figure(fig: str, response: Response):
 
 @router.get("/figures", response_class=ORJSONResponse)
 async def get_figures(figs: str, response: Response):
-    viewPlaneConfigs = ViewPlaneConfigs.model_validate_json(unquote(figs))
+    viewPlaneConfigs = PlaneConfArray.model_validate_json(unquote(figs))
 
     response.headers.append(
         "cache-control",

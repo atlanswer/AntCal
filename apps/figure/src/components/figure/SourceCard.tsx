@@ -6,7 +6,7 @@ import {
   type Component,
 } from "solid-js";
 import { produce } from "solid-js/store";
-import { useFigureConfigs, type Source } from "~/components/figure/context";
+import { useFigureArrayConf, type Source } from "~/components/figure/context";
 import { DownArrow } from "~/components/icons/Down";
 import { MinusIcon } from "~/components/icons/Minus";
 import { UpArrow } from "~/components/icons/Up";
@@ -16,7 +16,7 @@ export const SourceCard: Component<{
   figIdx: number;
   srcIdx: number;
 }> = (props) => {
-  const [figureConfigs, setFigureConfigs] = useFigureConfigs();
+  const [figureConfigs, setFigureConfigs] = useFigureArrayConf();
 
   const sources = () => figureConfigs[props.figIdx]?.sources;
 
@@ -113,7 +113,7 @@ const DirectionSelector: Component<{
 }> = (props) => {
   const directions: Source["direction"][] = ["+X", "+Y", "+Z"] as const;
 
-  const [figureConfigs, setFigureConfigs] = useFigureConfigs();
+  const [figureConfigs, setFigureConfigs] = useFigureArrayConf();
 
   return (
     <div class="flex place-items-center gap-2">
@@ -153,7 +153,7 @@ const ValueSelector: Component<{
   figIdx: number;
   srcIdx: number;
 }> = (props) => {
-  const [figureConfigs, setFigureConfigs] = useFigureConfigs();
+  const [figureConfigs, setFigureConfigs] = useFigureArrayConf();
   const source = () => {
     const maybeSource = figureConfigs[props.figIdx]?.sources[props.srcIdx];
     if (maybeSource === undefined) {
