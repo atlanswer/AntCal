@@ -5,13 +5,15 @@
 
 import io
 import logging
-from typing import cast
+from pathlib import Path
 
-# import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
 from matplotlib.axes import Axes
+
+# import matplotlib as mpl
+from matplotlib.figure import Figure
 from matplotlib.patches import Arc, FancyArrow
 from matplotlib.projections.polar import PolarAxes
 from matplotlib.ticker import MaxNLocator
@@ -19,20 +21,24 @@ from mpl_toolkits.mplot3d.art3d import (
     pathpatch_2d_to_3d,  # pyright: ignore[reportUnknownVariableType]
 )
 from mpl_toolkits.mplot3d.axes3d import Axes3D
-from numpy import cos, pi, radians, sin
+from numpy import pi
 
 from .context import (
-    FigureArrayResponse,
     FigureResponse,
-    Sources,
     PlaneConf,
-    PlaneConfArray,
+    Sources,
 )
 
 logging.getLogger("matplotlib.font_manager").setLevel(logging.WARNING)
 
 # mpl.rcParams["backend"] = "SVG"
-plt.style.use(["default", "seaborn-v0_8-paper", "./publication.mplstyle"])
+plt.style.use(
+    [
+        "default",
+        "seaborn-v0_8-paper",
+        Path(__file__).parent / "./publication.mplstyle",
+    ]
+)
 # mpl.rcParams["svg.fonttype"] = "none"
 # mpl.rcParams["font.family"] = "Arial"
 # mpl.rcParams["font.weight"] = "bold"
@@ -57,153 +63,18 @@ plt.style.use(["default", "seaborn-v0_8-paper", "./publication.mplstyle"])
 set1 = plt.get_cmap("Set1")
 
 
-def plot_source_preview(sources: Sources) -> str:
-    scale_factor = 100
-
-    fig, ax = plt.subplots(
-        figsize=(2, 2),
-        subplot_kw={"projection": "3d"},
-    )
-    assert isinstance(ax, Axes3D)
-
-    ax.set_proj_type("ortho")
-    ax.set_box_aspect((1, 1, 1))
-    ax.view_init(elev=45, azim=45)
-    ax.set_axis_off()
-
-    max_amplitude = 0
-
-    for s in sources:
-        match s["direction"]:
-            case "+X":
-                theta = np.pi / 2
-                phi = 0
-            case "+Y":
-                theta = np.pi / 2
-                phi = np.pi / 2
-            case "+Z":
-                theta = 0
-                phi = 0
-        amplitude = s["amplitude"] * scale_factor
-        w = amplitude * np.cos(theta)
-        w2 = amplitude * np.sin(theta)
-        u = w2 * np.cos(phi)
-        v = w2 * np.sin(phi)
-        ax.quiver(
-            0,
-            0,
-            0,
-            u,
-            v,
-            w,
-            pivot="middle",
-            color=set1(0) if s["type"] == "E" else set1(1),
-            arrow_length_ratio=0.2,
-        )
-        ax.text(
-            u / 2 * 1.2,
-            v / 2 * 1.2,
-            w / 2 * 1.2,
-            "J" if s["type"] == "E" else "M",
-        )
-        max_amplitude = max(max_amplitude, amplitude)
-
-    ax.plot([0, max_amplitude], [0, 0], [0, 0], "k", linewidth=0.5)
-    ax.plot([0, 0], [0, max_amplitude], [0, 0], "k", linewidth=0.5)
-    ax.plot([0, 0], [0, 0], [0, max_amplitude], "k", linewidth=0.5)
-    ax.text(max_amplitude, 0, max_amplitude * 0.1, "$x$", "x", fontsize="small")
-    ax.text(
-        0,
-        max_amplitude * 0.8,
-        max_amplitude * 0.05,
-        "$y$",
-        "y",
-        fontsize="small",
-    )
-    ax.text(
-        0, max_amplitude * 0.05, max_amplitude * 0.85, "$z$", fontsize="small"
-    )
-    ax.set_xlim(-max_amplitude * 0.4, max_amplitude * 0.4)
-    ax.set_ylim(-max_amplitude * 0.4, max_amplitude * 0.4)
-    ax.set_zlim(-max_amplitude * 0.4, max_amplitude * 0.4)
-    ax.set_axisbelow(True)
-
-    arrow_phi = FancyArrow(
-        max_amplitude * 0.4,
-        max_amplitude * 0.65,
-        -max_amplitude * 0.05,
-        0,
-        length_includes_head=True,
-        width=max_amplitude * 0.025,
-        head_length=max_amplitude * 0.05,
-        color="k",
-    )
-    pathpatch_2d_to_3d(arrow_phi, zdir="z")
-    ax.add_artist(arrow_phi)
-    tail_phi = Arc(
-        (max_amplitude * 0.4, max_amplitude * 0.4),
-        max_amplitude * 0.5,
-        max_amplitude * 0.5,
-        theta1=0,
-        theta2=90,
-        linewidth=0.5,
-    )
-    pathpatch_2d_to_3d(tail_phi, zdir="z")
-    ax.add_artist(tail_phi)
-    ax.text(
-        max_amplitude * 0.7,
-        max_amplitude * 0.65,
-        0,
-        "$ϕ$",
-        fontsize="small",
-    )
-    arrow_theta = FancyArrow(
-        max_amplitude * 0.85,
-        max_amplitude * 0.9,
-        0,
-        -max_amplitude * 0.05,
-        length_includes_head=True,
-        width=max_amplitude * 0.025,
-        head_length=max_amplitude * 0.05,
-        color="k",
-    )
-    pathpatch_2d_to_3d(arrow_theta, zdir="x")
-    ax.add_artist(arrow_theta)
-    tail_theta = Arc(
-        (max_amplitude * 0.6, max_amplitude * 0.85),
-        max_amplitude * 0.5,
-        max_amplitude * 0.5,
-        theta1=0,
-        theta2=90,
-        linewidth=0.5,
-    )
-    pathpatch_2d_to_3d(tail_theta, zdir="x")
-    ax.add_artist(tail_theta)
-    ax.text(
-        0,
-        max_amplitude * 0.8,
-        max_amplitude * 1.05,
-        "$θ$",
-        fontsize="small",
-    )
-
-    f = io.BytesIO()
-    fig.savefig(f, format="svg", bbox_inches="tight", pad_inches=0)
-    plt.close(fig)
-    f.seek(0)
-
-    return f.getvalue().decode()
-
-
-def plot_view_planes(config: PlaneConf) -> FigureResponse:
-    db_min = config.db_min
-    db_max = config.db_max
-    lin_min = config.lin_min
-    axis_step = np.deg2rad(config.axis_step_deg)
+def plot_plane(config: PlaneConf) -> FigureResponse:
+    plane = config.plane
+    db_min = config.dbMin
+    db_max = config.dbMax
+    lin_min = config.linMin
+    axis_step = np.deg2rad(config.axisStepDeg)
 
     x = np.arange(0, 2 * pi, axis_step, np.float64)
 
-    plane = config.plane[0]
+    fig = plot_blank()
+
+    return FigureResponse(maxD=0, hpbw=0, figData=fig.decode())
 
     match plane:
         case "YZ":
@@ -365,15 +236,8 @@ def plot_view_planes(config: PlaneConf) -> FigureResponse:
                 l_idx = 359
         return hpbw + 1
 
-    f = io.BytesIO()
-    fig.savefig(f, format="svg")
-    plt.close(fig)
-    f.seek(0)
-
     return FigureResponse(
-        maxD=int(peak_idx),
-        hpbw=get_hpbw(),
-        figData=f.getvalue().decode(),
+        maxD=int(peak_idx), hpbw=get_hpbw(), figData=fig_to_str(fig)
     )
 
 
@@ -407,6 +271,153 @@ def create_polar_plot(
     ax.plot(theta, r, clip_on=False)
 
     return fig, ax
+
+
+def plot_source(sources: Sources) -> str:
+    scale_factor = 100
+
+    fig, ax = plt.subplots(
+        figsize=(2, 2),
+        subplot_kw={"projection": "3d"},
+    )
+    assert isinstance(ax, Axes3D)
+
+    ax.set_proj_type("ortho")
+    ax.set_box_aspect((1, 1, 1))
+    ax.view_init(elev=45, azim=45)
+    ax.set_axis_off()
+
+    max_amplitude = 0
+
+    for s in sources:
+        match s["direction"]:
+            case "+X":
+                theta = np.pi / 2
+                phi = 0
+            case "+Y":
+                theta = np.pi / 2
+                phi = np.pi / 2
+            case "+Z":
+                theta = 0
+                phi = 0
+        amplitude = s["amplitude"] * scale_factor
+        w = amplitude * np.cos(theta)
+        w2 = amplitude * np.sin(theta)
+        u = w2 * np.cos(phi)
+        v = w2 * np.sin(phi)
+        ax.quiver(
+            0,
+            0,
+            0,
+            u,
+            v,
+            w,
+            pivot="middle",
+            color=set1(0) if s["type"] == "E" else set1(1),
+            arrow_length_ratio=0.2,
+        )
+        ax.text(
+            u / 2 * 1.2,
+            v / 2 * 1.2,
+            w / 2 * 1.2,
+            "J" if s["type"] == "E" else "M",
+        )
+        max_amplitude = max(max_amplitude, amplitude)
+
+    ax.plot([0, max_amplitude], [0, 0], [0, 0], "k", linewidth=0.5)
+    ax.plot([0, 0], [0, max_amplitude], [0, 0], "k", linewidth=0.5)
+    ax.plot([0, 0], [0, 0], [0, max_amplitude], "k", linewidth=0.5)
+    ax.text(max_amplitude, 0, max_amplitude * 0.1, "$x$", "x", fontsize="small")
+    ax.text(
+        0,
+        max_amplitude * 0.8,
+        max_amplitude * 0.05,
+        "$y$",
+        "y",
+        fontsize="small",
+    )
+    ax.text(
+        0, max_amplitude * 0.05, max_amplitude * 0.85, "$z$", fontsize="small"
+    )
+    ax.set_xlim(-max_amplitude * 0.4, max_amplitude * 0.4)
+    ax.set_ylim(-max_amplitude * 0.4, max_amplitude * 0.4)
+    ax.set_zlim(-max_amplitude * 0.4, max_amplitude * 0.4)
+    ax.set_axisbelow(True)
+
+    arrow_phi = FancyArrow(
+        max_amplitude * 0.4,
+        max_amplitude * 0.65,
+        -max_amplitude * 0.05,
+        0,
+        length_includes_head=True,
+        width=max_amplitude * 0.025,
+        head_length=max_amplitude * 0.05,
+        color="k",
+    )
+    pathpatch_2d_to_3d(arrow_phi, zdir="z")
+    ax.add_artist(arrow_phi)
+    tail_phi = Arc(
+        (max_amplitude * 0.4, max_amplitude * 0.4),
+        max_amplitude * 0.5,
+        max_amplitude * 0.5,
+        theta1=0,
+        theta2=90,
+        linewidth=0.5,
+    )
+    pathpatch_2d_to_3d(tail_phi, zdir="z")
+    ax.add_artist(tail_phi)
+    ax.text(
+        max_amplitude * 0.7,
+        max_amplitude * 0.65,
+        0,
+        "$ϕ$",
+        fontsize="small",
+    )
+    arrow_theta = FancyArrow(
+        max_amplitude * 0.85,
+        max_amplitude * 0.9,
+        0,
+        -max_amplitude * 0.05,
+        length_includes_head=True,
+        width=max_amplitude * 0.025,
+        head_length=max_amplitude * 0.05,
+        color="k",
+    )
+    pathpatch_2d_to_3d(arrow_theta, zdir="x")
+    ax.add_artist(arrow_theta)
+    tail_theta = Arc(
+        (max_amplitude * 0.6, max_amplitude * 0.85),
+        max_amplitude * 0.5,
+        max_amplitude * 0.5,
+        theta1=0,
+        theta2=90,
+        linewidth=0.5,
+    )
+    pathpatch_2d_to_3d(tail_theta, zdir="x")
+    ax.add_artist(tail_theta)
+    ax.text(
+        0,
+        max_amplitude * 0.8,
+        max_amplitude * 1.05,
+        "$θ$",
+        fontsize="small",
+    )
+
+    f = io.BytesIO()
+    fig.savefig(f, format="svg", bbox_inches="tight", pad_inches=0)
+    plt.close(fig)
+    f.seek(0)
+
+    return f.getvalue().decode()
+
+
+def fig_to_str(fig: Figure) -> str:
+    buf = io.BytesIO()
+    fig.savefig(buf, format="svg")
+    plt.close(fig)
+    buf.seek(0)
+
+    return buf.getvalue().decode()
 
 
 if __name__ == "__main__":

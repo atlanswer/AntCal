@@ -1,5 +1,4 @@
-// @refresh granular
-// spell-checker:words HPBW
+// spell-checker:words hpbw
 
 import {
   Show,
@@ -20,10 +19,9 @@ const zFigureWithDetail = z.object({
   hpbw: z.number(),
   maxD: z.number(),
 });
-
 type FigureWithDetail = z.infer<typeof zFigureWithDetail>;
 
-export const ViewPlane: Component<{ cutPlane: Plane; figIdx: number }> = (
+export const PlaneCard: Component<{ plane: Plane; figIdx: number }> = (
   props,
 ) => {
   const [figureConfigs] = useFigureArrayConf();
@@ -49,7 +47,7 @@ export const ViewPlane: Component<{ cutPlane: Plane; figIdx: number }> = (
       const viewPlaneConfig = untrack(
         () =>
           ({
-            plane: props.cutPlane,
+            plane: props.plane,
             db: figureConfig().db,
             gainTotal: figureConfig().gainTotal,
             sources: figureConfig().sources,
@@ -59,7 +57,7 @@ export const ViewPlane: Component<{ cutPlane: Plane; figIdx: number }> = (
         fig: encodeURIComponent(JSON.stringify(viewPlaneConfig)),
       });
       const res = await fetch(
-        `${import.meta.env["VITE_API_URL"]}/figure-with-detail?${query.toString()}`,
+        `${import.meta.env["VITE_API_URL"]}/figure?${query.toString()}`,
       );
       if (res.ok) {
         const figureWithDetail = zFigureWithDetail.parse(await res.json());
@@ -86,8 +84,8 @@ export const ViewPlane: Component<{ cutPlane: Plane; figIdx: number }> = (
     <div class="flex flex-col gap-2 rounded bg-neutral-100 p-3 text-black shadow-md dark:bg-neutral-800 dark:text-white dark:shadow-none">
       <div class="flex place-content-between gap-2">
         <span class="text-lg">
-          <em>{props.cutPlane}</em>-Plane<span> </span>(
-          <em>{cutPlaneVar[props.cutPlane]}</em>)
+          <em>{props.plane}</em>-Plane<span> </span>(
+          <em>{cutPlaneVar[props.plane]}</em>)
         </span>
         <Show when={viewPlaneData.loading}>
           <svg
@@ -115,7 +113,7 @@ export const ViewPlane: Component<{ cutPlane: Plane; figIdx: number }> = (
             height="252"
             class="rounded"
             src={viewPlaneData.latest?.figData ?? ""}
-            alt={`${props.cutPlane} Plane`}
+            alt={`${props.plane} Plane`}
           />
         </Suspense>
       </div>

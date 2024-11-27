@@ -1,7 +1,7 @@
 import { Index, type Component } from "solid-js";
 import { AddSource } from "~/components/figure/AddSource";
 import type { Source } from "~/components/figure/context";
-import { SourceCard } from "~/components/figure/SourceCard";
+import { SourceItem } from "~/components/figure/SourceItem";
 
 export const SourcesPanel: Component<{
   sources: Source[];
@@ -11,7 +11,7 @@ export const SourcesPanel: Component<{
     <div class="flex flex-col place-items-center gap-2">
       <Index each={props.sources}>
         {(source, idx) => (
-          <SourceCard source={source} figIdx={props.idx} srcIdx={idx} />
+          <SourceItem source={source} figIdx={props.idx} srcIdx={idx} />
         )}
       </Index>
       <AddSource idx={props.idx} />

@@ -1,6 +1,7 @@
+# spell-checker:words lpwl
+
 import logging
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
@@ -58,7 +59,14 @@ def plot_polar(
         ax.plot(theta, r[0], clip_on=False)
         ax.plot(theta, r[1], clip_on=False)
     else:
-        ax.plot(theta, r, clip_on=False)
+        r_p = np.zeros_like(r)
+        r_p[r >= 0] = r[r >= 0]
+        r_n = np.zeros_like(r)
+        r_n[r < 0] = r[r < 0]
+
+        # ax.plot(theta, r, clip_on=False)
+        ax.plot(theta, r_p, "b-", clip_on=False)
+        ax.plot(theta, r_n, "r-", clip_on=False)
 
     ax.set_theta_zero_location("N")
     ax.set_theta_direction("clockwise")
@@ -69,23 +77,7 @@ def plot_polar(
 if __name__ == "__main__":
     logging.getLogger("matplotlib.font_manager").setLevel(logging.CRITICAL)
 
-    mpl.rcParams["backend"] = "SVG"
-    plt.style.use(["default", "seaborn-v0_8-paper"])
-    mpl.rcParams["svg.fonttype"] = "none"
-    mpl.rcParams["font.family"] = "Arial"
-    mpl.rcParams["font.weight"] = "bold"
-    mpl.rcParams["axes.labelweight"] = "bold"
-    mpl.rcParams["axes.grid"] = True
-    mpl.rcParams["axes.axisbelow"] = True
-    mpl.rcParams["grid.alpha"] = 0.5
-    mpl.rcParams["grid.linewidth"] = 0.5
-    mpl.rcParams["xtick.direction"] = "in"
-    mpl.rcParams["xtick.labelsize"] = 10
-    mpl.rcParams["ytick.direction"] = "in"
-    mpl.rcParams["ytick.labelsize"] = 10
-    mpl.rcParams["lines.linewidth"] = 2
-    mpl.rcParams["mathtext.fontset"] = "stix"
-    mpl.rcParams["figure.figsize"] = 3.5, 3.5
+    plt.style.use(["default", "seaborn-v0_8-paper", "./publication.mplstyle"])
 
     theta = pi / 4
     phi = pi / 2

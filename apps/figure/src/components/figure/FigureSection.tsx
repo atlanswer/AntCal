@@ -2,7 +2,7 @@ import { ErrorBoundary, Show, type Accessor, type Component } from "solid-js";
 import { produce } from "solid-js/store";
 import { SourcesPanel } from "~/components/figure/SourcePanel";
 import { SourcePreview } from "~/components/figure/SourcePreview";
-import { ViewPlane } from "~/components/figure/ViewPlane";
+import { PlaneCard } from "~/components/figure/Plane";
 import {
   useFigureArrayConf,
   type FigureConf,
@@ -42,7 +42,7 @@ export const FigureSection: Component<{
                 class="whitespace-nowrap rounded px-2"
                 classList={{ active: props.figureConfig().db }}
                 type="button"
-                onClick={() => setFigureConfigs(props.idx, "isDb", true)}
+                onClick={() => setFigureConfigs(props.idx, "db", true)}
               >
                 dB
               </button>
@@ -50,7 +50,7 @@ export const FigureSection: Component<{
                 class="whitespace-nowrap rounded px-2"
                 classList={{ active: !props.figureConfig().db }}
                 type="button"
-                onClick={() => setFigureConfigs(props.idx, "isDb", false)}
+                onClick={() => setFigureConfigs(props.idx, "db", false)}
               >
                 Linear
               </button>
@@ -63,9 +63,7 @@ export const FigureSection: Component<{
                 class="whitespace-nowrap rounded px-2"
                 classList={{ active: !props.figureConfig().gainTotal }}
                 type="button"
-                onClick={() =>
-                  setFigureConfigs(props.idx, "isGainTotal", false)
-                }
+                onClick={() => setFigureConfigs(props.idx, "gainTotal", false)}
               >
                 Gain <em>θ</em>/<em>ϕ</em>
               </button>
@@ -73,7 +71,7 @@ export const FigureSection: Component<{
                 class="whitespace-nowrap rounded px-2"
                 classList={{ active: props.figureConfig().gainTotal }}
                 type="button"
-                onClick={() => setFigureConfigs(props.idx, "isGainTotal", true)}
+                onClick={() => setFigureConfigs(props.idx, "gainTotal", true)}
               >
                 Gain Total
               </button>
@@ -105,9 +103,9 @@ export const FigureSection: Component<{
               </div>
             )}
           >
-            <ViewPlane cutPlane="YZ" figIdx={props.idx} />
-            <ViewPlane cutPlane="XZ" figIdx={props.idx} />
-            <ViewPlane cutPlane="XY" figIdx={props.idx} />
+            <PlaneCard plane="YZ" figIdx={props.idx} />
+            <PlaneCard plane="XZ" figIdx={props.idx} />
+            <PlaneCard plane="XY" figIdx={props.idx} />
             <SourcePreview sources={props.figureConfig().sources} />
           </ErrorBoundary>
         </div>

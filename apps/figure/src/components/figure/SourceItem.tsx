@@ -11,7 +11,7 @@ import { DownArrow } from "~/components/icons/Down";
 import { MinusIcon } from "~/components/icons/Minus";
 import { UpArrow } from "~/components/icons/Up";
 
-export const SourceCard: Component<{
+export const SourceItem: Component<{
   source: Accessor<Source>;
   figIdx: number;
   srcIdx: number;
@@ -21,7 +21,7 @@ export const SourceCard: Component<{
   const sources = () => figureConfigs[props.figIdx]?.sources;
 
   return (
-    <div class="flex flex-wrap place-content-between place-items-center gap-x-8 gap-y-2 rounded-lg bg-neutral-100 p-2 text-neutral-900 shadow-md outline-1 outline-neutral-500 dark:bg-black dark:text-neutral-100 dark:outline">
+    <div class="flex place-content-between place-items-center gap-x-8 gap-y-2 rounded-lg bg-neutral-100 p-2 text-neutral-900 shadow-md outline outline-neutral-400 dark:bg-black dark:text-neutral-100 dark:outline-neutral-500">
       <div class="flex place-content-between gap-2">
         <span class="flex place-items-center gap-4">
           <span class="rounded bg-neutral-500 px-2 text-white">

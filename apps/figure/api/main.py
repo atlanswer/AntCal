@@ -7,13 +7,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse, PlainTextResponse
 
 from .plot import (
-    Sources,
     PlaneConf,
-    PlaneConfArray,
+    Sources,
     plot_blank,
-    plot_source_preview,
-    plot_view_plane,
-    plot_view_planes,
+    plot_plane,
+    plot_source,
 )
 
 app = FastAPI(
@@ -36,7 +34,7 @@ async def get_root() -> str:
     return "Hello, world!"
 
 
-@router.get("/figure-with-detail", response_class=ORJSONResponse)
+@router.get("/figure", response_class=ORJSONResponse)
 async def get_figure(fig: str, response: Response):
     viewPlaneConfig = PlaneConf.model_validate_json(unquote(fig))
 
@@ -45,19 +43,7 @@ async def get_figure(fig: str, response: Response):
         "no-cache" if isDev else "public, max-age=1440, s-maxage=1440",
     )
 
-    return plot_view_plane(viewPlaneConfig).model_dump()
-
-
-@router.get("/figures", response_class=ORJSONResponse)
-async def get_figures(figs: str, response: Response):
-    viewPlaneConfigs = PlaneConfArray.model_validate_json(unquote(figs))
-
-    response.headers.append(
-        "cache-control",
-        "no-cache" if isDev else "public, max-age=1440, s-maxage=1440",
-    )
-
-    return plot_view_planes(viewPlaneConfigs).model_dump()
+    return plot_plane(viewPlaneConfig).model_dump()
 
 
 @router.get("/source-preview", response_class=PlainTextResponse)
@@ -69,7 +55,7 @@ async def get_source_preview(src: str, response: Response):
         "no-cache" if isDev else "public, max-age=1440, s-maxage=1440",
     )
 
-    return plot_source_preview(sources)
+    return plot_source(sources)
 
 
 @router.get("/blank")
