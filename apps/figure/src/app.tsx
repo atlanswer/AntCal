@@ -13,7 +13,6 @@ import { LoadingPage } from "~/components/LoadingPage";
 import { ThemeProvider } from "~/components/theme/context";
 
 const Layout = (props: RouteSectionProps) => {
-  // Inject Vercel Analytics
   if (!isServer) {
     onMount(() => {
       inject();

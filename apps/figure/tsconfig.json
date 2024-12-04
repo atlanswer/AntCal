@@ -14,10 +14,5 @@
     "tsBuildInfoFile": ".output/tsconfig.tsbuildinfo"
   },
   "include": ["public/**/*", "src/**/*"],
-  "files": [
-    "app.config.ts",
-    "eslint.config.js",
-    "postcss.config.js",
-    "tailwind.config.js"
-  ]
+  "files": ["app.config.ts", "eslint.config.js"]
 }

@@ -1,4 +1,5 @@
 import { defineConfig } from "@solidjs/start/config";
+import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
@@ -6,7 +7,8 @@ export default defineConfig({
     build: {
       target: ["esnext"],
     },
-    plugins: [tsconfigPaths()],
+    // @ts-expect-error Who knows what type this is
+    plugins: [tsconfigPaths(), tailwindcss()],
   },
   server: {
     esbuild: {
