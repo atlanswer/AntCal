@@ -1,6 +1,6 @@
 {
   "name": "@antcal/figure",
-  "version": "0.19.0",
+  "version": "0.19.1",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": "true",
@@ -41,3 +41,4 @@
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
+

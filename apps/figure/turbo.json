@@ -12,7 +12,9 @@
     },
     "build": {
       "inputs": ["$TURBO_DEFAULT$", "!api/**"],
-      "outputs": [".vinxi/**", ".vercel/**"]
+      "outputs": [".vinxi/**", ".vercel/**"],
+      "env": ["MPLCONFIGDIR"]
     }
   }
 }
+
