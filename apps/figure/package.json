@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.15.2",
+    "@solidjs/router": "^0.15.3",
     "@solidjs/start": "^1.0.11",
     "micromark": "^4.0.1",
     "micromark-extension-gfm": "^3.0.0",
@@ -41,4 +41,3 @@
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
-

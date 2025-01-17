@@ -37,7 +37,7 @@
     "eslint-plugin-solid": "^0.14.5",
     "globals": "^15.14.0",
     "prettier": "^3.4.2",
-    "prettier-plugin-tailwindcss": "^0.6.9",
+    "prettier-plugin-tailwindcss": "^0.6.10",
     "turbo": "^2.3.3",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
@@ -47,4 +47,3 @@
     "bun": ">=1.1"
   }
 }
-
