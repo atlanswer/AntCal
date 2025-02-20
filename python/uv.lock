@@ -34,7 +34,7 @@ wheels = [
 
 [[package]]
 name = "antcal"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "flit" },
     { name = "pyaedt" },
@@ -78,7 +78,7 @@ provides-extras = ["docs"]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "antcal", editable = "." },
+    { name = "antcal", virtual = "." },
     { name = "ipykernel", specifier = ">=6.29.5" },
     { name = "ipython", specifier = ">=8.29.0" },
     { name = "nbformat", specifier = ">=5.10.4" },
