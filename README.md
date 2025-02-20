@@ -7,13 +7,14 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/antcal?logo=pypi)
 [![MIT license](https://img.shields.io/pypi/l/antcal?logo=pypi)](https://opensource.org/licenses/MIT)
 
-Antenna calculator: https://antcal.readthedocs.io
-
-Figure: https://antcal.atlanswer.com
+Figure (Radiation Pattern Tool): https://antcal.atlanswer.com<br>
+Dev version: https://dev.antcal.atlanswer.com
 
 ## Usage
 
 ### Python Package
+
+Docs: https://antcal.readthedocs.io
 
 #### Install
 
@@ -32,21 +33,28 @@ bun dev:api
 bun run build
 ```
 
-### Python package
+### AntCal Python package
 
 ```shell
 cd python
 # Create virtual env
 uv sync
-# Install as Editable
-uv pip install -e .
+# Build and publish
+uvx flit build
+uvx flit publish
 ```
 
-### C++ package
+<details>
+
+<summary>
+AntCal C++ package
+</summary>
+
+### AntCal C++ package
 
 **Currently in backlog**
 
-C++ implementation is on the branch `cpplib`. A build environment is required. All presets are documented in `CMakePresets.json`.
+C++ implementation is in `/cpp`. A build environment is required. All presets are documented in `CMakePresets.json`.
 
 ```shell
 # Fetch vcpkg
@@ -58,3 +66,5 @@ cmake --build --preset <preset>
 # Test
 ctest --preset <preset>
 ```
+
+</details>
