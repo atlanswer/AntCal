@@ -5,19 +5,19 @@ import { ThemeToggle } from "~/components/theme";
 const Navigator = () => {
   const routes: { route: string; name: string }[] = [
     {
-      name: "PATTERN",
+      name: "Pattern",
       route: "/",
     },
     {
-      name: "REPORT",
+      name: "Report",
       route: "/report",
     },
     {
-      name: "DOCS",
+      name: "Docs",
       route: "/docs",
     },
     {
-      name: "ABOUT",
+      name: "About",
       route: "/about",
     },
   ];
@@ -29,7 +29,7 @@ const Navigator = () => {
           {(route) => (
             <A
               href={route.route}
-              class="saira-header box-border inline-block border-b-2 border-transparent px-1 pb-[calc(1rem-2px)] pt-4 text-2xl tracking-wide focus-visible:outline-none focus-visible:ring [&.active]:border-sky-500 [&.inactive]:hover:border-neutral-300 dark:[&.inactive]:hover:border-neutral-700"
+              class="box-border inline-block border-b-2 border-transparent px-1 pt-4 pb-[calc(1rem-2px)] text-xl font-semibold focus-visible:ring focus-visible:outline-none [&.active]:border-sky-500 [&.inactive]:hover:border-neutral-300 dark:[&.inactive]:hover:border-neutral-700"
               end
             >
               {route.name}

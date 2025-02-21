@@ -22,8 +22,8 @@ export const Footer = () => {
   // const [avgTime] = useDrawPerf();
 
   return (
-    <footer class="saira-body border-t border-neutral-300 bg-neutral-200 p-8 text-lg text-black dark:border-neutral-700 dark:bg-neutral-800 dark:text-white">
-      <div class="mx-auto flex max-w-screen-xl flex-col gap-4 md:flex-row">
+    <footer class="border-t border-neutral-300 bg-neutral-200 p-8 text-lg text-black dark:border-neutral-700 dark:bg-neutral-800 dark:text-white">
+      <div class="mx-auto flex max-w-screen-xl flex-col gap-4 lg:flex-row">
         <span class="flex flex-none place-items-center align-middle">
           <span>
             Built by{" "}
@@ -76,8 +76,8 @@ export const Footer = () => {
           <code>API_URL: {import.meta.env["VITE_API_URL"]}</code>
           {/* </span> */}
         </span>
-        <span class="flex flex-none place-items-center gap-1.5 md:ml-auto">
-          <span>v{version}</span>
+        <span class="flex flex-none place-items-center gap-1.5 lg:ml-auto">
+          <code>v{version}</code>
           <a
             rel="noopener"
             href="https://github.com/atlanswer/AntCal"
