@@ -32,6 +32,7 @@
 * {
   scrollbar-width: thin;
   scrollbar-gutter: stable both-edges;
+  @apply transition-colors;
 }
 
 main {

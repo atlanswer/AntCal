@@ -5,7 +5,7 @@
 Part of the [AntCal](https://github.com/atlanswer/AntCal) project.
 If you encountered any issue, please reach out to me.
 
-This web app is built with the following tools:
+This site is built with the following tools:
 
 - [SolidStart](https://start.solidjs.com)
 - [Tailwind CSS](https://tailwindcss.com)
@@ -15,7 +15,8 @@ This web app is built with the following tools:
 - [Numpy](https://numpy.org)
 - [Matplotlib](https://matplotlib.org)
 
-And it's hosted on [Vercel](https://vercel.com).
+This site is hosted on [Vercel](https://vercel.com)
+and uses the Geist font.
 
 ### Report
 
