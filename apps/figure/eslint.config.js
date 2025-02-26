@@ -1,24 +1,13 @@
-// @ts-expect-error No types
-import { FlatCompat } from "@eslint/eslintrc";
-// @ts-expect-error No types
 import eslint from "@eslint/js";
 // @ts-expect-error No types
 import prettier from "eslint-config-prettier";
+import turbo from "eslint-config-turbo";
 import solid from "eslint-plugin-solid/configs/typescript";
 import globals from "globals";
-import path from "path";
 import tsEslint from "typescript-eslint";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-const turbo = compat.extends("turbo");
-
-export default tsEslint.config(
+/** @type {import("eslint").Linter.Config} */
+export default [
   eslint.configs.recommended,
   ...tsEslint.configs.recommendedTypeChecked,
   {
@@ -31,7 +20,7 @@ export default tsEslint.config(
       },
     },
   },
-  ...turbo,
+  { plugins: { turbo: turbo } },
   {
     ignores: [
       "eslint.config.js",
@@ -43,4 +32,4 @@ export default tsEslint.config(
     ],
   },
   prettier,
-);
+];
