@@ -37,6 +37,6 @@ cd python
 # Create virtual env
 uv sync
 # Build and publish
-uvx flit build
-uvx flit publish
+uv run flit build
+uv run flit publish
 ```

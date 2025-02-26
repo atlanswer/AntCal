@@ -19,7 +19,6 @@ classifiers = [
     "Intended Audience :: Science/Research",
 ]
 dependencies = [
-    "flit>=3.11.0",
     "pyaedt>=0.11.5",
     "pyvista>=0.44.1",
     "rich>=13.9.4",
@@ -28,8 +27,10 @@ dependencies = [
 [dependency-groups]
 dev = [
     "antcal",
+    "flit>=3.11.0",
     "ipykernel>=6.29.5",
     "ipython>=8.29.0",
+    "keyring>=25.6.0",
     "nbformat>=5.10.4",
     "ruff>=0.7.4",
 ]

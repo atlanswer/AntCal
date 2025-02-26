@@ -29,15 +29,15 @@
     "micromark": "^4.0.1",
     "micromark-extension-gfm": "^3.0.0",
     "micromark-extension-math": "^3.1.0",
-    "solid-js": "^1.9.4",
+    "solid-js": "^1.9.5",
     "vinxi": "^0.5.3",
     "zod": "^3.24.2",
     "@antcal/tsconfig": "workspace:*",
     "@tailwindcss/typography": "^0.5.16",
-    "@tailwindcss/vite": "^4.0.7",
+    "@tailwindcss/vite": "^4.0.9",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
-    "tailwindcss": "^4.0.7",
+    "tailwindcss": "^4.0.9",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
