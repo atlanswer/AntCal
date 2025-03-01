@@ -1,18 +1,12 @@
-# spell-checker:words xtick, ytick, mplot, verts3d, stix, cmap, azim
-# spell-checker:words xlim, ylim, zlim, zdir, hpbw, lpwl
-# spell-checker:words toolkits, fonttype, labelweight, labelsize
-# spell-checker:words axisbelow, mathtext, fontset, figsize, fontsize
-
 import io
 import logging
 from pathlib import Path
+from typing import override
 
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
 from matplotlib.axes import Axes
-
-# import matplotlib as mpl
 from matplotlib.figure import Figure
 from matplotlib.patches import Arc, FancyArrow
 from matplotlib.projections.polar import PolarAxes
@@ -29,30 +23,23 @@ from .context import (
     Sources,
 )
 
-logging.getLogger("matplotlib.font_manager").setLevel(logging.WARNING)
 
-# mpl.rcParams["backend"] = "SVG"
+class FilterFontWarning(logging.Filter):
+    @override
+    def filter(self, record: logging.LogRecord) -> bool:
+        msg = record.getMessage()
+        return not ("Font family" in msg and "not found" in msg)
+
+
+logging.getLogger("matplotlib.font_manager").addFilter(FilterFontWarning())
+
+
 plt.style.use(
     [
         "default",
-        "seaborn-v0_8-paper",
         Path(__file__).parent / "./publication.mplstyle",
     ]
 )
-# mpl.rcParams["svg.fonttype"] = "none"
-# mpl.rcParams["font.family"] = "Arial"
-# mpl.rcParams["font.weight"] = "bold"
-# mpl.rcParams["axes.labelweight"] = "bold"
-# mpl.rcParams["axes.grid"] = True
-# mpl.rcParams["axes.axisbelow"] = True
-# mpl.rcParams["grid.alpha"] = 0.5
-# mpl.rcParams["grid.linewidth"] = 0.5
-# mpl.rcParams["xtick.direction"] = "in"
-# mpl.rcParams["xtick.labelsize"] = 10
-# mpl.rcParams["ytick.direction"] = "in"
-# mpl.rcParams["ytick.labelsize"] = 10
-# mpl.rcParams["lines.linewidth"] = 2
-# mpl.rcParams["mathtext.fontset"] = "stix"
 
 # sf = 3.5 / 3.5
 # """Scale factor"""
