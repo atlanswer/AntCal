@@ -1,7 +1,6 @@
-# spell-checker:words lpwl, arange, dtype, xyval, yzval, xzval
-
 import logging
-from typing import Literal, TypedDict
+from pathlib import Path
+from typing import Literal, TypedDict, override
 
 import matplotlib as mpl
 import numpy as np
@@ -12,25 +11,24 @@ from matplotlib.ticker import MaxNLocator
 from numpy import abs, cos, pi, sin, sqrt
 from pydantic import BaseModel
 
-logging.getLogger("matplotlib.font_manager").setLevel(logging.WARNING)
 
-mpl.rcParams["backend"] = "SVG"
-plt.style.use(["default", "seaborn-v0_8-paper"])
-mpl.rcParams["svg.fonttype"] = "none"
-mpl.rcParams["font.family"] = "Arial"
-mpl.rcParams["font.weight"] = "bold"
-mpl.rcParams["axes.labelweight"] = "bold"
-mpl.rcParams["axes.grid"] = True
-mpl.rcParams["axes.axisbelow"] = True
-mpl.rcParams["grid.alpha"] = 0.5
-mpl.rcParams["grid.linewidth"] = 0.5
-mpl.rcParams["xtick.direction"] = "in"
-mpl.rcParams["xtick.labelsize"] = 10
-mpl.rcParams["ytick.direction"] = "in"
-mpl.rcParams["ytick.labelsize"] = 10
-mpl.rcParams["lines.linewidth"] = 2
-mpl.rcParams["mathtext.fontset"] = "stix"
-mpl.rcParams["figure.figsize"] = 3.5, 3.5
+class FilterFontWarning(logging.Filter):
+    @override
+    def filter(self, record: logging.LogRecord) -> bool:
+        msg = record.getMessage()
+        return not ("Font family" in msg and "not found" in msg)
+
+
+logging.getLogger("matplotlib.font_manager").addFilter(FilterFontWarning())
+
+
+plt.style.use(
+    [
+        "default",
+        Path(__file__).parent / "./publication.mplstyle",
+    ]
+)
+
 
 set1 = plt.get_cmap("Set1")
 
