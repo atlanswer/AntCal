@@ -10,6 +10,7 @@ axes.grid: True
 axes.axisbelow: True
 axes.facecolor: white
 grid.alpha: 0.5
+grid.linestyle: dashed
 grid.linewidth: 0.5
 lines.solid_capstyle: round
 lines.dash_capstyle: round
@@ -20,4 +21,6 @@ ytick.direction: in
 ytick.labelsize: 10
 legend.frameon: False
 pdf.fonttype: 42
-mathtext.fontset: stix
+mathtext.default: regular
+mathtext.fontset: custom
+mathtext.it: Arial:italic
