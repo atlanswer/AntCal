@@ -52,8 +52,8 @@
     "packages/tsconfig": {
       "name": "@antcal/tsconfig",
       "devDependencies": {
-        "@tsconfig/strictest": "latest",
-        "typescript": "latest",
+        "@tsconfig/strictest": "^2.0.5",
+        "typescript": "^5.8.2",
       },
     },
   },

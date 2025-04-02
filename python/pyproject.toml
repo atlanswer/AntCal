@@ -18,16 +18,15 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Intended Audience :: Science/Research",
 ]
+dependencies = [
+    "rich>=14.0.0",
+]
 
 [project.urls]
 Homepage = "https://github.com/atlanswer/AntCal"
 Repository = "https://github.com/atlanswer/AntCal.git"
 Documentation = "https://github.com/atlanswer/AntCal#readme"
 Issues = "https://github.com/atlanswer/AntCal/issue"
-
-dependencies = [
-    "rich>=13.9.4",
-]
 
 [dependency-groups]
 dev = [
