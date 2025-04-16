@@ -1,7 +1,6 @@
 import eslint from "@eslint/js";
-// @ts-expect-error No types
-import prettier from "eslint-config-prettier";
-import turbo from "eslint-config-turbo";
+import prettier from "eslint-config-prettier/flat";
+import turbo from "eslint-config-turbo/flat";
 import solid from "eslint-plugin-solid/configs/typescript";
 import globals from "globals";
 import tsEslint from "typescript-eslint";
@@ -20,7 +19,7 @@ export default [
       },
     },
   },
-  { plugins: { turbo: turbo } },
+  ...turbo,
   {
     ignores: [
       "eslint.config.js",

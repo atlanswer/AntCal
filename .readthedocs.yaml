@@ -37,3 +37,4 @@ python:
       path: python
       extra_requirements:
         - "docs"
+        - "pyaedt"

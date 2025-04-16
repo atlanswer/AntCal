@@ -4,9 +4,7 @@ from collections.abc import Mapping
 from typing import Literal
 
 from ansys.aedt.core.application.variables import Variable, VariableManager
-from ansys.aedt.core.generic.general_methods import (
-    generate_unique_name,  # pyright: ignore
-)
+from ansys.aedt.core.generic.file_utils import generate_unique_name
 from ansys.aedt.core.hfss import Hfss
 from ansys.aedt.core.modeler.cad.object_3d import Object3d
 from ansys.aedt.core.modeler.modeler_3d import Modeler3D
