@@ -44,6 +44,7 @@ plot = [
     "matplotlib>=3.10.1",
     "numpy>=2.2.3",
     "pandas>=2.2.3",
+    "pydantic>=2.10.6",
 ]
 pyaedt = [
     "pyaedt>=0.15.0",

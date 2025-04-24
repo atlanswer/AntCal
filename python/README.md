@@ -36,6 +36,8 @@ pip install antcal
 cd python
 # Create virtual env
 uv sync
+# Or
+uv sync --extra plot --extra pyaedt --extra docs
 # Build and publish
 uv run flit build
 uv run flit publish

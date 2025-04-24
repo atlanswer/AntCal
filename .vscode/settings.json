@@ -1,33 +1,4 @@
-// VSCode settings are kept for consistency
-// between different development environment
 {
-  "cSpell.words": [
-    "aedt",
-    "astro",
-    "astrojs",
-    "conda",
-    "Eigen",
-    "Eigenmode",
-    "ipykernel",
-    "ipython",
-    "ipywidgets",
-    "MSVC",
-    "nbformat",
-    "ndarray",
-    "numpy",
-    "odesktop",
-    "orjson",
-    "Pyodide",
-    "pyright",
-    "Qwik",
-    "solidjs",
-    "tsbuildinfo",
-    "VCPKG",
-    "vinxi",
-    "openpyxl",
-    "pipenv",
-    "pydantic"
-  ],
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "cmake.sourceDirectory": "${workspaceFolder}/cpp",
   "typescript.tsdk": "node_modules/typescript/lib"
