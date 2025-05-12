@@ -10,16 +10,12 @@ export default defineConfig({
     plugins: [tsconfigPaths(), tailwindcss()],
   },
   server: {
+    preset: "vercel",
     esbuild: {
       options: {
         target: ["esnext"],
       },
     },
-    preset: "vercel-static",
     future: { nativeSWR: true },
-    prerender: {
-      routes: ["/", "/report", "/docs", "/about"],
-      crawlLinks: true,
-    },
   },
 });
