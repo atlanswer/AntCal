@@ -3,10 +3,11 @@ import { micromark } from "micromark";
 import { gfm, gfmHtml } from "micromark-extension-gfm";
 import { math, mathHtml } from "micromark-extension-math";
 import type { Component } from "solid-js";
+import { NoHydration } from "solid-js/web";
 
 export const Markdown: Component<{ md: string }> = (props) => {
   return (
-    <>
+    <NoHydration>
       <div
         // eslint-disable-next-line solid/no-innerhtml
         innerHTML={micromark(props.md, {
@@ -23,6 +24,6 @@ export const Markdown: Component<{ md: string }> = (props) => {
         crossorigin="anonymous"
         referrerpolicy="no-referrer"
       />
-    </>
+    </NoHydration>
   );
 };
