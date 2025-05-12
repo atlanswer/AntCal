@@ -25,7 +25,7 @@ const FileUpload = () => {
       <input
         id={inputId}
         type="file"
-        class="file:font-sans rounded bg-sky-500 px-2 py-1 text-white shadow file:border-y-0 file:border-r file:border-l-0 file:border-solid file:border-r-white file:bg-transparent file:pr-2 file:font-semibold file:text-white hover:bg-sky-700 focus-visible:ring focus-visible:outline-none"
+        class="rounded bg-sky-500 px-2 py-1 text-white shadow file:border-y-0 file:border-r file:border-l-0 file:border-solid file:border-r-white file:bg-transparent file:pr-2 file:font-sans file:font-semibold file:text-white hover:bg-sky-700 focus-visible:ring focus-visible:outline-none"
       />
     </div>
   );

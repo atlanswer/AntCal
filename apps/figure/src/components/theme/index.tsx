@@ -45,7 +45,7 @@ export const ThemeToggle = () => {
   return (
     <button
       title="Switch theme"
-      class="h-8 w-8 rounded p-1 text-neutral-500 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring dark:hover:text-neutral-300"
+      class="h-8 w-8 rounded p-1 text-neutral-500 hover:text-neutral-700 focus-visible:ring focus-visible:outline-none dark:hover:text-neutral-300"
       onClick={() => {
         if (isServer) {
           return;

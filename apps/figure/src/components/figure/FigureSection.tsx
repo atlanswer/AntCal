@@ -26,20 +26,20 @@ export const FigureSection: Component<{
                 type="text"
                 name="Figure Title"
                 placeholder="Figure Title"
-                class="w-72 max-w-full rounded bg-neutral-100 px-2 py-1 pr-10 text-2xl font-semibold text-black shadow focus-visible:outline-none focus-visible:ring dark:bg-neutral-800 dark:text-white"
+                class="w-72 max-w-full rounded bg-neutral-100 px-2 py-1 pr-10 text-2xl font-semibold text-black shadow focus-visible:ring focus-visible:outline-none dark:bg-neutral-800 dark:text-white"
                 value={props.figureConfig().title}
                 onChange={(event) =>
                   setFigureConfigs(props.idx, "title", event.target.value)
                 }
               />
-              <EditIcon class="absolute right-2 top-2" />
+              <EditIcon class="absolute top-2 right-2" />
             </div>
             <div
               title="Switch axes scale"
               class="grid grid-cols-2 place-content-center place-items-stretch rounded bg-neutral-100 p-1 text-neutral-500 shadow dark:bg-neutral-800 [&>.active]:bg-sky-500 [&>.active]:text-white"
             >
               <button
-                class="whitespace-nowrap rounded px-2"
+                class="rounded px-2 whitespace-nowrap"
                 classList={{ active: props.figureConfig().db }}
                 type="button"
                 onClick={() => setFigureConfigs(props.idx, "db", true)}
@@ -47,7 +47,7 @@ export const FigureSection: Component<{
                 dB
               </button>
               <button
-                class="whitespace-nowrap rounded px-2"
+                class="rounded px-2 whitespace-nowrap"
                 classList={{ active: !props.figureConfig().db }}
                 type="button"
                 onClick={() => setFigureConfigs(props.idx, "db", false)}
@@ -60,7 +60,7 @@ export const FigureSection: Component<{
               class="grid grid-cols-2 place-content-center place-items-stretch rounded bg-neutral-100 p-1 text-neutral-500 shadow dark:bg-neutral-800 [&>.active]:bg-sky-500 [&>.active]:text-white"
             >
               <button
-                class="whitespace-nowrap rounded px-2"
+                class="rounded px-2 whitespace-nowrap"
                 classList={{ active: !props.figureConfig().gainTotal }}
                 type="button"
                 onClick={() => setFigureConfigs(props.idx, "gainTotal", false)}
@@ -68,7 +68,7 @@ export const FigureSection: Component<{
                 Gain <em>θ</em>/<em>ϕ</em>
               </button>
               <button
-                class="whitespace-nowrap rounded px-2"
+                class="rounded px-2 whitespace-nowrap"
                 classList={{ active: props.figureConfig().gainTotal }}
                 type="button"
                 onClick={() => setFigureConfigs(props.idx, "gainTotal", true)}

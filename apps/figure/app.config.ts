@@ -7,7 +7,6 @@ export default defineConfig({
     build: {
       target: ["esnext"],
     },
-    // @ts-expect-error Who knows what type this is
     plugins: [tsconfigPaths(), tailwindcss()],
   },
   server: {
@@ -18,6 +17,9 @@ export default defineConfig({
     },
     preset: "vercel-static",
     future: { nativeSWR: true },
-    prerender: { crawlLinks: true },
+    prerender: {
+      routes: ["/", "/report", "/docs", "/about"],
+      crawlLinks: true,
+    },
   },
 });

@@ -27,13 +27,13 @@ export const SourceItem: Component<{
           <span class="rounded bg-neutral-500 px-2 text-white">
             {props.srcIdx + 1}
           </span>
-          <span class="w-20 text-nowrap text-lg font-semibold">
+          <span class="w-20 text-lg font-semibold text-nowrap">
             {props.source().type}-dipole
           </span>
         </span>
         <span class="flex w-20 rounded bg-neutral-200 font-bold text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400 [&>.active]:bg-sky-500 [&>.active]:text-white">
           <button
-            class="flex-1 whitespace-nowrap rounded"
+            class="flex-1 rounded whitespace-nowrap"
             classList={{ active: props.source().type === "E" }}
             type="button"
             onClick={() =>
@@ -49,7 +49,7 @@ export const SourceItem: Component<{
             J
           </button>
           <button
-            class="flex-1 whitespace-nowrap rounded"
+            class="flex-1 rounded whitespace-nowrap"
             classList={{ active: props.source().type === "M" }}
             type="button"
             onClick={() =>
@@ -122,7 +122,7 @@ const DirectionSelector: Component<{
         <Index each={directions}>
           {(direction) => (
             <button
-              class="flex-1 whitespace-nowrap rounded"
+              class="flex-1 rounded whitespace-nowrap"
               classList={{
                 active:
                   figureConfigs[props.figIdx]?.sources[props.srcIdx]
