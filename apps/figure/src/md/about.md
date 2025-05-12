@@ -16,7 +16,7 @@ This site is built with the following tools:
 - [Matplotlib](https://matplotlib.org)
 
 This site is hosted on [Vercel](https://vercel.com)
-and uses the Geist font.
+and uses the [Geist font](https://vercel.com/font).
 
 ### Report
 

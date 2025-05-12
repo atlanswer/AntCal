@@ -16,9 +16,12 @@ export const Markdown: Component<{ md: string }> = (props) => {
         })}
       />
       <Link
-        href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-y/KaTeX/0.15.2/katex.min.css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"
+        integrity="sha512-fHwaWebuwA7NSF5Qg/af4UeDx9XqUpYpOGgubo3yWu+b2IQR4UeQwbb42Ti7gVAjNtVoI/I9TEoYeu9omwcC6g=="
         type="text/css"
         rel="stylesheet"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
       />
     </>
   );
