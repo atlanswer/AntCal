@@ -1,18 +1,17 @@
 import { Title } from "@solidjs/meta";
-import { Suspense } from "solid-js";
+import { lazy } from "solid-js";
 import { NoHydration } from "solid-js/web";
-import { Markdown } from "~/components/Markdown";
-import aboutMd from "~/md/about.md?raw";
 
 export default function About() {
   return (
     <article class="prose prose-neutral dark:prose-invert prose-xl mx-auto max-w-screen-xl px-8 py-16 md:px-16">
       <Title>About | AntCal</Title>
-      <Suspense fallback={<p>Loading MarkDown...</p>}>
-        <NoHydration>
-          <Markdown md={aboutMd} />
-        </NoHydration>
-      </Suspense>
+      <NoHydration>
+        {(() => {
+          const Markdown = lazy(() => import("~/components/Markdown"));
+          return <Markdown md="about" />;
+        })()}
+      </NoHydration>
     </article>
   );
 }

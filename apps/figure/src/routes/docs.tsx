@@ -1,8 +1,6 @@
 import { Title } from "@solidjs/meta";
-import { Suspense } from "solid-js";
+import { lazy, Suspense } from "solid-js";
 import { NoHydration } from "solid-js/web";
-import { Markdown } from "~/components/Markdown";
-import docsMd from "~/md/docs.md?raw";
 
 export default function Docs() {
   return (
@@ -10,7 +8,10 @@ export default function Docs() {
       <Title>Docs | AntCal</Title>
       <Suspense fallback={<p>Loading MarkDown...</p>}>
         <NoHydration>
-          <Markdown md={docsMd} />
+          {(() => {
+            const Markdown = lazy(() => import("~/components/Markdown"));
+            return <Markdown md="docs" />;
+          })()}
         </NoHydration>
       </Suspense>
     </article>
