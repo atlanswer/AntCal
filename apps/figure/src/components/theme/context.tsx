@@ -1,3 +1,4 @@
+import { type } from "arktype";
 import {
   createContext,
   createEffect,
@@ -7,13 +8,11 @@ import {
   type ParentComponent,
 } from "solid-js";
 import { isServer } from "solid-js/web";
-import { z } from "zod";
-import ssrScript from "~/components/theme/ssr?raw";
 
 const THEME_STORAGE_KEY = "theme";
 
-const zTheme = z.enum(["system", "light", "dark"]).catch("system");
-type Theme = z.infer<typeof zTheme>;
+const Theme = type.enumerated("system", "light", "dark");
+type Theme = typeof Theme.infer;
 
 const [theme, setTheme] = createSignal<Theme>("system");
 
@@ -29,12 +28,14 @@ export const useTheme = () => {
 
 export const ThemeProvider: ParentComponent = (props) => {
   if (!isServer) {
-    setTheme(zTheme.parse(localStorage.getItem(THEME_STORAGE_KEY)));
+    let parsedTheme = Theme(localStorage.getItem(THEME_STORAGE_KEY));
+    parsedTheme = parsedTheme instanceof type.errors ? "system" : parsedTheme;
+    setTheme(parsedTheme);
 
     const matchPrefersDark = window.matchMedia("(prefers-color-scheme: dark)");
 
     const syncPrefersColorScheme = () =>
-      setPrefersDark(matchPrefersDark.matches ? true : false);
+      setPrefersDark(matchPrefersDark.matches);
 
     const [prefersDark, setPrefersDark] = createSignal<boolean>(
       matchPrefersDark.matches,
@@ -77,11 +78,8 @@ export const ThemeProvider: ParentComponent = (props) => {
   }
 
   return (
-    <>
-      <script>{ssrScript}</script>
-      <ThemeContext.Provider value={[theme, setTheme]}>
-        {props.children}
-      </ThemeContext.Provider>
-    </>
+    <ThemeContext.Provider value={[theme, setTheme]}>
+      {props.children}
+    </ThemeContext.Provider>
   );
 };

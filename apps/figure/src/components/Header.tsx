@@ -2,7 +2,7 @@ import { A } from "@solidjs/router";
 import { For } from "solid-js";
 import { ThemeToggle } from "~/components/theme";
 
-const Navigator = () => {
+function Navigator() {
   const routes: { route: string; name: string }[] = [
     {
       name: "Pattern",
@@ -39,7 +39,7 @@ const Navigator = () => {
       </span>
     </nav>
   );
-};
+}
 
 export const Header = () => (
   <header class="sticky top-0 z-10 place-content-center bg-white px-8 text-black shadow dark:border-neutral-900 dark:bg-black dark:text-white">

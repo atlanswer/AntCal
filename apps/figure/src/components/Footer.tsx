@@ -3,7 +3,7 @@ import { BeakerIcon } from "~/components/icons/Beaker";
 import { GitHubIcon } from "~/components/icons/GitHub";
 import { PlugIcon } from "~/components/icons/Plug";
 
-export const Footer = () => {
+export function Footer() {
   // const IconTime = () => (
   //   <svg
   //     class="h-5 w-5"
@@ -91,4 +91,4 @@ export const Footer = () => {
       </div>
     </footer>
   );
-};
+}

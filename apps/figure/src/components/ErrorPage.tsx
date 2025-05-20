@@ -1,5 +1,3 @@
-/* @refresh granular */
-
 import { Title } from "@solidjs/meta";
 import { A } from "@solidjs/router";
 

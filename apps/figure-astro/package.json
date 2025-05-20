@@ -24,7 +24,7 @@
     "@astrojs/check": "~0.9.4",
     "@astrojs/tailwind": "~6.0.2",
     "@tailwindcss/typography": "~0.5.16",
-    "astro": "~5.7.12",
-    "tailwindcss": "~4.1.6"
+    "astro": "~5.7.13",
+    "tailwindcss": "~4.1.7"
   }
 }
