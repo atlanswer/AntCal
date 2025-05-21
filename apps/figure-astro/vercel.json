@@ -1,6 +1,0 @@
-{
-  "cleanUrls": true,
-  "framework": "astro",
-  "regions": ["hkg1"],
-  "trailingSlash": false
-}

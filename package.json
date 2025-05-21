@@ -1,10 +1,7 @@
 {
   "name": "antcal",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Antenna Calculator",
-  "keywords": [
-    "antenna"
-  ],
   "author": "Atlanswer",
   "license": "MIT",
   "private": true,
@@ -13,6 +10,7 @@
     "apps/*",
     "packages/*"
   ],
+  "homepage": "https://antcal.atlanswer.com/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atlanswer/AntCal.git"
@@ -20,15 +18,13 @@
   "bugs": {
     "url": "https://github.com/atlanswer/AntCal/issues"
   },
-  "homepage": "https://antcal.atlanswer.com/",
   "scripts": {
     "dev": "turbo dev",
+    "dev:astro": "turbo -F @antcal/astro dev",
     "dev:fig": "turbo -F @antcal/figure dev",
     "dev:api": "turbo -F @antcal/figure dev:api",
-    "build": "turbo build",
     "lint": "turbo lint",
-    "prettier": "prettier",
-    "turbo": "turbo"
+    "build": "turbo build"
   },
   "devDependencies": {
     "eslint": "^9.27.0",

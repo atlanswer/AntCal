@@ -1,4 +1,4 @@
-# Reference: https://EditorConfig.org
+# https://EditorConfig.org
 
 # Top-most EditorConfig file
 root = true
@@ -17,5 +17,5 @@ charset = utf-8
 indent_size = 2
 indent_style = space
 
-# Trim trailing whitespace, except for Markdown
+# Trim trailing whitespace
 trim_trailing_whitespace = true
