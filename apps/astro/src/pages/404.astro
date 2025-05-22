@@ -1,9 +1,9 @@
 ---
-import Layout from "~/layouts/Layout.astro";
+import BaseLayout from "~/layouts/BaseLayout.astro";
 const { pathname } = Astro.url;
 ---
 
-<Layout title="404">
+<BaseLayout title="Page Not Found">
   <article
     class="prose dark:prose-invert flex h-full max-w-none flex-col place-content-center place-items-center"
   >
@@ -17,4 +17,4 @@ const { pathname } = Astro.url;
       >
     </p>
   </article>
-</Layout>
+</BaseLayout>

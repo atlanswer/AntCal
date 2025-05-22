@@ -1,6 +1,7 @@
 ---
 interface Props {
   title: string;
+  children: any;
 }
 
 const { title } = Astro.props;
@@ -15,11 +16,10 @@ import Footer from "~/components/Footer.astro";
 <!doctype html>
 <html lang="en-us" class="h-full">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} | AntCal</title>
-    <meta name="description" content="Create publication quality figures" />
-    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content="Create publication quality figures." />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#ffffff" />
     <meta
@@ -27,17 +27,18 @@ import Footer from "~/components/Footer.astro";
       media="(prefers-color-scheme: dark)"
       content="#000000"
     />
-    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/ios/1024.png" />
     <link
       rel="manifest"
       type="application/manifest+json"
       href="/app.webmanifest"
     />
     <Font cssVariable="--font-geist-sans" preload />
-    <Font cssVariable="--font-geist-mono" preload />
+    <Font cssVariable="--font-geist-mono" />
   </head>
   <body
-    class="flex h-full min-w-64 flex-col font-sans antialiased motion-reduce:transition-none"
+    class="flex min-h-full min-w-64 flex-col font-sans antialiased motion-reduce:transition-none"
   >
     <noscript>AntCal: You need to enable JavaScript to run this app.</noscript>
     <Header />
