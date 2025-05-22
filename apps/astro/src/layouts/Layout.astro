@@ -5,6 +5,9 @@ interface Props {
 
 const { title } = Astro.props;
 
+import { Font } from "astro:assets";
+import "~/styles/global.css";
+
 import Header from "~/components/Header.astro";
 import Footer from "~/components/Footer.astro";
 ---
@@ -30,6 +33,8 @@ import Footer from "~/components/Footer.astro";
       type="application/manifest+json"
       href="/app.webmanifest"
     />
+    <Font cssVariable="--font-geist-sans" preload />
+    <Font cssVariable="--font-geist-mono" preload />
   </head>
   <body
     class="flex h-full min-w-64 flex-col font-sans antialiased motion-reduce:transition-none"
@@ -44,45 +49,25 @@ import Footer from "~/components/Footer.astro";
 </html>
 
 <style is:global>
+  @reference "~/styles/global.css"
+
+  .math-display {
+    overflow: auto;
+  }
+
   * {
     scrollbar-width: thin;
-  }
-
-  ::-webkit-scrollbar {
-    height: 0.5rem;
-    width: 0.5rem;
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply bg-[#f6f1f1];
-  }
-  .dark::-webkit-scrollbar-track {
-    @apply bg-[#000000];
-  }
-
-  ::-webkit-scrollbar-thumb {
-    border-radius: 0.5rem;
-    @apply bg-neutral-400;
-  }
-
-  .dark::-webkit-scrollbar-thumb {
-    @apply bg-neutral-800;
-  }
-
-  ::-webkit-scrollbar-corner {
-    @apply bg-[#f6f1f1];
-  }
-  .dark::-webkit-scrollbar-corner {
-    @apply bg-[#000000];
+    scrollbar-gutter: stable both-edges;
+    @apply transition-colors;
   }
 
   main {
-    background: radial-gradient(circle, #d6d3d1 0.1rem, #f5f5f4 0.1rem) top left /
-      2rem 2rem;
+    background: radial-gradient(circle, #d6d3d1 0.1rem, #f5f5f4 0.1rem) top
+      left / 2rem 2rem;
   }
 
   .dark main {
-    background: radial-gradient(circle, #292524 0.1rem, #000000 0.1rem) top left /
-      2rem 2rem;
+    background: radial-gradient(circle, #292524 0.1rem, #000000 0.1rem) top
+      left / 2rem 2rem;
   }
 </style>

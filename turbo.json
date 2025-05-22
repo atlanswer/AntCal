@@ -9,6 +9,9 @@
     "lint": {
       "outputs": []
     },
+    "check": {
+      "outputs": []
+    },
     "build": {
       "dependsOn": ["^build"],
       "env": ["NODE_ENV"],

@@ -23,20 +23,17 @@
     "dev:astro": "turbo -F @antcal/astro dev",
     "dev:fig": "turbo -F @antcal/figure dev",
     "dev:api": "turbo -F @antcal/figure dev:api",
+    "check": "turbo check",
     "lint": "turbo lint",
     "build": "turbo build"
   },
   "devDependencies": {
-    "eslint": "^9.27.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-config-turbo": "^2.5.3",
-    "eslint-plugin-solid": "^0.14.5",
     "globals": "^16.1.0",
     "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "turbo": "^2.5.3",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.32.1"
+    "typescript": "^5.8.3"
   },
   "packageManager": "bun@1.2.13",
   "engines": {
