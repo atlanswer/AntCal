@@ -1,7 +1,7 @@
 {
   "trailingComma": "all",
   "experimentalTernaries": true,
-  "plugins": ["prettier-plugin-tailwindcss", "prettier-plugin-astro"],
+  "plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
   "overrides": [
     {
       "files": "*.astro",
@@ -9,5 +9,6 @@
         "parser": "astro"
       }
     }
-  ]
+  ],
+  "tailwindStylesheet": "./apps/astro/src/styles/global.css"
 }

@@ -4,17 +4,19 @@
 node_modules
 
 # Env
-.venv
 .env*.local
 
 # Build
 build
 dist
-.astro
 .vinxi
 .vercel
 
+# Generated types
+.astro/
+
 # Python
+.venv
 __pycache__
 .ruff_cache
 typings
