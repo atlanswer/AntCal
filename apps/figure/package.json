@@ -39,10 +39,10 @@
     "tailwindcss": "^4.1.7",
     "vinxi": "^0.5.6",
     "vite-tsconfig-paths": "^5.1.4",
-    "zod": "^3.25.7"
+    "zod": "^3.25.28"
   },
   "devDependencies": {
-    "globals": "^16.1.0",
+    "globals": "^16.2.0",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-config-turbo": "^2.5.3",
