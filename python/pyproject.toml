@@ -1,63 +1,73 @@
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = [ "flit-core>=3.11,<4" ]
+
 [project]
 name = "antcal"
-dynamic = ["version"]
 description = "AntCal python module"
 readme = "README.md"
-requires-python = ">=3.12"
+keywords = [ "antenna", "DRA", "simulation" ]
 license = { file = "LICENSE" }
-authors = [{ name = "Atlanswer", email = "atlanswer@gmail.com" }]
-keywords = ["antenna", "DRA", "simulation"]
+authors = [ { name = "Atlanswer", email = "atlanswer@gmail.com" } ]
+requires-python = ">=3.12"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Development Status :: 2 - Pre-Alpha",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Typing :: Typed",
-    "Topic :: Software Development :: Libraries",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Intended Audience :: Science/Research",
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
 ]
-dependencies = [
-    "rich>=14.0.0",
-]
+dynamic = [ "version" ]
+dependencies = [ "rich>=14" ]
 
-[project.urls]
-Homepage = "https://github.com/atlanswer/AntCal"
-Repository = "https://github.com/atlanswer/AntCal.git"
-Documentation = "https://github.com/atlanswer/AntCal#readme"
-Issues = "https://github.com/atlanswer/AntCal/issue"
+optional-dependencies.docs = [
+  "myst-parser>=4",
+  "sphinx>=8.2",
+  "sphinx-autobuild>=2024.10.3",
+  "sphinx-autodoc2>=0.5",
+  "sphinx-copybutton>=0.5",
+  "sphinx-rtd-theme>=3",
+]
+optional-dependencies.plot = [
+  "matplotlib>=3.10",
+  "numpy>=2.2",
+  "pandas>=2.2",
+  "pydantic>=2.10",
+]
+optional-dependencies.pyaedt = [ "pyaedt>=0.15", "pyvista>=0.44.2" ]
+urls.Documentation = "https://github.com/atlanswer/AntCal#readme"
+urls.Homepage = "https://github.com/atlanswer/AntCal"
+urls.Issues = "https://github.com/atlanswer/AntCal/issue"
+urls.Repository = "https://github.com/atlanswer/AntCal.git"
 
 [dependency-groups]
 dev = [
-    "antcal",
-    "flit>=3.11.0",
-    "ipykernel>=6.29.5",
-    "ipython>=9.0.0",
-    "keyring>=25.6.0",
-    "nbformat>=5.10.4",
-    "ruff>=0.9.9",
+  "antcal",
+  "flit>=3.12",
+  "ipykernel>=6.29",
+  "ipython>=9.2",
+  "keyring>=25.6",
+  "nbformat>=5.10",
+  "ruff>=0.11",
 ]
 
-[project.optional-dependencies]
-plot = [
-    "matplotlib>=3.10.1",
-    "numpy>=2.2.3",
-    "pandas>=2.2.3",
-    "pydantic>=2.10.6",
-]
-pyaedt = [
-    "pyaedt>=0.15.0",
-    "pyvista>=0.44.2",
-]
-docs = [
-    "myst-parser>=4.0.0",
-    "sphinx-autobuild>=2024.10.3",
-    "sphinx-autodoc2>=0.5.0",
-    "sphinx-copybutton>=0.5.2",
-    "sphinx-rtd-theme>=3.0.2",
-    "sphinx>=8.2.0",
-]
+[tool.ruff]
+target-version = "py312"
+
+line-length = 80
+lint.select = [ "B", "E", "F", "I", "SIM", "UP" ]
+
+[tool.pyright]
+typeCheckingMode = "standard"
+
+[tool.uv]
+cache-dir = "F:/uv/cache"
 
 [[tool.uv.index]]
 name = "testpypi"
@@ -65,22 +75,5 @@ url = "https://test.pypi.org/simple/"
 publish-url = "https://test.pypi.org/legacy/"
 explicit = true
 
-[build-system]
-requires = ["flit_core >=3.11,<4"]
-build-backend = "flit_core.buildapi"
-
-[tool.ruff]
-line-length = 80
-target-version = "py312"
-
-[tool.ruff.lint]
-select = ["E", "F", "UP", "B", "SIM", "I"]
-
-[tool.pyright]
-typeCheckingMode = "strict"
-reportMissingTypeStubs = false
-reportUnknownVariableType = "warning"
-
 [tool.uv.sources]
 antcal = { workspace = true }
-

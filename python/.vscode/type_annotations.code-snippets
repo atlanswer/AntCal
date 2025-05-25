@@ -15,10 +15,10 @@
   // 	],
   // 	"description": "Log output to console"
   // }
-  "Pyright ignore": {
+  "Pyright Ignore": {
     "scope": "python",
     "prefix": "pig",
     "body": "# pyright: ignore",
-    "description": "Add a comment to ignore line in Pyright",
+    "description": "Add a comment to ignore a line in Pyright",
   },
 }
