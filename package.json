@@ -1,6 +1,6 @@
 {
   "name": "antcal",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Antenna Calculator",
   "author": "Atlanswer",
   "license": "MIT",
@@ -20,11 +20,9 @@
   },
   "scripts": {
     "dev": "turbo dev",
-    "dev:astro": "turbo -F @antcal/astro dev",
     "dev:fig": "turbo -F @antcal/figure dev",
     "dev:api": "turbo -F @antcal/figure dev:api",
     "check": "turbo check",
-    "lint": "turbo lint",
     "build": "turbo build"
   },
   "devDependencies": {
@@ -34,7 +32,7 @@
     "turbo": "^2.5.3",
     "typescript": "^5.8.3"
   },
-  "packageManager": "bun@1.2.13",
+  "packageManager": "bun@1.2.14",
   "engines": {
     "bun": ">=1.2"
   }

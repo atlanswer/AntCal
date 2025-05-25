@@ -1,18 +1,13 @@
 {
-  "extends": ["@antcal/tsconfig"],
+  "extends": ["astro/tsconfigs/strictest"],
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"],
   "compilerOptions": {
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js",
-    "types": ["vinxi/client", "vite/client"],
     "baseUrl": ".",
-    "rootDir": ".",
     "paths": {
       "~/*": ["src/*"],
-      "@/*": ["public/*"],
-      "python/*": ["src/python/*"]
+      "@/*": ["public/*"]
     },
-    "tsBuildInfoFile": ".output/tsconfig.tsbuildinfo"
-  },
-  "include": ["public/**/*", "src/**/*"],
-  "files": ["app.config.ts", "eslint.config.js"]
+    "plugins": [{ "name": "@astrojs/ts-plugin" }]
+  }
 }

@@ -1,10 +1,11 @@
 {
   "name": "@antcal/figure",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "Generate publication quality figures",
   "license": "MIT",
-  "private": "true",
+  "private": true,
   "type": "module",
+  "homepage": "https://astro.atlanswer.com/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atlanswer/AntCal.git"
@@ -12,41 +13,20 @@
   "bugs": {
     "url": "https://github.com/atlanswer/AntCal/issues"
   },
-  "homepage": "https://antcal.atlanswer.com/",
   "scripts": {
-    "dev": "vinxi dev",
-    "dev:api": "uv run --env-file .env fastapi dev api/main.py",
-    "tsc": "tsc",
-    "lint": "eslint .",
-    "build": "vinxi build",
-    "serve": "vinxi serve --dir .vercel/output/static",
-    "version": "vinxi version"
-  },
-  "dependencies": {
-    "@antcal/tsconfig": "workspace:*",
-    "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.15.3",
-    "@solidjs/start": "^1.1.4",
-    "@tailwindcss/typography": "^0.5.16",
-    "@tailwindcss/vite": "^4.1.7",
-    "@vercel/analytics": "^1.5.0",
-    "@vercel/speed-insights": "^1.2.0",
-    "arktype": "^2.1.20",
-    "micromark": "^4.0.2",
-    "micromark-extension-gfm": "^3.0.0",
-    "micromark-extension-math": "^3.1.0",
-    "solid-js": "^1.9.7",
-    "tailwindcss": "^4.1.7",
-    "vinxi": "^0.5.6",
-    "vite-tsconfig-paths": "^5.1.4",
-    "zod": "^3.25.28"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
   },
   "devDependencies": {
-    "globals": "^16.2.0",
-    "eslint": "^9.27.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-config-turbo": "^2.5.3",
-    "eslint-plugin-solid": "^0.14.5",
-    "typescript-eslint": "^8.32.1"
+    "@astrojs/check": "~0.9.4",
+    "@astrojs/tailwind": "~6.0.2",
+    "@astrojs/ts-plugin": "^1.10.4",
+    "@tailwindcss/typography": "~0.5.16",
+    "@tailwindcss/vite": "~4.1.7",
+    "astro": "^5.8.0",
+    "geist": "~1.4.2",
+    "tailwindcss": "~4.1.7"
   }
 }
