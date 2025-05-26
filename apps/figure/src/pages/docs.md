@@ -1,3 +1,7 @@
+---
+layout: ~/layouts/Markdown.astro
+---
+
 # AntCal Documentation
 
 ## Radiation Pattern

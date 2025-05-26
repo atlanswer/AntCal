@@ -1,6 +1,5 @@
 ---
-title: About
-# layout: ~/layouts/LayoutArticle.astro
+layout: ~/layouts/Markdown.astro
 ---
 
 # AntCal

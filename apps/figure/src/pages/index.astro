@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "~/layouts/Base.astro";
+
+const globRes = import.meta.glob("~/pages/*.{astro,md}");
 ---
 
 <BaseLayout title="Figure">
-  <p>Hi</p>
+  {Object.keys(globRes).map((key) => <p>{key}</p>)}
 </BaseLayout>
