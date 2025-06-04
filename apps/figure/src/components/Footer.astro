@@ -1,8 +1,8 @@
 ---
 import { version } from "package.json";
 import IconStatus from "components/icons/IconStatus.astro";
-import IconTime from "components/icons/IconTime.astro";
 import IconGitHub from "components/icons/IconGitHub.astro";
+// import IconTime from "components/icons/IconTime.astro";
 ---
 
 <footer
@@ -15,7 +15,7 @@ import IconGitHub from "components/icons/IconGitHub.astro";
       <a
         href="https://github.com/atlanswer"
         target="_blank"
-        class="font-medium underline underline-offset-4 transition-[text-underline-offset] hover:underline-offset-8"
+        class="font-medium underline underline-offset-4"
       >
         @atlanswer
       </a>
@@ -26,15 +26,12 @@ import IconGitHub from "components/icons/IconGitHub.astro";
       class="flex place-items-center gap-1"
     >
       <IconStatus />
-      <span
-        class="underline underline-offset-4 transition-[text-underline-offset] hover:underline-offset-8"
-        >Status</span
-      >
+      <span class="underline underline-offset-4">Status</span>
     </a>
-    <span class="flex place-items-center gap-1">
-      <IconTime />
-      <span>{} ms</span>
-    </span>
+    <!-- <span class="flex place-items-center gap-1"> -->
+    <!--   <IconTime /> -->
+    <!--   <span>{} ms</span> -->
+    <!-- </span> -->
     <span class="flex place-items-center gap-1.5 sm:ml-auto">
       <span>v{version}</span>
       <a
@@ -43,10 +40,7 @@ import IconGitHub from "components/icons/IconGitHub.astro";
         class="flex place-items-center gap-1.5"
       >
         <IconGitHub />
-        <span
-          class="underline underline-offset-4 transition-[text-underline-offset] hover:underline-offset-8"
-          >Source</span
-        >
+        <span class="underline underline-offset-4">Source</span>
       </a>
     </span>
   </div>

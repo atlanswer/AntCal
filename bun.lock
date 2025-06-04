@@ -20,7 +20,8 @@
         "@astrojs/ts-plugin": "^1.10.4",
         "@tailwindcss/typography": "~0.5.16",
         "@tailwindcss/vite": "~4.1.8",
-        "astro": "^5.8.1",
+        "arktype": "^2.1.20",
+        "astro": "~5.8.1",
         "geist": "~1.4.2",
         "tailwindcss": "~4.1.8",
       },
@@ -38,6 +39,10 @@
     "@antcal/figure": ["@antcal/figure@workspace:apps/figure"],
 
     "@antcal/tsconfig": ["@antcal/tsconfig@workspace:packages/tsconfig"],
+
+    "@ark/schema": ["@ark/schema@0.46.0", "https://registry.npmmirror.com/@ark/schema/-/schema-0.46.0.tgz", { "dependencies": { "@ark/util": "0.46.0" } }, "sha512-c2UQdKgP2eqqDArfBqQIJppxJHvNNXuQPeuSPlDML4rjw+f1cu0qAlzOG4b8ujgm9ctIDWwhpyw6gjG5ledIVQ=="],
+
+    "@ark/util": ["@ark/util@0.46.0", "https://registry.npmmirror.com/@ark/util/-/util-0.46.0.tgz", {}, "sha512-JPy/NGWn/lvf1WmGCPw2VGpBg5utZraE84I7wli18EDF3p3zc/e9WolT35tINeZO3l7C77SjqRJeAUoT0CvMRg=="],
 
     "@astrojs/check": ["@astrojs/check@0.9.4", "https://registry.npmmirror.com/@astrojs/check/-/check-0.9.4.tgz", { "dependencies": { "@astrojs/language-server": "^2.15.0", "chokidar": "^4.0.1", "kleur": "^4.1.5", "yargs": "^17.7.2" }, "peerDependencies": { "typescript": "^5.0.0" }, "bin": { "astro-check": "dist/bin.js" } }, "sha512-IOheHwCtpUfvogHHsvu0AbeRZEnjJg3MopdLddkJE70mULItS/Vh37BHcI00mcOJcH1vhD3odbpvWokpxam7xA=="],
 
@@ -386,6 +391,8 @@
     "argparse": ["argparse@2.0.1", "https://registry.npmmirror.com/argparse/-/argparse-2.0.1.tgz", {}, "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q=="],
 
     "aria-query": ["aria-query@5.3.2", "https://registry.npmmirror.com/aria-query/-/aria-query-5.3.2.tgz", {}, "sha512-COROpnaoap1E2F000S62r6A60uHZnmlvomhfyT2DlTcrY1OrBKn2UhH7qn5wTC9zMvD0AY7csdPSNwKP+7WiQw=="],
+
+    "arktype": ["arktype@2.1.20", "https://registry.npmmirror.com/arktype/-/arktype-2.1.20.tgz", { "dependencies": { "@ark/schema": "0.46.0", "@ark/util": "0.46.0" } }, "sha512-IZCEEXaJ8g+Ijd59WtSYwtjnqXiwM8sWQ5EjGamcto7+HVN9eK0C4p0zDlCuAwWhpqr6fIBkxPuYDl4/Mcj/+Q=="],
 
     "array-iterate": ["array-iterate@2.0.1", "https://registry.npmmirror.com/array-iterate/-/array-iterate-2.0.1.tgz", {}, "sha512-I1jXZMjAgCMmxT4qxXfPXa6SthSoE8h6gkSI9BGGNv8mP8G/v0blc+qFnZu6K42vTOiuME596QaLO0TP3Lk0xg=="],
 

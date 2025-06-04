@@ -5,7 +5,7 @@ import IconLight from "components/icons/IconLight.astro";
 
 <button
   id="theme-toggle"
-  title="Switch theme"
+  title="Switch Theme"
   class="h-8 w-8 rounded p-1 text-neutral-500 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring dark:hover:text-neutral-300"
   aria-label="Toggle light/dark theme"
 >
@@ -13,46 +13,42 @@ import IconLight from "components/icons/IconLight.astro";
 </button>
 
 <script>
-  declare global {
-    type Theme = "light" | "dark" | "system";
-    interface Window {
-      getThemeLocal: () => Theme;
-    }
-  }
-  window.getThemeLocal = () => {
-    const themeLocal = localStorage.getItem("theme");
-    switch (themeLocal) {
-      case "light":
-        return themeLocal;
-      case "dark":
-        return themeLocal;
-      default:
-        localStorage.setItem("theme", "dark");
-        return "dark";
-    }
-  };
+  import { getLocalTheme } from "components/theme";
 
-  const themeLocal = window.getThemeLocal();
-  const htmlElm = document.documentElement;
-
-  if (themeLocal === "light") {
-    htmlElm.classList.remove("dark");
-  }
-  if (themeLocal === "dark") {
-    htmlElm.classList.add("dark");
-  }
-</script>
-
-<script>
   const themeToggle = document.getElementById("theme-toggle");
-  const htmlElm = document.documentElement;
+  const html = document.documentElement;
 
   themeToggle!.onclick = () => {
-    const currentThemeLocal = window.getThemeLocal();
-    localStorage.setItem(
-      "theme",
-      currentThemeLocal === "light" ? "dark" : "light",
-    );
-    htmlElm.classList.toggle("dark");
+    const localTheme = getLocalTheme();
+    const preferDark = globalThis.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+
+    switch (localTheme) {
+      case "light":
+        if (preferDark) {
+          localStorage.setItem("theme", "system");
+        } else {
+          localStorage.setItem("theme", "dark");
+        }
+        html.classList.add("dark");
+        return;
+      case "dark":
+        if (preferDark) {
+          localStorage.setItem("theme", "light");
+        } else {
+          localStorage.setItem("theme", "system");
+        }
+        html.classList.remove("dark");
+        return;
+      default:
+        if (preferDark) {
+          localStorage.setItem("theme", "light");
+          html.classList.remove("dark");
+        } else {
+          localStorage.setItem("theme", "dark");
+          html.classList.add("dark");
+        }
+    }
   };
 </script>

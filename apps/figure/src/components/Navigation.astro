@@ -1,13 +1,15 @@
 ---
 const pages: { name: string; href: string }[] = [
-  { name: "Figure", href: "/" },
-  { name: "Report", href: "/report" },
+  { name: "Field", href: "/field" },
+  // { name: "Radiation Pattern", href: "/pattern" },
+  // { name: "Report", href: "/report" },
+  { name: "Docs", href: "/docs" },
   { name: "About", href: "/about" },
 ] as const;
 ---
 
 <nav
-  class="flex flex-1 font-medium leading-loose text-black sm:place-content-center dark:text-white"
+  class="flex flex-1 font-semibold leading-loose text-black sm:place-content-center dark:text-white"
 >
   <span class="inline-block [&>:not(:first-child)]:ml-6">
     {

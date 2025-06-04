@@ -15,9 +15,10 @@ This site is built with the following tools:
 - [Tailwind CSS](https://tailwindcss.com)
 - [Turborepo](https://turbo.build/repo)
 - [Bun](https://bun.sh)
-- [FastAPI](https://fastapi.tiangolo.com)
-- [Numpy](https://numpy.org)
-- [Matplotlib](https://matplotlib.org)
+- [Arktype](https://arktype.io)
+  <!-- - [FastAPI](https://fastapi.tiangolo.com) -->
+  <!-- - [Numpy](https://numpy.org) -->
+  <!-- - [Matplotlib](https://matplotlib.org) -->
 
 This site is hosted on [Vercel](https://vercel.com)
 and uses the [Geist font](https://vercel.com/font).
