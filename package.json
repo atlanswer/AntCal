@@ -21,7 +21,6 @@
   "scripts": {
     "dev": "turbo dev",
     "dev:fig": "turbo -F @antcal/figure dev",
-    "dev:api": "turbo -F @antcal/figure dev:api",
     "check": "turbo check",
     "build": "turbo build"
   },
