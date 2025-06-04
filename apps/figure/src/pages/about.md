@@ -1,5 +1,5 @@
 ---
-layout: ~/layouts/Markdown.astro
+layout: layouts/Markdown.astro
 ---
 
 # AntCal

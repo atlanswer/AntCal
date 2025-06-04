@@ -5,7 +5,7 @@ interface Props extends MarkdownLayoutProps<{}> {
   children: any;
 }
 
-import BaseLayout from "~/layouts/Base.astro";
+import BaseLayout from "layouts/Base.astro";
 
 const url = Astro.props.url?.split("/").pop() ?? "";
 const title = url.charAt(0).toUpperCase() + url.slice(1);
