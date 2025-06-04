@@ -3,24 +3,29 @@ import BaseLayout from "layouts/Base.astro";
 ---
 
 <BaseLayout>
-  <svg
-    id="field-plot"
-    width={650}
-    height={600}
-    class="m-8 overflow-auto rounded border"></svg>
+  <div class="flex flex-col p-8">
+    <svg
+      id="field-plot"
+      width={262.5}
+      height={262.5}
+      viewBox="0 0 700 700"
+      class="mx-auto h-[48rem] w-full max-w-[80rem] rounded bg-neutral-200 shadow-xl dark:shadow-neutral-600"
+    ></svg>
+    <button></button>
+  </div>
+
   <script>
     import {
       color,
       drag,
+      randomUniform,
+      range,
       select,
       selectAll,
-      range,
-      randomUniform,
       scaleOrdinal,
       schemeCategory10,
     } from "d3";
     import { gridPlanes3D, points3D, lineStrips3D } from "d3-3d";
-    import type { Point3DInput } from "d3-3d";
 
     const origin = { x: 350, y: 350 };
     const j = 10;
@@ -74,7 +79,6 @@ import BaseLayout from "layouts/Base.astro";
         .attr("class", "d3-3d grid-cell")
         .merge(xGrid)
         .classed("stroke-black", true)
-        .classed("dark:stroke-white", true)
         .attr("stroke-width", 0.3)
         .attr("fill", (d) => (d.ccw ? "#eee" : "#aaa"))
         .attr("fill-opacity", 0.6)
@@ -115,7 +119,6 @@ import BaseLayout from "layouts/Base.astro";
         .attr("class", "d3-3d yScale")
         .merge(yScale)
         .classed("stroke-black", true)
-        .classed("dark:stroke-white", true)
         .attr("stroke-width", 0.5)
         .attr("d", yScale3d.draw);
 
@@ -130,7 +133,6 @@ import BaseLayout from "layouts/Base.astro";
         .append("text")
         .attr("class", "d3-3d yText")
         .classed("fill-black", true)
-        .classed("dark:fill-white", true)
         .attr("font-family", "system-ui, sans-serif")
         .merge(yText)
         .each(function (d) {
