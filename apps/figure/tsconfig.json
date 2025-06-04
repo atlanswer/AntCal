@@ -5,8 +5,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"],
-      "@/*": ["public/*"]
+      "src/*": ["src/*"],
+      "components/*": ["src/components"],
+      "public/*": ["public/*"]
     },
     "plugins": [{ "name": "@astrojs/ts-plugin" }]
   }

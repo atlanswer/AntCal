@@ -28,8 +28,8 @@
   "devDependencies": {
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "turbo": "^2.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.12",
+    "turbo": "^2.5.4",
     "typescript": "^5.8.3"
   },
   "packageManager": "bun@1.2.14",
