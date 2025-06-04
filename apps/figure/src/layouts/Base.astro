@@ -19,7 +19,7 @@ if (title === undefined) {
 ---
 
 <!doctype html>
-<html lang="en-us" class="h-full">
+<html lang="en-US">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,11 +43,11 @@ if (title === undefined) {
     <Font cssVariable="--font-geist-mono" />
   </head>
   <body
-    class="flex min-h-full min-w-64 flex-col font-sans antialiased motion-reduce:transition-none"
+    class="flex min-h-screen min-w-64 flex-col font-sans antialiased motion-reduce:transition-none"
   >
     <noscript>AntCal: You need to enable JavaScript to run this app.</noscript>
     <Header />
-    <main class="flex-auto">
+    <main class="flex-1">
       <slot />
     </main>
     <Footer />
