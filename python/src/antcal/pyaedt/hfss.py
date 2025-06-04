@@ -12,6 +12,19 @@ from ansys.aedt.core.modules.material_lib import Materials
 
 
 class MyVariable(Variable):
+    """Helper class for using variables in an HFSS instance.
+
+    Usage:
+    ```
+    from functools import partial
+
+    hfss = Hfss(...)
+    Variable = partial(MyVariable, hfss=hfss)
+
+    var1 = Variable("3.14 mm", "var1")
+    ```
+    """
+
     def __init__(self, expression: str, name: str, hfss: Hfss):
         super().__init__(expression, name=name, app=hfss)  # pyright: ignore
         self.expression = expression
