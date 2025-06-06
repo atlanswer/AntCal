@@ -1,17 +1,15 @@
-import { type } from "arktype";
+import * as v from "valibot";
 
-const Theme = type.enumerated("system", "light", "dark");
-export type Theme = typeof Theme.infer;
+const themeSchema = v.fallback(
+  v.picklist(["system", "light", "dark"]),
+  "system",
+);
 
-export function getLocalTheme(): Theme {
+export function getLocalTheme() {
   const localTheme = localStorage.getItem("theme");
 
-  const theme = Theme(localTheme);
+  const parsedTheme = v.parse(themeSchema, localTheme);
+  localStorage.setItem("theme", parsedTheme);
 
-  if (theme instanceof type.errors) {
-    localStorage.setItem("theme", "system");
-    return "system";
-  }
-
-  return theme;
+  return parsedTheme;
 }

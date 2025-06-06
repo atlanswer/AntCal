@@ -1,21 +1,20 @@
 {
-  "$schema": "https://turbo.build/schema.json",
+  "$schema": "./node_modules/turbo/schema.json",
   "ui": "tui",
   "tasks": {
     "dev": {
       "cache": false,
       "persistent": true
     },
-    "lint": {
-      "outputs": []
-    },
-    "check": {
-      "outputs": []
-    },
+    "lint": {},
+    "check": {},
     "build": {
       "dependsOn": ["^build"],
       "env": ["NODE_ENV"],
       "outputs": ["dist/**"]
+    },
+    "preview": {
+      "dependsOn": ["build"]
     }
   }
 }

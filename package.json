@@ -22,7 +22,8 @@
     "dev": "turbo dev",
     "dev:fig": "turbo -F @antcal/figure dev",
     "check": "turbo check",
-    "build": "turbo build"
+    "build": "turbo build",
+    "preview": "turbo preview"
   },
   "devDependencies": {
     "prettier": "^3.5.3",
@@ -31,7 +32,7 @@
     "turbo": "^2.5.4",
     "typescript": "^5.8.3"
   },
-  "packageManager": "bun@1.2.13",
+  "packageManager": "bun@1.2.15",
   "engines": {
     "bun": ">=1.2"
   }
