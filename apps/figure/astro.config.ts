@@ -1,5 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,6 +11,10 @@ export default defineConfig({
   },
   prefetch: {
     prefetchAll: true,
+  },
+  markdown: {
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [rehypeKatex],
   },
   experimental: {
     fonts: [
