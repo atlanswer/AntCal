@@ -28,6 +28,7 @@ export default defineConfig({
     ],
   },
   experimental: {
+    responsiveImages: true,
     fonts: [
       {
         name: "Geist Sans",

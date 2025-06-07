@@ -6,7 +6,9 @@ interface Props {
 
 let { title } = Astro.props;
 
+import { ClientRouter } from "astro:transitions";
 import { Font } from "astro:assets";
+
 import "styles/global.css";
 
 import Header from "components/Header.astro";
@@ -41,31 +43,27 @@ if (title === undefined) {
     />
     <Font cssVariable="--font-geist-sans" preload />
     <Font cssVariable="--font-geist-mono" />
-    <script is:inline>
-      const localTheme = localStorage.getItem("theme");
-      const html = document.documentElement;
-
-      switch (localTheme) {
+    <script is:inline data-astro-rerun>
+      switch (localStorage.getItem("theme")) {
         case "dark":
-          html.classList.add("dark");
+          document.documentElement.classList.add("dark");
           break;
         case "light":
-          html.classList.remove("dark");
+          document.documentElement.classList.remove("dark");
           break;
         default:
           if (globalThis.matchMedia("(prefers-color-scheme: dark)").matches) {
-            html.classList.add("dark");
+            document.documentElement.classList.add("dark");
           } else {
-            html.classList.remove("dark");
+            document.documentElement.classList.remove("dark");
           }
           localStorage.setItem("theme", "system");
       }
     </script>
     <slot name="head-extra" />
+    <ClientRouter />
   </head>
-  <body
-    class="flex min-h-screen min-w-64 flex-col font-sans antialiased motion-reduce:transition-none"
-  >
+  <body class="flex min-h-screen min-w-64 flex-col font-sans antialiased">
     <noscript>AntCal: You need to enable JavaScript to run this app.</noscript>
     <Header />
     <main class="flex-1">
@@ -76,16 +74,16 @@ if (title === undefined) {
 </html>
 
 <style is:global>
-  @reference "styles/global.css"
-
-  .math-display {
-    overflow: auto;
-  }
+  @reference "styles/global.css";
 
   * {
-    scrollbar-width: thin;
-    scrollbar-gutter: stable both-edges;
     @apply transition-colors;
+    @apply motion-reduce:transition-none;
+  }
+
+  html {
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
   }
 
   main {
@@ -96,5 +94,20 @@ if (title === undefined) {
   .dark main {
     background: radial-gradient(circle, #292524 0.1rem, #000000 0.1rem) top
       left / 2rem 2rem;
+  }
+
+  .katex-display {
+    overflow: auto hidden;
+  }
+  .katex-display > .katex {
+    white-space: normal;
+  }
+  /* Add space between broken lines: */
+  .katex-display > .base {
+    margin: 0.25em 0;
+  }
+  /* Compensate by reducing space around display math */
+  .katex-display {
+    margin: 0.5em 0;
   }
 </style>
