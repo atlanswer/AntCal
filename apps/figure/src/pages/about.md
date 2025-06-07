@@ -11,11 +11,11 @@ If you encountered any issue, please reach out to me.
 
 This site is built with the following tools:
 
+- [Bun](https://bun.sh)
 - [Astro](https://astro.build)
 - [Tailwind CSS](https://tailwindcss.com)
 - [Turborepo](https://turbo.build/repo)
-- [Bun](https://bun.sh)
-- [Arktype](https://arktype.io)
+- [Valibot](https://valibot.dev)
   <!-- - [FastAPI](https://fastapi.tiangolo.com) -->
   <!-- - [Numpy](https://numpy.org) -->
   <!-- - [Matplotlib](https://matplotlib.org) -->
@@ -23,14 +23,18 @@ This site is built with the following tools:
 This site is hosted on [Vercel](https://vercel.com)
 and uses the [Geist font](https://vercel.com/font).
 
-### Report
+### Field
 
-Upload data files to generate figures. Work in progress!
+Visualize vector field data with the preferred style.
+
+<!-- ### Report -->
+
+<!-- Upload data files to generate figures. Work in progress! -->
 
 ## Privacy
 
 Your information is processed by the host provider Vercel.
-Their privacy policy can be found here:
+Their privacy policies can be found here:
 [Privacy Policy](https://vercel.com/legal/privacy-policy),
 [Web Analytics Privacy and Compliance](https://vercel.com/docs/analytics/privacy-policy),
 [Speed Insights Privacy and Compliance](https://vercel.com/docs/speed-insights/privacy-policy).
