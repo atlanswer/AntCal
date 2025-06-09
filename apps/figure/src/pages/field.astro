@@ -3,7 +3,32 @@ import BaseLayout from "layouts/Base.astro";
 ---
 
 <BaseLayout>
-  <div class="flex flex-col p-8">
+  <div class="flex flex-col gap-8 p-8">
+    <svg width="3.5in" height="3.5in" class="rounded outline">
+      <rect x={0} y={0} width="100" height={50} stroke="blue"></rect>
+      <rect
+        x="100"
+        y="100"
+        rx="10"
+        ry="20"
+        width="50"
+        height="50"
+        stroke="red"
+        stroke-width="5"></rect>
+    </svg>
+
+    <div
+      style="background-image: linear-gradient(90deg, #781b86 0.0%, #641c97 3.448%, #4e21ac 6.896%, #462eba 10.344%, #3f40c6 13.793%, #3e52cd 17.241%, #4066cf 20.689%, #4377cd 24.137%, #4886c7 27.586%, #4d94bd 31.034%, #559eb1 34.482%, #5da8a3 37.931%, #67ae95 41.379%, #72b585 44.827%, #7cb878 48.275%, #8bbb6a 51.724%, #96bd60 55.172%, #a5be55 58.62%, #b2be4d 62.068%, #c0bb47 65.517%, #ccb842 68.965%, #d6b03e 72.413%, #dea83b 75.862%, #e39b39 79.31%, #e68b35 82.758%, #e77a32 86.206%, #e4632d 89.655%, #e14e2a 93.103%, #de3525 96.551%, #db2121 100.0%);"
+    >
+      <p>:mathematica/rainbow-m</p>
+    </div>
+
+    <div
+      style="background-image: linear-gradient(90deg, #3c5793 0%, #3e5791 3.448%, #3f5790 6.896%, #40588e 10.344%, #425f7e 13.793%, #42666f 17.241%, #446d60 20.689%, #467156 24.137%, #48764d 27.586%, #4d7c44 31.034%, #588342 34.482%, #648a3f 37.931%, #70923e 41.379%, #859d40 44.827%, #95a642 48.275%, #a9b145 51.724%, #b8b848 55.172%, #cac14c 58.62%, #d3c24e 62.068%, #d9be51 65.517%, #dfbc53 68.965%, #dcad51 72.413%, #d69a50 75.862%, #d1884e 79.31%, #c96f48 82.758%, #c25741 86.206%, #ba3d3b 89.655%, #ba3d3b 93.103%, #ba3d3b 96.551%, #ba3d3b 100%);"
+    >
+      <p>:mathematica/dark-rainbow</p>
+    </div>
+
     <svg
       id="field-plot"
       width={262.5}
@@ -12,204 +37,197 @@ import BaseLayout from "layouts/Base.astro";
       class="mx-auto h-[48rem] w-full max-w-[80rem] rounded bg-neutral-200 shadow-xl dark:shadow-neutral-600"
     >
     </svg>
-    <button></button>
   </div>
-
-  <script>
-    import {
-      color,
-      drag,
-      randomUniform,
-      range,
-      select,
-      selectAll,
-      scaleOrdinal,
-      schemeCategory10,
-    } from "d3";
-    import { gridPlanes3D, points3D, lineStrips3D } from "d3-3d";
-
-    const origin = { x: 350, y: 350 };
-    const j = 10;
-    const scale = 20;
-    const startAngle = Math.PI / 4;
-    const colorScale = scaleOrdinal(schemeCategory10);
-
-    let scatter = [];
-    let yLine = [];
-    let xGrid = [];
-    let beta = 0;
-    let alpha = 0;
-    let mx,
-      my,
-      mouseX = 0,
-      mouseY = 0;
-
-    const svg = select("#field-plot")
-      .call(
-        drag().on("drag", dragged).on("start", dragStart).on("end", dragEnd),
-      )
-      .append("g");
-
-    const grid3d = gridPlanes3D()
-      .rows(20)
-      .origin(origin)
-      .rotateY(startAngle)
-      .rotateX(-startAngle)
-      .scale(scale);
-
-    const points3d = points3D()
-      .origin(origin)
-      .rotateY(startAngle)
-      .rotateX(-startAngle)
-      .scale(scale);
-
-    const yScale3d = lineStrips3D()
-      .origin(origin)
-      .rotateY(startAngle)
-      .rotateX(-startAngle)
-      .scale(scale);
-
-    function processData(data, tt) {
-      /* ----------- GRID ----------- */
-
-      const xGrid = svg.selectAll("path.grid-cell").data(data[0], (d) => d.id);
-
-      xGrid
-        .enter()
-        .append("path")
-        .attr("class", "d3-3d grid-cell")
-        .merge(xGrid)
-        .classed("stroke-black", true)
-        .attr("stroke-width", 0.3)
-        .attr("fill", (d) => (d.ccw ? "#eee" : "#aaa"))
-        .attr("fill-opacity", 0.6)
-        .attr("d", grid3d.draw);
-
-      xGrid.exit().remove();
-
-      /* ----------- POINTS ----------- */
-
-      const points = svg.selectAll("circle").data(data[1], (d) => d.id);
-
-      points
-        .enter()
-        .append("circle")
-        .attr("class", "d3-3d")
-        .attr("opacity", 0)
-        .attr("cx", posPointX)
-        .attr("cy", posPointY)
-        .merge(points)
-        .transition()
-        .duration(tt)
-        .attr("r", 3)
-        .attr("stroke", (d) => color(colorScale(d.id)).darker(3))
-        .attr("fill", (d) => colorScale(d.id))
-        .attr("opacity", 1)
-        .attr("cx", posPointX)
-        .attr("cy", posPointY);
-
-      points.exit().remove();
-
-      /* ----------- y-Scale ----------- */
-
-      const yScale = svg.selectAll("path.yScale").data(data[2]);
-
-      yScale
-        .enter()
-        .append("path")
-        .attr("class", "d3-3d yScale")
-        .merge(yScale)
-        .classed("stroke-black", true)
-        .attr("stroke-width", 0.5)
-        .attr("d", yScale3d.draw);
-
-      yScale.exit().remove();
-
-      /* ----------- y-Scale Text ----------- */
-
-      const yText = svg.selectAll("text.yText").data(data[2][0]);
-
-      yText
-        .enter()
-        .append("text")
-        .attr("class", "d3-3d yText")
-        .classed("fill-black", true)
-        .attr("font-family", "system-ui, sans-serif")
-        .merge(yText)
-        .each(function (d) {
-          d.centroid = { x: d.rotated.x, y: d.rotated.y, z: d.rotated.z };
-        })
-        .attr("x", (d) => d.projected.x)
-        .attr("y", (d) => d.projected.y)
-        .text((d) => (d.y <= 0 ? d.y : ""));
-
-      yText.exit().remove();
-
-      selectAll(".d3-3d").sort(points3d.sort);
-    }
-
-    function posPointX(d) {
-      return d.projected.x;
-    }
-
-    function posPointY(d) {
-      return d.projected.y;
-    }
-
-    function init() {
-      xGrid = [];
-      scatter = [];
-      yLine = [];
-
-      let cnt = 0;
-
-      for (let z = -j; z < j; z++) {
-        for (let x = -j; x < j; x++) {
-          xGrid.push({ x: x, y: 1, z: z });
-          scatter.push({
-            x: x,
-            y: randomUniform(0, -10)(),
-            z: z,
-            id: "point-" + cnt++,
-          });
-        }
-      }
-
-      range(-1, 11, 1).forEach((d) => {
-        yLine.push({ x: -j, y: -d, z: -j });
-      });
-
-      const data = [grid3d(xGrid), points3d(scatter), yScale3d([yLine])];
-      processData(data, 1000);
-    }
-
-    function dragStart(event) {
-      mx = event.x;
-      my = event.y;
-    }
-
-    function dragged(event) {
-      beta = (event.x - mx + mouseX) * (Math.PI / 230);
-      alpha = (event.y - my + mouseY) * (Math.PI / 230) * -1;
-
-      const data = [
-        grid3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(xGrid),
-        points3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(
-          scatter,
-        ),
-        yScale3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)([
-          yLine,
-        ]),
-      ];
-
-      processData(data, 0);
-    }
-
-    function dragEnd(event) {
-      mouseX = event.x - mx + mouseX;
-      mouseY = event.y - my + mouseY;
-    }
-
-    init();
-  </script>
 </BaseLayout>
+
+<script>
+  import {
+    color,
+    drag,
+    randomUniform,
+    range,
+    select,
+    selectAll,
+    scaleOrdinal,
+    schemeCategory10,
+  } from "d3";
+  import { gridPlanes3D, points3D, lineStrips3D } from "d3-3d";
+
+  const origin = { x: 350, y: 350 };
+  const j = 10;
+  const scale = 20;
+  const startAngle = Math.PI / 4;
+  const colorScale = scaleOrdinal(schemeCategory10);
+
+  let scatter = [];
+  let yLine = [];
+  let xGrid = [];
+  let beta = 0;
+  let alpha = 0;
+  let mx,
+    my,
+    mouseX = 0,
+    mouseY = 0;
+
+  const svg = select("#field-plot")
+    .call(drag().on("drag", dragged).on("start", dragStart).on("end", dragEnd))
+    .append("g");
+
+  const grid3d = gridPlanes3D()
+    .rows(20)
+    .origin(origin)
+    .rotateY(startAngle)
+    .rotateX(-startAngle)
+    .scale(scale);
+
+  const points3d = points3D()
+    .origin(origin)
+    .rotateY(startAngle)
+    .rotateX(-startAngle)
+    .scale(scale);
+
+  const yScale3d = lineStrips3D()
+    .origin(origin)
+    .rotateY(startAngle)
+    .rotateX(-startAngle)
+    .scale(scale);
+
+  function processData(data, tt) {
+    /* ----------- GRID ----------- */
+
+    const xGrid = svg.selectAll("path.grid-cell").data(data[0], (d) => d.id);
+
+    xGrid
+      .enter()
+      .append("path")
+      .attr("class", "d3-3d grid-cell")
+      .merge(xGrid)
+      .classed("stroke-black", true)
+      .attr("stroke-width", 0.3)
+      .attr("fill", (d) => (d.ccw ? "#eee" : "#aaa"))
+      .attr("fill-opacity", 0.6)
+      .attr("d", grid3d.draw);
+
+    xGrid.exit().remove();
+
+    /* ----------- POINTS ----------- */
+
+    const points = svg.selectAll("circle").data(data[1], (d) => d.id);
+
+    points
+      .enter()
+      .append("circle")
+      .attr("class", "d3-3d")
+      .attr("opacity", 0)
+      .attr("cx", posPointX)
+      .attr("cy", posPointY)
+      .merge(points)
+      .transition()
+      .duration(tt)
+      .attr("r", 3)
+      .attr("stroke", (d) => color(colorScale(d.id)).darker(3))
+      .attr("fill", (d) => colorScale(d.id))
+      .attr("opacity", 1)
+      .attr("cx", posPointX)
+      .attr("cy", posPointY);
+
+    points.exit().remove();
+
+    /* ----------- y-Scale ----------- */
+
+    const yScale = svg.selectAll("path.yScale").data(data[2]);
+
+    yScale
+      .enter()
+      .append("path")
+      .attr("class", "d3-3d yScale")
+      .merge(yScale)
+      .classed("stroke-black", true)
+      .attr("stroke-width", 0.5)
+      .attr("d", yScale3d.draw);
+
+    yScale.exit().remove();
+
+    /* ----------- y-Scale Text ----------- */
+
+    const yText = svg.selectAll("text.yText").data(data[2][0]);
+
+    yText
+      .enter()
+      .append("text")
+      .attr("class", "d3-3d yText")
+      .classed("fill-black", true)
+      .attr("font-family", "system-ui, sans-serif")
+      .merge(yText)
+      .each(function (d) {
+        d.centroid = { x: d.rotated.x, y: d.rotated.y, z: d.rotated.z };
+      })
+      .attr("x", (d) => d.projected.x)
+      .attr("y", (d) => d.projected.y)
+      .text((d) => (d.y <= 0 ? d.y : ""));
+
+    yText.exit().remove();
+
+    selectAll(".d3-3d").sort(points3d.sort);
+  }
+
+  function posPointX(d) {
+    return d.projected.x;
+  }
+
+  function posPointY(d) {
+    return d.projected.y;
+  }
+
+  function init() {
+    xGrid = [];
+    scatter = [];
+    yLine = [];
+
+    let cnt = 0;
+
+    for (let z = -j; z < j; z++) {
+      for (let x = -j; x < j; x++) {
+        xGrid.push({ x: x, y: 1, z: z });
+        scatter.push({
+          x: x,
+          y: randomUniform(0, -10)(),
+          z: z,
+          id: "point-" + cnt++,
+        });
+      }
+    }
+
+    range(-1, 11, 1).forEach((d) => {
+      yLine.push({ x: -j, y: -d, z: -j });
+    });
+
+    const data = [grid3d(xGrid), points3d(scatter), yScale3d([yLine])];
+    processData(data, 1000);
+  }
+
+  function dragStart(event) {
+    mx = event.x;
+    my = event.y;
+  }
+
+  function dragged(event) {
+    beta = (event.x - mx + mouseX) * (Math.PI / 230);
+    alpha = (event.y - my + mouseY) * (Math.PI / 230) * -1;
+
+    const data = [
+      grid3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(xGrid),
+      points3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(scatter),
+      yScale3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)([yLine]),
+    ];
+
+    processData(data, 0);
+  }
+
+  function dragEnd(event) {
+    mouseX = event.x - mx + mouseX;
+    mouseY = event.y - my + mouseY;
+  }
+
+  init();
+</script>
