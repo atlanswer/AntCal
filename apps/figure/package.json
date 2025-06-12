@@ -24,7 +24,7 @@
     "@astrojs/tailwind": "~6.0.2",
     "@astrojs/ts-plugin": "~1.10.4",
     "@tailwindcss/typography": "~0.5.16",
-    "@tailwindcss/vite": "~4.1.8",
+    "@tailwindcss/vite": "~4.1.10",
     "@types/d3": "~7.4.3",
     "@types/d3-3d": "~1.0.0",
     "astro": "~5.9.2",
@@ -34,7 +34,7 @@
     "rehype-external-links": "^3.0.0",
     "rehype-katex": "~7.0.1",
     "remark-math": "~6.0.0",
-    "tailwindcss": "~4.1.8",
+    "tailwindcss": "~4.1.10",
     "valibot": "~1.1.0"
   }
 }
