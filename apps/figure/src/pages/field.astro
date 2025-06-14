@@ -4,18 +4,48 @@ import BaseLayout from "layouts/Base.astro";
 
 <BaseLayout>
   <div class="flex flex-col gap-8 p-8">
-    <svg width="3.5in" height="3.5in" class="rounded outline">
-      <rect x={0} y={0} width="100" height={50} stroke="blue"></rect>
-      <rect
-        x="100"
-        y="100"
-        rx="10"
-        ry="20"
-        width="50"
-        height="50"
-        stroke="red"
-        stroke-width="5"></rect>
-    </svg>
+    <script>
+      import * as d3 from "d3";
+      const matrix = [
+        [11975, 5871, 8916, 2868],
+        [1951, 10048, 2060, 6171],
+        [8010, 16145, 8090, 8045],
+        [1013, 990, 940, 6907],
+      ];
+
+      d3.select("main")
+        .append("table")
+        .selectAll("tr")
+        .data(matrix)
+        .join("tr")
+        .selectAll("td")
+        .data((d) => d)
+        .join("td")
+        .text((d) => d);
+    </script>
+
+    <svg id="svg1" width="3.5in" height="3.5in" class="rounded outline"> </svg>
+    <script>
+      import * as d3 from "d3";
+      import * as d3d from "d3-3d";
+
+      const data3D: d3d.Triangle3DInput[] = [
+        [
+          { x: 0, y: -1, z: 0 },
+          { x: -1, y: 1, z: 0 },
+          { x: 1, y: 1, z: 0 },
+        ],
+      ];
+      const triangles3d = d3d.triangles3D().scale(100).origin({ x: 50, y: 50 });
+      const projectedData = triangles3d(data3D);
+
+      function draw(data: d3d.Triangle3DInput[]) {
+        d3.select("#svg1").append("g").append("path").data(data);
+      }
+
+      draw(projectedData);
+    </script>
+
     <div
       style="background-image: linear-gradient(
         90deg,

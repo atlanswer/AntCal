@@ -1,6 +1,6 @@
 {
   "name": "antcal",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "Antenna Calculator",
   "author": "Atlanswer",
   "license": "MIT",
@@ -32,7 +32,7 @@
     "turbo": "^2.5.4",
     "typescript": "^5.8.3"
   },
-  "packageManager": "bun@1.2.15",
+  "packageManager": "bun@1.2.16",
   "engines": {
     "bun": ">=1.2"
   }
