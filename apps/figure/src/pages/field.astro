@@ -4,12 +4,34 @@ import BaseLayout from "layouts/Base.astro";
 
 <BaseLayout>
   <div class="flex flex-col gap-8 p-8">
+    <p id="scale"></p>
+    <script>
+      import * as d3 from "d3";
+
+      const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+      color.domain(
+        "A list of ten words to explore this scale’s domain".split(/ /),
+      );
+
+      d3.select("#scale")
+        .selectAll("span")
+        .data(color.domain())
+        .join("span")
+        .text((d) => d)
+        .style("padding", "0.5rem")
+        .style("background", (d) => color(d));
+    </script>
+
     <svg id="demo" width="3.5in" height="3.5in"></svg>
     <script>
       import * as d3 from "d3";
       import * as d3d from "d3-3d";
 
-      const points3d = d3d.points3D();
+      const scale = 20;
+
+      const points3d = d3d.points3D().scale(scale);
+      const xAxis = d3d.lineStrips3D().scale(scale);
 
       const points: d3d.Point3DInput[] = [
         { x: 0, y: 0, z: 0 },
@@ -19,9 +41,11 @@ import BaseLayout from "layouts/Base.astro";
       ];
 
       function draw() {
-        const { width, height } = document
-          .getElementById("demo")!
-          .getBoundingClientRect();
+        const demo = document.getElementById("demo");
+        if (demo === null) return;
+
+        const { width, height } = demo.getBoundingClientRect();
+        const origin: d3d.Coordinate2D = { x: width / 2, y: height / 2 };
 
         const svg = d3.select("#demo");
 
@@ -39,9 +63,7 @@ import BaseLayout from "layouts/Base.astro";
         svg
           .append("g")
           .selectAll("circle")
-          .data(
-            points3d.origin({ x: width / 2, y: height / 2 }).scale(10)(points),
-          )
+          .data(points3d.origin(origin)(points))
           .join("circle")
           .attr("cx", (d) => d.projected.x)
           .attr("cy", (d) => d.projected.y)

@@ -43,22 +43,26 @@ if (title === undefined) {
     />
     <Font cssVariable="--font-geist-sans" preload />
     <Font cssVariable="--font-geist-mono" />
-    <script is:inline data-astro-rerun>
-      switch (localStorage.getItem("theme")) {
-        case "dark":
-          document.documentElement.classList.add("dark");
-          break;
-        case "light":
-          document.documentElement.classList.remove("dark");
-          break;
-        default:
-          if (globalThis.matchMedia("(prefers-color-scheme: dark)").matches) {
+    <script is:inline>
+      function syncTheme() {
+        switch (localStorage.getItem("theme")) {
+          case "dark":
             document.documentElement.classList.add("dark");
-          } else {
+            break;
+          case "light":
             document.documentElement.classList.remove("dark");
-          }
-          localStorage.setItem("theme", "system");
+            break;
+          default:
+            if (globalThis.matchMedia("(prefers-color-scheme: dark)").matches) {
+              document.documentElement.classList.add("dark");
+            } else {
+              document.documentElement.classList.remove("dark");
+            }
+            localStorage.setItem("theme", "system");
+        }
       }
+      syncTheme();
+      document.addEventListener("astro:after-swap", syncTheme);
     </script>
     <slot name="head-extra" />
     <ClientRouter />
