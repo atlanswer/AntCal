@@ -8,9 +8,7 @@ const pages: { name: string; href: string }[] = [
 ] as const;
 ---
 
-<nav
-  class="flex flex-1 font-semibold leading-loose text-black sm:place-content-center dark:text-white"
->
+<nav class="flex flex-1 font-semibold leading-loose sm:place-content-center">
   <span class="inline-block [&>:not(:first-child)]:ml-6">
     {
       pages.map((page) => (
