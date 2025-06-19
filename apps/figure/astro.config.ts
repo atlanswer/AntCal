@@ -1,5 +1,6 @@
-import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import tailwindcss from "@tailwindcss/vite";
+import solid from "@astrojs/solid-js";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeExternalLinks from "rehype-external-links";
@@ -7,6 +8,7 @@ import rehypeExternalLinks from "rehype-external-links";
 // https://astro.build/config
 export default defineConfig({
   site: "https://antcal.atlanswer.com",
+  integrations: [solid()],
   vite: {
     plugins: [tailwindcss()],
   },
