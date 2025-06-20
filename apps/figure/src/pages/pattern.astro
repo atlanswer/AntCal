@@ -1,9 +1,3 @@
 ---
 import BaseLayout from "layouts/Base.astro";
-
-const globRes = import.meta.glob("src/pages/*.{astro,md}");
 ---
-
-<BaseLayout title="Radiation Pattern">
-  {Object.keys(globRes).map((key) => <p>{key}</p>)}
-</BaseLayout>

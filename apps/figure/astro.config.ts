@@ -30,7 +30,8 @@ export default defineConfig({
     ],
   },
   experimental: {
-    responsiveImages: true,
+    contentIntellisense: true,
+    clientPrerender: true,
     fonts: [
       {
         name: "Geist Sans",
