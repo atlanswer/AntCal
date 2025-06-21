@@ -1,6 +1,6 @@
 {
   "name": "@antcal/figure",
-  "version": "0.23.0",
+  "version": "0.23.1",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": true,
@@ -20,23 +20,21 @@
     "check": "astro check"
   },
   "devDependencies": {
-    "@astrojs/check": "~0.9.4",
-    "@astrojs/solid-js": "~5.1.0",
-    "@astrojs/tailwind": "~6.0.2",
-    "@astrojs/ts-plugin": "~1.10.4",
-    "@tailwindcss/typography": "~0.5.16",
-    "@tailwindcss/vite": "~4.1.10",
-    "@types/d3": "~7.4.3",
-    "@types/d3-3d": "~1.0.0",
-    "astro": "~5.10.0",
-    "d3": "~7.9.0",
-    "d3-3d": "~1.0.0",
-    "geist": "~1.4.2",
-    "rehype-external-links": "~3.0.0",
-    "rehype-katex": "~7.0.1",
-    "remark-math": "~6.0.0",
-    "tailwindcss": "~4.1.10",
-    "typescript": "^5.8.3",
-    "valibot": "~1.1.0"
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/solid-js": "^5.1.0",
+    "@astrojs/ts-plugin": "^1.10.4",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.1.10",
+    "@types/d3": "^7.4.3",
+    "@types/d3-3d": "^1.0.0",
+    "astro": "^5.10.0",
+    "d3": "^7.9.0",
+    "d3-3d": "^1.0.0",
+    "geist": "^1.4.2",
+    "rehype-external-links": "^3.0.0",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
+    "tailwindcss": "^4.1.10",
+    "valibot": "^1.1.0"
   }
 }

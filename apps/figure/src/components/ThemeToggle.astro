@@ -6,9 +6,8 @@ import IconLight from "components/icons/IconLight.astro";
 <button
   id="theme-toggle"
   title="Switch Theme"
-  class="h-8 w-8 rounded p-1 text-neutral-500 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring dark:hover:text-neutral-300"
+  class="h-8 w-8 rounded p-1 text-neutral-500 hover:text-neutral-700 focus-visible:ring focus-visible:outline-none dark:hover:text-neutral-300"
   aria-label="Switch light/dark theme"
-  transition:persist
 >
   <IconLight />
 </button>
@@ -16,40 +15,42 @@ import IconLight from "components/icons/IconLight.astro";
 <script>
   import { getLocalTheme } from "components/theme";
 
-  const themeToggle = document.getElementById("theme-toggle");
-  const html = document.documentElement;
+  document.addEventListener("astro:page-load", () => {
+    const themeToggle = document.getElementById("theme-toggle");
+    const html = document.documentElement;
 
-  themeToggle!.onclick = () => {
-    const localTheme = getLocalTheme();
-    const preferDark = globalThis.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
+    themeToggle!.onclick = () => {
+      const localTheme = getLocalTheme();
+      const preferDark = globalThis.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
 
-    switch (localTheme) {
-      case "light":
-        if (preferDark) {
-          localStorage.setItem("theme", "system");
-        } else {
-          localStorage.setItem("theme", "dark");
-        }
-        html.classList.add("dark");
-        return;
-      case "dark":
-        if (preferDark) {
-          localStorage.setItem("theme", "light");
-        } else {
-          localStorage.setItem("theme", "system");
-        }
-        html.classList.remove("dark");
-        return;
-      default:
-        if (preferDark) {
-          localStorage.setItem("theme", "light");
-          html.classList.remove("dark");
-        } else {
-          localStorage.setItem("theme", "dark");
+      switch (localTheme) {
+        case "light":
+          if (preferDark) {
+            localStorage.setItem("theme", "system");
+          } else {
+            localStorage.setItem("theme", "dark");
+          }
           html.classList.add("dark");
-        }
-    }
-  };
+          return;
+        case "dark":
+          if (preferDark) {
+            localStorage.setItem("theme", "light");
+          } else {
+            localStorage.setItem("theme", "system");
+          }
+          html.classList.remove("dark");
+          return;
+        default:
+          if (preferDark) {
+            localStorage.setItem("theme", "light");
+            html.classList.remove("dark");
+          } else {
+            localStorage.setItem("theme", "dark");
+            html.classList.add("dark");
+          }
+      }
+    };
+  });
 </script>

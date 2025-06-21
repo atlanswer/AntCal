@@ -5,9 +5,7 @@ const { pathname } = Astro.url;
 ---
 
 <BaseLayout title="Page Not Found">
-  <article
-    class="prose dark:prose-invert mx-auto my-48 flex flex-col items-center"
-  >
+  <article class="mx-auto my-48 prose text-center dark:prose-invert">
     <p>
       You are visiting the page <code>{pathname}</code> which does not exist.
     </p>
