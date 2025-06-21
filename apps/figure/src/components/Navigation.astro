@@ -17,7 +17,7 @@ const pages: { name: string; href: string }[] = [
         <a
           href={page.href}
           class="border-b-4 border-transparent px-2 pt-4 pb-3 text-center not-[&.active]:hover:border-neutral-300 focus-visible:ring focus-visible:outline-none not-[&.active]:dark:hover:border-neutral-700 [&.active]:border-sky-500"
-          class:list={[{ active: page.href === pathname }]}
+          class:list={[{ active: pathname.startsWith(page.href) }]}
         >
           {page.name}
         </a>
