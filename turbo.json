@@ -6,7 +6,6 @@
       "cache": false,
       "persistent": true
     },
-    "lint": {},
     "check": {},
     "build": {
       "dependsOn": ["^build"],

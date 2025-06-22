@@ -1,11 +1,11 @@
 {
   "name": "@antcal/figure",
-  "version": "0.23.1",
+  "version": "0.23.2",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": true,
   "type": "module",
-  "homepage": "https://astro.atlanswer.com/",
+  "homepage": "https://antcal.atlanswer.com/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atlanswer/AntCal.git"
@@ -15,9 +15,9 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "check": "astro check",
     "build": "astro build",
-    "preview": "astro preview",
-    "check": "astro check"
+    "preview": "astro preview"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",

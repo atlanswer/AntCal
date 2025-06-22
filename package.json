@@ -20,7 +20,6 @@
   },
   "scripts": {
     "dev": "turbo dev",
-    "dev:fig": "turbo -F @antcal/figure dev",
     "check": "turbo check",
     "build": "turbo build",
     "preview": "turbo preview"

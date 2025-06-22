@@ -2,11 +2,12 @@
 
 [![Read the Docs](https://readthedocs.org/projects/antcal/badge/?version=latest)](https://antcal.readthedocs.io)
 [![PyPI - Version](https://img.shields.io/pypi/v/antcal?logo=pypi)](https://pypi.org/project/antcal)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/antcal?logo=pypi) ![PyPI - Status](https://img.shields.io/pypi/status/antcal?logo=pypi)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/antcal?logo=pypi)
+![PyPI - Status](https://img.shields.io/pypi/status/antcal?logo=pypi)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/antcal?logo=pypi)
 [![MIT license](https://img.shields.io/pypi/l/antcal?logo=pypi)](https://opensource.org/licenses/MIT)
 
-Figure (Radiation Pattern Tool): https://antcal.atlanswer.com<br>
+AntCal Web App: https://antcal.atlanswer.com<br/>
 Dev version: https://dev.antcal.atlanswer.com
 
 ## Usage
@@ -23,16 +24,15 @@ pip install antcal
 
 ## Development
 
-### Figure
+### Web App
 
 ```shell
 bun i
-bun dev:fig
-bun dev:api
-bun run build
+bun dev
+bun preview
 ```
 
-### AntCal Python package
+### Python package
 
 ```shell
 cd python
@@ -49,7 +49,7 @@ uv run flit publish
 AntCal C++ package
 </summary>
 
-### AntCal C++ package
+###  C++ package
 
 **Currently in backlog**
 

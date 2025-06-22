@@ -1,0 +1,40 @@
+[project]
+name = "figure"
+dynamic = ["version"]
+description = "AntCal Figure web app"
+requires-python = ">=3.12"
+authors = [{ name = "Atlanswer", email = "atlanswer@gmail.com" }]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Development Status :: 4 - Beta",
+]
+dependencies = [
+  "fastapi[standard]>=0.115",
+  "matplotlib>=3.10",
+  "numpy>=2.3",
+  "openpyxl>=3.1",
+  "orjson>=3.10",
+]
+
+[dependency-groups]
+dev = ["ipykernel>=6.29", "ruff>=0.1"]
+
+[project.urls]
+Homepage = "https://github.com/atlanswer/AntCal"
+Repository = "https://github.com/atlanswer/AntCal.git"
+Documentation = "https://github.com/atlanswer/AntCal#readme"
+Issues = "https://github.com/atlanswer/AntCal/issue"
+
+[tool.setuptools.dynamic]
+version = { attr = "api.__version__" }
+
+[tool.ruff]
+line-length = 80
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "UP", "B", "SIM", "I"]
+
+[tool.pyright]
+typeCheckingMode = "standard"
