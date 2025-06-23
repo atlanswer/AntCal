@@ -1,7 +1,5 @@
-import { MetaProvider } from "@solidjs/meta";
+import { MetaProvider, Title } from "@solidjs/meta";
 import ErrorPage from "components/ErrorPage";
-import { Title } from "@solidjs/meta";
-import { useSearchParams } from "@solidjs/router";
 import { AddFigure } from "components/figure/AddFigure";
 import { FigureSection } from "components/figure/FigureSection";
 import {
