@@ -1,6 +1,6 @@
 {
   "name": "@antcal/figure",
-  "version": "0.23.2",
+  "version": "0.23.4",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": true,
@@ -15,6 +15,7 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "dev:api": "uv run --env-file .env.development -- fastapi dev api/main.py",
     "check": "astro check",
     "build": "astro build",
     "preview": "astro preview"
@@ -27,6 +28,8 @@
     "@tailwindcss/vite": "^4.1.10",
     "@types/d3": "^7.4.3",
     "@types/d3-3d": "^1.0.0",
+    "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "astro": "^5.10.0",
     "d3": "^7.9.0",
     "d3-3d": "^1.0.0",

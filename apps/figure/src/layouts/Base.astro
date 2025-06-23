@@ -8,6 +8,8 @@ let { title } = Astro.props;
 
 import { ClientRouter } from "astro:transitions";
 import { Font } from "astro:assets";
+import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
 
 import "styles/global.css";
 
@@ -64,8 +66,9 @@ if (title === undefined) {
       syncTheme();
       document.addEventListener("astro:after-swap", syncTheme);
     </script>
-    <slot name="head-extra" />
+    <Analytics />
     <ClientRouter />
+    <slot name="head-extra" />
   </head>
   <body
     class="flex min-h-screen min-w-64 flex-col font-sans text-black subpixel-antialiased dark:text-white"
@@ -76,5 +79,6 @@ if (title === undefined) {
       <slot />
     </main>
     <Footer />
+    <SpeedInsights />
   </body>
 </html>

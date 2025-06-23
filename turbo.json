@@ -6,14 +6,10 @@
       "cache": false,
       "persistent": true
     },
-    "check": {},
     "build": {
       "dependsOn": ["^build"],
       "env": ["NODE_ENV"],
       "outputs": ["dist/**"]
-    },
-    "preview": {
-      "dependsOn": ["build"]
     }
   }
 }

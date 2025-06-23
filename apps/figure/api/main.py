@@ -18,9 +18,9 @@ app = FastAPI(
     default_response_class=ORJSONResponse,
 )
 
-VITE_API_URL = getenv("VITE_API_URL")
+PUBLIC_API_URL = getenv("PUBLIC_API_URL")
 
-isDev = bool(VITE_API_URL is not None and "localhost" in VITE_API_URL)
+isDev = bool(PUBLIC_API_URL is not None and "localhost" in PUBLIC_API_URL)
 
 if isDev:
     app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:4321"])

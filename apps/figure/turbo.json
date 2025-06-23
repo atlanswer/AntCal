@@ -1,0 +1,20 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "dev": {
+      "with": ["dev:api"]
+    },
+    "dev:api": {
+      "cache": false,
+      "persistent": true
+    },
+    "check": {},
+    "build": {
+      "outputs": ["dist/**", ".astro/**"]
+    },
+    "preview": {
+      "dependsOn": ["build"]
+    }
+  }
+}
