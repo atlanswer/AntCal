@@ -1,6 +1,6 @@
 ---
 import Navigation from "components/Navigation.astro";
-import ThemeToggle from "components/ThemeToggle.astro";
+import ThemeToggle from "components/ThemeToggle";
 ---
 
 <header
@@ -12,6 +12,6 @@ import ThemeToggle from "components/ThemeToggle.astro";
   >
     <span class="hidden w-8 sm:inline"></span>
     <Navigation />
-    <ThemeToggle />
+    <ThemeToggle client:only="solid-js" />
   </div>
 </header>
