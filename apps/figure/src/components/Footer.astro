@@ -1,21 +1,26 @@
 ---
 import { version } from "package.json";
-import IconStatus from "components/icons/IconStatus.astro";
-import IconGitHub from "components/icons/IconGitHub.astro";
-// import IconTime from "components/icons/IconTime.astro";
+import Beaker from "components/icons/Beaker.astro";
+import Cloud from "components/icons/Cloud.astro";
+import GitHub from "components/icons/GitHub.astro";
+
+const API_URL = import.meta.env.PUBLIC_API_URL;
+const VERCEL_ENV = import.meta.env.VERCEL_ENV ?? "development";
 ---
 
 <footer
   class="border-t border-neutral-300 bg-neutral-200 p-8 dark:border-neutral-700 dark:bg-neutral-800"
   transition:name="footer"
 >
-  <div class="mx-auto flex max-w-screen-xl flex-col gap-4 sm:flex-row sm:gap-8">
-    <span>
+  <div
+    class="mx-auto flex max-w-screen-xl flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-8"
+  >
+    <span class="text-nowrap">
       Built by
-      <span> </span>
       <a
         href="https://github.com/atlanswer"
         target="_blank"
+        rel="noopener"
         class="font-medium underline underline-offset-4"
       >
         @atlanswer
@@ -24,15 +29,14 @@ import IconGitHub from "components/icons/IconGitHub.astro";
     <a
       href="https://status.atlanswer.com"
       target="_blank"
+      rel="noopener"
       class="flex place-items-center gap-1"
     >
-      <IconStatus />
+      <Cloud />
       <span class="underline underline-offset-4">Status</span>
     </a>
-    <!-- <span class="flex place-items-center gap-1"> -->
-    <!--   <IconTime /> -->
-    <!--   <span>{} ms</span> -->
-    <!-- </span> -->
+    <a>{VERCEL_ENV === "production" ? "Dev Build" : "Production Build"}</a>
+    <code class="text-nowrap">API: {API_URL}</code>
     <span class="flex place-items-center gap-1.5 sm:ml-auto">
       <span>v{version}</span>
       <a
@@ -40,7 +44,7 @@ import IconGitHub from "components/icons/IconGitHub.astro";
         target="_blank"
         class="flex place-items-center gap-1.5"
       >
-        <IconGitHub />
+        <GitHub />
         <span class="underline underline-offset-4">Source</span>
       </a>
     </span>
