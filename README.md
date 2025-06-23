@@ -49,7 +49,7 @@ uv run flit publish
 AntCal C++ package
 </summary>
 
-###  C++ package
+### C++ package
 
 **Currently in backlog**
 
