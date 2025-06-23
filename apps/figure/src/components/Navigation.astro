@@ -1,12 +1,12 @@
 ---
 const pathname = Astro.url.pathname;
 
-const pages: { name: string; href: string }[] = [
-  { name: "Field", href: "/field" },
-  { name: "RP", href: "/pattern" },
+const pages: { title: string; path: string }[] = [
+  { title: "Field", path: "/field" },
+  { title: "Pattern", path: "/pattern" },
   // { name: "Report", href: "/report" },
-  { name: "Docs", href: "/docs" },
-  { name: "About", href: "/about" },
+  { title: "Docs", path: "/docs" },
+  { title: "About", path: "/about" },
 ] as const;
 ---
 
@@ -15,11 +15,11 @@ const pages: { name: string; href: string }[] = [
     {
       pages.map((page) => (
         <a
-          href={page.href}
+          href={page.path}
           class="border-b-4 border-transparent px-2 pt-4 pb-3 text-center not-[&.active]:hover:border-neutral-300 focus-visible:ring focus-visible:outline-none not-[&.active]:dark:hover:border-neutral-700 [&.active]:border-sky-500"
-          class:list={[{ active: pathname.startsWith(page.href) }]}
+          class:list={[{ active: pathname.startsWith(page.path) }]}
         >
-          {page.name}
+          {page.title}
         </a>
       ))
     }

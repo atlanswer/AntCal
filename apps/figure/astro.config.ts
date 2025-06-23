@@ -4,13 +4,20 @@ import solid from "@astrojs/solid-js";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeExternalLinks from "rehype-external-links";
+import { visualizer } from "rollup-plugin-visualizer";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://antcal.atlanswer.com",
   integrations: [solid()],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      visualizer({
+        emitFile: true,
+        filename: "bundle.html",
+      }),
+    ],
   },
   prefetch: {
     prefetchAll: true,
