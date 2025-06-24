@@ -4,7 +4,13 @@ layout: layouts/Markdown.astro
 
 # AntCal Documentation
 
+## Field
+
+Visualize vector fields in an interactive SVG. Work in progress!
+
 ## Radiation Pattern
+
+Limitations:
 
 - Currently all sources are positioned at the origin
 - Amplitudes are normalized to the maximum radiation of E-/M-dipole respectively
