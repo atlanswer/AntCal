@@ -11,9 +11,6 @@ class Source(TypedDict):
     type: Literal["E", "M"]
     lpwl: float
     direction: Literal["+X", "+Y", "+Z"]
-    x: float
-    y: float
-    z: float
     amplitude: float
     phase: float
 

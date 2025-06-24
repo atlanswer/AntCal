@@ -1,32 +1,42 @@
 import type { Source } from "components/figure/context";
-import { Suspense, type Component } from "solid-js";
+import { createResource, Suspense, untrack, type Component } from "solid-js";
 
-export const SourcePreview: Component<{ sources: Source[] }> = () => {
-  // const [sourcesPreviewData] = createResource(
-  // () => JSON.stringify(props.sources),
-  // async () => {
-  //   const t_start = Date.now();
+export const SourcePreview: Component<{ sources: Source[] }> = (props) => {
+  const [sourcesPreviewData] = createResource(
+    () => JSON.stringify(props.sources),
+    async () => {
+      const sources = untrack(() => props.sources);
 
-  //   return `data:image/svg+xml,${encodeURIComponent(svgData)}`;
-  // },
-  // () => "Source Preview is Under Construction",
-  // );
+      const query = new URLSearchParams({
+        src: encodeURIComponent(JSON.stringify(sources)),
+      });
+
+      const url = new URL(
+        `${import.meta.env.PUBLIC_API_URL}/source-preview?${query.toString()}`,
+      );
+
+      const res = await fetch(url);
+
+      if (res.ok) {
+        return `data:image/svg+xml,${encodeURIComponent(await res.text())}`;
+      } else {
+        throw new Error(
+          `Error ploting source preview: API response with status code ${res.status}.`,
+        );
+      }
+    },
+  );
 
   return (
-    <figure class="flex h-44 w-44 place-content-center place-items-center rounded-md bg-neutral-100 text-black shadow-md outline-1 outline-neutral-500 dark:bg-neutral-800 dark:text-white dark:outline">
+    <figure class="flex h-[252px] w-[252px] place-content-center place-items-center rounded-md bg-neutral-100 shadow-md dark:bg-neutral-800">
       <Suspense fallback={<SourcePreviewLoading />}>
-        {/* <img
-          width="176"
-          height="176"
+        <img
+          width="252"
+          height="252"
           class="rounded-md"
           src={sourcesPreviewData.latest ?? ""}
           alt="Source Preview"
-        /> */}
-        <p class="text-center font-semibold">
-          Source Preview is
-          <br />
-          Under Construction
-        </p>
+        />
       </Suspense>
     </figure>
   );

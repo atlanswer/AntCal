@@ -57,11 +57,8 @@ def plot_plane(config: PlaneConf) -> FigureResponse:
     lin_min = config.linMin
     axis_step = np.deg2rad(config.axisStepDeg)
 
-    x = np.arange(0, 2 * pi, axis_step, np.float64)
-
-    fig = plot_blank()
-
-    return FigureResponse(maxD=0, hpbw=0, figData=fig.decode())
+    x = np.linspace(0, 2 * pi, int(360 / axis_step) + 1, dtype=np.float64)
+    n_samples = len(x)
 
     match plane:
         case "YZ":
@@ -84,23 +81,23 @@ def plot_plane(config: PlaneConf) -> FigureResponse:
         src_phase = np.deg2rad(s["phase"])
         match s["type"], s["direction"]:
             case "E", "+X":
-                theta_b = np.cos(theta) * np.cos(phi)
-                phi_b = np.sin(phi)
+                theta_b = np.cos(axis_theta) * np.cos(axis_phi)
+                phi_b = np.sin(axis_phi)
             case "M", "+X":
-                theta_b = np.sin(phi)
-                phi_b = np.cos(theta) * np.cos(phi)
+                theta_b = np.sin(axis_phi)
+                phi_b = np.cos(axis_theta) * np.cos(axis_phi)
             case "E", "+Y":
-                theta_b = np.cos(theta) * np.sin(phi)
-                phi_b = np.cos(phi)
+                theta_b = np.cos(axis_theta) * np.sin(axis_phi)
+                phi_b = np.cos(axis_phi)
             case "M", "+Y":
-                theta_b = np.cos(phi)
-                phi_b = np.cos(theta) * np.sin(phi)
+                theta_b = np.cos(axis_phi)
+                phi_b = np.cos(axis_theta) * np.sin(axis_phi)
             case "E", "+Z":
-                theta_b = np.sin(theta)
-                phi_b = np.zeros(n_samples)
+                theta_b = np.sin(axis_theta)
+                phi_b = 0
             case "M", "+Z":
-                theta_b = np.zeros(n_samples)
-                phi_b = np.sin(theta)
+                theta_b = 0
+                phi_b = np.sin(axis_theta)
         theta_b *= src_amp
         phi_b *= src_amp
 
@@ -168,24 +165,27 @@ def plot_plane(config: PlaneConf) -> FigureResponse:
         y_phi = 10 * np.log10(y_phi)
         y_phi[y_phi < db_min] = db_min
 
-    fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
+    fig, ax = plt.subplots(
+        figsize=(3.5, 3.5),
+        subplot_kw={"projection": "polar"},
+    )
     assert isinstance(ax, PolarAxes)
 
     match config.plane, config.db, config.gainTotal:
         case "XY", True, True:
-            ax.plot(phi, y_total_db, clip_on=False)
+            ax.plot(axis_phi, y_total_db, clip_on=False)
         case "XY", False, True:
-            ax.plot(phi, y_total, clip_on=False)
+            ax.plot(axis_phi, y_total, clip_on=False)
         case "XY", _, False:
-            ax.plot(phi, y_theta, clip_on=False)
-            ax.plot(phi, y_phi, clip_on=False)
+            ax.plot(axis_phi, y_theta, clip_on=False)
+            ax.plot(axis_phi, y_phi, clip_on=False)
         case _, True, True:
-            ax.plot(theta, y_total_db, clip_on=False)
+            ax.plot(axis_theta, y_total_db, clip_on=False)
         case _, False, True:
-            ax.plot(theta, y_total, clip_on=False)
+            ax.plot(axis_theta, y_total, clip_on=False)
         case _:
-            ax.plot(theta, y_theta, clip_on=False)
-            ax.plot(theta, y_phi, clip_on=False)
+            ax.plot(axis_theta, y_theta, clip_on=False)
+            ax.plot(axis_theta, y_phi, clip_on=False)
 
     r_locator = MaxNLocator(nbins=4)
     if config.db:
@@ -264,7 +264,7 @@ def plot_source(sources: Sources) -> str:
     scale_factor = 100
 
     fig, ax = plt.subplots(
-        figsize=(2, 2),
+        figsize=(3.5, 3.5),
         subplot_kw={"projection": "3d"},
     )
     assert isinstance(ax, Axes3D)

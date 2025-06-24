@@ -1,5 +1,3 @@
-// spell-checker:words lpwl, hpbw
-
 import {
   createContext,
   untrack,

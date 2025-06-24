@@ -85,7 +85,7 @@ export const PlaneCard: Component<{ plane: Plane; figIdx: number }> = (
   };
 
   return (
-    <div class="flex flex-col gap-2 rounded bg-neutral-100 p-3 text-black shadow-md dark:bg-neutral-800 dark:text-white dark:shadow-none">
+    <div class="flex flex-col gap-2 rounded bg-neutral-100 p-3 shadow-md dark:bg-neutral-800 dark:shadow-none">
       <div class="flex place-content-between gap-2">
         <span class="text-lg">
           <em>{props.plane}</em>-Plane<span> </span>(
@@ -110,7 +110,7 @@ export const PlaneCard: Component<{ plane: Plane; figIdx: number }> = (
           <span>HPBW: {viewPlaneData.latest?.hpbw ?? "-"}°</span>
         </Suspense>
       </div>
-      <div class="flex h-[252px] w-[252px] flex-wrap place-content-center rounded outline outline-1 outline-neutral-100">
+      <div class="flex h-[252px] w-[252px] flex-wrap place-content-center rounded outline-1 outline-neutral-100">
         <Suspense fallback={<ViewPlaneLoading />}>
           <img
             width="252"
