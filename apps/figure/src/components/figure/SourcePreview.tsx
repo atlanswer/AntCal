@@ -11,11 +11,9 @@ export const SourcePreview: Component<{ sources: Source[] }> = (props) => {
         src: encodeURIComponent(JSON.stringify(sources)),
       });
 
-      const url = new URL(
+      const res = await fetch(
         `${import.meta.env.PUBLIC_API_URL}/source-preview?${query.toString()}`,
       );
-
-      const res = await fetch(url);
 
       if (res.ok) {
         return `data:image/svg+xml,${encodeURIComponent(await res.text())}`;
