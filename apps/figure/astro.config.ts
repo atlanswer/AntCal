@@ -8,7 +8,10 @@ import { visualizer } from "rollup-plugin-visualizer";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://antcal.atlanswer.com",
+  site:
+    import.meta.env.VERCEL_ENV === "production" ?
+      "https://antcal.atlanswer.com"
+    : "https://dev.antcal.atlanswer.com",
   integrations: [solid()],
   vite: {
     plugins: [
