@@ -1,128 +1,15 @@
 ---
 import BaseLayout from "layouts/Base.astro";
+
+import DemoColorScheme from "components/d3/DemoColorScheme";
+import FieldPlot from "src/components/field/FieldPlot";
 ---
 
 <BaseLayout>
   <div class="flex flex-col gap-8 p-8">
-    <p id="scale"></p>
-    <script>
-      import * as d3 from "d3";
+    <DemoColorScheme client:only="solid-js" />
 
-      const color = d3.scaleOrdinal(d3.schemeCategory10);
-
-      color.domain(
-        "A list of ten words to explore this scale’s domain".split(/ /),
-      );
-
-      d3.select("#scale")
-        .selectAll("span")
-        .data(color.domain())
-        .join("span")
-        .text((d) => d)
-        .style("padding", "0.5rem")
-        .style("background", (d) => color(d));
-    </script>
-
-    <svg id="demo" width="3.5in" height="3.5in"></svg>
-    <script>
-      import * as d3 from "d3";
-      import * as d3d from "d3-3d";
-
-      const scale = 40;
-
-      const points3d = d3d
-        .points3D()
-        .scale(scale)
-        .rotateZ(Math.PI / 4)
-        .rotateX(Math.PI / 4);
-      const axes = d3d
-        .lineStrips3D()
-        .scale(scale)
-        .rotateZ(Math.PI / 4)
-        .rotateX(Math.PI / 4);
-
-      const points: d3d.Point3DInput[] = [
-        { x: 0, y: 0, z: 0 },
-        { x: 1, y: 0, z: 0 },
-        { x: 0, y: 1, z: 0 },
-        { x: 0, y: 0, z: 1 },
-      ];
-
-      const xTicks: d3d.Point3DInput[] = d3
-        .range(6)
-        .map((x) => ({ x: x, y: 0, z: 0 }));
-      const yTicks: d3d.Point3DInput[] = d3
-        .range(6)
-        .map((y) => ({ x: 0, y: y, z: 0 }));
-      const zTicks: d3d.Point3DInput[] = d3
-        .range(6)
-        .map((z) => ({ x: 0, y: 0, z: z }));
-      const ticks = [xTicks, yTicks, zTicks];
-
-      function draw() {
-        const demo = document.getElementById("demo");
-        if (demo === null) return;
-
-        const { width, height } = demo.getBoundingClientRect();
-        const origin: d3d.Coordinate2D = { x: width / 2, y: height / 2 };
-        // @ts-expect-error
-        const axesData = axes.origin(origin)(ticks);
-
-        const svg = d3.select("#demo").call(
-          d3
-            .drag()
-            .on("drag", () => {})
-            .on("start", () => {})
-            .on("end", () => {}),
-        );
-
-        svg
-          .append("rect")
-          .attr("x", 0)
-          .attr("y", 0)
-          .attr("width", "100%")
-          .attr("height", "100%")
-          .attr("stroke", "skyblue")
-          .attr("stroke-width", 2)
-          .attr("rx", 6)
-          .attr("ry", 6)
-          .attr("class", "fill-white dark:fill-black");
-
-        const axesGroup = svg.append("g");
-        axesGroup
-          .selectAll("path")
-          .data(axesData)
-          .join("path") // @ts-expect-error
-          .attr("d", axes.draw)
-          .attr("class", "stroke-black dark:stroke-white");
-        axesGroup
-          .selectAll("g")
-          .data(axesData)
-          .join("g")
-          .selectAll("text")
-          .data((d) => d)
-          .join("text")
-          .attr("class", "fill-black dark:fill-white")
-          .attr("x", (d) => d.projected.x)
-          .attr("y", (d) => d.projected.y)
-          .text((d) => {
-            // console.debug(this);
-            return Math.max(d.x, d.y, d.z);
-          });
-
-        svg
-          .append("g")
-          .selectAll("circle")
-          .data(points3d.origin(origin)(points))
-          .join("circle")
-          .attr("cx", (d) => d.projected.x)
-          .attr("cy", (d) => d.projected.y)
-          .attr("r", 3)
-          .attr("class", "fill-blue-500");
-      }
-
-      document.addEventListener("astro:page-load", draw);
-    </script>
+    <FieldPlot client:only="solid-js" />
 
     <div
       style="background-image: linear-gradient(

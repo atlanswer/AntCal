@@ -6,7 +6,6 @@ layout: layouts/Markdown.astro
 
 **Create publication quality figures. Work in progress!**
 
-Part of the [AntCal](https://github.com/atlanswer/AntCal) project.
 If you encountered any issue, please reach out to me.
 
 This site is built with the following tools:
@@ -14,6 +13,7 @@ This site is built with the following tools:
 - [Bun](https://bun.sh)
 - [Astro](https://astro.build)
 - [Tailwind CSS](https://tailwindcss.com)
+- [D3](https://d3js.org)
 - [Turborepo](https://turbo.build/repo)
 - [Valibot](https://valibot.dev)
   <!-- - [FastAPI](https://fastapi.tiangolo.com) -->
