@@ -16,9 +16,9 @@ export default function DemoColorScheme() {
       .data(color.domain())
       .join("span")
       .text((d) => d)
-      .style("padding", "0.5rem")
+      .style("padding", "0.25rem")
       .style("background", (d) => color(d));
   });
 
-  return <p ref={pRef} />;
+  return <p ref={pRef} class="w-full break-words" />;
 }

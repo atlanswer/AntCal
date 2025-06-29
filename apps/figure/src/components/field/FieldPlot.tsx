@@ -1,6 +1,6 @@
-import { onMount } from "solid-js";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
+import { onMount } from "solid-js";
 
 export default function Field() {
   let svgRef: SVGSVGElement | undefined;
@@ -14,6 +14,12 @@ export default function Field() {
   const rotateX = Math.PI / 4;
   const rotateY = 0;
   const rotateZ = Math.PI / 4;
+  let mx = 0,
+    my = 0,
+    mouseX = 0,
+    mouseY = 0,
+    beta = 0,
+    alpha = 0;
 
   const points3d = d3d
     .points3D()
@@ -52,7 +58,22 @@ export default function Field() {
   const axesData = axes(ticks);
 
   function draw() {
-    const svg = d3.select(svgRef!);
+    const svg = d3.select(svgRef!).call(
+      d3
+        .drag<SVGSVGElement, unknown>()
+        .on("start", (event: DragEvent) => {
+          mx = event.x;
+          my = event.y;
+        })
+        .on("drag", (event: DragEvent) => {
+          beta = (event.x - mx + mouseX) * (Math.PI / 230);
+          alpha = (event.y - my + mouseY) * (Math.PI / 230) * -1;
+        })
+        .on("end", (event: DragEvent) => {
+          mouseX = event.x - mx + mouseX;
+          mouseY = event.y - my + mouseY;
+        }),
+    );
 
     const axesGroup = svg.append("g");
     axesGroup
@@ -92,8 +113,9 @@ export default function Field() {
   onMount(() => draw());
 
   return (
-    <div class="w-1/2 rounded outline">
+    <div class="w-full max-w-xl rounded bg-white outline dark:bg-black">
       <svg
+        xmlns="http://www.w3.org/2000/svg"
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
         preserveAspectRatio="xMidYMid meet"
