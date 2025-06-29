@@ -6,12 +6,9 @@ interface Props extends MarkdownLayoutProps<{}> {
 }
 
 import BaseLayout from "layouts/Base.astro";
-
-const url = Astro.props.url?.split("/").pop() ?? "";
-const title = url.charAt(0).toUpperCase() + url.slice(1);
 ---
 
-<BaseLayout title={title}>
+<BaseLayout>
   <slot name="head-extra" slot="head-extra" />
   <link
     href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"
