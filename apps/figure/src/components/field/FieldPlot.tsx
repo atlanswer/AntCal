@@ -55,7 +55,11 @@ export default function Field() {
 
     const svg = d3.select(svgRef!);
 
-    const axesGroup = svg.append("g");
+    const axesGroup = svg
+      .selectAll("g.axes-group")
+      .data([null])
+      .join("g")
+      .attr("class", "axes-group");
     axesGroup
       .selectAll("path")
       .data(axesData)
@@ -80,7 +84,10 @@ export default function Field() {
       });
 
     svg
-      .append("g")
+      .selectAll("g.points-group")
+      .data([null])
+      .join("g")
+      .attr("class", "points-group")
       .selectAll("circle")
       .data(pointsData)
       .join("circle")
@@ -90,14 +97,17 @@ export default function Field() {
       .attr("class", "fill-blue-500");
   }
 
-  // onMount(() => {
-  //   d3.select(svgRef!).call(
-  //     d3.drag<SVGSVGElement, unknown>().on("drag", (event: DragEvent) => {
-  //       setRotateZ((prev) => prev + event.movementX * sensitivity);
-  //       setRotateX((prev) => prev + event.movementY * sensitivity);
-  //     }),
-  //   );
-  // });
+  const zoom = d3.zoom<SVGSVGElement, unknown>().on("zoom", ({ transform }) => {
+    setScale(transform.k);
+  });
+
+  createEffect(() => {
+    d3.select(svgRef!).call(zoom.scaleTo, scale());
+  });
+
+  onMount(() => {
+    d3.select(svgRef!).call(zoom);
+  });
 
   createEffect(() => draw());
 
