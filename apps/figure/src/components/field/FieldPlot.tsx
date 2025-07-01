@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
-import { createEffect, createSignal, createUniqueId, onMount } from "solid-js";
+import { batch, createEffect, createSignal, onMount } from "solid-js";
 
 export default function Field() {
   let svgRef: SVGSVGElement | undefined;
@@ -10,13 +10,12 @@ export default function Field() {
   const height = DPI * 3.5;
 
   const origin: d3d.Coordinate2D = { x: width / 2, y: height / 2 };
-  const scaleInputId = createUniqueId();
   const [scale, setScale] = createSignal(30);
   const [rotateX, setRotateX] = createSignal(Math.PI / 4);
   const [rotateY, setRotateY] = createSignal(0);
   const [rotateZ, setRotateZ] = createSignal(Math.PI / 4);
 
-  const sensitivity = Math.PI / 230;
+  const sensitivity = Math.PI / 180;
 
   const points3d = d3d.points3D().origin(origin);
   const axes = d3d.lineStrips3D().origin(origin);
@@ -97,35 +96,77 @@ export default function Field() {
       .attr("class", "fill-blue-500");
   }
 
-  const zoom = d3.zoom<SVGSVGElement, unknown>().on("zoom", ({ transform }) => {
-    setScale(transform.k);
-  });
+  // Redraw
+  createEffect(() => draw());
 
-  createEffect(() => {
-    d3.select(svgRef!).call(zoom.scaleTo, scale());
-  });
+  // Pan and zoom
+  const zoom = d3.zoom<SVGSVGElement, unknown>().on("zoom", (event) =>
+    batch(() => {
+      if (!event.sourceEvent) return;
+
+      const { transform } = event;
+
+      if (event.sourceEvent.type === "wheel") {
+        setScale(transform.k);
+      }
+      if (event.sourceEvent.type === "mousemove") {
+        setRotateZ(transform.x * sensitivity);
+        setRotateX(transform.y * sensitivity);
+      }
+    }),
+  );
 
   onMount(() => {
-    d3.select(svgRef!).call(zoom);
+    const svg = d3.select(svgRef!);
+    svg
+      .call(zoom)
+      .call(zoom.translateBy, rotateZ(), rotateX())
+      .call(zoom.scaleTo, scale(), [0, 0]);
   });
-
-  createEffect(() => draw());
 
   return (
     <>
-      <div>
-        <label for={scaleInputId}>Scale: </label>
-        <input
-          type="number"
-          required
-          id={scaleInputId}
-          name="Scale"
-          min="1"
-          value={scale()}
-          onChange={(event) => {
-            setScale(event.target.valueAsNumber);
-          }}
-        />
+      <div class="grid w-full max-w-xl grid-cols-[repeat(auto-fit,_8rem)] gap-4">
+        <label class="">
+          Scale:
+          <input
+            class="w-32"
+            type="number"
+            required
+            name="Scale"
+            min="1"
+            size="6"
+            value={scale()}
+            onChange={(event) => setScale(event.target.valueAsNumber)}
+          />
+        </label>
+        <label class="">
+          X Rotate:
+          <input
+            class="w-32"
+            type="number"
+            required
+            name="X Rotate"
+            min="0"
+            step="0.1"
+            value={rotateX()}
+            onChange={(event) => setRotateX(event.target.valueAsNumber)}
+          />
+        </label>
+        <label class="">
+          Z Rotate:
+          <input
+            class="w-32"
+            type="number"
+            required
+            name="Z Rotate"
+            min="0"
+            step="0.1"
+            size="6"
+            value={rotateZ()}
+            onChange={(event) => setRotateZ(event.target.valueAsNumber)}
+          />
+        </label>
       </div>
       <div class="w-full max-w-xl rounded bg-white outline dark:bg-black">
         <svg
