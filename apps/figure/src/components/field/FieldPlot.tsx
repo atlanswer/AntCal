@@ -10,12 +10,15 @@ export default function Field() {
   const height = DPI * 3.5;
 
   const origin: d3d.Coordinate2D = { x: width / 2, y: height / 2 };
-  const [scale, setScale] = createSignal(30);
-  const [rotateX, setRotateX] = createSignal(Math.PI / 4);
+  const defaultScale = 30;
+  const [scale, setScale] = createSignal(defaultScale);
+  const defaultRotation = Math.PI / 4;
+  const [rotateX, setRotateX] = createSignal(defaultRotation);
   const [rotateY, setRotateY] = createSignal(0);
-  const [rotateZ, setRotateZ] = createSignal(Math.PI / 4);
+  const [rotateZ, setRotateZ] = createSignal(defaultRotation);
 
-  const sensitivity = Math.PI / 180;
+  const zoomSens = 5;
+  const panSens = Math.PI / 180;
 
   const points3d = d3d.points3D().origin(origin);
   const axes = d3d.lineStrips3D().origin(origin);
@@ -25,6 +28,7 @@ export default function Field() {
     { x: 1, y: 0, z: 0 },
     { x: 0, y: 1, z: 0 },
     { x: 0, y: 0, z: 1 },
+    { x: 1, y: 1, z: 1 },
   ];
 
   const xTicks: d3d.Point3DInput[] = d3
@@ -100,28 +104,42 @@ export default function Field() {
   createEffect(() => draw());
 
   // Pan and zoom
-  const zoom = d3.zoom<SVGSVGElement, unknown>().on("zoom", (event) =>
+  const zoom = d3.zoom<SVGSVGElement, unknown>().on("zoom", function (event) {
     batch(() => {
       if (!event.sourceEvent) return;
+      // @ts-expect-error: crazy hack to prevent recursion
+      this.__zooming = null;
 
       const { transform } = event;
 
+      // console.debug(event);
+      console.debug(transform);
+
       if (event.sourceEvent.type === "wheel") {
-        setScale(transform.k);
+        setScale((prev) => prev + (transform.k - 1) * zoomSens);
       }
       if (event.sourceEvent.type === "mousemove") {
-        setRotateZ(transform.x * sensitivity);
-        setRotateX(transform.y * sensitivity);
+        // setRotateZ(transform.x * panSens);
+        // setRotateX(transform.y * panSens);
       }
-    }),
-  );
+
+      // Reset since we don't need D3's transform
+      d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+    });
+  });
 
   onMount(() => {
     const svg = d3.select(svgRef!);
-    svg
-      .call(zoom)
-      .call(zoom.translateBy, rotateZ(), rotateX())
-      .call(zoom.scaleTo, scale(), [0, 0]);
+    svg.call(zoom).on(
+      "dblclick.zoom",
+      () =>
+        batch(() => {
+          setScale(defaultScale);
+          setRotateX(defaultRotation);
+          setRotateZ(defaultRotation);
+        }),
+      svg.call(zoom.translateBy, defaultRotation, defaultRotation),
+    );
   });
 
   return (
