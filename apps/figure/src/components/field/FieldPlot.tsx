@@ -17,6 +17,9 @@ export default function Field() {
   const [rotateY, setRotateY] = createSignal(0);
   const [rotateZ, setRotateZ] = createSignal(defaultRotation);
 
+  let prevMouseX = 0;
+  let prevMouseY = 0;
+
   const zoomSens = 5;
   const panSens = Math.PI / 180;
 
@@ -112,19 +115,20 @@ export default function Field() {
 
       const { transform } = event;
 
-      // console.debug(event);
-      console.debug(transform);
-
       if (event.sourceEvent.type === "wheel") {
         setScale((prev) => prev + (transform.k - 1) * zoomSens);
+        // Reset all
+        d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+        prevMouseX = 0;
+        prevMouseY = 0;
       }
       if (event.sourceEvent.type === "mousemove") {
-        // setRotateZ(transform.x * panSens);
-        // setRotateX(transform.y * panSens);
+        setRotateZ((prev) => prev - (transform.x - prevMouseX) * panSens);
+        setRotateX((prev) => prev - (transform.y - prevMouseY) * panSens);
+        // Update position, no reset
+        prevMouseX = transform.x;
+        prevMouseY = transform.y;
       }
-
-      // Reset since we don't need D3's transform
-      d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
     });
   });
 
@@ -137,6 +141,10 @@ export default function Field() {
           setScale(defaultScale);
           setRotateX(defaultRotation);
           setRotateZ(defaultRotation);
+          // Reset all
+          d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+          prevMouseX = 0;
+          prevMouseY = 0;
         }),
       svg.call(zoom.translateBy, defaultRotation, defaultRotation),
     );
