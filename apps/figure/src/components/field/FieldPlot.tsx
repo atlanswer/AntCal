@@ -17,9 +17,6 @@ export default function Field() {
   const [rotateY, setRotateY] = createSignal(0);
   const [rotateZ, setRotateZ] = createSignal(defaultRotation);
 
-  let prevMouseX = 0;
-  let prevMouseY = 0;
-
   const zoomSens = 5;
   const panSens = Math.PI / 180;
 
@@ -109,26 +106,36 @@ export default function Field() {
   // Pan and zoom
   const zoom = d3.zoom<SVGSVGElement, unknown>().on("zoom", function (event) {
     batch(() => {
+      // Prevent recursion
+      if (d3.zoomTransform(svgRef!) === d3.zoomIdentity) return;
       if (!event.sourceEvent) return;
-      // @ts-expect-error: crazy hack to prevent recursion
-      this.__zooming = null;
 
       const { transform } = event;
 
-      if (event.sourceEvent.type === "wheel") {
-        setScale((prev) => prev + (transform.k - 1) * zoomSens);
-        // Reset all
-        d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
-        prevMouseX = 0;
-        prevMouseY = 0;
+      switch (event.sourceEvent.type) {
+        case "wheel":
+          setScale((prev) => prev + (transform.k - 1) * zoomSens);
+          break;
+        case "mousemove":
+          setRotateZ((prev) => prev - transform.x * panSens);
+          setRotateX((prev) => prev - transform.y * panSens);
+          break;
+        case "touchmove":
+          if (transform.k === 1) {
+            // Pan
+            setRotateZ((prev) => prev - transform.x * panSens);
+            setRotateX((prev) => prev - transform.y * panSens);
+          } else {
+            // Zoom
+            setScale((prev) => prev + (transform.k - 1) * zoomSens);
+          }
+          break;
+        default:
+          break;
       }
-      if (event.sourceEvent.type === "mousemove") {
-        setRotateZ((prev) => prev - (transform.x - prevMouseX) * panSens);
-        setRotateX((prev) => prev - (transform.y - prevMouseY) * panSens);
-        // Update position, no reset
-        prevMouseX = transform.x;
-        prevMouseY = transform.y;
-      }
+
+      // Reset all
+      d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
     });
   });
 
@@ -143,8 +150,6 @@ export default function Field() {
           setRotateZ(defaultRotation);
           // Reset all
           d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
-          prevMouseX = 0;
-          prevMouseY = 0;
         }),
       svg.call(zoom.translateBy, defaultRotation, defaultRotation),
     );
