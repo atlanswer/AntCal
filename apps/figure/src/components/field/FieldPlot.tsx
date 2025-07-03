@@ -17,7 +17,7 @@ export default function Field() {
   const [rotateY, setRotateY] = createSignal(0);
   const [rotateZ, setRotateZ] = createSignal(defaultRotation);
 
-  const zoomSens = 5;
+  const zoomSens = 10;
   const panSens = Math.PI / 180;
 
   const points3d = d3d.points3D().origin(origin);
@@ -180,6 +180,7 @@ export default function Field() {
 
   return (
     <>
+      <FileUpload />
       <div class="grid w-full max-w-xl grid-cols-[repeat(auto-fit,_8rem)] gap-4">
         <label class="">
           Scale:
@@ -234,3 +235,16 @@ export default function Field() {
     </>
   );
 }
+
+const FileUpload = () => {
+  return (
+    <label class="grid grid-cols-1 gap-2">
+      Upload Field Data
+      <input
+        type="file"
+        accept=".fld"
+        class="rounded bg-sky-500 px-2 py-1 text-white shadow file:border-y-0 file:border-r file:border-l-0 file:border-solid file:border-r-white file:bg-transparent file:pr-2 file:font-sans file:font-semibold file:text-white hover:bg-sky-700 focus-visible:ring focus-visible:outline-none"
+      />
+    </label>
+  );
+};
