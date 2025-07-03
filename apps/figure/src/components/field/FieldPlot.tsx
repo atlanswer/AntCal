@@ -21,6 +21,7 @@ export default function Field() {
   const panSens = Math.PI / 180;
 
   const points3d = d3d.points3D().origin(origin);
+  const triangles3d = d3d.triangles3D().origin(origin);
   const axes = d3d.lineStrips3D().origin(origin);
 
   const points: d3d.Point3DInput[] = [
@@ -29,6 +30,14 @@ export default function Field() {
     { x: 0, y: 1, z: 0 },
     { x: 0, y: 0, z: 1 },
     { x: 1, y: 1, z: 1 },
+  ];
+
+  const triangles: d3d.Triangle3DInput[] = [
+    [
+      { x: -1, y: 0, z: 0 },
+      { x: 1, y: 0, z: 0 },
+      { x: 0, y: 0, z: 1 },
+    ],
   ];
 
   const xTicks: d3d.Point3DInput[] = d3
@@ -49,6 +58,12 @@ export default function Field() {
       .rotateY(rotateY())
       .rotateZ(rotateZ())(points);
 
+    const trianglesData = triangles3d
+      .scale(scale())
+      .rotateX(rotateX())
+      .rotateY(rotateY())
+      .rotateZ(rotateZ())(triangles);
+
     const axesData = axes
       .scale(scale())
       .rotateX(rotateX())
@@ -56,27 +71,25 @@ export default function Field() {
       // @ts-expect-error
       .rotateZ(rotateZ())(ticks);
 
-    const svg = d3.select(svgRef!);
+    const g = d3.select(svgRef!).selectAll("g").data([null]).join("g");
 
-    const axesGroup = svg
-      .selectAll("g.axes-group")
-      .data([null])
-      .join("g")
-      .attr("class", "axes-group");
-    axesGroup
-      .selectAll("path")
+    // Axes
+    g.selectAll("path.axes")
       .data(axesData)
       .join("path") // @ts-expect-error
       .attr("d", axes.draw)
-      .attr("class", "stroke-black dark:stroke-white");
-    axesGroup
-      .selectAll("g")
+      .classed("stroke-black dark:stroke-white axes", true)
+      .classed("d3-3d", true);
+
+    // Axis text
+    g.selectAll("g.axis-text")
       .data(axesData)
       .join("g")
+      .classed("axis-text", true)
       .selectAll("text")
       .data((d) => d)
       .join("text")
-      .attr("class", "fill-black dark:fill-white")
+      .classed("fill-black dark:fill-white", true)
       // @ts-expect-error
       .attr("x", (d) => d.projected.x)
       // @ts-expect-error
@@ -85,19 +98,29 @@ export default function Field() {
         // @ts-expect-error
         return Math.max(d.x, d.y, d.z);
       });
+    // .classed("d3-3d", true);
 
-    svg
-      .selectAll("g.points-group")
-      .data([null])
-      .join("g")
-      .attr("class", "points-group")
-      .selectAll("circle")
+    g.selectAll("circle.points")
       .data(pointsData)
       .join("circle")
+      .classed("points", true)
       .attr("cx", (d) => d.projected.x)
       .attr("cy", (d) => d.projected.y)
       .attr("r", 3)
-      .attr("class", "fill-blue-500");
+      .classed("fill-blue-500", true)
+      .classed("d3-3d", true);
+
+    g.selectAll("path.triangles")
+      .data(trianglesData)
+      .join("path")
+      .classed("triangles", true)
+      // @ts-expect-error
+      .attr("d", triangles3d.draw)
+      .classed("fill-red-500", true)
+      .classed("d3-3d", true);
+
+    // @ts-expect-error
+    g.selectAll(".d3-3d").sort(points3d.sort);
   }
 
   // Redraw
