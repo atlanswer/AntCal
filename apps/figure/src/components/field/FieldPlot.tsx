@@ -12,25 +12,33 @@ export default function Field() {
   const origin: d3d.Coordinate2D = { x: width / 2, y: height / 2 };
   const defaultScale = 30;
   const [scale, setScale] = createSignal(defaultScale);
-  const defaultRotation = Math.PI / 4;
+  const defaultRotation = 1 / 4;
   const [rotateX, setRotateX] = createSignal(defaultRotation);
   const [rotateY, setRotateY] = createSignal(0);
   const [rotateZ, setRotateZ] = createSignal(defaultRotation);
 
   const zoomSens = 10;
-  const panSens = Math.PI / 180;
+  const panSens = 1 / 180;
 
   const points3d = d3d.points3D().origin(origin);
   const triangles3d = d3d.triangles3D().origin(origin);
   const axes = d3d.lineStrips3D().origin(origin);
 
   const points: d3d.Point3DInput[] = [
-    { x: 0, y: 0, z: 0 },
-    { x: 1, y: 0, z: 0 },
-    { x: 0, y: 1, z: 0 },
-    { x: 0, y: 0, z: 1 },
-    { x: 1, y: 1, z: 1 },
+    // { x: 0, y: 0, z: 0 },
+    // { x: 1, y: 0, z: 0 },
+    // { x: 0, y: 1, z: 0 },
+    // { x: 0, y: 0, z: 1 },
+    // { x: 1, y: 1, z: 1 },
   ];
+
+  for (let i = 0; i <= 5; i++) {
+    for (let j = 0; j <= 5; j++) {
+      for (let k = 0; k <= 5; k++) {
+        points.push({ x: i, y: j, z: k });
+      }
+    }
+  }
 
   const triangles: d3d.Triangle3DInput[] = [
     [
@@ -54,22 +62,22 @@ export default function Field() {
   function draw() {
     const pointsData = points3d
       .scale(scale())
-      .rotateX(rotateX())
-      .rotateY(rotateY())
-      .rotateZ(rotateZ())(points);
+      .rotateX(rotateX() * Math.PI)
+      .rotateY(rotateY() * Math.PI)
+      .rotateZ(rotateZ() * Math.PI)(points);
 
     const trianglesData = triangles3d
       .scale(scale())
-      .rotateX(rotateX())
-      .rotateY(rotateY())
-      .rotateZ(rotateZ())(triangles);
+      .rotateX(rotateX() * Math.PI)
+      .rotateY(rotateY() * Math.PI)
+      .rotateZ(rotateZ() * Math.PI)(triangles);
 
     const axesData = axes
       .scale(scale())
-      .rotateX(rotateX())
-      .rotateY(rotateY())
+      .rotateX(rotateX() * Math.PI)
+      .rotateY(rotateY() * Math.PI)
       // @ts-expect-error
-      .rotateZ(rotateZ())(ticks);
+      .rotateZ(rotateZ() * Math.PI)(ticks);
 
     const g = d3.select(svgRef!).selectAll("g").data([null]).join("g");
 
@@ -203,7 +211,7 @@ export default function Field() {
             required
             name="X Rotate"
             min="0"
-            step="0.1"
+            step="0.01"
             value={rotateX()}
             onChange={(event) => setRotateX(event.target.valueAsNumber)}
           />
@@ -216,8 +224,7 @@ export default function Field() {
             required
             name="Z Rotate"
             min="0"
-            step="0.1"
-            size="6"
+            step="0.01"
             value={rotateZ()}
             onChange={(event) => setRotateZ(event.target.valueAsNumber)}
           />
@@ -232,6 +239,7 @@ export default function Field() {
           class="h-full w-full"
         />
       </div>
+      <SVGDownload target={svgRef!} />
     </>
   );
 }
@@ -243,8 +251,31 @@ const FileUpload = () => {
       <input
         type="file"
         accept=".fld"
-        class="rounded bg-sky-500 px-2 py-1 text-white shadow file:border-y-0 file:border-r file:border-l-0 file:border-solid file:border-r-white file:bg-transparent file:pr-2 file:font-sans file:font-semibold file:text-white hover:bg-sky-700 focus-visible:ring focus-visible:outline-none"
+        class="rounded bg-sky-500 px-4 py-2 text-white file:border-y-0 file:border-r file:border-l-0 file:border-solid file:border-r-white file:bg-transparent file:pr-2 file:font-sans file:font-semibold file:text-white hover:bg-sky-700"
       />
     </label>
   );
 };
+
+function SVGDownload(props: { target: SVGSVGElement }) {
+  return (
+    <button
+      type="button"
+      class="rounded bg-sky-500 px-4 py-2 font-semibold text-white hover:bg-sky-700"
+      onClick={() => {
+        const svgData = new XMLSerializer().serializeToString(props.target);
+        const svgBlob = new Blob([svgData], { type: "image/svg+xml" });
+        const svgUrl = URL.createObjectURL(svgBlob);
+
+        const svgLink = document.createElement("a");
+        svgLink.href = svgUrl;
+        svgLink.download = "download.svg";
+        svgLink.click();
+
+        URL.revokeObjectURL(svgUrl);
+      }}
+    >
+      Download SVG
+    </button>
+  );
+}
