@@ -2,8 +2,15 @@ import * as d3 from "d3";
 import * as d3d from "d3-3d";
 import { batch, createEffect, createSignal, onMount } from "solid-js";
 
+const [debugText, setDebugText] = createSignal("Debug info");
+
 export default function Field() {
   let svgRef: SVGSVGElement | undefined;
+
+  let debugTextAreaRef: HTMLTextAreaElement | undefined;
+  createEffect(() => {
+    debugTextAreaRef!.value = debugText();
+  });
 
   const DPI = 72;
   const width = DPI * 3.5;
@@ -14,7 +21,7 @@ export default function Field() {
   const [scale, setScale] = createSignal(defaultScale);
   const defaultRotation = 1 / 4;
   const [rotateX, setRotateX] = createSignal(defaultRotation);
-  const [rotateY, setRotateY] = createSignal(0);
+  const [rotateY, _] = createSignal(0);
   const [rotateZ, setRotateZ] = createSignal(defaultRotation);
 
   const zoomSens = 10;
@@ -199,8 +206,13 @@ export default function Field() {
   return (
     <>
       <FileUpload />
+      <textarea
+        ref={debugTextAreaRef}
+        rows="6"
+        class="w-full rounded outline"
+      ></textarea>
       <div class="grid w-full max-w-xl grid-cols-[repeat(auto-fit,_8rem)] gap-4">
-        <label class="">
+        <label>
           Scale:
           <input
             class="w-32"
@@ -213,8 +225,8 @@ export default function Field() {
             onChange={(event) => setScale(event.target.valueAsNumber)}
           />
         </label>
-        <label class="">
-          X Rotate:
+        <label>
+          <em>θ</em> Rotation:
           <input
             class="w-32"
             type="number"
@@ -226,8 +238,8 @@ export default function Field() {
             onChange={(event) => setRotateX(event.target.valueAsNumber)}
           />
         </label>
-        <label class="">
-          Z Rotate:
+        <label>
+          <em>ϕ</em> Rotation:
           <input
             class="w-32"
             type="number"
@@ -262,6 +274,19 @@ const FileUpload = () => {
         type="file"
         accept=".fld"
         class="rounded bg-sky-500 px-4 py-2 text-white file:border-y-0 file:border-r file:border-l-0 file:border-solid file:border-r-white file:bg-transparent file:pr-2 file:font-sans file:font-semibold file:text-white hover:bg-sky-700"
+        onChange={(event) => {
+          if (event.target.files!.length === 0) {
+            setDebugText("No file selected.");
+            return;
+          }
+          if (event.target.files!.length > 1) {
+            setDebugText("Too many files selected.");
+            return;
+          }
+          event.target
+            .files![0]!.text()
+            .then((content) => setDebugText(content));
+        }}
       />
     </label>
   );
