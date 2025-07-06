@@ -6,11 +6,17 @@ layout: layouts/Markdown.astro
 
 ## Field
 
-Visualize vector fields in an interactive SVG. Work in progress!
+Visualize vector fields in an interactive SVG.
+
+## Report
+
+Upload data files to generate figures.
 
 ## Radiation Pattern
 
-Limitations:
+Simulate radiation pattern based on electric or magnetic sources.
+
+**Limitations:**
 
 - Currently all sources are positioned at the origin
 - Amplitudes are normalized to the maximum radiation of E-/M-dipole respectively
@@ -80,10 +86,6 @@ $$
 Note: $\operatorname{atan2(y,\ x)}$ uses Numpy's [`arctan2`](https://numpy.org/doc/stable/reference/generated/numpy.arctan2.html) parameter order.
 
 [^wikipedia]: [Trigonometric Identities](https://en.wikipedia.org/wiki/List_of_trigonometric_identities#Arbitrary_phase_shift)
-
-## Report
-
-Upload data files to generate figures. Work in progress!
 
 ## Reference
 
