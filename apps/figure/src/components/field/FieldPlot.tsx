@@ -145,23 +145,33 @@ export default function Field() {
 
       switch (event.sourceEvent.type) {
         case "wheel":
-          setScale((prev) => prev + (transform.k - 1) * zoomSens);
+          setScale((prev) =>
+            parseFloat((prev + (transform.k - 1) * zoomSens).toFixed(3)),
+          );
           break;
         case "mousemove":
-          setRotateZ((prev) => prev - transform.x * panSens);
-          setRotateX((prev) => prev - transform.y * panSens);
+          setRotateZ((prev) =>
+            parseFloat((prev - transform.x * panSens).toFixed(8)),
+          );
+          setRotateX((prev) =>
+            parseFloat((prev - transform.y * panSens).toFixed(8)),
+          );
           break;
         case "touchmove":
           if (transform.k === 1) {
             // Pan
-            setRotateZ((prev) => prev - transform.x * panSens);
-            setRotateX((prev) => prev - transform.y * panSens);
+            setRotateZ((prev) =>
+              parseFloat((prev - transform.x * panSens).toFixed(8)),
+            );
+            setRotateX((prev) =>
+              parseFloat((prev - transform.y * panSens).toFixed(8)),
+            );
           } else {
             // Zoom
-            setScale((prev) => prev + (transform.k - 1) * zoomSens);
+            setScale((prev) =>
+              parseFloat((prev + (transform.k - 1) * zoomSens).toFixed(3)),
+            );
           }
-          break;
-        default:
           break;
       }
 
