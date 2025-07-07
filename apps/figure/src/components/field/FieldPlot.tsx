@@ -1,15 +1,22 @@
+import {
+  debugText,
+  errBadge,
+  setDebugText,
+  setErrBadge,
+} from "components/field/contexts";
+import SVGDownload from "components/field/SVGDownload";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
-import { batch, createEffect, createSignal, onMount } from "solid-js";
-
-const [debugText, setDebugText] = createSignal("Debug info");
+import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
 
 export default function Field() {
   let svgRef: SVGSVGElement | undefined;
-
   let debugTextAreaRef: HTMLTextAreaElement | undefined;
+
   createEffect(() => {
-    debugTextAreaRef!.value = debugText();
+    if (debugTextAreaRef) {
+      debugTextAreaRef.value = debugText();
+    }
   });
 
   const DPI = 72;
@@ -21,8 +28,11 @@ export default function Field() {
   const [scale, setScale] = createSignal(defaultScale);
   const defaultRotation = 1 / 4;
   const [rotateX, setRotateX] = createSignal(defaultRotation);
+  const rotateXRad = () => rotateX() * Math.PI;
   const [rotateY, _] = createSignal(0);
+  const rotateYRad = () => rotateY() * Math.PI;
   const [rotateZ, setRotateZ] = createSignal(defaultRotation);
+  const rotateZRad = () => rotateZ() * Math.PI;
 
   const zoomSens = 10;
   const panSens = 1 / 180;
@@ -31,13 +41,7 @@ export default function Field() {
   const triangles3d = d3d.triangles3D().origin(origin);
   const axes = d3d.lineStrips3D().origin(origin);
 
-  const points: d3d.Point3DInput[] = [
-    // { x: 0, y: 0, z: 0 },
-    // { x: 1, y: 0, z: 0 },
-    // { x: 0, y: 1, z: 0 },
-    // { x: 0, y: 0, z: 1 },
-    // { x: 1, y: 1, z: 1 },
-  ];
+  const points: d3d.Point3DInput[] = [];
 
   for (let i = 0; i <= 5; i++) {
     for (let j = 0; j <= 5; j++) {
@@ -69,22 +73,22 @@ export default function Field() {
   function draw() {
     const pointsData = points3d
       .scale(scale())
-      .rotateX(rotateX() * Math.PI)
-      .rotateY(rotateY() * Math.PI)
-      .rotateZ(rotateZ() * Math.PI)(points);
+      .rotateX(rotateXRad())
+      .rotateY(rotateYRad())
+      .rotateZ(rotateZRad())(points);
 
     const trianglesData = triangles3d
       .scale(scale())
-      .rotateX(rotateX() * Math.PI)
-      .rotateY(rotateY() * Math.PI)
-      .rotateZ(rotateZ() * Math.PI)(triangles);
+      .rotateX(rotateXRad())
+      .rotateY(rotateYRad())
+      .rotateZ(rotateZRad())(triangles);
 
     const axesData = axes
       .scale(scale())
-      .rotateX(rotateX() * Math.PI)
-      .rotateY(rotateY() * Math.PI)
+      .rotateX(rotateXRad())
+      .rotateY(rotateYRad())
       // @ts-expect-error
-      .rotateZ(rotateZ() * Math.PI)(ticks);
+      .rotateZ(rotateZRad())(ticks);
 
     const g = d3.select(svgRef!).selectAll("g").data([null]).join("g");
 
@@ -206,11 +210,14 @@ export default function Field() {
   return (
     <>
       <FileUpload />
-      <textarea
-        ref={debugTextAreaRef}
-        rows="6"
-        class="w-full rounded outline"
-      ></textarea>
+      <Show when={import.meta.env.VERCEL_ENV === "preview"}>
+        <textarea
+          ref={debugTextAreaRef}
+          rows="6"
+          class="w-full rounded font-mono outline"
+        ></textarea>
+      </Show>
+      <ErrorBadge />
       <div class="grid w-full max-w-xl grid-cols-[repeat(auto-fit,_8rem)] gap-4">
         <label>
           Scale:
@@ -269,18 +276,26 @@ export default function Field() {
 const FileUpload = () => {
   return (
     <label class="grid grid-cols-1 gap-2">
-      Upload Field Data
+      <p>
+        Upload Field Data (<code>.fld</code>)
+      </p>
       <input
         type="file"
         accept=".fld"
         class="rounded bg-sky-500 px-4 py-2 text-white file:border-y-0 file:border-r file:border-l-0 file:border-solid file:border-r-white file:bg-transparent file:pr-2 file:font-sans file:font-semibold file:text-white hover:bg-sky-700"
         onChange={(event) => {
           if (event.target.files!.length === 0) {
-            setDebugText("No file selected.");
+            setErrBadge({
+              err: "No file selected",
+              detail: "Select one field file to visualize.",
+            });
             return;
           }
           if (event.target.files!.length > 1) {
-            setDebugText("Too many files selected.");
+            setErrBadge({
+              err: "Multiple files selected",
+              detail: "Only one field file can be visualize at the time.",
+            });
             return;
           }
           event.target
@@ -292,41 +307,13 @@ const FileUpload = () => {
   );
 };
 
-function SVGDownload(props: { target: SVGSVGElement }) {
+function ErrorBadge() {
   return (
-    <button
-      type="button"
-      class="rounded bg-sky-500 px-4 py-2 font-semibold text-white hover:bg-sky-700"
-      onClick={async () => {
-        const svg = props.target.cloneNode(true);
-        const defs = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "defs",
-        );
-        svg.insertBefore(defs, svg.firstChild);
-        const style = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "style",
-        );
-        defs.appendChild(style);
-
-        const globalStyleText = (await import("styles/global.css?inline"))
-          .default;
-        style.textContent = globalStyleText;
-
-        const svgData = new XMLSerializer().serializeToString(svg);
-        const svgBlob = new Blob([svgData], { type: "image/svg+xml" });
-        const svgUrl = URL.createObjectURL(svgBlob);
-
-        const svgLink = document.createElement("a");
-        svgLink.href = svgUrl;
-        svgLink.download = "download.svg";
-        svgLink.click();
-
-        URL.revokeObjectURL(svgUrl);
-      }}
-    >
-      Download SVG
-    </button>
+    <Show when={errBadge()}>
+      <div class="rounded bg-red-500 p-4 text-white">
+        <p class="text-lg font-bold">{errBadge()!.err}</p>
+        <p>{errBadge()!.detail}</p>
+      </div>
+    </Show>
   );
 }
