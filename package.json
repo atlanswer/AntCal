@@ -1,6 +1,6 @@
 {
   "name": "antcal",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Antenna Calculator",
   "author": "Atlanswer <i@atlanswer.com> (https://atlanswer.com)",
   "license": "MIT",
@@ -25,6 +25,7 @@
     "preview": "turbo preview"
   },
   "devDependencies": {
+    "@types/bun": "^1.2.18",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.13",
