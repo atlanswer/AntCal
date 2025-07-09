@@ -1,13 +1,19 @@
-import {
-  debugText,
-  errBadge,
-  setDebugText,
-  setErrBadge,
-} from "components/field/contexts";
+import { errBadge, setErrBadge } from "components/field/contexts";
+import { parseFld, type VectorArray } from "components/field/fldParser";
 import SVGDownload from "components/field/SVGDownload";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
 import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
+import { createStore } from "solid-js/store";
+
+const [vectorArray, setVectorArray] = createSignal<VectorArray>([]);
+const [vectorInfo, setVectorInfo] = createStore({
+  xSpan: 0,
+  ySpan: 0,
+  zSpan: 0,
+  maxNorm: 1,
+  vLen: 100,
+});
 
 export default function Field() {
   let svgRef: SVGSVGElement | undefined;
@@ -15,7 +21,7 @@ export default function Field() {
 
   createEffect(() => {
     if (debugTextAreaRef) {
-      debugTextAreaRef.value = debugText();
+      debugTextAreaRef.value = `num: ${vectorArray().length} | xSpan: ${vectorInfo.xSpan} | ySpan: ${vectorInfo.ySpan} | zSpan: ${vectorInfo.zSpan}`;
     }
   });
 
@@ -33,31 +39,55 @@ export default function Field() {
   const rotateYRad = () => rotateY() * Math.PI;
   const [rotateZ, setRotateZ] = createSignal(defaultRotation);
   const rotateZRad = () => rotateZ() * Math.PI;
+  const [axesEnabled, setAxesEnabled] = createSignal(true);
 
-  const zoomSens = 10;
+  createEffect(() => {
+    const dimMax = Math.max(
+      vectorInfo.xSpan,
+      vectorInfo.ySpan,
+      vectorInfo.zSpan,
+    );
+    if (dimMax === 0) {
+      setScale(30);
+      setZoomSens(10);
+      return;
+    }
+    const newScale = Math.floor(width / dimMax);
+    setScale(newScale);
+    setZoomSens(Math.floor(newScale / 3));
+  });
+
+  const [zoomSens, setZoomSens] = createSignal(10);
   const panSens = 1 / 180;
 
   const points3d = d3d.points3D().origin(origin);
-  const triangles3d = d3d.triangles3D().origin(origin);
+  const lines3d = d3d.lines3D().origin(origin);
+  const poly3d = d3d.polygons3D().origin(origin);
   const axes = d3d.lineStrips3D().origin(origin);
 
-  const points: d3d.Point3DInput[] = [];
-
-  for (let i = 0; i <= 5; i++) {
-    for (let j = 0; j <= 5; j++) {
-      for (let k = 0; k <= 5; k++) {
-        points.push({ x: i, y: j, z: k });
-      }
+  const points: () => d3d.Point3DInput[] = () => {
+    const res: d3d.Point3DInput[] = [];
+    for (const v of vectorArray()) {
+      res.push({ x: v[0], y: v[1], z: v[2] });
     }
-  }
+    return res;
+  };
 
-  const triangles: d3d.Triangle3DInput[] = [
-    [
-      { x: -1, y: 0, z: 0 },
-      { x: 1, y: 0, z: 0 },
-      { x: 0, y: 0, z: 1 },
-    ],
-  ];
+  const lines: () => d3d.Line3DInput[] = () => {
+    const res: d3d.Line3DInput[] = [];
+    for (const v of vectorArray()) {
+      // @ts-expect-error
+      res.push([
+        { x: v[0], y: v[1], z: v[2] },
+        {
+          x: v[0] + (v[3] * vectorInfo.vLen) / 100,
+          y: v[1] + (v[4] * vectorInfo.vLen) / 100,
+          z: v[2] + (v[5] * vectorInfo.vLen) / 100,
+        },
+      ]);
+    }
+    return res;
+  };
 
   const xTicks: d3d.Point3DInput[] = d3
     .range(6)
@@ -71,17 +101,17 @@ export default function Field() {
   const ticks = [xTicks, yTicks, zTicks];
 
   function draw() {
-    const pointsData = points3d
-      .scale(scale())
-      .rotateX(rotateXRad())
-      .rotateY(rotateYRad())
-      .rotateZ(rotateZRad())(points);
+    // const pointsData = points3d
+    //   .scale(scale())
+    //   .rotateX(rotateXRad())
+    //   .rotateY(rotateYRad())
+    //   .rotateZ(rotateZRad())(points());
 
-    const trianglesData = triangles3d
+    const linesData = lines3d
       .scale(scale())
       .rotateX(rotateXRad())
       .rotateY(rotateYRad())
-      .rotateZ(rotateZRad())(triangles);
+      .rotateZ(rotateZRad())(lines());
 
     const axesData = axes
       .scale(scale())
@@ -94,7 +124,7 @@ export default function Field() {
 
     // Axes
     g.selectAll("path.axes")
-      .data(axesData)
+      .data(axesEnabled() ? axesData : [])
       .join("path") // @ts-expect-error
       .attr("d", axes.draw)
       .classed("stroke-black dark:stroke-white axes", true)
@@ -102,9 +132,10 @@ export default function Field() {
 
     // Axis text
     g.selectAll("g.axis-text")
-      .data(axesData)
+      .data(axesEnabled() ? axesData : [])
       .join("g")
       .classed("axis-text", true)
+      .classed("font-[Arial]", true)
       .selectAll("text")
       .data((d) => d)
       .join("text")
@@ -119,27 +150,32 @@ export default function Field() {
       });
     // .classed("d3-3d", true);
 
-    g.selectAll("circle.points")
-      .data(pointsData)
-      .join("circle")
-      .classed("points", true)
-      .attr("cx", (d) => d.projected.x)
-      .attr("cy", (d) => d.projected.y)
-      .attr("r", 3)
-      .classed("fill-blue-500", true)
-      .classed("d3-3d", true);
+    // g.selectAll("circle.points")
+    //   .data(pointsData)
+    //   .join("circle")
+    //   .classed("points", true)
+    //   .attr("cx", (d) => d.projected.x)
+    //   .attr("cy", (d) => d.projected.y)
+    //   .attr("r", 3)
+    //   .classed("fill-blue-500", true)
+    //   .classed("d3-3d", true);
 
-    g.selectAll("path.triangles")
-      .data(trianglesData)
-      .join("path")
-      .classed("triangles", true)
+    g.selectAll("line")
+      .data(linesData)
+      .join("line")
       // @ts-expect-error
-      .attr("d", triangles3d.draw)
-      .classed("fill-red-500", true)
+      .attr("x1", (d) => d[0].projected.x)
+      // @ts-expect-error
+      .attr("x2", (d) => d[1].projected.x)
+      // @ts-expect-error
+      .attr("y1", (d) => d[0].projected.y)
+      // @ts-expect-error
+      .attr("y2", (d) => d[1].projected.y)
+      .classed("stroke-blue-500", true)
       .classed("d3-3d", true);
 
     // @ts-expect-error
-    g.selectAll(".d3-3d").sort(points3d.sort);
+    g.selectAll(".d3-3d").sort(poly3d.sort);
   }
 
   // Redraw
@@ -157,7 +193,7 @@ export default function Field() {
       switch (event.sourceEvent.type) {
         case "wheel":
           setScale((prev) =>
-            parseFloat((prev + (transform.k - 1) * zoomSens).toFixed(3)),
+            parseFloat((prev + (transform.k - 1) * zoomSens()).toFixed(3)),
           );
           break;
         case "mousemove":
@@ -180,7 +216,7 @@ export default function Field() {
           } else {
             // Zoom
             setScale((prev) =>
-              parseFloat((prev + (transform.k - 1) * zoomSens).toFixed(3)),
+              parseFloat((prev + (transform.k - 1) * zoomSens()).toFixed(3)),
             );
           }
           break;
@@ -210,7 +246,7 @@ export default function Field() {
   return (
     <>
       <FileUpload />
-      <Show when={import.meta.env.VERCEL_ENV === "preview"}>
+      <Show when={import.meta.env.VERCEL_ENV !== "production"}>
         <textarea
           ref={debugTextAreaRef}
           rows="6"
@@ -220,22 +256,20 @@ export default function Field() {
       <ErrorBadge />
       <div class="grid w-full max-w-xl grid-cols-[repeat(auto-fit,_8rem)] gap-4">
         <label>
-          Scale:
+          Scale
           <input
-            class="w-32"
+            class="w-32 rounded pl-2 outline"
             type="number"
             required
             name="Scale"
-            min="1"
-            size="6"
             value={scale()}
             onChange={(event) => setScale(event.target.valueAsNumber)}
           />
         </label>
         <label>
-          <em>θ</em> Rotation:
+          <em>θ</em> Rotation (π)
           <input
-            class="w-32"
+            class="w-32 rounded pl-2 outline"
             type="number"
             required
             name="X Rotate"
@@ -246,9 +280,9 @@ export default function Field() {
           />
         </label>
         <label>
-          <em>ϕ</em> Rotation:
+          <em>ϕ</em> Rotation (π)
           <input
-            class="w-32"
+            class="w-32 rounded pl-2 outline"
             type="number"
             required
             name="Z Rotate"
@@ -256,6 +290,47 @@ export default function Field() {
             step="0.01"
             value={rotateZ()}
             onChange={(event) => setRotateZ(event.target.valueAsNumber)}
+          />
+        </label>
+        <label>
+          Enable Axes
+          <input
+            class="block"
+            type="checkbox"
+            required
+            name="Enable Axes"
+            checked
+            onChange={(event) => setAxesEnabled(event.target.checked)}
+          />
+        </label>
+        <label>
+          Max Vector Norm
+          <input
+            class="w-32 rounded pl-2 outline"
+            type="number"
+            required
+            name="Max Vector Norm"
+            min="0"
+            step="0.01"
+            value={vectorInfo.maxNorm}
+            onChange={(event) =>
+              setVectorInfo("maxNorm", event.target.valueAsNumber)
+            }
+          />
+        </label>
+        <label>
+          Vector Length (%)
+          <input
+            class="w-32 rounded pl-2 outline"
+            type="number"
+            required
+            name="Max Vector Length"
+            min="0"
+            step="1"
+            value={vectorInfo.vLen}
+            onChange={(event) =>
+              setVectorInfo("vLen", event.target.valueAsNumber)
+            }
           />
         </label>
       </div>
@@ -298,9 +373,30 @@ const FileUpload = () => {
             });
             return;
           }
-          event.target
-            .files![0]!.text()
-            .then((content) => setDebugText(content));
+          event.target.files![0]!.text().then((content) => {
+            const [vs, xMin, yMin, zMin, xSpan, ySpan, zSpan] =
+              parseFld(content);
+
+            setVectorInfo("xSpan", xSpan);
+            setVectorInfo("ySpan", ySpan);
+            setVectorInfo("zSpan", zSpan);
+
+            const vss: VectorArray = [];
+            for (const v of vs) {
+              const x = v[0];
+              const y = v[1];
+              const z = v[2];
+              vss.push([
+                -xSpan / 2 + x - xMin,
+                -ySpan / 2 + y - yMin,
+                -zSpan / 2 + z - zMin,
+                v[3],
+                v[4],
+                v[5],
+              ]);
+            }
+            setVectorArray(vss);
+          });
         }}
       />
     </label>
