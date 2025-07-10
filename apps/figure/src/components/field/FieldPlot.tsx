@@ -1,18 +1,24 @@
 import { errBadge, setErrBadge } from "components/field/contexts";
-import { parseFld, type VectorArray } from "components/field/fldParser";
+import { parseFld } from "components/field/fldParser";
+import type { Vector6 } from "components/field/linearAlgebra";
+import {
+  getVector3L2,
+  type Vector6Array,
+} from "components/field/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
 import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 
-const [vectorArray, setVectorArray] = createSignal<VectorArray>([]);
+const [vectorArray, setVectorArray] = createSignal<Vector6Array>([]);
 const [vectorInfo, setVectorInfo] = createStore({
   xSpan: 0,
   ySpan: 0,
   zSpan: 0,
   maxNorm: 1,
-  vLen: 100,
+  vLen: 1e-7,
+  vMax: 0,
 });
 
 export default function Field() {
@@ -21,7 +27,7 @@ export default function Field() {
 
   createEffect(() => {
     if (debugTextAreaRef) {
-      debugTextAreaRef.value = `num: ${vectorArray().length} | xSpan: ${vectorInfo.xSpan} | ySpan: ${vectorInfo.ySpan} | zSpan: ${vectorInfo.zSpan}`;
+      debugTextAreaRef.value = `num: ${vectorArray().length} | xSpan: ${vectorInfo.xSpan} | ySpan: ${vectorInfo.ySpan} | zSpan: ${vectorInfo.zSpan} | vMax: ${vectorInfo.vMax}`;
     }
   });
 
@@ -172,7 +178,12 @@ export default function Field() {
       // @ts-expect-error
       .attr("y2", (d) => d[1].projected.y)
       .classed("stroke-blue-500", true)
-      .classed("d3-3d", true);
+      .classed("d3-3d", true)
+      .attr("stroke-width", (d) => getVectorLenRank(d) / 30)
+      .attr(
+        "style",
+        (d) => `stroke: var(--color-rainbow-${getVectorLenRank(d)})`,
+      );
 
     // @ts-expect-error
     g.selectAll(".d3-3d").sort(poly3d.sort);
@@ -374,14 +385,16 @@ const FileUpload = () => {
             return;
           }
           event.target.files![0]!.text().then((content) => {
-            const [vs, xMin, yMin, zMin, xSpan, ySpan, zSpan] =
+            const [vs, xMin, yMin, zMin, xSpan, ySpan, zSpan, vMax] =
               parseFld(content);
 
             setVectorInfo("xSpan", xSpan);
             setVectorInfo("ySpan", ySpan);
             setVectorInfo("zSpan", zSpan);
+            setVectorInfo("vMax", vMax);
 
-            const vss: VectorArray = [];
+            // Position normalization
+            const vss: Vector6Array = [];
             for (const v of vs) {
               const x = v[0];
               const y = v[1];
@@ -412,4 +425,23 @@ function ErrorBadge() {
       </div>
     </Show>
   );
+}
+
+function getVectorLenRank(d: d3d.Line3D): number {
+  const start = d[0];
+  const end = d[1];
+  const diff = [
+    d[1].rotated.x - d[0].rotated.x,
+    d[1].rotated.y - d[0].rotated.y,
+    d[1].rotated.z - d[0].rotated.z,
+  ];
+  const vLen = getVector3L2(diff);
+  const unit = 0.000002;
+  let rank = Math.floor(vLen / unit);
+
+  if (rank > 29) {
+    rank = 29;
+  }
+
+  return rank;
 }

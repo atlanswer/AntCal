@@ -1,5 +1,8 @@
-type Vector = [number, number, number, number, number, number];
-export type VectorArray = Vector[];
+import {
+  type Vector6Array,
+  type Vector6,
+  getVector3L2,
+} from "components/field/linearAlgebra";
 
 function* genLines(text: string) {
   const lines = text.split("\n");
@@ -17,7 +20,7 @@ function parseElementNumber(line: string): number {
   return parseInt(numPart ?? "NaN");
 }
 
-function parseVector(line: string): Vector | undefined {
+function parseVector(line: string): Vector6 | undefined {
   const parsed = line
     .trim()
     .split(/\s+/)
@@ -27,19 +30,20 @@ function parseVector(line: string): Vector | undefined {
     return;
   }
 
-  return parsed as Vector;
+  return parsed as Vector6;
 }
 
 export function parseFld(
   text: string,
-): [VectorArray, number, number, number, number, number, number] {
-  const vField: VectorArray = [];
+): [Vector6Array, number, number, number, number, number, number, number] {
+  const vField: Vector6Array = [];
   let xMin = Infinity,
     yMin = Infinity,
     zMin = Infinity,
     xMax = -Infinity,
     yMax = -Infinity,
-    zMax = -Infinity;
+    zMax = -Infinity,
+    vMax = 0;
 
   for (const line of genLines(text)) {
     if (line.trim() === "") {
@@ -82,6 +86,11 @@ export function parseFld(
         zMax = res[2];
       }
 
+      const vLen = getVector3L2([res[3], res[4], res[5]]);
+      if (vLen > vMax) {
+        vMax = vLen;
+      }
+
       vField.push(res);
       continue;
     }
@@ -90,5 +99,14 @@ export function parseFld(
     console.error(line);
   }
 
-  return [vField, xMin, yMin, zMin, xMax - xMin, yMax - yMin, zMax - zMin];
+  return [
+    vField,
+    xMin,
+    yMin,
+    zMin,
+    xMax - xMin,
+    yMax - yMin,
+    zMax - zMin,
+    vMax,
+  ];
 }
