@@ -4,11 +4,33 @@ layout: layouts/Markdown.astro
 
 # AntCal Documentation
 
-## Field
+## Field (WIP)
 
 Visualize vector fields in an interactive SVG.
 
-## Report
+**TODOs:**
+
+- [ ] Vector length control
+- [ ] Vector arrow
+- [ ] Vector arrow shape selection
+
+**Limitations:**
+
+- Only supports field data files (`.fld`) exported from ANSYS HFSS
+- Currently, only grid-based vector field is supported (vector shape: `[x, y, z, u, v, w]`)
+
+### How to export vector fields in ANSYS HFSS
+
+1. Measure the bounding box (Cartesian coordinate system) of the area of interest
+2. Open the Field Calculator
+3. Select the desired data (e.g., `Vector_E`) and copy it to the stack (or construct your own data)
+4. Select the correct context (especially the phase)
+5. Click "Export..."
+6. Use "Calculate grid points", fill in the grid dimensions based on the bounding box
+7. Check "Include points in output file" to include vector starting positions in the file
+8. Save the `.fld` file
+
+## Report (TODO)
 
 Upload data files to generate figures.
 

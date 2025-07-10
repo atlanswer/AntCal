@@ -156,16 +156,6 @@ export default function Field() {
       });
     // .classed("d3-3d", true);
 
-    // g.selectAll("circle.points")
-    //   .data(pointsData)
-    //   .join("circle")
-    //   .classed("points", true)
-    //   .attr("cx", (d) => d.projected.x)
-    //   .attr("cy", (d) => d.projected.y)
-    //   .attr("r", 3)
-    //   .classed("fill-blue-500", true)
-    //   .classed("d3-3d", true);
-
     g.selectAll("line")
       .data(linesData)
       .join("line")
@@ -179,6 +169,7 @@ export default function Field() {
       .attr("y2", (d) => d[1].projected.y)
       .classed("stroke-blue-500", true)
       .classed("d3-3d", true)
+      .attr("a", (d) => console.debug(d))
       .attr("stroke-width", (d) => getVectorLenRank(d) / 30)
       .attr(
         "style",
@@ -256,7 +247,6 @@ export default function Field() {
 
   return (
     <>
-      <FileUpload />
       <Show when={import.meta.env.VERCEL_ENV !== "production"}>
         <textarea
           ref={debugTextAreaRef}
@@ -264,6 +254,7 @@ export default function Field() {
           class="w-full rounded font-mono outline"
         ></textarea>
       </Show>
+      <FileUpload />
       <ErrorBadge />
       <div class="grid w-full max-w-xl grid-cols-[repeat(auto-fit,_8rem)] gap-4">
         <label>
@@ -430,13 +421,9 @@ function ErrorBadge() {
 function getVectorLenRank(d: d3d.Line3D): number {
   const start = d[0];
   const end = d[1];
-  const diff = [
-    d[1].rotated.x - d[0].rotated.x,
-    d[1].rotated.y - d[0].rotated.y,
-    d[1].rotated.z - d[0].rotated.z,
-  ];
+  const diff = [d[1].x - d[0].x, d[1].y - d[0].y, d[1].z - d[0].z];
   const vLen = getVector3L2(diff);
-  const unit = 0.000002;
+  const unit = (vectorInfo.vMax * vectorInfo.vLen) / 100 / 30;
   let rank = Math.floor(vLen / unit);
 
   if (rank > 29) {

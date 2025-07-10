@@ -1,18 +1,11 @@
 ---
 import BaseLayout from "layouts/Base.astro";
 
-import DemoColorScheme from "components/d3/DemoColorScheme";
 import FieldPlot from "src/components/field/FieldPlot";
 ---
 
 <BaseLayout>
   <div class="flex flex-col items-center gap-8 p-8">
-    {
-      import.meta.env.VERCEL_ENV !== "production" && (
-        <DemoColorScheme client:only="solid-js" />
-      )
-    }
-
     <FieldPlot client:only="solid-js" />
 
     <div
