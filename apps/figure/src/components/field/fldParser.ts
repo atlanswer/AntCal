@@ -1,7 +1,8 @@
+import { setErrBadge } from "components/field/contexts";
 import {
-  type Vector6Array,
   type Vector6,
-  getVector3L2,
+  type Vector6Array,
+  getVector6L2,
 } from "components/field/linearAlgebra";
 
 function* genLines(text: string) {
@@ -26,24 +27,35 @@ function parseVector(line: string): Vector6 | undefined {
     .split(/\s+/)
     .map((s) => parseFloat(s));
 
-  if (parsed.length !== 6 || parsed.some(Number.isNaN)) {
+  if (parsed.length !== 6) {
+    setErrBadge({
+      err: "Unexpected Vector Shape",
+      detail: "Currently, only vectors with a length of 6 are supported.",
+    });
+
     return;
   }
+
+  if (parsed.length !== 6 || parsed.some(Number.isNaN)) return;
 
   return parsed as Vector6;
 }
 
-export function parseFld(
-  text: string,
-): [Vector6Array, number, number, number, number, number, number, number] {
-  const vField: Vector6Array = [];
-  let xMin = Infinity,
-    yMin = Infinity,
-    zMin = Infinity,
-    xMax = -Infinity,
-    yMax = -Infinity,
-    zMax = -Infinity,
-    vMax = 0;
+export function parseFld(text: string) {
+  const vs: Vector6Array = [];
+  const stats = {
+    xMin: Infinity,
+    yMin: Infinity,
+    zMin: Infinity,
+    xMax: -Infinity,
+    yMax: -Infinity,
+    zMax: -Infinity,
+    xSpan: 0,
+    ySpan: 0,
+    zSpan: 0,
+    vLenMin: Infinity,
+    vLenMax: 0,
+  };
 
   for (const line of genLines(text)) {
     if (line.trim() === "") {
@@ -67,31 +79,32 @@ export function parseFld(
         continue;
       }
 
-      if (res[0] < xMin) {
-        xMin = res[0];
+      if (res[0] < stats.xMin) {
+        stats.xMin = res[0];
       }
-      if (res[0] > xMax) {
-        xMax = res[0];
+      if (res[0] > stats.xMax) {
+        stats.xMax = res[0];
       }
-      if (res[1] < yMin) {
-        yMin = res[1];
+      if (res[1] < stats.yMin) {
+        stats.yMin = res[1];
       }
-      if (res[1] > yMax) {
-        yMax = res[1];
+      if (res[1] > stats.yMax) {
+        stats.yMax = res[1];
       }
-      if (res[2] < zMin) {
-        zMin = res[2];
+      if (res[2] < stats.zMin) {
+        stats.zMin = res[2];
       }
-      if (res[2] > zMax) {
-        zMax = res[2];
-      }
-
-      const vLen = getVector3L2([res[3], res[4], res[5]]);
-      if (vLen > vMax) {
-        vMax = vLen;
+      if (res[2] > stats.zMax) {
+        stats.zMax = res[2];
       }
 
-      vField.push(res);
+      const vLen = getVector6L2(res);
+      if (vLen > stats.vLenMax) {
+        stats.vLenMax = vLen;
+      }
+
+      vs.push(res);
+
       continue;
     }
 
@@ -99,14 +112,8 @@ export function parseFld(
     console.error(line);
   }
 
-  return [
-    vField,
-    xMin,
-    yMin,
-    zMin,
-    xMax - xMin,
-    yMax - yMin,
-    zMax - zMin,
-    vMax,
-  ];
+  return {
+    vectors: vs,
+    stats: stats,
+  };
 }

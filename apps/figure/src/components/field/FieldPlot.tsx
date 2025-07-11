@@ -1,6 +1,5 @@
 import { errBadge, setErrBadge } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
-import type { Vector6 } from "components/field/linearAlgebra";
 import {
   getVector3L2,
   type Vector6Array,
@@ -12,13 +11,12 @@ import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 
 const [vectorArray, setVectorArray] = createSignal<Vector6Array>([]);
-const [vectorInfo, setVectorInfo] = createStore({
+const [vectorStats, setVectorStats] = createStore({
   xSpan: 0,
   ySpan: 0,
   zSpan: 0,
-  maxNorm: 1,
+  vLenMax: 1,
   vLen: 1e-7,
-  vMax: 0,
 });
 
 export default function Field() {
@@ -27,7 +25,12 @@ export default function Field() {
 
   createEffect(() => {
     if (debugTextAreaRef) {
-      debugTextAreaRef.value = `num: ${vectorArray().length} | xSpan: ${vectorInfo.xSpan} | ySpan: ${vectorInfo.ySpan} | zSpan: ${vectorInfo.zSpan} | vMax: ${vectorInfo.vMax}`;
+      debugTextAreaRef.value =
+        `num: ${vectorArray().length} ` +
+        `| xSpan: ${vectorStats.xSpan} ` +
+        `| ySpan: ${vectorStats.ySpan} ` +
+        `| zSpan: ${vectorStats.zSpan} ` +
+        `| vLenMax: ${vectorStats.vLenMax}`;
     }
   });
 
@@ -46,13 +49,16 @@ export default function Field() {
   const [rotateZ, setRotateZ] = createSignal(defaultRotation);
   const rotateZRad = () => rotateZ() * Math.PI;
   const [axesEnabled, setAxesEnabled] = createSignal(true);
+  const [zoomSens, setZoomSens] = createSignal(10);
+  const rotateSens = 1 / 180;
 
   createEffect(() => {
     const dimMax = Math.max(
-      vectorInfo.xSpan,
-      vectorInfo.ySpan,
-      vectorInfo.zSpan,
+      vectorStats.xSpan,
+      vectorStats.ySpan,
+      vectorStats.zSpan,
     );
+    // Reset
     if (dimMax === 0) {
       setScale(30);
       setZoomSens(10);
@@ -62,9 +68,6 @@ export default function Field() {
     setScale(newScale);
     setZoomSens(Math.floor(newScale / 3));
   });
-
-  const [zoomSens, setZoomSens] = createSignal(10);
-  const panSens = 1 / 180;
 
   const points3d = d3d.points3D().origin(origin);
   const lines3d = d3d.lines3D().origin(origin);
@@ -86,9 +89,9 @@ export default function Field() {
       res.push([
         { x: v[0], y: v[1], z: v[2] },
         {
-          x: v[0] + (v[3] * vectorInfo.vLen) / 100,
-          y: v[1] + (v[4] * vectorInfo.vLen) / 100,
-          z: v[2] + (v[5] * vectorInfo.vLen) / 100,
+          x: v[0] + (v[3] * vectorStats.vLen) / 100,
+          y: v[1] + (v[4] * vectorStats.vLen) / 100,
+          z: v[2] + (v[5] * vectorStats.vLen) / 100,
         },
       ]);
     }
@@ -200,20 +203,20 @@ export default function Field() {
           break;
         case "mousemove":
           setRotateZ((prev) =>
-            parseFloat((prev - transform.x * panSens).toFixed(8)),
+            parseFloat((prev - transform.x * rotateSens).toFixed(8)),
           );
           setRotateX((prev) =>
-            parseFloat((prev - transform.y * panSens).toFixed(8)),
+            parseFloat((prev - transform.y * rotateSens).toFixed(8)),
           );
           break;
         case "touchmove":
           if (transform.k === 1) {
             // Pan
             setRotateZ((prev) =>
-              parseFloat((prev - transform.x * panSens).toFixed(8)),
+              parseFloat((prev - transform.x * rotateSens).toFixed(8)),
             );
             setRotateX((prev) =>
-              parseFloat((prev - transform.y * panSens).toFixed(8)),
+              parseFloat((prev - transform.y * rotateSens).toFixed(8)),
             );
           } else {
             // Zoom
@@ -306,17 +309,17 @@ export default function Field() {
           />
         </label>
         <label>
-          Max Vector Norm
+          Max Vector Length
           <input
             class="w-32 rounded pl-2 outline"
             type="number"
             required
-            name="Max Vector Norm"
+            name="Max Vector Length"
             min="0"
             step="0.01"
-            value={vectorInfo.maxNorm}
+            value={vectorStats.vLenMax}
             onChange={(event) =>
-              setVectorInfo("maxNorm", event.target.valueAsNumber)
+              setVectorStats("maxNorm", event.target.valueAsNumber)
             }
           />
         </label>
@@ -329,9 +332,9 @@ export default function Field() {
             name="Max Vector Length"
             min="0"
             step="1"
-            value={vectorInfo.vLen}
+            value={vectorStats.vLen}
             onChange={(event) =>
-              setVectorInfo("vLen", event.target.valueAsNumber)
+              setVectorStats("vLen", event.target.valueAsNumber)
             }
           />
         </label>
@@ -376,13 +379,9 @@ const FileUpload = () => {
             return;
           }
           event.target.files![0]!.text().then((content) => {
-            const [vs, xMin, yMin, zMin, xSpan, ySpan, zSpan, vMax] =
-              parseFld(content);
+            const { vectors, stats } = parseFld(content);
 
-            setVectorInfo("xSpan", xSpan);
-            setVectorInfo("ySpan", ySpan);
-            setVectorInfo("zSpan", zSpan);
-            setVectorInfo("vMax", vMax);
+            setVectorStats(stats);
 
             // Position normalization
             const vss: Vector6Array = [];
@@ -423,7 +422,7 @@ function getVectorLenRank(d: d3d.Line3D): number {
   const end = d[1];
   const diff = [d[1].x - d[0].x, d[1].y - d[0].y, d[1].z - d[0].z];
   const vLen = getVector3L2(diff);
-  const unit = (vectorInfo.vMax * vectorInfo.vLen) / 100 / 30;
+  const unit = (vectorStats.vMax * vectorStats.vLen) / 100 / 30;
   let rank = Math.floor(vLen / unit);
 
   if (rank > 29) {
