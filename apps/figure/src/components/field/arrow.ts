@@ -1,0 +1,4 @@
+const ARROW_SCALE = 0.04
+const ARROW_LEN = 0.025
+const ARROW_WID = 0.012
+const ARROW_INSET = 0.006

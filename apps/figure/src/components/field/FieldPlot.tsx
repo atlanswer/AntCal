@@ -98,6 +98,25 @@ export default function Field() {
     return res;
   };
 
+  const LEN = 10;
+
+  const ARROW_LEN = 0.0724;
+  const ARROW_WID = 0.0362;
+  const ARROW_INSET = 0.00724;
+
+  const aLen = LEN * ARROW_LEN;
+  const aWid = LEN * ARROW_WID;
+  const aIns = LEN * ARROW_INSET;
+
+  const polygons: d3d.Polygon3DInput[] = [
+    [
+      { x: aWid / 2, y: 0, z: 0 },
+      { x: 0, y: 0, z: aLen },
+      { x: -aWid / 2, y: 0, z: 0 },
+      { x: 0, y: 0, z: aIns },
+    ],
+  ];
+
   const xTicks: d3d.Point3DInput[] = d3
     .range(6)
     .map((x) => ({ x: x, y: 0, z: 0 }));
@@ -121,6 +140,12 @@ export default function Field() {
       .rotateX(rotateXRad())
       .rotateY(rotateYRad())
       .rotateZ(rotateZRad())(lines());
+
+    const polygonsData = poly3d
+      .scale(scale())
+      .rotateX(rotateXRad())
+      .rotateY(rotateYRad())
+      .rotateZ(rotateZRad())(polygons);
 
     const axesData = axes
       .scale(scale())
@@ -159,25 +184,34 @@ export default function Field() {
       });
     // .classed("d3-3d", true);
 
-    g.selectAll("line")
-      .data(linesData)
-      .join("line")
+    g.selectAll("path.poly")
+      .data(polygonsData)
+      .join("path")
+      .classed("poly", true)
       // @ts-expect-error
-      .attr("x1", (d) => d[0].projected.x)
-      // @ts-expect-error
-      .attr("x2", (d) => d[1].projected.x)
-      // @ts-expect-error
-      .attr("y1", (d) => d[0].projected.y)
-      // @ts-expect-error
-      .attr("y2", (d) => d[1].projected.y)
-      .classed("stroke-blue-500", true)
-      .classed("d3-3d", true)
-      .attr("a", (d) => console.debug(d))
-      .attr("stroke-width", (d) => getVectorLenRank(d) / 30)
-      .attr(
-        "style",
-        (d) => `stroke: var(--color-rainbow-${getVectorLenRank(d)})`,
-      );
+      .attr("d", poly3d.draw)
+      .classed("stroke-black dark:stroke-white fill-blue-500", true)
+      .classed("d3-3d", true);
+
+    // g.selectAll("line")
+    //   .data(linesData)
+    //   .join("line")
+    //   // @ts-expect-error
+    //   .attr("x1", (d) => d[0].projected.x)
+    //   // @ts-expect-error
+    //   .attr("x2", (d) => d[1].projected.x)
+    //   // @ts-expect-error
+    //   .attr("y1", (d) => d[0].projected.y)
+    //   // @ts-expect-error
+    //   .attr("y2", (d) => d[1].projected.y)
+    //   .classed("stroke-blue-500", true)
+    //   .classed("d3-3d", true)
+    //   .attr("a", (d) => console.debug(d))
+    //   .attr("stroke-width", (d) => getVectorLenRank(d) / 30)
+    //   .attr(
+    //     "style",
+    //     (d) => `stroke: var(--color-rainbow-${getVectorLenRank(d)})`,
+    //   );
 
     // @ts-expect-error
     g.selectAll(".d3-3d").sort(poly3d.sort);
@@ -253,12 +287,21 @@ export default function Field() {
       <Show when={import.meta.env.VERCEL_ENV !== "production"}>
         <textarea
           ref={debugTextAreaRef}
-          rows="6"
+          rows="4"
           class="w-full rounded font-mono outline"
         ></textarea>
       </Show>
       <FileUpload />
       <ErrorBadge />
+      <div class="w-full max-w-xl rounded bg-white outline dark:bg-black">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          ref={svgRef}
+          viewBox={`0 0 ${width} ${height}`}
+          preserveAspectRatio="xMidYMid meet"
+          class="h-full w-full"
+        />
+      </div>
       <div class="grid w-full max-w-xl grid-cols-[repeat(auto-fit,_8rem)] gap-4">
         <label>
           Scale
@@ -319,7 +362,7 @@ export default function Field() {
             step="0.01"
             value={vectorStats.vLenMax}
             onChange={(event) =>
-              setVectorStats("maxNorm", event.target.valueAsNumber)
+              setVectorStats("vLenMax", event.target.valueAsNumber)
             }
           />
         </label>
@@ -338,15 +381,6 @@ export default function Field() {
             }
           />
         </label>
-      </div>
-      <div class="w-full max-w-xl rounded bg-white outline dark:bg-black">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          ref={svgRef}
-          viewBox={`0 0 ${width} ${height}`}
-          preserveAspectRatio="xMidYMid meet"
-          class="h-full w-full"
-        />
       </div>
       <SVGDownload target={svgRef!} />
     </>
