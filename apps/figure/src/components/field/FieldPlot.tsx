@@ -15,42 +15,34 @@ const [vectorStats, setVectorStats] = createStore({
   xSpan: 0,
   ySpan: 0,
   zSpan: 0,
-  vLenMax: 1,
+  vLenMin: -1,
+  vLenMax: 0,
   vLen: 1e-7,
 });
 
 export default function Field() {
   let svgRef: SVGSVGElement | undefined;
-  let debugTextAreaRef: HTMLTextAreaElement | undefined;
-
-  createEffect(() => {
-    if (debugTextAreaRef) {
-      debugTextAreaRef.value =
-        `num: ${vectorArray().length} ` +
-        `| xSpan: ${vectorStats.xSpan} ` +
-        `| ySpan: ${vectorStats.ySpan} ` +
-        `| zSpan: ${vectorStats.zSpan} ` +
-        `| vLenMax: ${vectorStats.vLenMax}`;
-    }
-  });
 
   const DPI = 72;
   const width = DPI * 3.5;
-  const height = DPI * 3.5;
+  const height = DPI * 2;
 
   const origin: d3d.Coordinate2D = { x: width / 2, y: height / 2 };
   const defaultScale = 30;
   const [scale, setScale] = createSignal(defaultScale);
-  const defaultRotation = 1 / 4;
-  const [rotateX, setRotateX] = createSignal(defaultRotation);
-  const rotateXRad = () => rotateX() * Math.PI;
-  const [rotateY, _] = createSignal(0);
-  const rotateYRad = () => rotateY() * Math.PI;
-  const [rotateZ, setRotateZ] = createSignal(defaultRotation);
-  const rotateZRad = () => rotateZ() * Math.PI;
+  const rotXDefault = Math.atan(Math.sqrt(2)) / Math.PI;
+  const rotZDefault = 1 / 4;
+  const [rotX, setRotX] = createSignal(rotXDefault);
+  const rotXRad = () => rotX() * Math.PI;
+  const [rotY, _] = createSignal(0);
+  const rotYRad = () => rotY() * Math.PI;
+  const [rotZ, setRotZ] = createSignal(rotZDefault);
+  const rotZRad = () => rotZ() * Math.PI;
   const [axesEnabled, setAxesEnabled] = createSignal(true);
   const [zoomSens, setZoomSens] = createSignal(10);
-  const rotateSens = 1 / 180;
+  const rotSens = 1 / 180;
+  const [rotArrow, setRotArrow] = createSignal(0);
+  const rotArrowRad = () => rotArrow() * Math.PI;
 
   createEffect(() => {
     const dimMax = Math.max(
@@ -108,12 +100,18 @@ export default function Field() {
   const aWid = LEN * ARROW_WID;
   const aIns = LEN * ARROW_INSET;
 
+  const viewX = () => Math.sin(rotZRad()) * Math.sin(rotXRad());
+  const viewY = () => Math.cos(rotZRad()) * Math.sin(rotXRad());
+  const viewZ = () => Math.cos(rotXRad());
+
   const polygons: d3d.Polygon3DInput[] = [
     [
-      { x: aWid / 2, y: 0, z: 0 },
-      { x: 0, y: 0, z: aLen },
-      { x: -aWid / 2, y: 0, z: 0 },
-      { x: 0, y: 0, z: aIns },
+      // { x: aWid / 2, y: 0, z: 0 },
+      // { x: 0, y: 0, z: aLen },
+      // { x: -aWid / 2, y: 0, z: 0 },
+      // { x: 0, y: 0, z: aIns },
+      { x: 0, y: 0, z: 0 },
+      { x: 1, y: 1, z: 1 },
     ],
   ];
 
@@ -135,24 +133,35 @@ export default function Field() {
     //   .rotateY(rotateYRad())
     //   .rotateZ(rotateZRad())(points());
 
+    const z = Math.cos(rotXRad());
+    const y = Math.cos(rotZRad()) * Math.sin(rotXRad());
+    const x = Math.sin(rotZRad()) * Math.sin(rotXRad());
+    if (polygons.length > 1) {
+      polygons.pop();
+    }
+    polygons.push([
+      { x: 0, y: 0, z: 0 },
+      { x: x, y: y, z: z },
+    ]);
+
     const linesData = lines3d
       .scale(scale())
-      .rotateX(rotateXRad())
-      .rotateY(rotateYRad())
-      .rotateZ(rotateZRad())(lines());
+      .rotateX(rotXRad())
+      .rotateY(rotYRad())
+      .rotateZ(rotZRad())(lines());
 
     const polygonsData = poly3d
       .scale(scale())
-      .rotateX(rotateXRad())
-      .rotateY(rotateYRad())
-      .rotateZ(rotateZRad())(polygons);
+      .rotateX(rotXRad())
+      .rotateY(rotYRad())
+      .rotateZ(rotZRad())(polygons);
 
     const axesData = axes
       .scale(scale())
-      .rotateX(rotateXRad())
-      .rotateY(rotateYRad())
+      .rotateX(rotXRad())
+      .rotateY(rotYRad())
       // @ts-expect-error
-      .rotateZ(rotateZRad())(ticks);
+      .rotateZ(rotZRad())(ticks);
 
     const g = d3.select(svgRef!).selectAll("g").data([null]).join("g");
 
@@ -190,7 +199,9 @@ export default function Field() {
       .classed("poly", true)
       // @ts-expect-error
       .attr("d", poly3d.draw)
-      .classed("stroke-black dark:stroke-white fill-blue-500", true)
+      .attr("stroke-linecap", "round")
+      .attr("stroke-linejoin", "round")
+      .classed("stroke-black dark:stroke-red-500 fill-blue-500 stroke-3", true)
       .classed("d3-3d", true);
 
     // g.selectAll("line")
@@ -236,21 +247,21 @@ export default function Field() {
           );
           break;
         case "mousemove":
-          setRotateZ((prev) =>
-            parseFloat((prev - transform.x * rotateSens).toFixed(8)),
+          setRotZ((prev) =>
+            parseFloat((prev - transform.x * rotSens).toFixed(8)),
           );
-          setRotateX((prev) =>
-            parseFloat((prev - transform.y * rotateSens).toFixed(8)),
+          setRotX((prev) =>
+            parseFloat((prev - transform.y * rotSens).toFixed(8)),
           );
           break;
         case "touchmove":
           if (transform.k === 1) {
             // Pan
-            setRotateZ((prev) =>
-              parseFloat((prev - transform.x * rotateSens).toFixed(8)),
+            setRotZ((prev) =>
+              parseFloat((prev - transform.x * rotSens).toFixed(8)),
             );
-            setRotateX((prev) =>
-              parseFloat((prev - transform.y * rotateSens).toFixed(8)),
+            setRotX((prev) =>
+              parseFloat((prev - transform.y * rotSens).toFixed(8)),
             );
           } else {
             // Zoom
@@ -268,32 +279,32 @@ export default function Field() {
 
   onMount(() => {
     const svg = d3.select(svgRef!);
-    svg.call(zoom).on(
-      "dblclick.zoom",
-      () =>
-        batch(() => {
-          setScale(defaultScale);
-          setRotateX(defaultRotation);
-          setRotateZ(defaultRotation);
-          // Reset all
-          d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
-        }),
-      svg.call(zoom.translateBy, defaultRotation, defaultRotation),
+    svg.call(zoom).on("dblclick.zoom", () =>
+      batch(() => {
+        setScale(defaultScale);
+        setRotX(rotXDefault);
+        setRotZ(rotZDefault);
+        // Reset all
+        d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+      }),
     );
   });
 
   return (
     <>
-      <Show when={import.meta.env.VERCEL_ENV !== "production"}>
-        <textarea
-          ref={debugTextAreaRef}
-          rows="4"
-          class="w-full rounded font-mono outline"
-        ></textarea>
-      </Show>
       <FileUpload />
       <ErrorBadge />
-      <div class="w-full max-w-xl rounded bg-white outline dark:bg-black">
+      <p class="font-mono text-sm">
+        Number of Vectors:{" "}
+        {vectorArray().length === 0 ? "-" : vectorArray().length} | Span along x
+        axis: {vectorStats.xSpan === 0 ? "-" : vectorStats.xSpan} m | Span alone
+        y axis: {vectorStats.ySpan === 0 ? "-" : vectorStats.ySpan} m | Span
+        alone z axis: {vectorStats.zSpan === 0 ? "-" : vectorStats.zSpan} m |
+        Minimum vector length:{" "}
+        {vectorStats.vLenMin === -1 ? "-" : vectorStats.vLenMin}| Maximum vector
+        length: {vectorStats.vLenMax === 0 ? "-" : vectorStats.vLenMax}
+      </p>{" "}
+      <div class="w-full max-w-3xl rounded bg-white outline dark:bg-black">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           ref={svgRef}
@@ -302,11 +313,12 @@ export default function Field() {
           class="h-full w-full"
         />
       </div>
-      <div class="grid w-full max-w-xl grid-cols-[repeat(auto-fit,_8rem)] gap-4">
+      <p>You can zoom and rotate the viewport. Double click to reset.</p>
+      <div class="grid w-full max-w-xl grid-cols-[repeat(auto-fit,_9rem)] justify-items-stretch gap-4">
         <label>
           Scale
           <input
-            class="w-32 rounded pl-2 outline"
+            class="w-full rounded pl-2 outline"
             type="number"
             required
             name="Scale"
@@ -317,27 +329,27 @@ export default function Field() {
         <label>
           <em>θ</em> Rotation (π)
           <input
-            class="w-32 rounded pl-2 outline"
+            class="w-full rounded pl-2 outline"
             type="number"
             required
             name="X Rotate"
             min="0"
             step="0.01"
-            value={rotateX()}
-            onChange={(event) => setRotateX(event.target.valueAsNumber)}
+            value={rotX()}
+            onChange={(event) => setRotX(event.target.valueAsNumber)}
           />
         </label>
         <label>
           <em>ϕ</em> Rotation (π)
           <input
-            class="w-32 rounded pl-2 outline"
+            class="w-full rounded pl-2 outline"
             type="number"
             required
             name="Z Rotate"
             min="0"
             step="0.01"
-            value={rotateZ()}
-            onChange={(event) => setRotateZ(event.target.valueAsNumber)}
+            value={rotZ()}
+            onChange={(event) => setRotZ(event.target.valueAsNumber)}
           />
         </label>
         <label>
@@ -369,7 +381,7 @@ export default function Field() {
         <label>
           Vector Length (%)
           <input
-            class="w-32 rounded pl-2 outline"
+            class="w-full rounded pl-2 outline"
             type="number"
             required
             name="Max Vector Length"
@@ -379,6 +391,22 @@ export default function Field() {
             onChange={(event) =>
               setVectorStats("vLen", event.target.valueAsNumber)
             }
+          />
+        </label>
+        <label>
+          Arrow Rotation:
+          <input
+            class="w-full"
+            type="range"
+            required
+            name="Arrow Rotation"
+            min="0"
+            max="2"
+            step="0.1"
+            // value={vectorStats.vLen}
+            // onChange={(event) =>
+            //   setVectorStats("vLen", event.target.valueAsNumber)
+            // }
           />
         </label>
       </div>
