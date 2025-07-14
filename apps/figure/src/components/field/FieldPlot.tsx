@@ -1,16 +1,13 @@
 import { errBadge, setErrBadge } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
-import {
-  getVector3L2,
-  type Vector6Array,
-} from "components/field/linearAlgebra";
+import { getVec3L2, type Vec6Array } from "components/field/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
 import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 
-const [vectorArray, setVectorArray] = createSignal<Vector6Array>([]);
+const [vectorArray, setVectorArray] = createSignal<Vec6Array>([]);
 const [vectorStats, setVectorStats] = createStore({
   xSpan: 0,
   ySpan: 0,
@@ -44,6 +41,7 @@ export default function Field() {
   const [rotArrow, setRotArrow] = createSignal(0);
   const rotArrowRad = () => rotArrow() * Math.PI;
 
+  // Set proper scale and zoom sensitivity
   createEffect(() => {
     const dimMax = Math.max(
       vectorStats.xSpan,
@@ -403,10 +401,8 @@ export default function Field() {
             min="0"
             max="2"
             step="0.1"
-            // value={vectorStats.vLen}
-            // onChange={(event) =>
-            //   setVectorStats("vLen", event.target.valueAsNumber)
-            // }
+            value={rotArrow()}
+            onChange={(event) => setRotArrow(event.target.valueAsNumber)}
           />
         </label>
       </div>
@@ -446,7 +442,7 @@ const FileUpload = () => {
             setVectorStats(stats);
 
             // Position normalization
-            const vss: Vector6Array = [];
+            const vss: Vec6Array = [];
             for (const v of vs) {
               const x = v[0];
               const y = v[1];
@@ -483,7 +479,7 @@ function getVectorLenRank(d: d3d.Line3D): number {
   const start = d[0];
   const end = d[1];
   const diff = [d[1].x - d[0].x, d[1].y - d[0].y, d[1].z - d[0].z];
-  const vLen = getVector3L2(diff);
+  const vLen = getVec3L2(diff);
   const unit = (vectorStats.vMax * vectorStats.vLen) / 100 / 30;
   let rank = Math.floor(vLen / unit);
 

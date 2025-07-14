@@ -1,8 +1,11 @@
 import { setErrBadge } from "components/field/contexts";
 import {
-  type Vector6,
-  type Vector6Array,
-  getVector6L2,
+  type Vec3,
+  type Vec3Array,
+  type Vec6,
+  type Vec6Array,
+  getUnitVec3,
+  getVec6L2,
 } from "components/field/linearAlgebra";
 
 function* genLines(text: string) {
@@ -21,7 +24,7 @@ function parseElementNumber(line: string): number {
   return parseInt(numPart ?? "NaN");
 }
 
-function parseVector(line: string): Vector6 | undefined {
+function parseVector(line: string): Vec6 | undefined {
   const parsed = line
     .trim()
     .split(/\s+/)
@@ -38,11 +41,17 @@ function parseVector(line: string): Vector6 | undefined {
 
   if (parsed.length !== 6 || parsed.some(Number.isNaN)) return;
 
-  return parsed as Vector6;
+  return parsed as Vec6;
 }
 
 export function parseFld(text: string) {
-  const vs: Vector6Array = [];
+  /** Vecter starting positions */
+  const starts: Vec3Array = [];
+  /** Unit vectors */
+  const units: Vec3Array = [];
+  /** Vector lengths */
+  const lens: number[] = [];
+  /** Vector stats */
   const stats = {
     xMin: Infinity,
     yMin: Infinity,
@@ -74,36 +83,44 @@ export function parseFld(text: string) {
       continue;
     }
     if (/^-?\d/.test(line)) {
-      const res = parseVector(line);
-      if (res === undefined) {
+      const v6 = parseVector(line);
+      if (v6 === undefined) {
         continue;
       }
 
-      if (res[0] < stats.xMin) {
-        stats.xMin = res[0];
+      if (v6[0] < stats.xMin) {
+        stats.xMin = v6[0];
       }
-      if (res[0] > stats.xMax) {
-        stats.xMax = res[0];
+      if (v6[0] > stats.xMax) {
+        stats.xMax = v6[0];
       }
-      if (res[1] < stats.yMin) {
-        stats.yMin = res[1];
+      if (v6[1] < stats.yMin) {
+        stats.yMin = v6[1];
       }
-      if (res[1] > stats.yMax) {
-        stats.yMax = res[1];
+      if (v6[1] > stats.yMax) {
+        stats.yMax = v6[1];
       }
-      if (res[2] < stats.zMin) {
-        stats.zMin = res[2];
+      if (v6[2] < stats.zMin) {
+        stats.zMin = v6[2];
       }
-      if (res[2] > stats.zMax) {
-        stats.zMax = res[2];
-      }
-
-      const vLen = getVector6L2(res);
-      if (vLen > stats.vLenMax) {
-        stats.vLenMax = vLen;
+      if (v6[2] > stats.zMax) {
+        stats.zMax = v6[2];
       }
 
-      vs.push(res);
+      const start: Vec3 = [v6[0], v6[1], v6[2]];
+      const v3: Vec3 = [v6[3], v6[4], v6[5]];
+      const [unit, len] = getUnitVec3(v3);
+
+      if (len < stats.vLenMin) {
+        stats.vLenMin = len;
+      }
+      if (len > stats.vLenMax) {
+        stats.vLenMax = len;
+      }
+
+      starts.push(start);
+      units.push(unit);
+      lens.push(len);
 
       continue;
     }
@@ -112,8 +129,14 @@ export function parseFld(text: string) {
     console.error(line);
   }
 
+  stats.xSpan = stats.xMax - stats.xMin;
+  stats.ySpan = stats.yMax - stats.yMin;
+  stats.zSpan = stats.zMax - stats.zMin;
+
   return {
-    vectors: vs,
-    stats: stats,
+    starts,
+    units,
+    lens,
+    stats,
   };
 }
