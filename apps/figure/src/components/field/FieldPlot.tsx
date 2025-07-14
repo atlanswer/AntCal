@@ -1,10 +1,10 @@
 import { errBadge, setErrBadge } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
 import {
-  getVec3L2,
-  type Vec6Array,
-  type Vec3,
   getUnitVec3,
+  getVec3L2,
+  type Vec3,
+  type Vec6Array,
 } from "components/field/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
 import * as d3 from "d3";
@@ -396,7 +396,7 @@ const FileUpload = () => {
             return;
           }
           event.target.files![0]!.text().then((content) => {
-            const { vectors, stats } = parseFld(content);
+            const { starts, units, lens, stats } = parseFld(content);
 
             setVectorStats(stats);
 

@@ -88,6 +88,14 @@ export function parseFld(text: string) {
         continue;
       }
 
+      // Fix for right handed system
+      const temp1 = v6[1];
+      v6[1] = v6[0];
+      v6[0] = temp1;
+      const temp2 = v6[4];
+      v6[4] = v6[3];
+      v6[3] = temp2;
+
       if (v6[0] < stats.xMin) {
         stats.xMin = v6[0];
       }
