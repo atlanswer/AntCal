@@ -1,11 +1,17 @@
 import { errBadge, setErrBadge } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
-import { getVec3L2, type Vec6Array } from "components/field/linearAlgebra";
+import {
+  getVec3L2,
+  type Vec6Array,
+  type Vec3,
+  getUnitVec3,
+} from "components/field/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
 import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
+import { createArrow } from "./arrow";
 
 const [vectorArray, setVectorArray] = createSignal<Vec6Array>([]);
 const [vectorStats, setVectorStats] = createStore({
@@ -88,30 +94,16 @@ export default function Field() {
     return res;
   };
 
-  const LEN = 10;
-
-  const ARROW_LEN = 0.0724;
-  const ARROW_WID = 0.0362;
-  const ARROW_INSET = 0.00724;
-
-  const aLen = LEN * ARROW_LEN;
-  const aWid = LEN * ARROW_WID;
-  const aIns = LEN * ARROW_INSET;
-
   const viewX = () => Math.sin(rotZRad()) * Math.sin(rotXRad());
   const viewY = () => Math.cos(rotZRad()) * Math.sin(rotXRad());
   const viewZ = () => Math.cos(rotXRad());
+  /** Unit vector that is the normal vector of the screen */
+  const vView = () => [viewX(), viewY(), viewZ()] as Vec3;
 
-  const polygons: d3d.Polygon3DInput[] = [
-    [
-      // { x: aWid / 2, y: 0, z: 0 },
-      // { x: 0, y: 0, z: aLen },
-      // { x: -aWid / 2, y: 0, z: 0 },
-      // { x: 0, y: 0, z: aIns },
-      { x: 0, y: 0, z: 0 },
-      { x: 1, y: 1, z: 1 },
-    ],
-  ];
+  const testU: Vec3[] = [[0, 0, 1], [1, 0, 0], getUnitVec3([1, 1, 1])[0]];
+  const testA: number[] = [1, 1, 2];
+
+  const polygons: d3d.Polygon3DInput[] = [];
 
   const xTicks: d3d.Point3DInput[] = d3
     .range(6)
@@ -125,28 +117,12 @@ export default function Field() {
   const ticks = [xTicks, yTicks, zTicks];
 
   function draw() {
-    // const pointsData = points3d
-    //   .scale(scale())
-    //   .rotateX(rotateXRad())
-    //   .rotateY(rotateYRad())
-    //   .rotateZ(rotateZRad())(points());
+    const n: Vec3 = [0, 1, 0];
 
-    const z = Math.cos(rotXRad());
-    const y = Math.cos(rotZRad()) * Math.sin(rotXRad());
-    const x = Math.sin(rotZRad()) * Math.sin(rotXRad());
-    if (polygons.length > 1) {
-      polygons.pop();
+    polygons.length = 0;
+    for (let i = 0; i < testU.length; i++) {
+      polygons.push(createArrow(testU[i]!, testA[i]!, vView(), rotArrowRad()));
     }
-    polygons.push([
-      { x: 0, y: 0, z: 0 },
-      { x: x, y: y, z: z },
-    ]);
-
-    const linesData = lines3d
-      .scale(scale())
-      .rotateX(rotXRad())
-      .rotateY(rotYRad())
-      .rotateZ(rotZRad())(lines());
 
     const polygonsData = poly3d
       .scale(scale())
@@ -199,28 +175,11 @@ export default function Field() {
       .attr("d", poly3d.draw)
       .attr("stroke-linecap", "round")
       .attr("stroke-linejoin", "round")
-      .classed("stroke-black dark:stroke-red-500 fill-blue-500 stroke-3", true)
+      .classed(
+        "stroke-black dark:stroke-yellow-500 fill-sky-500 stroke-1",
+        true,
+      )
       .classed("d3-3d", true);
-
-    // g.selectAll("line")
-    //   .data(linesData)
-    //   .join("line")
-    //   // @ts-expect-error
-    //   .attr("x1", (d) => d[0].projected.x)
-    //   // @ts-expect-error
-    //   .attr("x2", (d) => d[1].projected.x)
-    //   // @ts-expect-error
-    //   .attr("y1", (d) => d[0].projected.y)
-    //   // @ts-expect-error
-    //   .attr("y2", (d) => d[1].projected.y)
-    //   .classed("stroke-blue-500", true)
-    //   .classed("d3-3d", true)
-    //   .attr("a", (d) => console.debug(d))
-    //   .attr("stroke-width", (d) => getVectorLenRank(d) / 30)
-    //   .attr(
-    //     "style",
-    //     (d) => `stroke: var(--color-rainbow-${getVectorLenRank(d)})`,
-    //   );
 
     // @ts-expect-error
     g.selectAll(".d3-3d").sort(poly3d.sort);
@@ -400,9 +359,9 @@ export default function Field() {
             name="Arrow Rotation"
             min="0"
             max="2"
-            step="0.1"
+            step="0.05"
             value={rotArrow()}
-            onChange={(event) => setRotArrow(event.target.valueAsNumber)}
+            onInput={(event) => setRotArrow(event.target.valueAsNumber)}
           />
         </label>
       </div>
