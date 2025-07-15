@@ -1,27 +1,28 @@
+import { createArrow } from "components/field/arrow";
 import { errBadge, setErrBadge } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
-import {
-  getUnitVec3,
-  getVec3L2,
-  type Vec3,
-} from "components/field/linearAlgebra";
+import { type Vec3 } from "components/field/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
 import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
-import { createArrow } from "./arrow";
 
-const [starts, setStarts] = createSignal<Vec3[]>([]);
-const [units, setUnits] = createSignal<Vec3[]>([]);
-const [lens, setLens] = createSignal<number[]>([]);
+const [starts, setStarts] = createSignal<Vec3[]>([
+  [0, 0, 0],
+  [1, 0, 0],
+]);
+const [units, setUnits] = createSignal<Vec3[]>([
+  [0, 0, 1],
+  [1, 0, 0],
+]);
+const [lens, setLens] = createSignal<number[]>([1, 1]);
 const [stats, setStats] = createStore({
-  xSpan: 10,
-  ySpan: 10,
-  zSpan: 10,
-  vLenMin: -1,
-  vLenMax: 0,
-  vLen: 1e-7,
+  xSpan: 6,
+  ySpan: 6,
+  zSpan: 6,
+  vLenMin: 0,
+  vLenMax: 1,
 });
 
 export default function Field() {
@@ -32,7 +33,7 @@ export default function Field() {
   const height = DPI * 3;
 
   const origin: d3d.Coordinate2D = { x: width / 2, y: height / 2 };
-  const defaultScale = 30;
+  let defaultScale = 30;
   const [scale, setScale] = createSignal(defaultScale);
   const rotXDefault = Math.atan(Math.sqrt(2)) / Math.PI;
   const rotZDefault = 1 / 4;
@@ -43,23 +44,36 @@ export default function Field() {
   const [rotZ, setRotZ] = createSignal(rotZDefault);
   const rotZRad = () => rotZ() * Math.PI;
   const [axesEnabled, setAxesEnabled] = createSignal(true);
-  const [zoomSens, setZoomSens] = createSignal(10);
+  let defaultZoomSens = 10;
+  const [zoomSens, setZoomSens] = createSignal(defaultZoomSens);
   const rotSens = 1 / 180;
   const [rotArrow, setRotArrow] = createSignal(0);
   const rotArrowRad = () => rotArrow() * Math.PI;
+  const [vScale, setVScale] = createSignal(1);
+  const [arrowTail, setArrowTail] = createSignal(true);
+  const [arrowAlign, setArrowAlign] = createSignal<"start" | "middle" | "end">(
+    "middle",
+  );
 
   // Set proper scale and zoom sensitivity
   createEffect(() => {
-    const dimMax = Math.max(stats.xSpan, stats.ySpan, stats.zSpan);
-    // Reset
-    if (dimMax === 0) {
-      setScale(30);
-      setZoomSens(10);
-      return;
-    }
-    const newScale = Math.floor(width / dimMax);
+    const spanMax = Math.max(stats.xSpan, stats.ySpan, stats.zSpan);
+    const newScale = Math.floor(width / spanMax);
     setScale(newScale);
+    defaultScale = newScale;
     setZoomSens(Math.floor(newScale / 3));
+    defaultZoomSens = 10;
+
+    if (starts().length < 2) return;
+
+    const v0 = starts()[0]!;
+    const v1 = starts()[1]!;
+    const diff = Math.max(
+      Math.abs(v1[0] - v0[0]),
+      Math.abs(v1[1] - v0[1]),
+      Math.abs(v1[2] - v0[2]),
+    );
+    setVScale(diff / stats.vLenMax);
   });
 
   const points3d = d3d.points3D().origin(origin);
@@ -68,19 +82,30 @@ export default function Field() {
   const axis = d3d.lineStrips3D().origin(origin);
 
   const points: () => d3d.Point3DInput[] = () => [];
-
   const lines: () => d3d.Line3DInput[] = () => [];
+  const polygons: () => d3d.Polygon3DInput[] = () => {
+    const res: d3d.Polygon3DInput[] = [];
+    for (let i = 0; i < starts().length; i++) {
+      res.push(
+        createArrow(
+          starts()[i]!,
+          units()[i]!,
+          lens()[i]! * vScale(),
+          vView(),
+          rotArrowRad(),
+          arrowAlign(),
+          arrowTail(),
+        ),
+      );
+    }
+    return res;
+  };
 
   const viewX = () => Math.sin(rotZRad()) * Math.sin(rotXRad());
   const viewY = () => Math.cos(rotZRad()) * Math.sin(rotXRad());
   const viewZ = () => Math.cos(rotXRad());
   /** Unit vector that is the normal vector of the screen */
   const vView = () => [viewX(), viewY(), viewZ()] as Vec3;
-
-  const testU: Vec3[] = [[0, 0, 1], [1, 0, 0], getUnitVec3([1, 1, 1])[0]];
-  const testA: number[] = [1, 1, 2];
-
-  const polygons: d3d.Polygon3DInput[] = [];
 
   const xAxisRange = () => d3.nice(-stats.xSpan / 2, stats.xSpan / 2, 5);
   const xAxisTicks: () => d3d.Point3DInput[] = () =>
@@ -95,17 +120,11 @@ export default function Field() {
   const f = d3.format(".2s");
 
   function draw() {
-    // Update arrow facing direction
-    polygons.length = 0;
-    for (let i = 0; i < testU.length; i++) {
-      polygons.push(createArrow(testU[i]!, testA[i]!, vView(), rotArrowRad()));
-    }
-
     const polygonsData = poly3d
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
-      .rotateZ(rotZRad())(polygons);
+      .rotateZ(rotZRad())(polygons());
 
     const axis3d = axis
       .scale(scale())
@@ -170,18 +189,16 @@ export default function Field() {
       .classed("fill-black dark:fill-white", true)
       .text((d) => f([d.x, d.y, d.z].find((v) => v !== 0) ?? 0));
 
-    g.selectAll("path.poly")
+    // Vector arrows
+    g.selectAll("path.arrow")
       .data(polygonsData)
       .join("path")
-      .classed("poly", true)
+      .classed("arrow", true)
       // @ts-expect-error
       .attr("d", poly3d.draw)
-      .attr("stroke-linecap", "round")
-      .attr("stroke-linejoin", "round")
-      .classed(
-        "stroke-black dark:stroke-yellow-500 fill-sky-500 stroke-1",
-        true,
-      )
+      // .attr("stroke-linecap", "round")
+      // .attr("stroke-linejoin", "round")
+      .classed("stroke-white fill-sky-500 stroke-1", true)
       .classed("d3-3d", true);
 
     // @ts-expect-error
@@ -256,11 +273,12 @@ export default function Field() {
       <ErrorBadge />
       <p class="font-mono text-sm">
         Number of Vectors: {lens().length === 0 ? "-" : lens().length} | Span
-        along x axis: {stats.xSpan === 0 ? "-" : stats.xSpan} m | Span alone y
-        axis: {stats.ySpan === 0 ? "-" : stats.ySpan} m | Span alone z axis:{" "}
-        {stats.zSpan === 0 ? "-" : stats.zSpan} m | Minimum vector length:{" "}
-        {stats.vLenMin === -1 ? "-" : stats.vLenMin}| Maximum vector length:{" "}
-        {stats.vLenMax === 0 ? "-" : stats.vLenMax}
+        along x axis: {stats.xSpan === 0 ? "-" : stats.xSpan.toFixed(8)} m |
+        Span alone y axis: {stats.ySpan === 0 ? "-" : stats.ySpan.toFixed(8)} m
+        | Span alone z axis: {stats.zSpan === 0 ? "-" : stats.zSpan.toFixed(8)}{" "}
+        m | Minimum vector length:{" "}
+        {stats.vLenMin === -1 ? "-" : stats.vLenMin.toFixed(8)} | Maximum vector
+        length: {stats.vLenMax === 0 ? "-" : stats.vLenMax.toFixed(8)}
       </p>{" "}
       <div class="w-full max-w-3xl rounded bg-white outline dark:bg-black">
         <svg
@@ -322,7 +340,20 @@ export default function Field() {
           />
         </label>
         <label>
-          Max Vector Length
+          Vector Scale
+          <input
+            class="w-full rounded pl-2 outline"
+            type="number"
+            required
+            name="Vector Scale"
+            min="0"
+            step="0.1"
+            value={vScale()}
+            onChange={(event) => setVScale(event.target.valueAsNumber)}
+          />
+        </label>
+        <label>
+          Min Vector Length
           <input
             class="w-32 rounded pl-2 outline"
             type="number"
@@ -337,19 +368,6 @@ export default function Field() {
           />
         </label>
         <label>
-          Vector Length (%)
-          <input
-            class="w-full rounded pl-2 outline"
-            type="number"
-            required
-            name="Max Vector Length"
-            min="0"
-            step="1"
-            value={stats.vLen}
-            onChange={(event) => setStats("vLen", event.target.valueAsNumber)}
-          />
-        </label>
-        <label>
           Arrow Rotation:
           <input
             class="w-full"
@@ -361,6 +379,32 @@ export default function Field() {
             step="0.05"
             value={rotArrow()}
             onInput={(event) => setRotArrow(event.target.valueAsNumber)}
+          />
+        </label>
+        <label>
+          Arrow Alignment
+          <select
+            required
+            onChange={(event) =>
+              setArrowAlign(event.target.value as "start" | "middle" | "end")
+            }
+          >
+            <option value="start">Start</option>
+            <option value="middle" selected>
+              Middle
+            </option>
+            <option value="end">End</option>
+          </select>
+        </label>
+        <label>
+          Arrow Tail
+          <input
+            class="block"
+            type="checkbox"
+            required
+            name="Include Arrow Tail"
+            checked
+            onChange={(event) => setArrowTail(event.target.checked)}
           />
         </label>
       </div>
