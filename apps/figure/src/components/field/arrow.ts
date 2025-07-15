@@ -7,7 +7,6 @@ import {
 } from "components/field/linearAlgebra";
 import type * as d3d from "d3-3d";
 
-const ARROW_SCALE = 0.04;
 const ARROW_LEN = 0.724;
 const ARROW_WID = 0.362;
 const ARROW_INSET = 0.07;

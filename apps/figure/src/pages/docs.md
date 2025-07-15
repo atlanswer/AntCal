@@ -11,7 +11,7 @@ Visualize vector fields in an interactive SVG.
 **TODOs:**
 
 - [ ] Vector length control
-- [ ] Vector arrow
+- [x] Vector arrow
 - [ ] Vector arrow shape selection
 
 **Limitations:**

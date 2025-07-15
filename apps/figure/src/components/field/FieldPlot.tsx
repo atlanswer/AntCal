@@ -25,10 +25,44 @@ const [stats, setStats] = createStore({
   vLenMax: 1,
 });
 
+const rainbowDark: string[] = [
+  "#3c5793",
+  "#3e5791",
+  "#3f5790",
+  "#40588e",
+  "#425f7e",
+  "#42666f",
+  "#446d60",
+  "#467156",
+  "#48764d",
+  "#4d7c44",
+  "#588342",
+  "#648a3f",
+  "#70923e",
+  "#859d40",
+  "#95a642",
+  "#a9b145",
+  "#b8b848",
+  "#cac14c",
+  "#d3c24e",
+  "#d9be51",
+  "#dfbc53",
+  "#dcad51",
+  "#d69a50",
+  "#d1884e",
+  "#c96f48",
+  "#c25741",
+  "#ba3d3b",
+  "#ba3d3b",
+  "#ba3d3b",
+  "#ba3d3b",
+];
+
 export default function Field() {
   let svgRef: SVGSVGElement | undefined;
 
-  const DPI = 72;
+  // const DPI = 72;
+  const DPI = 600;
   const width = DPI * 3.5;
   const height = DPI * 3;
 
@@ -46,7 +80,7 @@ export default function Field() {
   const [axesEnabled, setAxesEnabled] = createSignal(true);
   let defaultZoomSens = 10;
   const [zoomSens, setZoomSens] = createSignal(defaultZoomSens);
-  const rotSens = 1 / 180;
+  const rotSens = 1 / 360 / 4;
   const [rotArrow, setRotArrow] = createSignal(0);
   const rotArrowRad = () => rotArrow() * Math.PI;
   const [vScale, setVScale] = createSignal(1);
@@ -54,6 +88,8 @@ export default function Field() {
   const [arrowAlign, setArrowAlign] = createSignal<"start" | "middle" | "end">(
     "middle",
   );
+  const [disLenMin, setDisLenMin] = createSignal(0);
+  const [disLenMax, setDisLenMax] = createSignal(0);
 
   // Set proper scale and zoom sensitivity
   createEffect(() => {
@@ -63,9 +99,10 @@ export default function Field() {
     defaultScale = newScale;
     setZoomSens(Math.floor(newScale / 3));
     defaultZoomSens = 10;
-
+  });
+  // Set vector length scale
+  createEffect(() => {
     if (starts().length < 2) return;
-
     const v0 = starts()[0]!;
     const v1 = starts()[1]!;
     const diff = Math.max(
@@ -75,22 +112,23 @@ export default function Field() {
     );
     setVScale(diff / stats.vLenMax);
   });
+  createEffect(() => setDisLenMin(stats.vLenMin));
+  createEffect(() => setDisLenMax(stats.vLenMax));
 
-  const points3d = d3d.points3D().origin(origin);
-  const lines3d = d3d.lines3D().origin(origin);
   const poly3d = d3d.polygons3D().origin(origin);
   const axis = d3d.lineStrips3D().origin(origin);
 
-  const points: () => d3d.Point3DInput[] = () => [];
-  const lines: () => d3d.Line3DInput[] = () => [];
   const polygons: () => d3d.Polygon3DInput[] = () => {
     const res: d3d.Polygon3DInput[] = [];
     for (let i = 0; i < starts().length; i++) {
+      let len = lens()[i]!;
+      len = len < disLenMin() ? disLenMin() : len;
+      len = len > disLenMax() ? disLenMax() : len;
       res.push(
         createArrow(
           starts()[i]!,
           units()[i]!,
-          lens()[i]! * vScale(),
+          len * vScale(),
           vView(),
           rotArrowRad(),
           arrowAlign(),
@@ -161,7 +199,7 @@ export default function Field() {
       .classed("axis-text", true)
       .attr("font-family", "Times New Roman")
       .attr("font-style", "italic")
-      .attr("font-size", "10pt")
+      .attr("font-size", "80pt")
       .attr("dominant-baseline", "middle")
       .classed("fill-black dark:fill-white", true)
       .attr("x", (d) => d.projected.x)
@@ -185,7 +223,7 @@ export default function Field() {
       .attr("x", (d) => d.projected.x)
       .attr("y", (d) => d.projected.y)
       .attr("font-family", "Arial")
-      .attr("font-size", "6pt")
+      .attr("font-size", "48pt")
       .classed("fill-black dark:fill-white", true)
       .text((d) => f([d.x, d.y, d.z].find((v) => v !== 0) ?? 0));
 
@@ -196,13 +234,26 @@ export default function Field() {
       .classed("arrow", true)
       // @ts-expect-error
       .attr("d", poly3d.draw)
-      // .attr("stroke-linecap", "round")
-      // .attr("stroke-linejoin", "round")
-      .classed("stroke-white fill-sky-500 stroke-1", true)
+      .attr("stroke-linejoin", "arcs")
+      .style("stroke-width", 8)
+      .style("stroke", mapColor)
+      .style("fill", mapColor)
       .classed("d3-3d", true);
 
     // @ts-expect-error
     g.selectAll(".d3-3d").sort(poly3d.sort);
+  }
+
+  function mapColor(_: any, i: number): string {
+    const len = lens()[i]!;
+    let diff = len - disLenMin();
+    diff = diff < 0 ? 0 : diff;
+
+    const step = (disLenMax() - disLenMin()) / 30;
+    let idx = Math.floor(diff / step);
+    idx = idx > 29 ? 29 : idx;
+
+    return rainbowDark[idx]!;
   }
 
   // Redraw
@@ -358,13 +409,24 @@ export default function Field() {
             class="w-32 rounded pl-2 outline"
             type="number"
             required
+            name="Min Vector Length"
+            min="0"
+            step="0.01"
+            value={disLenMin()}
+            onChange={(event) => setDisLenMin(event.target.valueAsNumber)}
+          />
+        </label>
+        <label>
+          Max Vector Length
+          <input
+            class="w-32 rounded pl-2 outline"
+            type="number"
+            required
             name="Max Vector Length"
             min="0"
             step="0.01"
-            value={stats.vLenMax}
-            onChange={(event) =>
-              setStats("vLenMax", event.target.valueAsNumber)
-            }
+            value={disLenMax()}
+            onChange={(event) => setDisLenMax(event.target.valueAsNumber)}
           />
         </label>
         <label>
