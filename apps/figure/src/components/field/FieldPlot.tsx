@@ -341,7 +341,7 @@ export default function Field() {
         />
       </div>
       <p>You can zoom and rotate the viewport. Double click to reset.</p>
-      <div class="grid w-full max-w-xl grid-cols-[repeat(auto-fit,_9rem)] justify-items-stretch gap-4">
+      <div class="grid w-full max-w-3xl grid-cols-[repeat(auto-fit,_14rem)] justify-items-stretch gap-4">
         <label>
           Scale
           <input
@@ -406,7 +406,7 @@ export default function Field() {
         <label>
           Min Vector Length
           <input
-            class="w-32 rounded pl-2 outline"
+            class="w-full rounded pl-2 outline"
             type="number"
             required
             name="Min Vector Length"
@@ -419,7 +419,7 @@ export default function Field() {
         <label>
           Max Vector Length
           <input
-            class="w-32 rounded pl-2 outline"
+            class="w-full rounded pl-2 outline"
             type="number"
             required
             name="Max Vector Length"
@@ -446,6 +446,7 @@ export default function Field() {
         <label>
           Arrow Alignment
           <select
+            class="block"
             required
             onChange={(event) =>
               setArrowAlign(event.target.value as "start" | "middle" | "end")
