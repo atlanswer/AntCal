@@ -1,11 +1,8 @@
 import { setErrBadge } from "components/field/contexts";
 import {
   type Vec3,
-  type Vec3Array,
   type Vec6,
-  type Vec6Array,
   getUnitVec3,
-  getVec6L2,
 } from "components/field/linearAlgebra";
 
 function* genLines(text: string) {
@@ -46,9 +43,9 @@ function parseVector(line: string): Vec6 | undefined {
 
 export function parseFld(text: string) {
   /** Vecter starting positions */
-  const starts: Vec3Array = [];
+  const starts: Vec3[] = [];
   /** Unit vectors */
-  const units: Vec3Array = [];
+  const units: Vec3[] = [];
   /** Vector lengths */
   const lens: number[] = [];
   /** Vector stats */
@@ -140,6 +137,19 @@ export function parseFld(text: string) {
   stats.xSpan = stats.xMax - stats.xMin;
   stats.ySpan = stats.yMax - stats.yMin;
   stats.zSpan = stats.zMax - stats.zMin;
+
+  const xStart = -stats.xSpan / 2;
+  const yStart = -stats.ySpan / 2;
+  const zStart = -stats.zSpan / 2;
+
+  // Normalize staring positions
+  for (let i = 0; i < starts.length; i++) {
+    const s = starts[i]!;
+    s[0] = xStart + s[0] - stats.xMin;
+    s[1] = yStart + s[1] - stats.yMin;
+    s[2] = zStart + s[2] - stats.zMin;
+    starts[i] = s;
+  }
 
   return {
     starts,

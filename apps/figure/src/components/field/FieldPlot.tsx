@@ -4,7 +4,6 @@ import {
   getUnitVec3,
   getVec3L2,
   type Vec3,
-  type Vec6Array,
 } from "components/field/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
 import * as d3 from "d3";
@@ -13,11 +12,13 @@ import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import { createArrow } from "./arrow";
 
-const [vectorArray, setVectorArray] = createSignal<Vec6Array>([]);
-const [vectorStats, setVectorStats] = createStore({
-  xSpan: 0,
-  ySpan: 0,
-  zSpan: 0,
+const [starts, setStarts] = createSignal<Vec3[]>([]);
+const [units, setUnits] = createSignal<Vec3[]>([]);
+const [lens, setLens] = createSignal<number[]>([]);
+const [stats, setStats] = createStore({
+  xSpan: 10,
+  ySpan: 10,
+  zSpan: 10,
   vLenMin: -1,
   vLenMax: 0,
   vLen: 1e-7,
@@ -28,7 +29,7 @@ export default function Field() {
 
   const DPI = 72;
   const width = DPI * 3.5;
-  const height = DPI * 2;
+  const height = DPI * 3;
 
   const origin: d3d.Coordinate2D = { x: width / 2, y: height / 2 };
   const defaultScale = 30;
@@ -49,11 +50,7 @@ export default function Field() {
 
   // Set proper scale and zoom sensitivity
   createEffect(() => {
-    const dimMax = Math.max(
-      vectorStats.xSpan,
-      vectorStats.ySpan,
-      vectorStats.zSpan,
-    );
+    const dimMax = Math.max(stats.xSpan, stats.ySpan, stats.zSpan);
     // Reset
     if (dimMax === 0) {
       setScale(30);
@@ -68,31 +65,11 @@ export default function Field() {
   const points3d = d3d.points3D().origin(origin);
   const lines3d = d3d.lines3D().origin(origin);
   const poly3d = d3d.polygons3D().origin(origin);
-  const axes = d3d.lineStrips3D().origin(origin);
+  const axis = d3d.lineStrips3D().origin(origin);
 
-  const points: () => d3d.Point3DInput[] = () => {
-    const res: d3d.Point3DInput[] = [];
-    for (const v of vectorArray()) {
-      res.push({ x: v[0], y: v[1], z: v[2] });
-    }
-    return res;
-  };
+  const points: () => d3d.Point3DInput[] = () => [];
 
-  const lines: () => d3d.Line3DInput[] = () => {
-    const res: d3d.Line3DInput[] = [];
-    for (const v of vectorArray()) {
-      // @ts-expect-error
-      res.push([
-        { x: v[0], y: v[1], z: v[2] },
-        {
-          x: v[0] + (v[3] * vectorStats.vLen) / 100,
-          y: v[1] + (v[4] * vectorStats.vLen) / 100,
-          z: v[2] + (v[5] * vectorStats.vLen) / 100,
-        },
-      ]);
-    }
-    return res;
-  };
+  const lines: () => d3d.Line3DInput[] = () => [];
 
   const viewX = () => Math.sin(rotZRad()) * Math.sin(rotXRad());
   const viewY = () => Math.cos(rotZRad()) * Math.sin(rotXRad());
@@ -105,20 +82,20 @@ export default function Field() {
 
   const polygons: d3d.Polygon3DInput[] = [];
 
-  const xTicks: d3d.Point3DInput[] = d3
-    .range(6)
-    .map((x) => ({ x: x, y: 0, z: 0 }));
-  const yTicks: d3d.Point3DInput[] = d3
-    .range(6)
-    .map((y) => ({ x: 0, y: y, z: 0 }));
-  const zTicks: d3d.Point3DInput[] = d3
-    .range(6)
-    .map((z) => ({ x: 0, y: 0, z: z }));
-  const ticks = [xTicks, yTicks, zTicks];
+  const xAxisRange = () => d3.nice(-stats.xSpan / 2, stats.xSpan / 2, 5);
+  const xAxisTicks: () => d3d.Point3DInput[] = () =>
+    d3.ticks(...xAxisRange(), 5).map((x) => ({ x: x, y: 0, z: 0 }));
+  const yAxisRange = () => d3.nice(-stats.ySpan / 2, stats.ySpan / 2, 5);
+  const yAxisTicks: () => d3d.Point3DInput[] = () =>
+    d3.ticks(...yAxisRange(), 5).map((y) => ({ x: 0, y: y, z: 0 }));
+  const zAxisRange = () => d3.nice(-stats.zSpan / 2, stats.zSpan / 2, 5);
+  const zAxisTicks: () => d3d.Point3DInput[] = () =>
+    d3.ticks(...zAxisRange(), 5).map((z) => ({ x: 0, y: 0, z: z }));
+
+  const f = d3.format(".2s");
 
   function draw() {
-    const n: Vec3 = [0, 1, 0];
-
+    // Update arrow facing direction
     polygons.length = 0;
     for (let i = 0; i < testU.length; i++) {
       polygons.push(createArrow(testU[i]!, testA[i]!, vView(), rotArrowRad()));
@@ -130,42 +107,68 @@ export default function Field() {
       .rotateY(rotYRad())
       .rotateZ(rotZRad())(polygons);
 
-    const axesData = axes
+    const axis3d = axis
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
+      .rotateZ(rotZRad());
+    const axesData = axis3d([
       // @ts-expect-error
-      .rotateZ(rotZRad())(ticks);
+      xAxisTicks(),
+      // @ts-expect-error
+      yAxisTicks(),
+      // @ts-expect-error
+      zAxisTicks(),
+    ]) as unknown as [d3d.Point3D[], d3d.Point3D[], d3d.Point3D[]];
 
     const g = d3.select(svgRef!).selectAll("g").data([null]).join("g");
 
     // Axes
-    g.selectAll("path.axes")
+    g.selectAll("path.x-axis")
       .data(axesEnabled() ? axesData : [])
-      .join("path") // @ts-expect-error
-      .attr("d", axes.draw)
-      .classed("stroke-black dark:stroke-white axes", true)
+      .join("path")
+      .classed("x-axis", true)
+      // @ts-expect-error
+      .attr("d", axis3d.draw)
+      .classed("stroke-black dark:stroke-white", true)
       .classed("d3-3d", true);
 
-    // Axis text
-    g.selectAll("g.axis-text")
+    const axisEnds = axesData.map((axis) => axis.at(-1)!);
+
+    // Axis end text
+    g.selectAll("text.axis-text")
+      .data(axesEnabled() ? axisEnds : [])
+      .join("text")
+      .classed("axis-text", true)
+      .attr("font-family", "Times New Roman")
+      .attr("font-style", "italic")
+      .attr("font-size", "10pt")
+      .attr("dominant-baseline", "middle")
+      .classed("fill-black dark:fill-white", true)
+      .attr("x", (d) => d.projected.x)
+      .attr("y", (d) => d.projected.y)
+      .text(
+        (d) =>
+          ({ x: "y", y: "x", z: "z" })[
+            (["x", "y", "z"] as const).find((k) => d[k] !== 0)!
+          ],
+      );
+
+    // Axis ticks
+    g.selectAll("g.axis-ticks")
       .data(axesEnabled() ? axesData : [])
       .join("g")
-      .classed("axis-text", true)
-      .classed("font-[Arial]", true)
-      .selectAll("text")
-      .data((d) => d)
+      .classed("axis-ticks", true)
+      .selectAll("text.axis-ticks")
+      .data((d) => d.slice(0, -1))
       .join("text")
-      .classed("fill-black dark:fill-white", true)
-      // @ts-expect-error
+      .classed("axis-ticks", true)
       .attr("x", (d) => d.projected.x)
-      // @ts-expect-error
       .attr("y", (d) => d.projected.y)
-      .text((d) => {
-        // @ts-expect-error
-        return Math.max(d.x, d.y, d.z);
-      });
-    // .classed("d3-3d", true);
+      .attr("font-family", "Arial")
+      .attr("font-size", "6pt")
+      .classed("fill-black dark:fill-white", true)
+      .text((d) => f([d.x, d.y, d.z].find((v) => v !== 0) ?? 0));
 
     g.selectAll("path.poly")
       .data(polygonsData)
@@ -252,14 +255,12 @@ export default function Field() {
       <FileUpload />
       <ErrorBadge />
       <p class="font-mono text-sm">
-        Number of Vectors:{" "}
-        {vectorArray().length === 0 ? "-" : vectorArray().length} | Span along x
-        axis: {vectorStats.xSpan === 0 ? "-" : vectorStats.xSpan} m | Span alone
-        y axis: {vectorStats.ySpan === 0 ? "-" : vectorStats.ySpan} m | Span
-        alone z axis: {vectorStats.zSpan === 0 ? "-" : vectorStats.zSpan} m |
-        Minimum vector length:{" "}
-        {vectorStats.vLenMin === -1 ? "-" : vectorStats.vLenMin}| Maximum vector
-        length: {vectorStats.vLenMax === 0 ? "-" : vectorStats.vLenMax}
+        Number of Vectors: {lens().length === 0 ? "-" : lens().length} | Span
+        along x axis: {stats.xSpan === 0 ? "-" : stats.xSpan} m | Span alone y
+        axis: {stats.ySpan === 0 ? "-" : stats.ySpan} m | Span alone z axis:{" "}
+        {stats.zSpan === 0 ? "-" : stats.zSpan} m | Minimum vector length:{" "}
+        {stats.vLenMin === -1 ? "-" : stats.vLenMin}| Maximum vector length:{" "}
+        {stats.vLenMax === 0 ? "-" : stats.vLenMax}
       </p>{" "}
       <div class="w-full max-w-3xl rounded bg-white outline dark:bg-black">
         <svg
@@ -329,9 +330,9 @@ export default function Field() {
             name="Max Vector Length"
             min="0"
             step="0.01"
-            value={vectorStats.vLenMax}
+            value={stats.vLenMax}
             onChange={(event) =>
-              setVectorStats("vLenMax", event.target.valueAsNumber)
+              setStats("vLenMax", event.target.valueAsNumber)
             }
           />
         </label>
@@ -344,10 +345,8 @@ export default function Field() {
             name="Max Vector Length"
             min="0"
             step="1"
-            value={vectorStats.vLen}
-            onChange={(event) =>
-              setVectorStats("vLen", event.target.valueAsNumber)
-            }
+            value={stats.vLen}
+            onChange={(event) => setStats("vLen", event.target.valueAsNumber)}
           />
         </label>
         <label>
@@ -398,24 +397,12 @@ const FileUpload = () => {
           event.target.files![0]!.text().then((content) => {
             const { starts, units, lens, stats } = parseFld(content);
 
-            setVectorStats(stats);
-
-            // Position normalization
-            const vss: Vec6Array = [];
-            for (const v of vs) {
-              const x = v[0];
-              const y = v[1];
-              const z = v[2];
-              vss.push([
-                -xSpan / 2 + x - xMin,
-                -ySpan / 2 + y - yMin,
-                -zSpan / 2 + z - zMin,
-                v[3],
-                v[4],
-                v[5],
-              ]);
-            }
-            setVectorArray(vss);
+            batch(() => {
+              setStarts(starts);
+              setUnits(units);
+              setLens(lens);
+              setStats(stats);
+            });
           });
         }}
       />
@@ -432,19 +419,4 @@ function ErrorBadge() {
       </div>
     </Show>
   );
-}
-
-function getVectorLenRank(d: d3d.Line3D): number {
-  const start = d[0];
-  const end = d[1];
-  const diff = [d[1].x - d[0].x, d[1].y - d[0].y, d[1].z - d[0].z];
-  const vLen = getVec3L2(diff);
-  const unit = (vectorStats.vMax * vectorStats.vLen) / 100 / 30;
-  let rank = Math.floor(vLen / unit);
-
-  if (rank > 29) {
-    rank = 29;
-  }
-
-  return rank;
 }

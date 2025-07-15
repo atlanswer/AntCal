@@ -1,9 +1,6 @@
 export type Vec3 = [number, number, number];
 export type Vec6 = [number, number, number, number, number, number];
 
-export type Vec3Array = Vec3[];
-export type Vec6Array = Vec6[];
-
 export function addVec3(a: Vec3, b: Vec3): Vec3 {
   return [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
 }
