@@ -6,7 +6,7 @@ layout: layouts/Markdown.astro
 
 **Create publication quality figures. Work in progress!**
 
-If you encountered any issue, please reach out to me.
+If you encountered any issue, please report it to me: [New issue](https://github.com/atlanswer/AntCal/issues/new)
 
 This site is built with the following tools:
 

@@ -10,9 +10,11 @@ Visualize vector fields in an interactive SVG.
 
 **TODOs:**
 
-- [ ] Vector length control
-- [x] Vector arrow
-- [ ] Vector arrow shape selection
+- [ ] &nbsp; Fix arrow stroke and tail when it's too small
+- [x] &nbsp; Quick link to different views
+- [x] &nbsp; Vector arrow
+- [x] &nbsp; Vector length control
+- [ ] &nbsp; Vector arrow shape selection
 
 **Limitations:**
 
