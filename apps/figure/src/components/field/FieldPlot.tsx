@@ -1,4 +1,5 @@
 import { createArrow } from "components/field/arrow";
+import { rainbowDark } from "components/field/colorScheme";
 import { errBadge, setErrBadge } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
 import { type Vec3 } from "components/field/linearAlgebra";
@@ -11,12 +12,14 @@ import { createStore } from "solid-js/store";
 const [starts, setStarts] = createSignal<Vec3[]>([
   [0, 0, 0],
   [1, 0, 0],
+  [0, 2, 0],
 ]);
 const [units, setUnits] = createSignal<Vec3[]>([
   [0, 0, 1],
   [1, 0, 0],
+  [0, 1, 0],
 ]);
-const [lens, setLens] = createSignal<number[]>([1, 1]);
+const [lens, setLens] = createSignal<number[]>([1, 0.6, 0.3]);
 const [stats, setStats] = createStore({
   xSpan: 6,
   ySpan: 6,
@@ -25,46 +28,13 @@ const [stats, setStats] = createStore({
   vLenMax: 1,
 });
 
-const rainbowDark: string[] = [
-  "#3c5793",
-  "#3e5791",
-  "#3f5790",
-  "#40588e",
-  "#425f7e",
-  "#42666f",
-  "#446d60",
-  "#467156",
-  "#48764d",
-  "#4d7c44",
-  "#588342",
-  "#648a3f",
-  "#70923e",
-  "#859d40",
-  "#95a642",
-  "#a9b145",
-  "#b8b848",
-  "#cac14c",
-  "#d3c24e",
-  "#d9be51",
-  "#dfbc53",
-  "#dcad51",
-  "#d69a50",
-  "#d1884e",
-  "#c96f48",
-  "#c25741",
-  "#ba3d3b",
-  "#ba3d3b",
-  "#ba3d3b",
-  "#ba3d3b",
-];
-
 export default function Field() {
   let svgRef: SVGSVGElement | undefined;
 
-  // const DPI = 72;
-  const DPI = 600;
+  const DPI = 72;
+  // const DPI = 600;
   const width = DPI * 3.5;
-  const height = DPI * 3;
+  const height = DPI * 3.5;
 
   const origin: d3d.Coordinate2D = { x: width / 2, y: height / 2 };
   let defaultScale = 30;
@@ -80,7 +50,8 @@ export default function Field() {
   const [axesEnabled, setAxesEnabled] = createSignal(true);
   let defaultZoomSens = 10;
   const [zoomSens, setZoomSens] = createSignal(defaultZoomSens);
-  const rotSens = 1 / 360 / 4;
+  // const rotSens = 1 / 360 / 4;
+  const rotSens = 1 / 180;
   const [rotArrow, setRotArrow] = createSignal(0);
   const rotArrowRad = () => rotArrow() * Math.PI;
   const [vScale, setVScale] = createSignal(1);
@@ -187,6 +158,8 @@ export default function Field() {
       .classed("x-axis", true)
       // @ts-expect-error
       .attr("d", axis3d.draw)
+      .attr("stroke", "black")
+      .attr("stroke-width", 0.2)
       .classed("stroke-black dark:stroke-white", true)
       .classed("d3-3d", true);
 
@@ -199,7 +172,7 @@ export default function Field() {
       .classed("axis-text", true)
       .attr("font-family", "Times New Roman")
       .attr("font-style", "italic")
-      .attr("font-size", "80pt")
+      .attr("font-size", "10pt")
       .attr("dominant-baseline", "middle")
       .classed("fill-black dark:fill-white", true)
       .attr("x", (d) => d.projected.x)
@@ -223,7 +196,7 @@ export default function Field() {
       .attr("x", (d) => d.projected.x)
       .attr("y", (d) => d.projected.y)
       .attr("font-family", "Arial")
-      .attr("font-size", "48pt")
+      .attr("font-size", "6pt")
       .classed("fill-black dark:fill-white", true)
       .text((d) => f([d.x, d.y, d.z].find((v) => v !== 0) ?? 0));
 
@@ -235,7 +208,7 @@ export default function Field() {
       // @ts-expect-error
       .attr("d", poly3d.draw)
       .attr("stroke-linejoin", "arcs")
-      .style("stroke-width", 8)
+      .style("stroke-width", 1)
       .style("stroke", mapColor)
       .style("fill", mapColor)
       .classed("d3-3d", true);
@@ -322,7 +295,7 @@ export default function Field() {
     <>
       <FileUpload />
       <ErrorBadge />
-      <p class="font-mono text-sm">
+      <p class="max-w-3xl font-mono text-sm">
         Number of Vectors: {lens().length === 0 ? "-" : lens().length} | Span
         along x axis: {stats.xSpan === 0 ? "-" : stats.xSpan.toFixed(8)} m |
         Span alone y axis: {stats.ySpan === 0 ? "-" : stats.ySpan.toFixed(8)} m
@@ -341,6 +314,60 @@ export default function Field() {
         />
       </div>
       <p>You can zoom and rotate the viewport. Double click to reset.</p>
+      <div class="mx-auto flex gap-4">
+        <button
+          type="button"
+          class="button"
+          onClick={() =>
+            batch(() => {
+              setRotX(rotXDefault);
+              setRotZ(rotZDefault);
+              d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+            })
+          }
+        >
+          Isometric
+        </button>
+        <button
+          type="button"
+          class="button"
+          onClick={() =>
+            batch(() => {
+              setRotX(0.5);
+              setRotZ(0);
+              d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+            })
+          }
+        >
+          YZ
+        </button>
+        <button
+          type="button"
+          class="button"
+          onClick={() =>
+            batch(() => {
+              setRotX(0.5);
+              setRotZ(-0.5);
+              d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+            })
+          }
+        >
+          XZ
+        </button>
+        <button
+          type="button"
+          class="button"
+          onClick={() =>
+            batch(() => {
+              setRotX(0);
+              setRotZ(0);
+              d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+            })
+          }
+        >
+          XY
+        </button>
+      </div>
       <div class="grid w-full max-w-3xl grid-cols-[repeat(auto-fit,_14rem)] justify-items-stretch gap-4">
         <label>
           Scale
@@ -379,10 +406,10 @@ export default function Field() {
             onChange={(event) => setRotZ(event.target.valueAsNumber)}
           />
         </label>
-        <label>
+        <label class="cursor-pointer">
           Enable Axes
           <input
-            class="block"
+            class="block translate-x-1 translate-y-1 scale-150"
             type="checkbox"
             required
             name="Enable Axes"
@@ -446,7 +473,7 @@ export default function Field() {
         <label>
           Arrow Alignment
           <select
-            class="block"
+            class="block cursor-pointer"
             required
             onChange={(event) =>
               setArrowAlign(event.target.value as "start" | "middle" | "end")
@@ -459,10 +486,10 @@ export default function Field() {
             <option value="end">End</option>
           </select>
         </label>
-        <label>
-          Arrow Tail
+        <label class="cursor-pointer">
+          Include Arrow Tail
           <input
-            class="block"
+            class="block translate-x-1 translate-y-1 scale-150"
             type="checkbox"
             required
             name="Include Arrow Tail"

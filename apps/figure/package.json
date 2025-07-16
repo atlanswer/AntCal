@@ -1,6 +1,6 @@
 {
   "name": "@antcal/figure",
-  "version": "0.24.5",
+  "version": "0.24.6",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": true,
@@ -31,7 +31,7 @@
     "@types/d3-3d": "^1.0.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
-    "astro": "^5.11.1",
+    "astro": "^5.11.2",
     "d3": "^7.9.0",
     "d3-3d": "^1.0.0",
     "geist": "^1.4.2",
