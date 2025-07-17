@@ -1,6 +1,5 @@
 import { createArrow } from "components/field/arrow";
 import { rainbowDark } from "components/field/colorScheme";
-import { errBadge, setErrBadge } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
 import { type Vec3 } from "components/field/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
@@ -15,6 +14,11 @@ import {
   Show,
 } from "solid-js";
 import { createStore } from "solid-js/store";
+
+const [errBadge, setErrBadge] = createSignal<{
+  err: string;
+  detail: string;
+}>();
 
 const [starts, setStarts] = createSignal<Vec3[]>([
   [0, 0, 0],
@@ -403,100 +407,104 @@ export default function Field() {
       </div>
       <p>You can zoom and rotate the viewport. Double click to reset.</p>
       <div class="grid w-full max-w-3xl grid-cols-[repeat(auto-fit,_14rem)] justify-items-stretch gap-4">
-        <label>
+        <label title="Scale the figure to zoom in and out">
           Scale
           <input
             class="w-full rounded pl-2 outline"
             type="number"
             required
-            name="Scale"
             value={scale()}
             onChange={(event) => setScale(event.target.valueAsNumber)}
           />
         </label>
-        <label>
+        <label title="Rotate the figure in the θ direction">
           <em>θ</em> Rotation (π)
           <input
             class="w-full rounded pl-2 outline"
             type="number"
             required
-            name="X Rotate"
             min="0"
             step="0.01"
             value={rotX()}
             onChange={(event) => setRotX(event.target.valueAsNumber)}
           />
         </label>
-        <label>
+        <label title="Rotate the figure around the Z axis">
           <em>ϕ</em> Rotation (π)
           <input
             class="w-full rounded pl-2 outline"
             type="number"
             required
-            name="Z Rotate"
             min="0"
             step="0.01"
             value={rotZ()}
             onChange={(event) => setRotZ(event.target.valueAsNumber)}
           />
         </label>
-        <label class="cursor-pointer">
+        <label title="Change the figure height, the width is fixed at 3.5 in">
+          Figure Height (in)
+          <input
+            class="w-full rounded pl-2 outline"
+            type="number"
+            required
+            min="0.5"
+            step="0.5"
+            value={vScale()}
+            onChange={(event) => setVScale(event.target.valueAsNumber)}
+          />
+        </label>
+        <label class="cursor-pointer" title="Toggle the axes on and off">
           Enable Axes
           <input
             class="block translate-x-1 translate-y-1 scale-150"
             type="checkbox"
             required
-            name="Enable Axes"
             checked
             onChange={(event) => setAxesEnabled(event.target.checked)}
           />
         </label>
-        <label>
-          Vector Scale
+        <label title="Change the size of the vector arrows">
+          Vector Arrow Size
           <input
             class="w-full rounded pl-2 outline"
             type="number"
             required
-            name="Vector Scale"
             min="0"
             step="0.1"
             value={vScale()}
             onChange={(event) => setVScale(event.target.valueAsNumber)}
           />
         </label>
-        <label>
+        <label title="Limit the minimum length of vectors">
           Min Vector Length
           <input
             class="w-full rounded pl-2 outline"
             type="number"
             required
-            name="Min Vector Length"
             min="0"
             step="0.01"
             value={disLenMin()}
             onChange={(event) => setDisLenMin(event.target.valueAsNumber)}
           />
         </label>
-        <label>
+        <label title="Limit the maximum length of vectors">
           Max Vector Length
           <input
             class="w-full rounded pl-2 outline"
             type="number"
             required
-            name="Max Vector Length"
             min="0"
             step="0.01"
             value={disLenMax()}
             onChange={(event) => setDisLenMax(event.target.valueAsNumber)}
           />
         </label>
-        <label>
+        <label title="Rotate the vector arrows">
           Arrow Rotation:
           <input
             class="w-full"
             type="range"
             required
-            name="Arrow Rotation"
             min="0"
             max="2"
             step="0.05"
@@ -504,7 +512,7 @@ export default function Field() {
             onInput={(event) => setRotArrow(event.target.valueAsNumber)}
           />
         </label>
-        <label>
+        <label title="Change the vector arrow placement relating to its staring position">
           Arrow Alignment
           <select
             class="block cursor-pointer"
@@ -520,13 +528,12 @@ export default function Field() {
             <option value="end">End</option>
           </select>
         </label>
-        <label class="cursor-pointer">
+        <label class="cursor-pointer" title="Include the vector tails or not">
           Include Arrow Tail
           <input
             class="block translate-x-1 translate-y-1 scale-150"
             type="checkbox"
             required
-            name="Include Arrow Tail"
             checked
             onChange={(event) => setArrowTail(event.target.checked)}
           />
@@ -548,6 +555,8 @@ const FileUpload = () => {
         accept=".fld"
         class="rounded bg-sky-500 px-4 py-2 text-white file:border-y-0 file:border-r file:border-l-0 file:border-solid file:border-r-white file:bg-transparent file:pr-2 file:font-sans file:font-semibold file:text-white hover:bg-sky-700"
         onChange={(event) => {
+          setErrBadge(undefined);
+
           if (event.target.files!.length === 0) {
             setErrBadge({
               err: "No file selected",
@@ -562,6 +571,7 @@ const FileUpload = () => {
             });
             return;
           }
+
           event.target.files![0]!.text().then((content) => {
             const { starts, units, lens, stats } = parseFld(content);
 
