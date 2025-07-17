@@ -7,6 +7,10 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/antcal?logo=pypi)
 [![MIT license](https://img.shields.io/pypi/l/antcal?logo=pypi)](https://opensource.org/licenses/MIT)
 
+Visualize vector field, synthesize radiation pattern, and more to come!
+
+<img alt="AntCal web app screenshot" src="https://github.com/user-attachments/assets/703104e9-d7ca-4c60-bd5b-f623ae5d6ed9" />
+
 AntCal Web App: https://antcal.atlanswer.com<br/>
 Dev version: https://dev.antcal.atlanswer.com
 
