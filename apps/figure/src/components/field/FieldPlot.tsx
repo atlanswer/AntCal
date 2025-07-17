@@ -6,7 +6,14 @@ import { type Vec3 } from "components/field/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
-import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
+import {
+  batch,
+  createEffect,
+  createMemo,
+  createSignal,
+  onMount,
+  Show,
+} from "solid-js";
 import { createStore } from "solid-js/store";
 
 const [starts, setStarts] = createSignal<Vec3[]>([
@@ -86,35 +93,41 @@ export default function Field() {
   createEffect(() => setDisLenMin(stats.vLenMin));
   createEffect(() => setDisLenMax(stats.vLenMax));
 
-  const poly3d = d3d.polygons3D().origin(origin);
-  const axis = d3d.lineStrips3D().origin(origin);
-
-  const polygons: () => d3d.Polygon3DInput[] = () => {
-    const res: d3d.Polygon3DInput[] = [];
-    for (let i = 0; i < starts().length; i++) {
-      let len = lens()[i]!;
-      len = len < disLenMin() ? disLenMin() : len;
-      len = len > disLenMax() ? disLenMax() : len;
-      res.push(
-        createArrow(
-          starts()[i]!,
-          units()[i]!,
-          len * vScale(),
-          vView(),
-          rotArrowRad(),
-          arrowAlign(),
-          arrowTail(),
-        ),
-      );
-    }
-    return res;
-  };
-
   const viewX = () => Math.sin(rotZRad()) * Math.sin(rotXRad());
   const viewY = () => Math.cos(rotZRad()) * Math.sin(rotXRad());
   const viewZ = () => Math.cos(rotXRad());
   /** Unit vector that is the normal vector of the screen */
   const vView = () => [viewX(), viewY(), viewZ()] as Vec3;
+
+  const polygons: () => {
+    arrows: d3d.Polygon3DInput[];
+    tails: d3d.Point3DInput[][];
+  } = createMemo(() => {
+    const arrows: d3d.Polygon3DInput[] = [];
+    const tails: d3d.Point3DInput[][] = [];
+
+    for (let i = 0; i < starts().length; i++) {
+      let len = lens()[i]!;
+      len = len < disLenMin() ? disLenMin() : len;
+      len = len > disLenMax() ? disLenMax() : len;
+
+      const [arrow, tail] = createArrow(
+        starts()[i]!,
+        units()[i]!,
+        len * vScale(),
+        vView(),
+        rotArrowRad(),
+        arrowAlign(),
+        arrowTail(),
+      );
+
+      arrows.push(arrow);
+      if (tail) {
+        tails.push(tail);
+      }
+    }
+    return { arrows, tails };
+  });
 
   const xAxisRange = () => d3.nice(-stats.xSpan / 2, stats.xSpan / 2, 5);
   const xAxisTicks: () => d3d.Point3DInput[] = () =>
@@ -128,19 +141,31 @@ export default function Field() {
 
   const f = d3.format(".2s");
 
-  function draw() {
-    const polygonsData = poly3d
-      .scale(scale())
-      .rotateX(rotXRad())
-      .rotateY(rotYRad())
-      .rotateZ(rotZRad())(polygons());
+  const line3d = d3d.lines3D().origin(origin);
+  const poly3d = d3d.polygons3D().origin(origin);
+  const axis3d = d3d.lineStrips3D().origin(origin);
 
-    const axis3d = axis
+  function draw() {
+    const { arrows, tails } = polygons();
+
+    const arrowsData = poly3d
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
-      .rotateZ(rotZRad());
-    const axesData = axis3d([
+      .rotateZ(rotZRad())(arrows);
+
+    const tailsData = line3d
+      .scale(scale())
+      .rotateX(rotXRad())
+      .rotateY(rotYRad())
+      // @ts-expect-error
+      .rotateZ(rotZRad())(tails);
+
+    const axesData = axis3d
+      .scale(scale())
+      .rotateX(rotXRad())
+      .rotateY(rotYRad())
+      .rotateZ(rotZRad())([
       // @ts-expect-error
       xAxisTicks(),
       // @ts-expect-error
@@ -196,21 +221,30 @@ export default function Field() {
       .attr("x", (d) => d.projected.x)
       .attr("y", (d) => d.projected.y)
       .attr("font-family", "Arial")
-      .attr("font-size", "6pt")
+      .attr("font-size", "4pt")
       .classed("fill-black dark:fill-white", true)
       .text((d) => f([d.x, d.y, d.z].find((v) => v !== 0) ?? 0));
 
     // Vector arrows
     g.selectAll("path.arrow")
-      .data(polygonsData)
+      .data(arrowsData)
       .join("path")
       .classed("arrow", true)
       // @ts-expect-error
       .attr("d", poly3d.draw)
-      .attr("stroke-linejoin", "arcs")
-      .style("stroke-width", 1)
-      .style("stroke", mapColor)
-      .style("fill", mapColor)
+      .attr("fill", mapColor)
+      .classed("d3-3d", true);
+
+    // Vector tails
+    g.selectAll("line.tail")
+      .data(tailsData)
+      .join("line")
+      .classed("tail", true)
+      .attr("x1", (d) => (d as unknown as d3d.Point3D[])[0]!.projected.x)
+      .attr("y1", (d) => (d as unknown as d3d.Point3D[])[0]!.projected.y)
+      .attr("x2", (d) => (d as unknown as d3d.Point3D[])[1]!.projected.x)
+      .attr("y2", (d) => (d as unknown as d3d.Point3D[])[1]!.projected.y)
+      .attr("stroke", mapColor)
       .classed("d3-3d", true);
 
     // @ts-expect-error
@@ -313,11 +347,10 @@ export default function Field() {
           class="h-full w-full"
         />
       </div>
-      <p>You can zoom and rotate the viewport. Double click to reset.</p>
       <div class="mx-auto flex gap-4">
         <button
           type="button"
-          class="button"
+          class="view-button"
           onClick={() =>
             batch(() => {
               setRotX(rotXDefault);
@@ -330,7 +363,7 @@ export default function Field() {
         </button>
         <button
           type="button"
-          class="button"
+          class="view-button"
           onClick={() =>
             batch(() => {
               setRotX(0.5);
@@ -343,7 +376,7 @@ export default function Field() {
         </button>
         <button
           type="button"
-          class="button"
+          class="view-button"
           onClick={() =>
             batch(() => {
               setRotX(0.5);
@@ -356,7 +389,7 @@ export default function Field() {
         </button>
         <button
           type="button"
-          class="button"
+          class="view-button"
           onClick={() =>
             batch(() => {
               setRotX(0);
@@ -368,6 +401,7 @@ export default function Field() {
           XY
         </button>
       </div>
+      <p>You can zoom and rotate the viewport. Double click to reset.</p>
       <div class="grid w-full max-w-3xl grid-cols-[repeat(auto-fit,_14rem)] justify-items-stretch gap-4">
         <label>
           Scale
@@ -507,7 +541,7 @@ const FileUpload = () => {
   return (
     <label class="grid grid-cols-1 gap-2">
       <p>
-        Upload Field Data (<code>.fld</code>)
+        Upload Field Data (<code>.fld</code>) to visualize
       </p>
       <input
         type="file"

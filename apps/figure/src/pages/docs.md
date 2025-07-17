@@ -4,17 +4,24 @@ layout: layouts/Markdown.astro
 
 # AntCal Documentation
 
-## Field (WIP)
+## Field
 
 Visualize vector fields in an interactive SVG.
 
 **TODOs:**
 
-- [ ] &nbsp; Fix arrow stroke and tail when it's too small
+- [x] &nbsp; Fix arrow stroke and tail when it's too small
 - [x] &nbsp; Quick link to different views
 - [x] &nbsp; Vector arrow
 - [x] &nbsp; Vector length control
+- [ ] &nbsp; Figure height control
+- [ ] &nbsp; Colorbar
 - [ ] &nbsp; Vector arrow shape selection
+
+**Notes:**
+
+- Vector positions are normalized to be evenly distributed around the origin
+- Vector arrows are facing the user by default
 
 **Limitations:**
 
@@ -36,7 +43,7 @@ Visualize vector fields in an interactive SVG.
 
 Upload data files to generate figures.
 
-## Radiation Pattern
+## Radiation Pattern (WIP)
 
 Simulate radiation pattern based on electric or magnetic sources.
 

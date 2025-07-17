@@ -26,14 +26,15 @@
     "zorder",
     "horizontalalignment",
     "xticklabels",
-    "manu",
     "openpyxl",
     "mplot",
     "toolkits",
-    "Mathematica",
     "lpwl",
     "hpbw",
-    "verts"
+    "verts",
+    "Mathematica",
+    "HFSS",
+    "operatorname"
   ],
   "flagWords": []
 }
