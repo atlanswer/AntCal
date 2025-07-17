@@ -1,5 +1,6 @@
 import { createArrow } from "components/field/arrow";
 import { rainbowDark } from "components/field/colorScheme";
+import { errBadge, setErrBadge } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
 import { type Vec3 } from "components/field/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
@@ -14,11 +15,6 @@ import {
   Show,
 } from "solid-js";
 import { createStore } from "solid-js/store";
-
-const [errBadge, setErrBadge] = createSignal<{
-  err: string;
-  detail: string;
-}>();
 
 const [starts, setStarts] = createSignal<Vec3[]>([
   [0, 0, 0],
@@ -43,13 +39,18 @@ export default function Field() {
   let svgRef: SVGSVGElement | undefined;
 
   const DPI = 72;
-  // const DPI = 600;
-  const width = DPI * 3.5;
-  const height = DPI * 3.5;
+  /** Figure width is fixed to 3.5 in */
+  const widthInPoints = DPI * 3.5;
+  const [height, setHeight] = createSignal(3.5);
+  const heightInPoints = () => height() * DPI;
+  const origin: () => d3d.Coordinate2D = () => ({
+    x: widthInPoints / 2,
+    y: heightInPoints() / 2,
+  });
 
-  const origin: d3d.Coordinate2D = { x: width / 2, y: height / 2 };
   let defaultScale = 30;
   const [scale, setScale] = createSignal(defaultScale);
+
   const rotXDefault = Math.atan(Math.sqrt(2)) / Math.PI;
   const rotZDefault = 1 / 4;
   const [rotX, setRotX] = createSignal(rotXDefault);
@@ -58,30 +59,33 @@ export default function Field() {
   const rotYRad = () => rotY() * Math.PI;
   const [rotZ, setRotZ] = createSignal(rotZDefault);
   const rotZRad = () => rotZ() * Math.PI;
-  const [axesEnabled, setAxesEnabled] = createSignal(true);
+
   let defaultZoomSens = 10;
   const [zoomSens, setZoomSens] = createSignal(defaultZoomSens);
-  // const rotSens = 1 / 360 / 4;
   const rotSens = 1 / 180;
   const [rotArrow, setRotArrow] = createSignal(0);
   const rotArrowRad = () => rotArrow() * Math.PI;
   const [vScale, setVScale] = createSignal(1);
+
+  const [axesEnabled, setAxesEnabled] = createSignal(true);
   const [arrowTail, setArrowTail] = createSignal(true);
   const [arrowAlign, setArrowAlign] = createSignal<"start" | "middle" | "end">(
     "middle",
   );
-  const [disLenMin, setDisLenMin] = createSignal(0);
-  const [disLenMax, setDisLenMax] = createSignal(0);
+
+  const [vLenMin, setVLenMin] = createSignal(0);
+  const [vLenMax, setVLenMax] = createSignal(0);
 
   // Set proper scale and zoom sensitivity
   createEffect(() => {
     const spanMax = Math.max(stats.xSpan, stats.ySpan, stats.zSpan);
-    const newScale = Math.floor(width / spanMax);
+    const newScale = Math.floor((widthInPoints / spanMax) * 0.9);
     setScale(newScale);
     defaultScale = newScale;
     setZoomSens(Math.floor(newScale / 3));
     defaultZoomSens = 10;
   });
+
   // Set vector length scale
   createEffect(() => {
     if (starts().length < 2) return;
@@ -94,8 +98,10 @@ export default function Field() {
     );
     setVScale(diff / stats.vLenMax);
   });
-  createEffect(() => setDisLenMin(stats.vLenMin));
-  createEffect(() => setDisLenMax(stats.vLenMax));
+
+  // Update vector length range
+  createEffect(() => setVLenMin(stats.vLenMin));
+  createEffect(() => setVLenMax(stats.vLenMax));
 
   const viewX = () => Math.sin(rotZRad()) * Math.sin(rotXRad());
   const viewY = () => Math.cos(rotZRad()) * Math.sin(rotXRad());
@@ -112,8 +118,8 @@ export default function Field() {
 
     for (let i = 0; i < starts().length; i++) {
       let len = lens()[i]!;
-      len = len < disLenMin() ? disLenMin() : len;
-      len = len > disLenMax() ? disLenMax() : len;
+      len = len < vLenMin() ? vLenMin() : len;
+      len = len > vLenMax() ? vLenMax() : len;
 
       const [arrow, tail] = createArrow(
         starts()[i]!,
@@ -145,20 +151,22 @@ export default function Field() {
 
   const f = d3.format(".2s");
 
-  const line3d = d3d.lines3D().origin(origin);
-  const poly3d = d3d.polygons3D().origin(origin);
-  const axis3d = d3d.lineStrips3D().origin(origin);
+  const line3d = d3d.lines3D();
+  const poly3d = d3d.polygons3D();
+  const axis3d = d3d.lineStrips3D();
 
   function draw() {
     const { arrows, tails } = polygons();
 
     const arrowsData = poly3d
+      .origin(origin())
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
       .rotateZ(rotZRad())(arrows);
 
     const tailsData = line3d
+      .origin(origin())
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
@@ -166,6 +174,7 @@ export default function Field() {
       .rotateZ(rotZRad())(tails);
 
     const axesData = axis3d
+      .origin(origin())
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
@@ -257,10 +266,10 @@ export default function Field() {
 
   function mapColor(_: any, i: number): string {
     const len = lens()[i]!;
-    let diff = len - disLenMin();
+    let diff = len - vLenMin();
     diff = diff < 0 ? 0 : diff;
 
-    const step = (disLenMax() - disLenMin()) / 30;
+    const step = (vLenMax() - vLenMin()) / 30;
     let idx = Math.floor(diff / step);
     idx = idx > 29 ? 29 : idx;
 
@@ -346,7 +355,7 @@ export default function Field() {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           ref={svgRef}
-          viewBox={`0 0 ${width} ${height}`}
+          viewBox={`0 0 ${widthInPoints} ${heightInPoints()}`}
           preserveAspectRatio="xMidYMid meet"
           class="h-full w-full"
         />
@@ -449,8 +458,8 @@ export default function Field() {
             required
             min="0.5"
             step="0.5"
-            value={vScale()}
-            onChange={(event) => setVScale(event.target.valueAsNumber)}
+            value={height()}
+            onChange={(event) => setHeight(event.target.valueAsNumber)}
           />
         </label>
         <label class="cursor-pointer" title="Toggle the axes on and off">
@@ -483,8 +492,8 @@ export default function Field() {
             required
             min="0"
             step="0.01"
-            value={disLenMin()}
-            onChange={(event) => setDisLenMin(event.target.valueAsNumber)}
+            value={vLenMin()}
+            onChange={(event) => setVLenMin(event.target.valueAsNumber)}
           />
         </label>
         <label title="Limit the maximum length of vectors">
@@ -495,8 +504,8 @@ export default function Field() {
             required
             min="0"
             step="0.01"
-            value={disLenMax()}
-            onChange={(event) => setDisLenMax(event.target.valueAsNumber)}
+            value={vLenMax()}
+            onChange={(event) => setVLenMax(event.target.valueAsNumber)}
           />
         </label>
         <label title="Rotate the vector arrows">

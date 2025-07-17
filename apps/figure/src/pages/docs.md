@@ -14,7 +14,7 @@ Visualize vector fields in an interactive SVG.
 - [x] &nbsp; Quick link to different views
 - [x] &nbsp; Vector arrow
 - [x] &nbsp; Vector length control
-- [ ] &nbsp; Figure height control
+- [x] &nbsp; Figure height control
 - [ ] &nbsp; Colorbar
 - [ ] &nbsp; Vector arrow shape selection
 
@@ -27,12 +27,13 @@ Visualize vector fields in an interactive SVG.
 
 - Only supports field data files (`.fld`) exported from ANSYS HFSS
 - Currently, only grid-based vector field is supported (vector shape: `[x, y, z, u, v, w]`)
+- Pan motion is not implemented. The figure only rotates around its center
 
 ### How to export vector fields in ANSYS HFSS
 
-1. Measure the bounding box (Cartesian coordinate system) of the area of interest
-2. Open the Field Calculator
-3. Select the desired data (e.g., `Vector_E`) and copy it to the stack (or construct your own data)
+1. Measure the bounding box (in Cartesian coordinate system) of the area of interest
+2. Open the Field Calculator (e.g., right click Field Plots)
+3. Select the desired quantity (e.g., `Vector_E`) and copy it to the stack (or construct your own vector quantity)
 4. Select the correct context (especially the phase)
 5. Click "Export..."
 6. Use "Calculate grid points", fill in the grid dimensions based on the bounding box
