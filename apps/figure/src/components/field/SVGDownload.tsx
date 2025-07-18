@@ -1,4 +1,5 @@
 import { setErrBadge } from "components/field/contexts";
+import { filename } from "components/field/contexts";
 
 export default function SVGDownload(props: {
   target: SVGSVGElement | undefined;
@@ -24,7 +25,7 @@ export default function SVGDownload(props: {
 
         const svgLink = document.createElement("a");
         svgLink.href = svgUrl;
-        svgLink.download = "download.svg";
+        svgLink.download = `${filename()}.svg`;
         svgLink.click();
 
         URL.revokeObjectURL(svgUrl);

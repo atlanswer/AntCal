@@ -1,6 +1,7 @@
 import { createArrow } from "components/field/arrow";
 import { rainbowDark } from "components/field/colorScheme";
 import { errBadge, setErrBadge } from "components/field/contexts";
+import { filename, setFilename } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
 import { type Vec3 } from "components/field/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
@@ -581,7 +582,11 @@ const FileUpload = () => {
             return;
           }
 
-          event.target.files![0]!.text().then((content) => {
+          const uploadedFile = event.target.files![0]!;
+
+          setFilename(uploadedFile.name);
+
+          uploadedFile.text().then((content) => {
             const { starts, units, lens, stats } = parseFld(content);
 
             batch(() => {
