@@ -1,5 +1,0 @@
-{
-  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-  "cmake.sourceDirectory": "${workspaceFolder}/cpp",
-  "typescript.tsdk": "node_modules/typescript/lib"
-}
