@@ -1,8 +1,13 @@
 ---
 import BaseLayout from "layouts/Base.astro";
 import FigureHome from "components/FigureHome";
+import FigureNew from "components/pattern";
 ---
 
 <BaseLayout>
-  <FigureHome client:only="solid-js" />
+  {
+    import.meta.env.VERCEL_ENV === "production" ?
+      <FigureHome client:only="solid-js" />
+    : <FigureNew client:only="solid-js" />
+  }
 </BaseLayout>

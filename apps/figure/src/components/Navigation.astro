@@ -1,13 +1,21 @@
 ---
 const pathname = Astro.url.pathname;
 
-const pages: { title: string; path: string }[] = [
-  { title: "Field", path: "/field" },
-  { title: "Pattern", path: "/pattern" },
-  // { name: "Report", href: "/report" },
-  { title: "Docs", path: "/docs" },
-  { title: "About", path: "/about" },
-] as const;
+const pages: { title: string; path: string }[] =
+  import.meta.env.VERCEL_ENV === "production" ?
+    [
+      { title: "Field", path: "/field" },
+      { title: "Pattern", path: "/pattern" },
+      { title: "Docs", path: "/docs" },
+      { title: "About", path: "/about" },
+    ]
+  : [
+      { title: "Pattern", path: "/pattern" },
+      { title: "Field", path: "/field" },
+      { title: "Report", path: "/report" },
+      { title: "Docs", path: "/docs" },
+      { title: "About", path: "/about" },
+    ];
 ---
 
 <nav class="flex flex-1 leading-loose font-semibold sm:place-content-center">
