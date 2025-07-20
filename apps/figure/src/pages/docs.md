@@ -21,7 +21,7 @@ Visualize vector fields in an interactive SVG.
 
 **Notes:**
 
-- Figure width is fixed to 3.5 inches with 72 DPI according to the IEEE guidence
+- Figure width is fixed to 3.5 inches with a DPI of 72 according to the IEEE guidence
 - Vector positions are normalized to be evenly distributed around the origin
 - Vector arrows are facing the user by default
 
