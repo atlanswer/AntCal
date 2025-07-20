@@ -7,7 +7,7 @@ export default function SVGDownload(props: {
   return (
     <button
       type="button"
-      class="cursor-pointer rounded bg-sky-500 px-4 py-2 font-semibold text-white hover:bg-sky-700"
+      class="pointer-events-auto cursor-pointer rounded bg-sky-500 px-4 py-2 font-semibold text-white hover:bg-sky-700"
       onClick={() => {
         if (props.target === undefined) {
           setErrBadge({

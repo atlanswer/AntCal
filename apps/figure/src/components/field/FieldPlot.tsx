@@ -264,6 +264,34 @@ export default function Field() {
 
     // @ts-expect-error
     g.selectAll(".d3-3d").sort(poly3d.sort);
+
+    // Colorbar
+    const colorbar = g
+      .selectAll("g.colorbar")
+      .data([null])
+      .join("g")
+      .classed("colorbar", true);
+    colorbar
+      .selectAll("rect")
+      .data([null])
+      .join("rect")
+      .attr("preserveAspectRatio", "none")
+      .attr("x", widthInPoints / 2 - 72 / 2)
+      .attr("y", heightInPoints() - 5 - 8)
+      .attr("width", 72)
+      .attr("height", 8)
+      .attr("fill", "url(#mathematica-rainbow-dark)");
+    colorbar
+      .selectAll("text")
+      .data([vLenMin(), vLenMax()])
+      .join("text")
+      .attr("x", (_, i) => widthInPoints / 2 + 72 * (i - 0.5))
+      .attr("y", heightInPoints() - 5 - 8 - 2)
+      .attr("text-anchor", "middle")
+      .attr("font-family", "Arial")
+      .attr("font-size", "4pt")
+      .classed("fill-black dark:fill-white", true)
+      .text((d) => d);
   }
 
   function mapColor(_: any, i: number): string {
@@ -358,65 +386,148 @@ export default function Field() {
         <span>Y span: {stats.ySpan === 0 ? "-" : stats.ySpan} m</span>
         <span>Z span: {stats.zSpan === 0 ? "-" : stats.zSpan} m</span>
       </div>
-      <div class="w-full max-w-3xl rounded bg-white outline dark:bg-black">
+      <div class="grid w-full max-w-3xl grid-cols-1 grid-rows-1 rounded bg-white outline dark:bg-black">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           ref={svgRef}
           viewBox={`0 0 ${widthInPoints} ${heightInPoints()}`}
           preserveAspectRatio="xMidYMid meet"
-          class="h-full w-full"
-        />
+          class="col-start-1 row-start-1 h-full w-full"
+        >
+          <defs>
+            <linearGradient
+              id="mathematica-rainbow"
+              x1="0"
+              x2="1"
+              y1="0"
+              y2="0"
+            >
+              <stop offset="0%" stop-color="#781b86" />
+              <stop offset="3.448%" stop-color="#641c97" />
+              <stop offset="6.896%" stop-color="#4e21ac" />
+              <stop offset="10.344%" stop-color="#462eba" />
+              <stop offset="13.793%" stop-color="#3f40c6" />
+              <stop offset="17.241%" stop-color="#3e52cd" />
+              <stop offset="20.689%" stop-color="#4066cf" />
+              <stop offset="24.137%" stop-color="#4377cd" />
+              <stop offset="27.586%" stop-color="#4886c7" />
+              <stop offset="31.034%" stop-color="#4d94bd" />
+              <stop offset="34.482%" stop-color="#559eb1" />
+              <stop offset="37.931%" stop-color="#5da8a3" />
+              <stop offset="41.379%" stop-color="#67ae95" />
+              <stop offset="44.827%" stop-color="#72b585" />
+              <stop offset="48.275%" stop-color="#7cb878" />
+              <stop offset="51.724%" stop-color="#8bbb6a" />
+              <stop offset="55.172%" stop-color="#96bd60" />
+              <stop offset="58.620%" stop-color="#a5be55" />
+              <stop offset="62.068%" stop-color="#b2be4d" />
+              <stop offset="65.517%" stop-color="#c0bb47" />
+              <stop offset="68.965%" stop-color="#ccb842" />
+              <stop offset="72.413%" stop-color="#d6b03e" />
+              <stop offset="75.862%" stop-color="#dea83b" />
+              <stop offset="79.310%" stop-color="#e39b39" />
+              <stop offset="82.758%" stop-color="#e68b35" />
+              <stop offset="86.206%" stop-color="#e77a32" />
+              <stop offset="89.655%" stop-color="#e4632d" />
+              <stop offset="93.103%" stop-color="#e14e2a" />
+              <stop offset="96.551%" stop-color="#de3525" />
+              <stop offset="100%" stop-color="#db2121" />
+            </linearGradient>
+            <linearGradient
+              id="mathematica-rainbow-dark"
+              x1="0"
+              x2="1"
+              y1="0"
+              y2="0"
+            >
+              <stop offset="0%" stop-color="#3c5793" />
+              <stop offset="3.448%" stop-color="#3e5791" />
+              <stop offset="6.896%" stop-color="#3f5790" />
+              <stop offset="10.344%" stop-color="#40588e" />
+              <stop offset="13.793%" stop-color="#425f7e" />
+              <stop offset="17.241%" stop-color="#42666f" />
+              <stop offset="20.689%" stop-color="#446d60" />
+              <stop offset="24.137%" stop-color="#467156" />
+              <stop offset="27.586%" stop-color="#48764d" />
+              <stop offset="31.034%" stop-color="#4d7c44" />
+              <stop offset="34.482%" stop-color="#588342" />
+              <stop offset="37.931%" stop-color="#648a3f" />
+              <stop offset="41.379%" stop-color="#70923e" />
+              <stop offset="44.827%" stop-color="#859d40" />
+              <stop offset="48.275%" stop-color="#95a642" />
+              <stop offset="51.724%" stop-color="#a9b145" />
+              <stop offset="55.172%" stop-color="#b8b848" />
+              <stop offset="58.620%" stop-color="#cac14c" />
+              <stop offset="62.068%" stop-color="#d3c24e" />
+              <stop offset="65.517%" stop-color="#d9be51" />
+              <stop offset="68.965%" stop-color="#dfbc53" />
+              <stop offset="72.413%" stop-color="#dcad51" />
+              <stop offset="75.862%" stop-color="#d69a50" />
+              <stop offset="79.310%" stop-color="#d1884e" />
+              <stop offset="82.758%" stop-color="#c96f48" />
+              <stop offset="86.206%" stop-color="#c25741" />
+              <stop offset="89.655%" stop-color="#ba3d3b" />
+              <stop offset="93.103%" stop-color="#ba3d3b" />
+              <stop offset="96.551%" stop-color="#ba3d3b" />
+              <stop offset="100%" stop-color="#ba3d3b" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="pointer-events-none col-start-1 row-start-1 flex h-full w-full flex-col items-start justify-between p-4">
+          <div class="pointer-events-auto flex gap-4 *:cursor-pointer *:rounded *:bg-slate-500 *:px-4 *:py-2 *:font-semibold *:text-white *:hover:bg-slate-700">
+            <button
+              type="button"
+              onClick={() =>
+                batch(() => {
+                  setRotX(rotXDefault);
+                  setRotZ(rotZDefault);
+                  d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+                })
+              }
+            >
+              Isometric
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                batch(() => {
+                  setRotX(0.5);
+                  setRotZ(0);
+                  d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+                })
+              }
+            >
+              YZ
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                batch(() => {
+                  setRotX(0.5);
+                  setRotZ(-0.5);
+                  d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+                })
+              }
+            >
+              XZ
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                batch(() => {
+                  setRotX(0);
+                  setRotZ(0);
+                  d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
+                })
+              }
+            >
+              XY
+            </button>
+          </div>
+          <SVGDownload target={svgRef!} />
+        </div>
       </div>
-      <div class="mx-auto flex gap-4 *:cursor-pointer *:rounded *:bg-slate-500 *:px-2 *:py-1 *:font-semibold *:text-white *:hover:bg-slate-700">
-        <button
-          type="button"
-          onClick={() =>
-            batch(() => {
-              setRotX(rotXDefault);
-              setRotZ(rotZDefault);
-              d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
-            })
-          }
-        >
-          Isometric
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            batch(() => {
-              setRotX(0.5);
-              setRotZ(0);
-              d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
-            })
-          }
-        >
-          YZ
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            batch(() => {
-              setRotX(0.5);
-              setRotZ(-0.5);
-              d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
-            })
-          }
-        >
-          XZ
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            batch(() => {
-              setRotX(0);
-              setRotZ(0);
-              d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
-            })
-          }
-        >
-          XY
-        </button>
-      </div>
+
       <p>You can zoom and rotate the viewport. Double click to reset.</p>
       <div class="grid w-full max-w-3xl grid-cols-[repeat(auto-fit,_14rem)] justify-items-stretch gap-4">
         <label title="Scale the figure to zoom in and out">
@@ -563,7 +674,6 @@ export default function Field() {
           />
         </label>
       </div>
-      <SVGDownload target={svgRef!} />
     </>
   );
 }
