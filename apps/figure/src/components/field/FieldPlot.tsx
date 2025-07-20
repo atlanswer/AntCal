@@ -343,15 +343,20 @@ export default function Field() {
     <>
       <FileUpload />
       <ErrorBadge />
-      <p class="max-w-3xl font-mono text-sm">
-        Number of Vectors: {lens().length === 0 ? "-" : lens().length} | Span
-        along x axis: {stats.xSpan === 0 ? "-" : stats.xSpan.toFixed(8)} m |
-        Span alone y axis: {stats.ySpan === 0 ? "-" : stats.ySpan.toFixed(8)} m
-        | Span alone z axis: {stats.zSpan === 0 ? "-" : stats.zSpan.toFixed(8)}{" "}
-        m | Minimum vector length:{" "}
-        {stats.vLenMin === -1 ? "-" : stats.vLenMin.toFixed(8)} | Maximum vector
-        length: {stats.vLenMax === 0 ? "-" : stats.vLenMax.toFixed(8)}
-      </p>{" "}
+      <div class="flex max-w-3xl flex-wrap justify-center gap-4 *:rounded *:bg-neutral-300 *:px-2 *:font-mono *:text-sm *:leading-relaxed *:dark:bg-neutral-500">
+        <span>Figure Width: 3.5 in</span>
+        <span>DPI: {DPI}</span>
+        <span>#Vectors: {lens().length === 0 ? "-" : lens().length}</span>
+        <span>
+          Min Vector Len: {stats.vLenMin === -1 ? "-" : stats.vLenMin}
+        </span>
+        <span>
+          Max Vector Len: {stats.vLenMax === -1 ? "-" : stats.vLenMax}
+        </span>
+        <span>X span: {stats.xSpan === 0 ? "-" : stats.xSpan} m</span>
+        <span>Y span: {stats.ySpan === 0 ? "-" : stats.ySpan} m</span>
+        <span>Z span: {stats.zSpan === 0 ? "-" : stats.zSpan} m</span>
+      </div>
       <div class="w-full max-w-3xl rounded bg-white outline dark:bg-black">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -361,10 +366,9 @@ export default function Field() {
           class="h-full w-full"
         />
       </div>
-      <div class="mx-auto flex gap-4">
+      <div class="mx-auto flex gap-4 *:cursor-pointer *:rounded *:bg-slate-500 *:px-2 *:py-1 *:font-semibold *:text-white *:hover:bg-slate-700">
         <button
           type="button"
-          class="view-button"
           onClick={() =>
             batch(() => {
               setRotX(rotXDefault);
@@ -377,7 +381,6 @@ export default function Field() {
         </button>
         <button
           type="button"
-          class="view-button"
           onClick={() =>
             batch(() => {
               setRotX(0.5);
@@ -390,7 +393,6 @@ export default function Field() {
         </button>
         <button
           type="button"
-          class="view-button"
           onClick={() =>
             batch(() => {
               setRotX(0.5);
@@ -403,7 +405,6 @@ export default function Field() {
         </button>
         <button
           type="button"
-          class="view-button"
           onClick={() =>
             batch(() => {
               setRotX(0);

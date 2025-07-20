@@ -10,17 +10,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@utility view-button {
-  @apply cursor-pointer;
-  @apply rounded;
-  @apply px-3;
-  @apply py-1;
-  @apply text-white;
-  @apply font-semibold;
-  @apply bg-slate-500;
-  @apply hover:bg-slate-700;
-}
-
 @layer base {
   * {
     @apply transition-colors;

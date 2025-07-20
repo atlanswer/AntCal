@@ -32,7 +32,7 @@
     "turbo": "^2.5.5",
     "typescript": "^5.8.3"
   },
-  "packageManager": "bun@1.2.17",
+  "packageManager": "bun@1.2.19",
   "engines": {
     "bun": ">=1.2"
   }

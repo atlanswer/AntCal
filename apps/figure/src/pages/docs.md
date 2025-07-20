@@ -15,6 +15,7 @@ Visualize vector fields in an interactive SVG.
 - [x] &nbsp; Vector arrow
 - [x] &nbsp; Vector length control
 - [x] &nbsp; Figure height control
+- [ ] &nbsp; Vector arrow tail length control
 - [ ] &nbsp; Colorbar
 - [ ] &nbsp; Vector arrow shape selection
 
@@ -33,7 +34,7 @@ Visualize vector fields in an interactive SVG.
 ### How to export vector fields in ANSYS HFSS
 
 1. Measure the bounding box (in Cartesian coordinate system) of the area of interest
-2. Open the Field Calculator (e.g., right click Field Plots)
+2. Open the Field Calculator (e.g., right click Field Overlays)
 3. Select the desired quantity (e.g., `Vector_E`) and copy it to the stack (or construct your own vector quantity)
 4. Select the correct context (especially the phase)
 5. Click "Export..."
