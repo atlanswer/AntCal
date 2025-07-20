@@ -15,7 +15,7 @@ Visualize vector fields in an interactive SVG.
 - [x] &nbsp; Vector arrow
 - [x] &nbsp; Vector length control
 - [x] &nbsp; Figure height control
-- [ ] &nbsp; Vector arrow tail length control
+- [x] &nbsp; Vector arrow tail length control
 - [ ] &nbsp; Colorbar
 - [ ] &nbsp; Vector arrow shape selection
 

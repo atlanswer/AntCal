@@ -19,6 +19,7 @@ export function createArrow(
   rotArrowRad: number,
   align: "middle" | "start" | "end" = "middle",
   hasTail: boolean = true,
+  tailLen: number = 0.5,
 ): [d3d.Polygon3DInput, [d3d.Point3DInput, d3d.Point3DInput] | undefined] {
   const v: Vec3 = [unit[0] * scale, unit[1] * scale, unit[2] * scale];
   const ofsValues: { [key in typeof align]: number } = {
@@ -53,7 +54,7 @@ export function createArrow(
   if (hasTail) {
     const p5 = p1;
     const p6: Vec3 = addVec3(
-      addVec3(sclMulVec3(v, -ARROW_LEN / 2), start),
+      addVec3(sclMulVec3(v, -ARROW_LEN * tailLen), start),
       ofs,
     );
 

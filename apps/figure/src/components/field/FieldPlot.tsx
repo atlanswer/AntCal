@@ -1,7 +1,6 @@
 import { createArrow } from "components/field/arrow";
 import { rainbowDark } from "components/field/colorScheme";
-import { errBadge, setErrBadge } from "components/field/contexts";
-import { filename, setFilename } from "components/field/contexts";
+import { errBadge, setErrBadge, setFilename } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
 import { type Vec3 } from "components/field/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
@@ -73,6 +72,7 @@ export default function Field() {
   const [arrowAlign, setArrowAlign] = createSignal<"start" | "middle" | "end">(
     "middle",
   );
+  const [arrowTailLen, setArrowTailLen] = createSignal(0.5);
 
   const [vLenMin, setVLenMin] = createSignal(0);
   const [vLenMax, setVLenMax] = createSignal(0);
@@ -130,6 +130,7 @@ export default function Field() {
         rotArrowRad(),
         arrowAlign(),
         arrowTail(),
+        arrowTailLen(),
       );
 
       arrows.push(arrow);
@@ -547,6 +548,18 @@ export default function Field() {
             required
             checked
             onChange={(event) => setArrowTail(event.target.checked)}
+          />
+        </label>
+        <label title="Change the length of the arrow tails">
+          Arrow Tail Length
+          <input
+            class="w-full rounded pl-2 outline"
+            type="number"
+            min="0"
+            step="0.1"
+            required
+            value={arrowTailLen()}
+            onChange={(event) => setArrowTailLen(event.target.valueAsNumber)}
           />
         </label>
       </div>
