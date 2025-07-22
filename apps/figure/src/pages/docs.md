@@ -57,44 +57,34 @@ Simulate radiation pattern based on electric or magnetic sources.
 - Amplitudes are normalized to the maximum radiation of E-/M-dipole respectively
 - Far fields are sampled with limited resolution of 1°
 
+### Vector Potentials
+
+$$
+\begin{align}
+\mathbf{A} &= \frac{\mu}{4\pi} \int_{C} \mathbf{I}_e(x',y',z')\frac{e^{-jkR}}{R} dl' \\
+\mathbf{F} &= \frac{\epsilon}{4\pi} \int_{C} \mathbf{I}_m(x',y',z')\frac{e^{-jkR}}{R} dl'
+\end{align}
+$$
+
+### Far-Field Region
+
+$$
+\begin{align}
+\mathbf{E}_A &\simeq -j\omega\mathbf{A} \\
+\mathbf{H}_A &\simeq \frac{\hat{\mathbf{a}}_r}{\eta}\times\mathbf{E}_A
+= -j\frac{\omega}{\eta}\hat{\mathbf{a}}_r\times\mathbf{A} \\
+\mathbf{E}_F &\simeq -j\omega\mathbf{F} \\
+\mathbf{H}_F &\simeq -\eta\hat{\mathbf{a}}_r\times\mathbf{H}_F
+= j\omega\eta\hat{\mathbf{a}}_r\times\mathbf{F} \\
+\end{align}
+$$
+
+### Finite Length Dipole
+
 ### E-dipole:
 
 - Gain $θ$: $\sin(\theta)\cos(\phi)$
 - Gain $ϕ$: $\sin(\phi)$
-
-#### Demo
-
-Module Parameters: $[lpwl\_, {theta\_, phi\_}, mesh\_, opac\_, step\_, pg\_]$
-
-$$
-\operatorname{fun} =
-\begin{dcases}
-\frac{\left|\pi Lpwl \sin{(\pi Lpwl \cos{\Xi})} \sin{\pi}\right|}{\cos{\Xi}}
-& \text{if }
-
-\frac{\left|\cos{(\pi Lpwl \cos{\Xi})}-\cos{(\pi Lpwl)}\right|}{\sin{\Xi}}
-= \text{Indeterminate} \\
-
-\frac{\left|\cos{(\pi Lpwl \cos{\Xi})} - \cos{\pi Lpwl}\right|}{\sin{\Xi}}
-& \text{otherwise}
-\end{dcases}
-$$
-
-where $\Xi$ is $[0, \pi, \pi / 180]$.
-
-$$
-\operatorname{max} = \operatorname{Max(\operatorname{fun})}
-$$
-
-$$
-\operatorname{l}(th\_, ph\_) = [\sin(th\ deg)\cos(ph\ deg), \sin(th\ deg)\sin(ph\ deg), \cos(th\ deg)]
-$$
-
-$$
-\operatorname{lr}(th\_, ph\_, t\_, f\_) = \sin(th\ deg)\cos(ph\ deg)\sin(t)\cos(f)
-+ \sin(th\ deg)\sin(ph\ deg)\sin(t)\sin(f)
-+ \cos(th\ deg)\cos(t)
-$$
 
 ### M-dipole:
 
