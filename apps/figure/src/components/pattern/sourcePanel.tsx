@@ -2,11 +2,11 @@ import type { Accessor } from "solid-js";
 import { configs, setConfigs } from "components/pattern/context";
 import { For } from "solid-js";
 
-export default function (props: { idx: Accessor<number> }) {
+export default function (props: { cIdx: Accessor<number> }) {
   return (
     <div>
-      <For each={configs[props.idx()]}>
-        {(_, sIdx) => <SourceSetter cIdx={props.idx} sIdx={sIdx} />}
+      <For each={configs[props.cIdx()]}>
+        {(_, sIdx) => <SourceSetter cIdx={props.cIdx} sIdx={sIdx} />}
       </For>
     </div>
   );

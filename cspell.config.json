@@ -1,6 +1,6 @@
 {
   "version": "0.2",
   "language": "en",
-  "words": ["Vercel", "Mathematica", "HFSS", "operatorname"],
+  "words": ["Vercel", "Mathematica", "HFSS", "operatorname", "numpy", "mathbf"],
   "flagWords": []
 }

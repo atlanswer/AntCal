@@ -19,12 +19,14 @@ Visualize vector fields in an interactive SVG.
 - [x] &nbsp; Colorbar
 - [ ] &nbsp; Normal and dark color variant
 - [ ] &nbsp; Vector arrow shape selection
+- [ ] &nbsp; Represent scalar fields with contour plots
 
 **Notes:**
 
-- Figure width is fixed to 3.5 inches with a DPI of 72 according to the IEEE guidence
+- Figure width is fixed to 3.5 inches with a DPI of 72 according to the IEEE guidance
 - Vector positions are normalized to be evenly distributed around the origin
 - Vector arrows are facing the user by default
+- The color map is the dark variant of the Mathematica rainbow
 
 **Limitations:**
 
@@ -79,24 +81,88 @@ $$
 \end{align}
 $$
 
-### Finite Length Dipole
+### Sources
 
-### E-dipole:
+The rotation of each source is defined by
 
-- Gain $θ$: $\sin(\theta)\cos(\phi)$
-- Gain $ϕ$: $\sin(\phi)$
+$$
+\begin{equation}
+\mathbf{v}' = R_z(\phi_0)R_x(\theta_0)\mathbf{v}
+\text{,}
+\end{equation}
+$$
 
-### M-dipole:
+where [^rotation]
 
-- Gain $θ$: $\sin(\phi)$
-- Gain $ϕ$: $\sin(\theta)\cos(\phi)$
+$$
+\begin{align}
+R_x(\theta) &=
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & \cos\theta & -\sin\theta \\
+0 & \sin\theta & \cos\theta
+\end{bmatrix} \\
+R_z(\phi) &=
+\begin{bmatrix}
+\cos\phi & -\sin\phi & 0 \\
+\sin\phi & \cos\phi & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+\text{.}
+\end{align}
+$$
+
+For $\mathbf{v} = [\theta, \phi]^T$,
+
+$$
+\begin{equation}
+\mathbf{v}' =
+\begin{bmatrix}
+\arccos(
+\sin\theta_0\sin\theta\cos(\phi-\phi_0) + \cos\theta_0\cos\theta
+) \\
+\operatorname{atan2}(
+\sin\theta\sin(\phi-\phi_0),\
+\cos\theta_0\sin\theta\cos(\phi-\phi_0) - \sin\theta_0\cos\theta
+)
+\end{bmatrix}
+\end{equation}
+$$
+
+[^rotation]: [Rotation Matrix](https://en.wikipedia.org/wiki/Rotation_matrix#In_three_dimensions)
+
+#### E-Dipole: Finite Length Dipole
+
+The length is represented by $L = l/\lambda$.
+
+$$
+\begin{equation}
+U(\theta) = \frac{\eta|I_0|^2}{8\pi^2}\left[
+\frac{\cos(\pi L\cos\theta) - \cos(\pi L)}{\sin\theta}
+\right]^2
+\end{equation}
+$$
+
+If $L$ = 0.5, $G_{\text{max}}$ ≈ 1.64 (2.15 dBi), HPBW ≈ 78°.
+
+#### M-Dipole: Circular Loop of Constant Current
+
+Assumed to be a small loop.
+
+$$
+\begin{equation}
+U(\theta) = \frac{\eta k^4m^2\sin^2\theta}{32\pi^2}
+\end{equation}
+$$
+
+$G_{\text{max}}$ = 1.5 (1.76 dBi), HPBW = 120°.
 
 ### Linear Combination with Arbitrary Phase Shift [^wikipedia]
 
 We have
 
 $$
-a\sin(x+\theta_a)+b\sin(x+\theta_b)=c\sin(x+\varphi)
+a\sin(x+\theta_a)+b\sin(x+\theta_b)=c\sin(x+\varphi)\text{,}
 $$
 
 where $c$ and $\varphi$ satisfy
@@ -107,8 +173,6 @@ c=\sqrt{a^2+b^2+2ab\cos(\theta_a-\theta_b)}\text{,} \\
 \varphi=\operatorname{atan2}(a\cos\theta_a+b\cos\theta_b,\ a\sin\theta_a+b\sin\theta_b)\text{.}
 \end{gather*}
 $$
-
-Note: $\operatorname{atan2(y,\ x)}$ uses Numpy's [`arctan2`](https://numpy.org/doc/stable/reference/generated/numpy.arctan2.html) parameter order.
 
 [^wikipedia]: [Trigonometric Identities](https://en.wikipedia.org/wiki/List_of_trigonometric_identities#Arbitrary_phase_shift)
 
@@ -158,3 +222,6 @@ See [IEEE Author Center](https://journals.ieeeauthorcenter.ieee.org).
 > Times New Roman, Helvetica, Arial, Cambria, and Symbol.
 >
 > —Preparation of Papers for IEEE Transactions and Journals (April 2013)
+
+$$
+$$

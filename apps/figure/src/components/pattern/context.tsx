@@ -42,4 +42,6 @@ export const configsDefault: Source[][] = [
 
 export const [configs, setConfigs] = createStore(configsDefault);
 
-export type ObservationPoint = { theta: number; phi: number };
+export type Coordinate = { theta: number; phi: number };
+
+export type Phasor = { amplitude: number; phase: number };
