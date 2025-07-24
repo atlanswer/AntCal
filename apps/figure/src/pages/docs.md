@@ -87,7 +87,7 @@ The rotation of each source is defined by
 
 $$
 \begin{equation}
-\mathbf{v}' = R_z(\phi_0)R_x(\theta_0)\mathbf{v}
+\mathbf{v}' = R_z(\phi_0)R_y(\theta_0)\mathbf{v}
 \text{,}
 \end{equation}
 $$
@@ -102,6 +102,12 @@ R_x(\theta) &=
 0 & \cos\theta & -\sin\theta \\
 0 & \sin\theta & \cos\theta
 \end{bmatrix} \\
+R_y(\theta) &=
+\begin{bmatrix}
+\cos\theta & 0 & \sin\theta \\
+0 & 1 & 0 \\
+-\sin\theta & 0 & \cos\theta
+\end{bmatrix} \\
 R_z(\phi) &=
 \begin{bmatrix}
 \cos\phi & -\sin\phi & 0 \\
@@ -112,21 +118,33 @@ R_z(\phi) &=
 \end{align}
 $$
 
-For $\mathbf{v} = [\theta, \phi]^T$,
+The inverse rotation is given by
 
 $$
 \begin{equation}
-\mathbf{v}' =
-\begin{bmatrix}
-\arccos(
-\sin\theta_0\sin\theta\cos(\phi-\phi_0) + \cos\theta_0\cos\theta
-) \\
-\operatorname{atan2}(
-\sin\theta\sin(\phi-\phi_0),\
-\cos\theta_0\sin\theta\cos(\phi-\phi_0) - \sin\theta_0\cos\theta
-)
-\end{bmatrix}
+\mathbf{v} = R_y(-\theta_0)R_z(-\phi_0)\mathbf{v}'
+\text{.}
 \end{equation}
+$$
+
+For $\mathbf{v}'
+= [\theta', \phi']^T
+= [\sin\theta'\cos\phi', \sin\theta'\sin\phi', \cos\theta']^T$,
+
+$$
+\begin{align}
+x &= \cos\theta_0\sin\theta'\cos(\phi' - \phi_0) - \sin\theta_0\cos\theta' \\
+y &= \sin\theta'\sin(\phi' - \phi_0) \\
+z &= \sin\theta_0\sin\theta'\cos(\phi - \phi_0) + \cos\theta_0\cos\theta'\\
+
+\theta &= \arccos(z) \\
+\phi &= \operatorname{atan2}(y, x) \\
+
+\mathbf{v} &=
+\begin{bmatrix}
+\theta \\ \phi
+\end{bmatrix}
+\end{align}
 $$
 
 [^rotation]: [Rotation Matrix](https://en.wikipedia.org/wiki/Rotation_matrix#In_three_dimensions)
