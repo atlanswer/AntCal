@@ -57,7 +57,7 @@ def plot_plane(config: PlaneConf) -> FigureResponse:
     lin_min = config.linMin
     axis_step = np.deg2rad(config.axisStepDeg)
 
-    x = np.linspace(0, 2 * pi, int(360 / axis_step) + 1, dtype=np.float64)
+    x = np.linspace(0, 2 * pi, int(2 * pi / axis_step) + 1, dtype=np.float64)
     n_samples = len(x)
 
     match plane:

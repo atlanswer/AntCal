@@ -5,9 +5,11 @@ import FigureNew from "components/pattern";
 ---
 
 <BaseLayout>
-  {
-    import.meta.env.VERCEL_ENV === "production" ?
-      <FigureHome client:only="solid-js" />
-    : <FigureNew client:only="solid-js" />
-  }
+  <!-- { -->
+  <!--   import.meta.env.VERCEL_ENV === "production" ? -->
+  <!--     <FigureHome client:only="solid-js" /> -->
+  <!--   : <FigureNew client:only="solid-js" /> -->
+  <!-- } -->
+  <FigureHome client:only="solid-js" />
+  <!--    <FigureNew client:only="solid-js" /> -->
 </BaseLayout>
