@@ -11,11 +11,14 @@ export const AddSource: Component<{
     setFigureConfigs(props.idx, "sources", (sources) => [
       ...sources,
       {
-        type: "M",
-        direction: "+X",
+        type: "E",
+        orientation: {
+          theta: 0,
+          phi: 0,
+        },
         amplitude: 1,
         phase: 0,
-        lpwl: 0.5,
+        length: 0.5,
       } satisfies Source,
     ]);
   };

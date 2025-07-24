@@ -104,12 +104,14 @@ export const PlaneCard: Component<{ plane: Plane; figIdx: number }> = (
           </svg>
         </Show>
       </div>
-      <div class="flex place-content-between gap-4">
-        <Suspense>
-          <span>Max Direction: {viewPlaneData.latest?.maxD ?? "-"}°</span>
-          <span>HPBW: {viewPlaneData.latest?.hpbw ?? "-"}°</span>
-        </Suspense>
-      </div>
+      {
+        // <div class="flex place-content-between gap-4">
+        //   <Suspense>
+        //     <span>Max Direction: {viewPlaneData.latest?.maxD ?? "-"}°</span>
+        //     <span>HPBW: {viewPlaneData.latest?.hpbw ?? "-"}°</span>
+        //   </Suspense>
+        // </div>
+      }
       <div class="flex h-[252px] w-[252px] flex-wrap place-content-center rounded outline-1 outline-neutral-100">
         <Suspense fallback={<ViewPlaneLoading />}>
           <img

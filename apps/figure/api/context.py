@@ -7,10 +7,15 @@ from mpl_toolkits.mplot3d.axes3d import Axes3D
 from pydantic import BaseModel, RootModel
 
 
+class Orientation(TypedDict):
+    theta: float
+    phi: float
+
+
 class Source(TypedDict):
     type: Literal["E", "M"]
-    lpwl: float
-    direction: Literal["+X", "+Y", "+Z"]
+    length: float
+    orientation: Orientation
     amplitude: float
     phase: float
 

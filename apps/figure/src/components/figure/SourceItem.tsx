@@ -66,27 +66,184 @@ export const SourceItem: Component<{
           </button>
         </span>
       </div>
-      <form
-        class="flex flex-wrap place-items-center gap-x-4 gap-y-2"
-        onSubmit={(event) => event.preventDefault()}
-      >
-        <DirectionSelector figIdx={props.figIdx} srcIdx={props.srcIdx} />
-        <ValueSelector
-          type="amplitude"
-          figIdx={props.figIdx}
-          srcIdx={props.srcIdx}
-        />
-        <ValueSelector
-          type="phase"
-          figIdx={props.figIdx}
-          srcIdx={props.srcIdx}
-        />
-        <ValueSelector
-          type="phase"
-          figIdx={props.figIdx}
-          srcIdx={props.srcIdx}
-        />
-      </form>
+
+      <div class="flex flex-wrap place-items-center gap-x-4 gap-y-2">
+        <label class="flex items-center gap-2">
+          <span>Length (λ^-1)</span>
+          <div class="flex h-7">
+            <button
+              type="button"
+              aria-label="Decrease value"
+              class="rounded-s border border-neutral-500 px-1"
+              onClick={() =>
+                setFigureConfigs(
+                  props.figIdx,
+                  "sources",
+                  props.srcIdx,
+                  "length",
+                  (prev) => prev - 0.25,
+                )
+              }
+            >
+              <ChevronDown />
+            </button>
+            <input
+              value={figureConfigs[props.figIdx]?.sources[props.srcIdx]?.length}
+              type="number"
+              min="0"
+              step={0.1}
+              class="w-16 border border-x-0 border-neutral-500 bg-transparent text-center focus-visible:outline-none"
+              required
+              onChange={(event) =>
+                setFigureConfigs(
+                  props.figIdx,
+                  "sources",
+                  props.srcIdx,
+                  "length",
+                  event.target.valueAsNumber,
+                )
+              }
+            />
+            <button
+              type="button"
+              aria-label="Increase value"
+              class="rounded-e border border-neutral-500 px-1"
+              onClick={() =>
+                setFigureConfigs(
+                  props.figIdx,
+                  "sources",
+                  props.srcIdx,
+                  "length",
+                  (prev) => prev + 0.25,
+                )
+              }
+            >
+              <ChevronUp />
+            </button>
+          </div>
+        </label>
+
+        <label class="flex items-center gap-2">
+          <span>Source Theta (π)</span>
+          <div class="flex h-7">
+            <button
+              type="button"
+              aria-label="Decrease value"
+              class="rounded-s border border-neutral-500 px-1"
+              onClick={() =>
+                setFigureConfigs(
+                  props.figIdx,
+                  "sources",
+                  props.srcIdx,
+                  "orientation",
+                  "theta",
+                  (prev) => prev - 0.25,
+                )
+              }
+            >
+              <ChevronDown />
+            </button>
+            <input
+              value={
+                figureConfigs[props.figIdx]?.sources[props.srcIdx]?.orientation
+                  .theta
+              }
+              type="number"
+              step={0.05}
+              class="w-16 border border-x-0 border-neutral-500 bg-transparent text-center focus-visible:outline-none"
+              required
+              onChange={(event) =>
+                setFigureConfigs(
+                  props.figIdx,
+                  "sources",
+                  props.srcIdx,
+                  "orientation",
+                  "theta",
+                  event.target.valueAsNumber,
+                )
+              }
+            />
+            <button
+              type="button"
+              aria-label="Increase value"
+              class="rounded-e border border-neutral-500 px-1"
+              onClick={() =>
+                setFigureConfigs(
+                  props.figIdx,
+                  "sources",
+                  props.srcIdx,
+                  "orientation",
+                  "theta",
+                  (prev) => prev + 0.25,
+                )
+              }
+            >
+              <ChevronUp />
+            </button>
+          </div>
+        </label>
+
+        <label class="flex items-center gap-2">
+          <span>Source Phi (π)</span>
+          <div class="flex h-7">
+            <button
+              type="button"
+              aria-label="Decrease value"
+              class="rounded-s border border-neutral-500 px-1"
+              onClick={() =>
+                setFigureConfigs(
+                  props.figIdx,
+                  "sources",
+                  props.srcIdx,
+                  "orientation",
+                  "phi",
+                  (prev) => prev - 0.25,
+                )
+              }
+            >
+              <ChevronDown />
+            </button>
+            <input
+              value={
+                figureConfigs[props.figIdx]?.sources[props.srcIdx]?.orientation
+                  .phi
+              }
+              type="number"
+              step={0.05}
+              class="w-16 border border-x-0 border-neutral-500 bg-transparent text-center focus-visible:outline-none"
+              required
+              onChange={(event) =>
+                setFigureConfigs(
+                  props.figIdx,
+                  "sources",
+                  props.srcIdx,
+                  "orientation",
+                  "phi",
+                  event.target.valueAsNumber,
+                )
+              }
+            />
+            <button
+              type="button"
+              aria-label="Increase value"
+              class="rounded-e border border-neutral-500 px-1"
+              onClick={() =>
+                setFigureConfigs(
+                  props.figIdx,
+                  "sources",
+                  props.srcIdx,
+                  "orientation",
+                  "phi",
+                  (prev) => prev + 0.25,
+                )
+              }
+            >
+              <ChevronUp />
+            </button>
+          </div>
+        </label>
+      </div>
+
       <Show when={(sources()?.length ?? 0) > 1}>
         <button
           aria-label="Remove source"
@@ -107,49 +264,50 @@ export const SourceItem: Component<{
   );
 };
 
-const DirectionSelector: Component<{
-  figIdx: number;
-  srcIdx: number;
-}> = (props) => {
-  const directions: Source["direction"][] = ["+X", "+Y", "+Z"] as const;
+// const DirectionSelector: Component<{
+//   figIdx: number;
+//   srcIdx: number;
+// }> = (props) => {
+//   const directions: Source["direction"][] = ["+X", "+Y", "+Z"] as const;
 
-  const [figureConfigs, setFigureConfigs] = useFigureArrayConf();
+//   const [figureConfigs, setFigureConfigs] = useFigureArrayConf();
 
-  return (
-    <div class="flex place-items-center gap-2">
-      <span class="text-sm">Direction</span>
-      <span class="flex h-7 w-32 rounded bg-neutral-200 font-bold text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400 [&>.active]:bg-sky-500 [&>.active]:text-white">
-        <Index each={directions}>
-          {(direction) => (
-            <button
-              class="flex-1 rounded whitespace-nowrap"
-              classList={{
-                active:
-                  figureConfigs[props.figIdx]?.sources[props.srcIdx]
-                    ?.direction === direction(),
-              }}
-              type="button"
-              onClick={() =>
-                setFigureConfigs(
-                  props.figIdx,
-                  "sources",
-                  props.srcIdx,
-                  "direction",
-                  direction,
-                )
-              }
-            >
-              {direction()}
-            </button>
-          )}
-        </Index>
-      </span>
-    </div>
-  );
-};
+//   return (
+//     <div class="flex place-items-center gap-2">
+//       <span class="text-sm">Direction</span>
+//       <span class="flex h-7 w-32 rounded bg-neutral-200 font-bold text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400 [&>.active]:bg-sky-500 [&>.active]:text-white">
+//         <Index each={directions}>
+//           {(direction) => (
+//             <button
+//               class="flex-1 rounded whitespace-nowrap"
+//               classList={{
+//                 active:
+//                   figureConfigs[props.figIdx]?.sources[props.srcIdx]
+//                     ?.direction === direction(),
+//               }}
+//               type="button"
+//               onClick={() =>
+//                 setFigureConfigs(
+//                   props.figIdx,
+//                   "sources",
+//                   props.srcIdx,
+//                   "direction",
+//                   direction,
+//                 )
+//               }
+//             >
+//               {direction()}
+//             </button>
+//           )}
+//         </Index>
+//       </span>
+//     </div>
+//   );
+// };
 
 const ValueSelector: Component<{
-  type: "amplitude" | "phase" | "lpwl";
+  title: string;
+  type: "amplitude" | "phase" | "length";
   figIdx: number;
   srcIdx: number;
 }> = (props) => {
@@ -189,7 +347,10 @@ const ValueSelector: Component<{
   return (
     <div class="flex place-items-center gap-2">
       <label for={inputId} class="text-sm">
-        {displayType()}
+        {
+          // displayType()
+        }
+        {props.title}
       </label>
       <div class="flex h-7">
         <button

@@ -105,7 +105,9 @@ export const FigureSection: Component<{
             <PlaneCard plane="YZ" figIdx={props.idx} />
             <PlaneCard plane="XZ" figIdx={props.idx} />
             <PlaneCard plane="XY" figIdx={props.idx} />
-            <SourcePreview sources={props.figureConfig().sources} />
+            {
+              // <SourcePreview sources={props.figureConfig().sources} />
+            }
           </ErrorBoundary>
         </div>
         <figcaption class="flex flex-wrap place-content-center place-items-center gap-8 text-black dark:text-white">

@@ -14,7 +14,9 @@ export const SourcesPanel: Component<{
           <SourceItem source={source} figIdx={props.idx} srcIdx={idx} />
         )}
       </Index>
-      <AddSource idx={props.idx} />
+      {
+        // <AddSource idx={props.idx} />
+      }
     </div>
   );
 };

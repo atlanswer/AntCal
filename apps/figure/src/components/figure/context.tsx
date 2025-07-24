@@ -9,8 +9,11 @@ import { z } from "zod";
 
 export const zSource = z.object({
   type: z.enum(["E", "M"]),
-  lpwl: z.number().nonnegative(),
-  direction: z.enum(["+X", "+Y", "+Z"]),
+  length: z.number().nonnegative(),
+  orientation: z.object({
+    theta: z.number(),
+    phi: z.number(),
+  }),
   amplitude: z.number().nonnegative(),
   phase: z.number().nonnegative().max(359),
 });
@@ -39,67 +42,70 @@ export const zFigureArrayConf = z.array(zFigureConf);
 export type FigureArrayConf = z.infer<typeof zFigureArrayConf>;
 
 export const figureConfArrayDefault = [
-  {
-    title: "ME-Dipole",
-    sources: [
-      {
-        type: "E",
-        lpwl: 0.5,
-        direction: "+Y",
-        amplitude: 1,
-        phase: 0,
-      },
-      {
-        type: "M",
-        lpwl: 0.5,
-        direction: "+X",
-        amplitude: 1,
-        phase: 0,
-      },
-    ],
-    db: true,
-    gainTotal: false,
-    dbMin: -30,
-    dbMax: 10,
-    linMin: 0,
-    axisStepDeg: 1,
-  },
+  // {
+  //   title: "ME-Dipole",
+  //   sources: [
+  //     {
+  //       type: "E",
+  //       length: 0.5,
+  //       direction: "+Y",
+  //       amplitude: 1,
+  //       phase: 0,
+  //     },
+  //     {
+  //       type: "M",
+  //       length: 0.5,
+  //       direction: "+X",
+  //       amplitude: 1,
+  //       phase: 0,
+  //     },
+  //   ],
+  //   db: true,
+  //   gainTotal: false,
+  //   dbMin: -30,
+  //   dbMax: 10,
+  //   linMin: 0,
+  //   axisStepDeg: 1,
+  // },
   {
     title: "E-Dipole",
     sources: [
       {
         type: "E",
-        lpwl: 0.5,
-        direction: "+Z",
+        length: 0.5,
+        orientation: {
+          theta: 0,
+          phi: 0,
+        },
         amplitude: 1,
         phase: 0,
       },
     ],
     db: true,
-    gainTotal: false,
+    gainTotal: true,
     dbMin: -30,
     dbMax: 10,
     linMin: 0,
     axisStepDeg: 1,
   },
-  {
-    title: "M-Dipole",
-    sources: [
-      {
-        type: "M",
-        lpwl: 0.5,
-        direction: "+Z",
-        amplitude: 1,
-        phase: 0,
-      },
-    ],
-    db: true,
-    gainTotal: false,
-    dbMin: -30,
-    dbMax: 10,
-    linMin: 0,
-    axisStepDeg: 1,
-  },
+  // {
+  //   title: "M-Dipole",
+  //   sources: [
+  //     {
+  //       type: "M",
+  //       length: 0.5,
+  //       direction: "+Z",
+  //       amplitude: 1,
+  //       phase: 0,
+  //     },
+  //   ],
+  //   db: true,
+  //   gainTotal: false,
+  //   dbMin: -30,
+  //   dbMax: 10,
+  //   linMin: 0,
+  //   axisStepDeg: 1,
+  // },
 ] as const satisfies FigureArrayConf;
 
 const figureArrayConfContext =
