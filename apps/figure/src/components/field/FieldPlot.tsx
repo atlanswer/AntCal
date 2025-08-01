@@ -16,17 +16,9 @@ import {
 } from "solid-js";
 import { createStore } from "solid-js/store";
 
-const [starts, setStarts] = createSignal<Vec3[]>([
-  [0, 0, 0],
-  [1, 0, 0],
-  [0, 2, 0],
-]);
-const [units, setUnits] = createSignal<Vec3[]>([
-  [0, 0, 1],
-  [1, 0, 0],
-  [0, 1, 0],
-]);
-const [lens, setLens] = createSignal<number[]>([1, 0.6, 0.3]);
+const [starts, setStarts] = createSignal<Vec3[]>([]);
+const [units, setUnits] = createSignal<Vec3[]>([]);
+const [lens, setLens] = createSignal<number[]>([]);
 const [stats, setStats] = createStore({
   xSpan: 6,
   ySpan: 6,
@@ -638,7 +630,7 @@ export default function Field() {
         <label title="Change the vector arrow placement relating to its staring position">
           Arrow Alignment
           <select
-            class="block cursor-pointer"
+            class="block cursor-pointer rounded px-2 py-0.5 outline"
             required
             onChange={(event) =>
               setArrowAlign(event.target.value as "start" | "middle" | "end")
