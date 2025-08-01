@@ -17,7 +17,8 @@ Visualize vector fields in an interactive SVG.
 - [x] &nbsp; Figure height control
 - [x] &nbsp; Vector arrow tail length control
 - [x] &nbsp; Colorbar
-- [ ] &nbsp; Normal and dark color variant
+- [x] &nbsp; Normal and dark color variant
+- [x] &nbsp; Map vector size
 - [ ] &nbsp; Vector arrow shape selection
 - [ ] &nbsp; Represent scalar fields with contour plots
 
