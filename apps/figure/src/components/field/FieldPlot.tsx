@@ -16,12 +16,37 @@ import {
 } from "solid-js";
 import { createStore } from "solid-js/store";
 
-const [starts, setStarts] = createSignal<Vec3[]>([]);
-const [units, setUnits] = createSignal<Vec3[]>([]);
-const [lens, setLens] = createSignal<number[]>([]);
+const startsDefault: Vec3[] = [];
+const unitsDefault: Vec3[] = [];
+const lensDefault: number[] = [];
+
+for (let i = -4; i <= 4; i++) {
+  for (let j = -4; j <= 4; j++) {
+    for (let k = -1; k <= 1; k++) {
+      startsDefault.push([i, j, k]);
+      unitsDefault.push([
+        Math.sin(((i / 4) * Math.PI) / 2),
+        Math.sin(((j / 4) * Math.PI) / 2),
+        1,
+      ]);
+      lensDefault.push(
+        Math.cos(
+          (((Math.abs(i) * Math.abs(i) + Math.abs(j) * Math.abs(j)) / 20) *
+            Math.PI) /
+            2,
+        ),
+      );
+    }
+  }
+}
+
+const [starts, setStarts] = createSignal<Vec3[]>(startsDefault);
+const [units, setUnits] = createSignal<Vec3[]>(unitsDefault);
+const [lens, setLens] = createSignal<number[]>(lensDefault);
+
 const [stats, setStats] = createStore({
-  xSpan: 6,
-  ySpan: 6,
+  xSpan: 8,
+  ySpan: 8,
   zSpan: 6,
   vLenMin: 0,
   vLenMax: 1,
@@ -64,6 +89,7 @@ export default function Field() {
   const [arrowAlign, setArrowAlign] = createSignal<"start" | "middle" | "end">(
     "middle",
   );
+  const [mapSize, setMapSize] = createSignal(true);
   const [arrowTailLen, setArrowTailLen] = createSignal(0.5);
 
   const [vLenMin, setVLenMin] = createSignal(0);
@@ -110,7 +136,7 @@ export default function Field() {
     const tails: d3d.Point3DInput[][] = [];
 
     for (let i = 0; i < starts().length; i++) {
-      let len = lens()[i]!;
+      let len = mapSize() ? lens()[i]! : (vLenMax() + vLenMin()) / 2;
       len = len < vLenMin() ? vLenMin() : len;
       len = len > vLenMax() ? vLenMax() : len;
 
@@ -576,6 +602,16 @@ export default function Field() {
             required
             checked
             onChange={(event) => setAxesEnabled(event.target.checked)}
+          />
+        </label>
+        <label class="cursor-pointer" title="Map Vector Size">
+          Map Vector Size
+          <input
+            class="block translate-x-1 translate-y-1 scale-150"
+            type="checkbox"
+            required
+            checked
+            onChange={(event) => setMapSize(event.target.checked)}
           />
         </label>
         <label title="Change the size of the vector arrows">
