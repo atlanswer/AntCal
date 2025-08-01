@@ -23,18 +23,3 @@ export function rotateCoordinate(
     phi: Math.abs(x) < eps && Math.abs(y) < eps ? 0 : Math.atan2(y, x),
   };
 }
-
-export function verticalEDipole(
-  L: number,
-  theta: number,
-  _: any = undefined,
-): number {
-  return (
-    (Math.cos(Math.PI * L * Math.cos(theta)) - Math.cos(Math.PI * L)) /
-    Math.sin(theta)
-  );
-}
-
-export function verticalMDipole(theta: number, _: any): number {
-  return 1;
-}
