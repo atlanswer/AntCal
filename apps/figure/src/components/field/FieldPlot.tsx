@@ -1,4 +1,5 @@
 import { createArrow } from "components/field/arrow";
+import { rainbow } from "components/field/colorScheme";
 import { rainbowDark } from "components/field/colorScheme";
 import { errBadge, setErrBadge, setFilename } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
@@ -94,6 +95,10 @@ export default function Field() {
 
   const [vLenMin, setVLenMin] = createSignal(0);
   const [vLenMax, setVLenMax] = createSignal(0);
+
+  const [colorScheme, setColorScheme] = createSignal<
+    "rainbow" | "rainbow-dark"
+  >("rainbow-dark");
 
   // Set proper scale and zoom sensitivity
   createEffect(() => {
@@ -298,7 +303,12 @@ export default function Field() {
       .attr("y", heightInPoints() - 5 - 8)
       .attr("width", 72)
       .attr("height", 8)
-      .attr("fill", "url(#mathematica-rainbow-dark)");
+      .attr(
+        "fill",
+        colorScheme() === "rainbow" ?
+          "url(#mathematica-rainbow)"
+        : "url(#mathematica-rainbow-dark)",
+      );
     colorbar
       .selectAll("text")
       .data([vLenMin(), vLenMax()])
@@ -321,7 +331,7 @@ export default function Field() {
     let idx = Math.floor(diff / step);
     idx = idx > 29 ? 29 : idx;
 
-    return rainbowDark[idx]!;
+    return colorScheme() === "rainbow" ? rainbow[idx]! : rainbowDark[idx]!;
   }
 
   // Redraw
@@ -700,6 +710,21 @@ export default function Field() {
             value={arrowTailLen()}
             onChange={(event) => setArrowTailLen(event.target.valueAsNumber)}
           />
+        </label>
+        <label title="Change color scheme">
+          Color Scheme
+          <select
+            class="block cursor-pointer rounded px-2 py-0.5 outline"
+            required
+            onChange={(event) =>
+              setColorScheme(event.target.value as "rainbow" | "rainbow-dark")
+            }
+          >
+            <option value="rainbow">Mathematica Rainbow</option>
+            <option value="rainbow-dark" selected>
+              Mathematica Dark Rainbow
+            </option>
+          </select>
         </label>
       </div>
     </>
