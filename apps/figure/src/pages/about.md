@@ -21,6 +21,7 @@ This site is built with the following tools:
 - [FastAPI](https://fastapi.tiangolo.com)
 - [Numpy](https://numpy.org)
 - [Matplotlib](https://matplotlib.org)
+- [PatternCraft](https://patterncraft.fun)
 
 This site is hosted on [Vercel](https://vercel.com)
 and uses the [Geist font](https://vercel.com/font).
