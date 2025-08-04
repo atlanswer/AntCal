@@ -11,6 +11,7 @@ export default function (props: { title: string; points: Coordinate[] }) {
   const heightIn = 3.5 / 2;
   const width = widthIn * DPI;
   const height = heightIn * DPI;
+  const padding = 10;
 
   function draw() {
     const svg = d3.select(svgRef!);
@@ -23,9 +24,42 @@ export default function (props: { title: string; points: Coordinate[] }) {
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round");
 
-    // Radial grid
-    // Spherical grid
-    grid.selectAll("g.r").data([null]).join("g").classed("r", true);
+    // Circle grid
+    const cg = grid
+      .selectAll("g.circle")
+      .data([null])
+      .join("g")
+      .classed("circle", true);
+    cg.selectAll("circle")
+      .data(d3.range(5).map((d) => (d / 4) * (width / 2 - padding)))
+      .join("circle")
+      .attr("cx", 0)
+      .attr("cy", 0)
+      .attr("r", (data) => data)
+      .attr("fill", "none")
+      .attr("stroke", "oklch(55.6% 0 0)")
+      .attr("stroke-width", 0.5)
+      .attr("stroke-dasharray", "2,2");
+    // Angle grid
+    const ag = grid
+      .selectAll("g.angle")
+      .data([null])
+      .join("g")
+      .classed("angle", true);
+    const angleLine = d3.lineRadial();
+    ag.selectAll("path")
+      .data(d3.range(8).map((d) => (d * Math.PI) / 4))
+      .join("path")
+      .attr("fill", "none")
+      .attr("stroke", "oklch(55.6% 0 0)")
+      .attr("stroke-width", 0.5)
+      .attr("stroke-dasharray", "2,2")
+      .attr("d", (d) =>
+        angleLine([
+          [0, 0],
+          [d, width / 2 - padding],
+        ]),
+      );
   }
 
   createEffect(() => draw());
