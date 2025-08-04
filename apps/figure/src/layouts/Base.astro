@@ -5,6 +5,7 @@ interface Props {
 }
 
 let { title } = Astro.props;
+const url = Astro.url.toString();
 
 import { ClientRouter } from "astro:transitions";
 import { Font } from "astro:assets";
@@ -30,9 +31,41 @@ if (title === undefined) {
 <html lang="en-US">
   <head transition:name="head">
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} | AntCal</title>
-    <meta name="description" content="Create publication quality figures." />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Create publication quality figures" />
+    <meta property="og:title" content={`${title} | AntCal`} />
+    <meta
+      property="og:description"
+      content="Create publication quality figures"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={url} />
+    <meta
+      property="og:image"
+      content="https://github.com/user-attachments/assets/a54062eb-d3ff-4fa0-94b6-8d441a436c37"
+    />
+    <meta
+      property="og:image:alt"
+      content="Screenshot of the AntCal app showing vector field visualization"
+    />
+    <meta name="twitter:title" content={`${title} | AntCal`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:description"
+      content="Create publication quality figures"
+    />
+    <meta name="twitter:url" content={url} />
+    <meta
+      name="twitter:image"
+      content="https://github.com/user-attachments/assets/a54062eb-d3ff-4fa0-94b6-8d441a436c37"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Screenshot of the AntCal app showing vector field visualization"
+    />
+    <meta name="twitter:creator" content="@Atlanswer" />
+    <meta name="twitter:site" content="@Atlanswer" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#ffffff" />
     <meta
