@@ -4,7 +4,7 @@ import {
   getUnitVec3,
   sclMulVec3,
   type Vec3,
-} from "components/field/linearAlgebra";
+} from "src/math/linearAlgebra";
 import type * as d3d from "d3-3d";
 
 const ARROW_LEN = 0.724;

@@ -3,7 +3,7 @@ import {
   type Vec3,
   type Vec6,
   getUnitVec3,
-} from "components/field/linearAlgebra";
+} from "src/math/linearAlgebra";
 
 function* genLines(text: string) {
   const lines = text.split("\n");

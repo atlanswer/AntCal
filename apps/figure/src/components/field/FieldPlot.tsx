@@ -3,7 +3,7 @@ import { rainbow } from "components/field/colorScheme";
 import { rainbowDark } from "components/field/colorScheme";
 import { errBadge, setErrBadge, setFilename } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
-import { type Vec3 } from "components/field/linearAlgebra";
+import { type Vec3 } from "src/math/linearAlgebra";
 import SVGDownload from "components/field/SVGDownload";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";

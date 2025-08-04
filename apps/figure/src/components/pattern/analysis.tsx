@@ -1,5 +1,5 @@
 import type { Accessor } from "solid-js";
-import SourcePanel from "components/pattern/sourcePanel";
+import Sources from "src/components/pattern/sources";
 import Plane from "components/pattern/plane";
 import type { Coordinate } from "components/pattern/context";
 import * as d3 from "d3";
@@ -25,7 +25,7 @@ export default function (props: { idx: Accessor<number> }) {
         <Plane title="Phi = 90" points={planePhi90} />
         <Plane title="Theta = 90" points={planeTheta90} />
       </div>
-      <SourcePanel cIdx={props.idx} />
+      <Sources cIdx={props.idx} />
     </div>
   );
 }
