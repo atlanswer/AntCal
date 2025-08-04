@@ -400,7 +400,7 @@ export default function Field() {
     <>
       <FileUpload />
       <ErrorBadge />
-      <div class="flex max-w-3xl flex-wrap justify-center gap-4 *:rounded *:bg-neutral-300 *:px-2 *:font-mono *:text-sm *:leading-relaxed *:dark:bg-neutral-500">
+      <div class="flex max-w-3xl flex-wrap justify-center gap-4 *:rounded *:bg-slate-500 *:px-2 *:font-mono *:text-sm *:leading-relaxed *:text-white">
         <span>Figure Width: 3.5 in</span>
         <span>DPI: {DPI}</span>
         <span>#Vectors: {lens().length === 0 ? "-" : lens().length}</span>
