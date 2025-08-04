@@ -9,7 +9,7 @@
 
 Visualize vector field, synthesize radiation pattern, and more to come!
 
-<img alt="AntCal web app screenshot" src="https://github.com/user-attachments/assets/3b0b1863-4307-44b0-b779-8ea43bc4afc3" />
+<img alt="AntCal web app screenshot" src="https://github.com/user-attachments/assets/9f1b3123-ea08-4c4a-a7d5-11bc8cb1fcc6" />
 
 AntCal Web App: https://antcal.atlanswer.com<br/>
 Dev version: https://dev.antcal.atlanswer.com
