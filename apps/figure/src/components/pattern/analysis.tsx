@@ -20,10 +20,10 @@ export default function (props: { idx: Accessor<number> }) {
   return (
     <div class="rounded p-4 outline">
       <p>Analysis {props.idx() + 1}</p>
-      <div class="flex gap-4 overflow-scroll p-1">
-        <Plane title="Phi = 0" points={planePhi0} />
-        <Plane title="Phi = 90" points={planePhi90} />
-        <Plane title="Theta = 90" points={planeTheta90} />
+      <div class="flex gap-4 overflow-x-auto p-1">
+        <Plane title="Φ = 0°" points={planePhi0} />
+        <Plane title="Φ = 90°" points={planePhi90} />
+        <Plane title="θ = 90°" points={planeTheta90} />
       </div>
       <Sources cIdx={props.idx} />
     </div>

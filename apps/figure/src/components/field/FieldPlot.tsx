@@ -502,7 +502,7 @@ export default function Field() {
           </defs>
         </svg>
         <div class="pointer-events-none col-start-1 row-start-1 flex h-full w-full flex-col items-start justify-between p-4">
-          <div class="pointer-events-auto flex w-full gap-4 overflow-scroll *:cursor-pointer *:rounded *:bg-slate-500 *:px-4 *:py-2 *:font-semibold *:text-white *:hover:bg-slate-700">
+          <div class="pointer-events-auto flex w-full gap-4 overflow-x-auto *:cursor-pointer *:rounded *:bg-slate-500 *:px-4 *:py-2 *:font-semibold *:text-white *:hover:bg-slate-700">
             <button
               type="button"
               onClick={() =>
