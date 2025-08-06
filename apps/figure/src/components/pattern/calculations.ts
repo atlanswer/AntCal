@@ -1,7 +1,7 @@
 import type { Coordinate, Phasor } from "components/pattern/context";
 import type { Vec3 } from "src/math/linearAlgebra";
 
-export function unitVecTheta(coordinate: { theta: number; phi: number }): Vec3 {
+export function unitVecTheta(coordinate: Coordinate): Vec3 {
   const { theta, phi } = coordinate;
 
   const x = Math.cos(theta) * Math.cos(phi);
@@ -11,7 +11,7 @@ export function unitVecTheta(coordinate: { theta: number; phi: number }): Vec3 {
   return [x, y, z];
 }
 
-export function unitVecPhi(coordinate: { _: number; phi: number }): Vec3 {
+export function unitVecPhi(coordinate: Coordinate): Vec3 {
   const { phi } = coordinate;
 
   const x = -Math.sin(phi);
@@ -20,11 +20,13 @@ export function unitVecPhi(coordinate: { _: number; phi: number }): Vec3 {
   return [x, y, 0];
 }
 
-export function rotateCoordinate(
+export function rollBackCoordinate(
   v: Coordinate,
-  theta0: number,
-  phi0: number,
+  rotation: Coordinate,
 ): Coordinate {
+  const theta0 = rotation.theta;
+  const phi0 = rotation.phi;
+
   const x =
     Math.cos(theta0) * Math.sin(v.theta) * Math.cos(v.phi - phi0) -
     Math.sin(theta0) * Math.cos(v.theta);
@@ -42,4 +44,22 @@ export function rotateCoordinate(
     theta: Math.acos(z),
     phi: Math.abs(x) < eps && Math.abs(y) < eps ? 0 : Math.atan2(y, x),
   };
+}
+
+export function rollbackVec3(v: Vec3, rotation: Coordinate): Vec3 {
+  const [xp, yp, zp] = v;
+  const theta0 = rotation.theta;
+  const phi0 = rotation.phi;
+
+  const x =
+    Math.cos(theta0) * Math.cos(phi0) * xp +
+    Math.cos(theta0) * Math.sin(phi0) * yp -
+    Math.sin(theta0) * zp;
+  const y = -Math.sin(phi0) * xp + Math.cos(phi0) * yp;
+  const z =
+    Math.sin(theta0) * Math.cos(phi0) * xp +
+    Math.sin(theta0) * Math.sin(phi0) * yp +
+    Math.cos(theta0) * zp;
+
+  return [x, y, z];
 }

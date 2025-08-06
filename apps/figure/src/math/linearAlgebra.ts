@@ -24,6 +24,10 @@ export function getVec6L2(v: Vec6): number {
   return Math.sqrt(v[3] * v[3] + v[4] * v[4] + v[5] * v[5]);
 }
 
+export function dotProdVec3(a: Vec3, b: Vec3): number {
+  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+}
+
 export function crossProdVec3(a: Vec3, b: Vec3): Vec3 {
   const i = a[1] * b[2] - b[1] * a[2];
   const j = -(a[0] * b[2] - b[0] * a[2]);

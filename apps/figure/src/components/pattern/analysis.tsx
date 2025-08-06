@@ -1,8 +1,9 @@
-import type { Accessor } from "solid-js";
-import Sources from "src/components/pattern/sources";
+import { setConfigs, type Coordinate } from "components/pattern/context";
 import Plane from "components/pattern/plane";
-import type { Coordinate } from "components/pattern/context";
 import * as d3 from "d3";
+import type { Accessor } from "solid-js";
+import { produce } from "solid-js/store";
+import Sources from "src/components/pattern/sources";
 
 export default function (props: { cIdx: Accessor<number> }) {
   const precision = 1;
@@ -19,8 +20,19 @@ export default function (props: { cIdx: Accessor<number> }) {
 
   return (
     <div class="rounded p-4 outline">
-      <p>Analysis {props.cIdx() + 1}</p>
-      <div class="flex gap-4 overflow-x-auto p-1">
+      <div class="flex gap-1">
+        <span>Analysis {props.cIdx() + 1}</span>
+        <button
+          class="cursor-pointer hover:text-red-500"
+          type="button"
+          onClick={() =>
+            setConfigs(produce((conf) => conf.splice(props.cIdx(), 1)))
+          }
+        >
+          (Remove)
+        </button>
+      </div>
+      <div class="flex justify-center gap-4 overflow-x-auto p-1">
         <Plane cIdx={props.cIdx} title="Φ = 0°" points={planePhi0} />
         <Plane cIdx={props.cIdx} title="Φ = 90°" points={planePhi90} />
         <Plane cIdx={props.cIdx} title="θ = 90°" points={planeTheta90} />

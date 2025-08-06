@@ -1,9 +1,16 @@
 import { configs } from "components/pattern/context";
-import type { Coordinate } from "components/pattern/context";
+import type { Coordinate, Source } from "components/pattern/context";
 import { createEffect } from "solid-js";
 import * as d3 from "d3";
 import { verticalEDipole, verticalMDipole } from "components/pattern/dipoles";
 import type { Accessor } from "solid-js";
+import {
+  rollBackCoordinate,
+  rollbackVec3,
+  unitVecPhi,
+  unitVecTheta,
+} from "./calculations";
+import { dotProdVec3, type Vec3 } from "src/math/linearAlgebra";
 
 export default function (props: {
   cIdx: Accessor<number>;
@@ -20,26 +27,42 @@ export default function (props: {
   const padding = 10;
   const rMax = width / 2 - padding;
 
-  const sources = () => configs[props.cIdx()];
-  const source = () => sources()![0];
-  const eField = () => {
-    switch (source()?.type) {
-      case "J":
-        return props.points.map((point) =>
-          verticalEDipole(point, source()?.length),
-        );
-      case "M":
-        return props.points.map((point) => verticalMDipole(point));
-      default:
-        throw new Error(`Unknown source type: ${source()?.type}`);
+  const calculation = () => {
+    const sources = configs[props.cIdx()]!;
+
+    const uVecThetaArray = props.points.map((p) => unitVecTheta(p));
+    const uVecPhiArray = props.points.map((p) => unitVecPhi(p));
+
+    for (const s of sources) {
+      const rotatedCoordinate = props.points.map((p) =>
+        rollBackCoordinate(p, s.orientation),
+      );
+
+      let eAmp: number[];
+      let eDir: Vec3[];
+
+      switch (s.type) {
+        case "J":
+          eAmp = rotatedCoordinate.map((c) => verticalEDipole(c, s.length));
+          eDir = uVecThetaArray;
+          break;
+        case "M":
+          eAmp = rotatedCoordinate.map((c) => verticalMDipole(c));
+          eDir = uVecPhiArray;
+          break;
+      }
+
+      const rotatedEDir = eDir.map((v) => rollbackVec3(v, s.orientation));
+
+      let thetaComp: number[] = [];
+      let phiComp: number[] = [];
+
+      for (let i = 0; i < props.points.length; i++) {
+        thetaComp.push(dotProdVec3(rotatedEDir[i]!, uVecThetaArray[i]!));
+        phiComp.push(dotProdVec3(rotatedEDir[i]!, uVecPhiArray[i]!));
+      }
     }
   };
-  const radiation = () => {
-    const e = eField();
-    return e.map((d) => d * d);
-  };
-  const traceData: () => [number, number][] = () =>
-    radiation().map((d, i) => [(i / 180) * Math.PI, d * rMax]);
 
   function draw() {
     const svg = d3.select(svgRef!);
@@ -96,7 +119,7 @@ export default function (props: {
       .join("g")
       .classed("traces", true);
     tg.selectAll("path")
-      .data([traceData()])
+      .data([])
       .join("path")
       .attr("fill", "none")
       .attr("stroke", d3.schemeCategory10[0]!)
