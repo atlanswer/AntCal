@@ -74,16 +74,7 @@ export default function (props: {
           break;
       }
 
-      console.debug("amp");
-      console.debug(eAmp.slice(0, 91));
-
-      console.debug("uVecTheta");
-      console.debug(uVecThetaSource.slice(0, 91));
-
       const eDir = eDirSource.map((v) => rotateVec3(v, rotation));
-
-      console.debug("rotateduvec");
-      console.debug(eDir.slice(0, 91));
 
       const thetaComp: number[] = [];
       const eAmpTheta2: number[] = [];
@@ -98,9 +89,6 @@ export default function (props: {
         eAmpTheta2.push(eAmp[i]! * thetaComp[i]!);
         eAmpPhi2.push(eAmp[i]! * phiComp[i]!);
       }
-
-      console.debug("eamptheta2");
-      console.debug(eAmpTheta2.slice(0, 91));
 
       const vecCoordinate: Vec3[] = props.coordinates.map((c) =>
         spherical2Cartesian(c),
@@ -128,10 +116,6 @@ export default function (props: {
     let rIntensityTheta: number[] = thetaPhasor1.map(
       (p) => 10 * Math.log10(p.amplitude * p.amplitude),
     );
-    console.debug("resultamp");
-    console.debug(thetaPhasor1.map((p) => p.amplitude).slice(0, 91));
-    console.debug("rintensity");
-    console.debug(rIntensityTheta.slice(0, 91));
     let rIntensityPhi: number[] = phiPhasor1.map(
       (p) => 10 * Math.log10(p.amplitude * p.amplitude),
     );
