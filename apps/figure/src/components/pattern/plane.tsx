@@ -102,8 +102,22 @@ export default function (props: {
       const phiPhasor2: Phasor[] = [];
 
       for (let i = 0; i < props.coordinates.length; i++) {
-        thetaPhasor2.push({ amplitude: eAmpTheta2[i]!, phase: phase2[i]! });
-        phiPhasor2.push({ amplitude: eAmpPhi2[i]!, phase: phase2[i]! });
+        let eAmpTheta = eAmpTheta2[i]!;
+        let eAmpPhi = eAmpPhi2[i]!;
+        let phaseTheta = phase2[i]!;
+        let phasePhi = phase2[i]!;
+
+        if (eAmpTheta < 0) {
+          eAmpTheta = -eAmpTheta;
+          phaseTheta += Math.PI;
+        }
+        if (eAmpPhi < 0) {
+          eAmpPhi = -eAmpPhi;
+          phasePhi += Math.PI;
+        }
+
+        thetaPhasor2.push({ amplitude: eAmpTheta, phase: phaseTheta });
+        phiPhasor2.push({ amplitude: eAmpPhi, phase: phasePhi });
       }
       for (let i = 0; i < props.coordinates.length; i++) {
         thetaPhasor1[i] = addPhasor(thetaPhasor1[i]!, thetaPhasor2[i]!);
@@ -138,12 +152,7 @@ export default function (props: {
       mapRange(v),
     ]);
 
-    return [
-      rThetaData.filter((_, i) => thetaPhasor1[i]!.amplitude > 0),
-      rThetaData.filter((_, i) => thetaPhasor1[i]!.amplitude <= 0),
-      rPhiData.filter((_, i) => phiPhasor1[i]!.amplitude > 0),
-      rPhiData.filter((_, i) => phiPhasor1[i]!.amplitude <= 0),
-    ];
+    return [rThetaData, rPhiData];
   };
 
   function draw() {
@@ -204,8 +213,7 @@ export default function (props: {
       .data(calculation())
       .join("path")
       .attr("fill", "none")
-      // .attr("stroke", (_, i) => d3.schemeCategory10[i]!)
-      .attr("stroke", (_, i) => d3.schemePaired[i]!)
+      .attr("stroke", (_, i) => d3.schemeCategory10[i]!)
       .attr("stroke-width", 1)
       .attr("d", radialLine);
   }
