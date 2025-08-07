@@ -2,8 +2,11 @@ import { test, expect, describe } from "bun:test";
 import {
   rollBackCoordinate,
   rollbackVec3,
+  rotateVec3,
   unitVecTheta,
 } from "components/pattern/calculations";
+import type { Vec3 } from "src/math/linearAlgebra";
+import type { Coordinate } from "./context";
 
 describe("Unit Vectors", () => {
   describe("Theta", () => {
@@ -152,6 +155,15 @@ describe("Vec3 Rotation", () => {
       [Math.sqrt(2) / 4, Math.sqrt(2) / 4, -Math.sqrt(3) / 2],
       { theta: Math.PI / 3, phi: Math.PI / 4 },
     );
+    expect(x).toBeCloseTo(1);
+    expect(y).toBeCloseTo(0);
+    expect(z).toBeCloseTo(0);
+  });
+  test("Back and forth", () => {
+    const start: Vec3 = [1, 0, 0];
+    const rotation: Coordinate = { theta: 0.25 * Math.PI, phi: 0 };
+    const rollback = rollbackVec3(start, rotation);
+    const [x, y, z] = rotateVec3(rollback, rotation);
     expect(x).toBeCloseTo(1);
     expect(y).toBeCloseTo(0);
     expect(z).toBeCloseTo(0);

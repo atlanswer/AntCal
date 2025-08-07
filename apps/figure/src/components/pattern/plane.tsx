@@ -8,7 +8,7 @@ import { dotProdVec3, type Vec3 } from "src/math/linearAlgebra";
 import { addPhasor, type Phasor } from "src/math/phasor";
 import {
   rollBackCoordinate,
-  rollbackVec3,
+  rotateVec3,
   spherical2Cartesian,
   unitVecPhi,
   unitVecTheta,
@@ -29,11 +29,11 @@ export default function (props: {
   const padding = 10;
   const rMax = width / 2 - padding;
 
+  const uVecTheta: Vec3[] = props.coordinates.map((p) => unitVecTheta(p));
+  const uVecPhi: Vec3[] = props.coordinates.map((p) => unitVecPhi(p));
+
   const calculation = () => {
     const sources = configs[props.cIdx()]!;
-
-    const uVecThetaArray = props.coordinates.map((p) => unitVecTheta(p));
-    const uVecPhiArray = props.coordinates.map((p) => unitVecPhi(p));
 
     const thetaPhasor1: Phasor[] = props.coordinates.map((_) => ({
       amplitude: 0,
@@ -50,21 +50,27 @@ export default function (props: {
         phi: s.orientation.phi * Math.PI,
       };
 
-      const rotatedCoordinate = props.coordinates.map((p) =>
+      const recoveredCoordinate: Coordinate[] = props.coordinates.map((p) =>
         rollBackCoordinate(p, rotation),
+      );
+      const uVecThetaSource: Vec3[] = recoveredCoordinate.map((p) =>
+        unitVecTheta(p),
+      );
+      const uVecPhiSource: Vec3[] = recoveredCoordinate.map((p) =>
+        unitVecPhi(p),
       );
 
       let eAmp: number[];
-      let eDir: Vec3[];
+      let eDirSource: Vec3[];
 
       switch (s.type) {
         case "J":
-          eAmp = rotatedCoordinate.map((c) => verticalEDipole(c, s.length));
-          eDir = uVecThetaArray;
+          eAmp = recoveredCoordinate.map((c) => verticalEDipole(c, s.length));
+          eDirSource = uVecThetaSource;
           break;
         case "M":
-          eAmp = rotatedCoordinate.map((c) => verticalMDipole(c));
-          eDir = uVecPhiArray;
+          eAmp = recoveredCoordinate.map((c) => verticalMDipole(c));
+          eDirSource = uVecPhiSource;
           break;
       }
 
@@ -72,12 +78,12 @@ export default function (props: {
       console.debug(eAmp.slice(0, 91));
 
       console.debug("uVecTheta");
-      console.debug(uVecThetaArray.slice(0, 91));
+      console.debug(uVecThetaSource.slice(0, 91));
 
-      const rotatedEDir = eDir.map((v) => rollbackVec3(v, rotation));
+      const eDir = eDirSource.map((v) => rotateVec3(v, rotation));
 
       console.debug("rotateduvec");
-      console.debug(rotatedEDir);
+      console.debug(eDir.slice(0, 91));
 
       const thetaComp: number[] = [];
       const eAmpTheta2: number[] = [];
@@ -85,8 +91,8 @@ export default function (props: {
       const eAmpPhi2: number[] = [];
 
       for (let i = 0; i < props.coordinates.length; i++) {
-        thetaComp.push(dotProdVec3(rotatedEDir[i]!, uVecThetaArray[i]!));
-        phiComp.push(dotProdVec3(rotatedEDir[i]!, uVecPhiArray[i]!));
+        thetaComp.push(dotProdVec3(eDir[i]!, uVecTheta[i]!));
+        phiComp.push(dotProdVec3(eDir[i]!, uVecPhi[i]!));
       }
       for (let i = 0; i < props.coordinates.length; i++) {
         eAmpTheta2.push(eAmp[i]! * thetaComp[i]!);

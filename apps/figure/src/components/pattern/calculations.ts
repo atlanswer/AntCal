@@ -57,6 +57,24 @@ export function rollBackCoordinate(
   };
 }
 
+export function rotateVec3(v: Vec3, rotation: Coordinate): Vec3 {
+  const [x, y, z] = v;
+  const theta0 = rotation.theta;
+  const phi0 = rotation.phi;
+
+  const xp =
+    Math.cos(theta0) * Math.cos(phi0) * x +
+    Math.sin(theta0) * Math.cos(phi0) * z -
+    Math.sin(phi0) * y;
+  const yp =
+    Math.cos(theta0) * Math.sin(phi0) * x +
+    Math.sin(theta0) * Math.sin(phi0) * z +
+    Math.cos(phi0) * y;
+  const zp = -Math.sin(theta0) * x + Math.cos(theta0) * z;
+
+  return [xp, yp, zp];
+}
+
 export function rollbackVec3(v: Vec3, rotation: Coordinate): Vec3 {
   const [xp, yp, zp] = v;
   const theta0 = rotation.theta;

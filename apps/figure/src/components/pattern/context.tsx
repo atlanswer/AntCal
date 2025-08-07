@@ -36,9 +36,9 @@ export const mEDipole: Source[] = structuredClone([
 ]);
 
 export const configsDefault: Source[][] = structuredClone([
-  // mEDipole,
+  mEDipole,
   [halfWaveEDipole],
-  // [halfWaveMDipole],
+  [halfWaveMDipole],
 ]);
 
 export const [configs, setConfigs] = createStore(configsDefault);
