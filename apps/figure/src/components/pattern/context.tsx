@@ -1,31 +1,33 @@
 import { createStore } from "solid-js/store";
+import type { Vec3 } from "src/math/linearAlgebra";
 
 export type Coordinate = { theta: number; phi: number };
-export type Phasor = { amplitude: number; phase: number };
 
 export type Source = {
   type: "J" | "M";
   length: number;
+  amplitude: number;
+  phase: number;
   orientation: Coordinate;
-  position: {
-    x: number;
-    y: number;
-    z: number;
-  };
+  position: Vec3;
 };
 
 export const halfWaveEDipole: Source = {
   type: "J",
   length: 0.5,
+  amplitude: 1,
+  phase: 0,
   orientation: { theta: 0.5, phi: 0.5 },
-  position: { x: 0, y: 0, z: 0 },
+  position: [0, 0, 0],
 };
 
 export const halfWaveMDipole: Source = {
   type: "M",
   length: 0.5,
+  amplitude: 1,
+  phase: 0,
   orientation: { theta: 0.5, phi: 0 },
-  position: { x: 0, y: 0, z: 0 },
+  position: [0, 0, 0],
 };
 
 export const mEDipole: Source[] = structuredClone([

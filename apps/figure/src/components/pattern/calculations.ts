@@ -1,4 +1,5 @@
-import type { Coordinate, Phasor } from "components/pattern/context";
+import type { Coordinate } from "components/pattern/context";
+import type { Phasor } from "src/math/phasor";
 import type { Vec3 } from "src/math/linearAlgebra";
 
 export function unitVecTheta(coordinate: Coordinate): Vec3 {
@@ -18,6 +19,16 @@ export function unitVecPhi(coordinate: Coordinate): Vec3 {
   const y = Math.cos(phi);
 
   return [x, y, 0];
+}
+
+export function spherical2Cartesian(coordinate: Coordinate): Vec3 {
+  const { theta, phi } = coordinate;
+
+  const x = Math.sin(theta) * Math.cos(phi);
+  const y = Math.sin(theta) * Math.sin(phi);
+  const z = Math.cos(theta);
+
+  return [x, y, z];
 }
 
 export function rollBackCoordinate(

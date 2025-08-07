@@ -80,6 +80,45 @@ function SourceSetter(props: {
           />
         </label>
       )}
+      <label class="flex gap-1">
+        Amplitude:
+        <input
+          class="w-16"
+          type="number"
+          required
+          min="0"
+          step="0.1"
+          value={source().amplitude}
+          onChange={(event) =>
+            setConfigs(
+              produce(
+                (conf) =>
+                  (conf[props.cIdx()]![props.sIdx()]!.amplitude =
+                    event.target.valueAsNumber),
+              ),
+            )
+          }
+        />
+      </label>
+      <label class="flex gap-1">
+        Phase:
+        <input
+          class="w-16"
+          type="number"
+          required
+          step="0.5"
+          value={source().phase}
+          onChange={(event) =>
+            setConfigs(
+              produce(
+                (conf) =>
+                  (conf[props.cIdx()]![props.sIdx()]!.phase =
+                    event.target.valueAsNumber),
+              ),
+            )
+          }
+        />
+      </label>
       <span>Orientation:</span>
       <label class="flex gap-1">
         Theta:
@@ -127,12 +166,12 @@ function SourceSetter(props: {
           type="number"
           required
           step="0.5"
-          value={source().position.x}
+          value={source().position[0]}
           onChange={(event) =>
             setConfigs(
               produce(
                 (conf) =>
-                  (conf[props.cIdx()]![props.sIdx()]!.position.x =
+                  (conf[props.cIdx()]![props.sIdx()]!.position[0] =
                     event.target.valueAsNumber),
               ),
             )
@@ -146,12 +185,12 @@ function SourceSetter(props: {
           type="number"
           required
           step="0.5"
-          value={source().position.y}
+          value={source().position[1]}
           onChange={(event) =>
             setConfigs(
               produce(
                 (conf) =>
-                  (conf[props.cIdx()]![props.sIdx()]!.position.y =
+                  (conf[props.cIdx()]![props.sIdx()]!.position[1] =
                     event.target.valueAsNumber),
               ),
             )
@@ -165,12 +204,12 @@ function SourceSetter(props: {
           type="number"
           required
           step="0.5"
-          value={source().position.z}
+          value={source().position[2]}
           onChange={(event) =>
             setConfigs(
               produce(
                 (conf) =>
-                  (conf[props.cIdx()]![props.sIdx()]!.position.z =
+                  (conf[props.cIdx()]![props.sIdx()]!.position[2] =
                     event.target.valueAsNumber),
               ),
             )
