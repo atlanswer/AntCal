@@ -33,9 +33,11 @@ export default function (props: { cIdx: Accessor<number> }) {
         </button>
       </div>
       <div class="flex justify-center gap-4 overflow-x-auto p-1">
-        <Plane cIdx={props.cIdx} title="Φ = 0°" points={planePhi0} />
-        <Plane cIdx={props.cIdx} title="Φ = 90°" points={planePhi90} />
-        <Plane cIdx={props.cIdx} title="θ = 90°" points={planeTheta90} />
+        <Plane cIdx={props.cIdx} title="Φ = 0°" coordinates={planePhi0} />
+        {
+          // <Plane cIdx={props.cIdx} title="Φ = 90°" coordinates={planePhi90} />
+          // <Plane cIdx={props.cIdx} title="θ = 90°" coordinates={planeTheta90} />
+        }
       </div>
       <Sources cIdx={props.cIdx} />
     </div>

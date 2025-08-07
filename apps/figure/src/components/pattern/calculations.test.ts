@@ -2,7 +2,31 @@ import { test, expect, describe } from "bun:test";
 import {
   rollBackCoordinate,
   rollbackVec3,
+  unitVecTheta,
 } from "components/pattern/calculations";
+
+describe("Unit Vectors", () => {
+  describe("Theta", () => {
+    test("North Pole", () => {
+      const [x, y, z] = unitVecTheta({ theta: 0, phi: 0 });
+      expect(x).toBeCloseTo(1);
+      expect(y).toBeCloseTo(0);
+      expect(z).toBeCloseTo(0);
+    });
+    test("Front", () => {
+      const [x, y, z] = unitVecTheta({ theta: 0.5 * Math.PI, phi: 0 });
+      expect(x).toBeCloseTo(0);
+      expect(y).toBeCloseTo(0);
+      expect(z).toBeCloseTo(-1);
+    });
+    test("Front Half", () => {
+      const [x, y, z] = unitVecTheta({ theta: 0.25 * Math.PI, phi: 0 });
+      expect(x).toBeCloseTo(Math.sqrt(2) / 2);
+      expect(y).toBeCloseTo(0);
+      expect(z).toBeCloseTo(-Math.sqrt(2) / 2);
+    });
+  });
+});
 
 describe("Coordinate Rotation", () => {
   describe("No Rotation", () => {

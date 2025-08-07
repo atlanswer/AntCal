@@ -1,9 +1,9 @@
-import type { Accessor } from "solid-js";
 import {
   configs,
   halfWaveEDipole,
   setConfigs,
 } from "components/pattern/context";
+import type { Accessor } from "solid-js";
 import { For } from "solid-js";
 import { produce } from "solid-js/store";
 
@@ -24,7 +24,9 @@ export default function (props: { cIdx: Accessor<number> }) {
             ),
           )
         }
-      >{`>Add Source<`}</button>
+      >
+        + Add Source
+      </button>
     </div>
   );
 }
