@@ -1,5 +1,4 @@
-import type { Coordinate } from "components/pattern/context";
-import type { Phasor } from "src/math/phasor";
+import type { Coordinate } from "src/components/pattern/contexts";
 import type { Vec3 } from "src/math/linearAlgebra";
 
 export function unitVecTheta(coordinate: Coordinate): Vec3 {

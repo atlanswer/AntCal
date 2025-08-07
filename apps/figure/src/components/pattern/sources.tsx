@@ -1,11 +1,11 @@
+import type { Accessor } from "solid-js";
+import { For } from "solid-js";
+import { produce } from "solid-js/store";
 import {
   configs,
   halfWaveEDipole,
   setConfigs,
-} from "components/pattern/context";
-import type { Accessor } from "solid-js";
-import { For } from "solid-js";
-import { produce } from "solid-js/store";
+} from "src/components/pattern/contexts";
 
 export default function (props: { cIdx: Accessor<number> }) {
   return (

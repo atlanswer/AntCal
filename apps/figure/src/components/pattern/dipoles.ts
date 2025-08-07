@@ -1,4 +1,4 @@
-import type { Coordinate } from "components/pattern/context";
+import type { Coordinate } from "components/pattern/contexts";
 
 export function verticalEDipole(
   coordinate: Coordinate,

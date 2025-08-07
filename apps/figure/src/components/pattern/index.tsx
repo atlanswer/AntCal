@@ -1,11 +1,11 @@
 import Analysis from "components/pattern/analysis";
+import { For } from "solid-js";
+import { produce } from "solid-js/store";
 import {
   configs,
   halfWaveEDipole,
   setConfigs,
-} from "components/pattern/context";
-import { For } from "solid-js";
-import { produce } from "solid-js/store";
+} from "src/components/pattern/contexts";
 
 export default function () {
   return (

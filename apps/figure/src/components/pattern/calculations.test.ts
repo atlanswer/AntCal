@@ -1,12 +1,12 @@
-import { test, expect, describe } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import {
   rollBackCoordinate,
   rollbackVec3,
   rotateVec3,
   unitVecTheta,
 } from "components/pattern/calculations";
+import type { Coordinate } from "components/pattern/contexts";
 import type { Vec3 } from "src/math/linearAlgebra";
-import type { Coordinate } from "./context";
 
 describe("Unit Vectors", () => {
   describe("Theta", () => {

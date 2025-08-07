@@ -1,18 +1,17 @@
-import type { Coordinate } from "components/pattern/context";
-import { configs } from "components/pattern/context";
-import { verticalEDipole, verticalMDipole } from "components/pattern/dipoles";
-import * as d3 from "d3";
-import type { Accessor } from "solid-js";
-import { createEffect } from "solid-js";
-import { dotProdVec3, type Vec3 } from "src/math/linearAlgebra";
-import { addPhasor, type Phasor } from "src/math/phasor";
 import {
   rollBackCoordinate,
   rotateVec3,
   spherical2Cartesian,
   unitVecPhi,
   unitVecTheta,
-} from "./calculations";
+} from "components/pattern/calculations";
+import { verticalEDipole, verticalMDipole } from "components/pattern/dipoles";
+import * as d3 from "d3";
+import type { Accessor } from "solid-js";
+import { createEffect } from "solid-js";
+import { configs, type Coordinate } from "src/components/pattern/contexts";
+import { dotProdVec3, type Vec3 } from "src/math/linearAlgebra";
+import { addPhasor, type Phasor } from "src/math/phasor";
 
 export default function (props: {
   cIdx: Accessor<number>;
@@ -90,10 +89,10 @@ export default function (props: {
         eAmpPhi2.push(eAmp[i]! * phiComp[i]!);
       }
 
-      const vecCoordinate: Vec3[] = props.coordinates.map((c) =>
+      const vecObservation: Vec3[] = props.coordinates.map((c) =>
         spherical2Cartesian(c),
       );
-      const pathDiff: number[] = vecCoordinate.map((v) =>
+      const pathDiff: number[] = vecObservation.map((v) =>
         dotProdVec3(v, s.position),
       );
       const phaseDiff: number[] = pathDiff.map((d) => d * 2 * Math.PI);
@@ -119,6 +118,7 @@ export default function (props: {
     let rIntensityPhi: number[] = phiPhasor1.map(
       (p) => 10 * Math.log10(p.amplitude * p.amplitude),
     );
+
     const rIntensityThetaMax = Math.max(...rIntensityTheta);
     const rIntensityPhiMax = Math.max(...rIntensityPhi);
     const rIntensityMax = Math.max(rIntensityThetaMax, rIntensityPhiMax);
@@ -138,7 +138,12 @@ export default function (props: {
       mapRange(v),
     ]);
 
-    return [rThetaData, rPhiData];
+    return [
+      rThetaData.filter((_, i) => thetaPhasor1[i]!.amplitude > 0),
+      rThetaData.filter((_, i) => thetaPhasor1[i]!.amplitude <= 0),
+      rPhiData.filter((_, i) => phiPhasor1[i]!.amplitude > 0),
+      rPhiData.filter((_, i) => phiPhasor1[i]!.amplitude <= 0),
+    ];
   };
 
   function draw() {
@@ -174,7 +179,7 @@ export default function (props: {
       .data([null])
       .join("g")
       .classed("angle", true);
-    const angleLine = d3.lineRadial();
+    const radialLine = d3.lineRadial();
     ag.selectAll("path")
       .data(d3.range(8).map((d) => (d * Math.PI) / 4))
       .join("path")
@@ -183,7 +188,7 @@ export default function (props: {
       .attr("stroke-width", 0.5)
       .attr("stroke-dasharray", "2,2")
       .attr("d", (d) =>
-        angleLine([
+        radialLine([
           [0, 0],
           [d, rMax],
         ]),
@@ -199,9 +204,10 @@ export default function (props: {
       .data(calculation())
       .join("path")
       .attr("fill", "none")
-      .attr("stroke", (_, i) => d3.schemeCategory10[i]!)
+      // .attr("stroke", (_, i) => d3.schemeCategory10[i]!)
+      .attr("stroke", (_, i) => d3.schemePaired[i]!)
       .attr("stroke-width", 1)
-      .attr("d", angleLine);
+      .attr("d", radialLine);
   }
 
   createEffect(() => draw());
