@@ -2,17 +2,5 @@
   "framework": "astro",
   "cleanUrls": true,
   "trailingSlash": false,
-  "regions": ["hkg1"],
-  "functions": {
-    "api/*.py": {
-      "includeFiles": "api/**/*",
-      "excludeFiles": "{.astro,.turbo,.vercel,.venv,dist,node_modules,public,src}/**/*"
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/api/main"
-    }
-  ]
+  "regions": ["hkg1"]
 }
