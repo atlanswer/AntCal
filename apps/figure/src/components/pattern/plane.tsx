@@ -13,6 +13,8 @@ import { configs, type Coordinate } from "src/components/pattern/contexts";
 import { dotProdVec3, type Vec3 } from "src/math/linearAlgebra";
 import { addPhasor, type Phasor } from "src/math/phasor";
 
+import { setDebugTraces } from "components/pattern/contexts";
+
 export default function (props: {
   cIdx: Accessor<number>;
   title: string;
@@ -64,11 +66,15 @@ export default function (props: {
 
       switch (s.type) {
         case "J":
-          eAmp = recoveredCoordinate.map((c) => verticalEDipole(c, s.length));
+          eAmp = recoveredCoordinate.map(
+            (c) => verticalEDipole(c, s.length) * s.amplitude,
+          );
           eDirSource = uVecThetaSource;
           break;
         case "M":
-          eAmp = recoveredCoordinate.map((c) => verticalMDipole(c));
+          eAmp = recoveredCoordinate.map(
+            (c) => verticalMDipole(c) * s.amplitude,
+          );
           eDirSource = uVecPhiSource;
           break;
       }
@@ -88,6 +94,12 @@ export default function (props: {
         eAmpTheta2.push(eAmp[i]! * thetaComp[i]!);
         eAmpPhi2.push(eAmp[i]! * phiComp[i]!);
       }
+
+      setDebugTraces([
+        eAmp.map((v) => v),
+        eAmpTheta2.map((v) => v),
+        eAmpPhi2.map((v) => v),
+      ]);
 
       const vecObservation: Vec3[] = props.coordinates.map((c) =>
         spherical2Cartesian(c),
@@ -223,13 +235,12 @@ export default function (props: {
   return (
     <div>
       <p>{props.title}</p>
-      <div class="rounded outline">
+      <div class="aspect-square w-80 rounded outline">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           ref={svgRef}
           viewBox={`${-width / 2} ${-height / 2} ${width} ${height}`}
           preserveAspectRatio="xMidYMid meet"
-          class="h-full w-full"
         ></svg>
       </div>
     </div>

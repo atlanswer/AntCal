@@ -1,6 +1,9 @@
 import { createStore } from "solid-js/store";
 import type { Vec3 } from "src/math/linearAlgebra";
 
+import { createSignal } from "solid-js";
+export const [debugTraces, setDebugTraces] = createSignal<number[][]>([]);
+
 export type Coordinate = { theta: number; phi: number };
 
 export type Source = {
