@@ -39,7 +39,7 @@ function SourceSetter(props: {
 
   return (
     <div class="flex flex-wrap gap-x-4">
-      <span>Source ({props.sIdx() + 1})</span>
+      <span>Source {props.sIdx() + 1}</span>
       <label class="flex gap-1">
         Type:
         <select

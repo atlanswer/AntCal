@@ -23,9 +23,6 @@ export default function () {
       >
         New Analysis
       </button>
-      <button class="cursor-pointer" onClick={() => console.debug(configs)}>
-        Debug
-      </button>
     </div>
   );
 }
