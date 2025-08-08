@@ -176,24 +176,36 @@ $$
 
 $G_{\text{max}}$ = 1.5 (1.76 dBi), HPBW = 120°.
 
-### Linear Combination with Arbitrary Phase Shift [^wikipedia]
+### Phasor Addition [^phase-shift] [^phasor-addition]
 
 We have
 
 $$
+\begin{equation}
 a\sin(x+\theta_a)+b\sin(x+\theta_b)=c\sin(x+\varphi)\text{,}
+\end{equation}
 $$
 
 where $c$ and $\varphi$ satisfy
 
 $$
-\begin{gather*}
-c=\sqrt{a^2+b^2+2ab\cos(\theta_a-\theta_b)}\text{,} \\
-\varphi=\operatorname{atan2}(a\cos\theta_a+b\cos\theta_b,\ a\sin\theta_a+b\sin\theta_b)\text{.}
-\end{gather*}
+\begin{gather}
+c^2=a^2+b^2+2ab\cos(\theta_a-\theta_b)\text{,} \\
+\tan\varphi=\frac{a\sin\theta_a+b\sin\theta_b}{a\cos\theta_a+b\cos\theta_b}\text{.}
+\end{gather}
 $$
 
-[^wikipedia]: [Trigonometric Identities](https://en.wikipedia.org/wiki/List_of_trigonometric_identities#Arbitrary_phase_shift)
+$\varphi$ can be calculated like this
+
+$$
+\begin{equation}
+\varphi=\operatorname{atan2}(a\sin\theta_a+b\sin\theta_b,\ a\cos\theta_a+b\cos\theta_b)\text{.}
+\end{equation}
+$$
+
+[^phase-shift]: [Trigonometric Identities](https://en.wikipedia.org/wiki/List_of_trigonometric_identities#Arbitrary_phase_shift)
+
+[^phasor-addition]: [Phasor Addition](https://en.wikipedia.org/wiki/Phasor#Addition)
 
 ## Reference
 
