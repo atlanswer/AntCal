@@ -18,13 +18,17 @@ const pages: { title: string; path: string }[] =
     ];
 ---
 
-<nav class="flex flex-1 leading-loose font-semibold sm:place-content-center">
-  <span class="grid auto-cols-fr grid-flow-col gap-2 sm:gap-6">
+<nav
+  class="flex flex-1 overflow-x-auto leading-loose font-semibold md:place-content-center"
+>
+  <span
+    class="grid w-fit auto-cols-[4rem] grid-flow-col gap-2 sm:gap-6 md:auto-cols-[5rem]"
+  >
     {
       pages.map((page) => (
         <a
           href={page.path}
-          class="border-b-4 border-transparent px-2 pt-4 pb-3 text-center not-[&.active]:hover:border-neutral-300 focus-visible:ring focus-visible:outline-none not-[&.active]:dark:hover:border-neutral-700 [&.active]:border-sky-500"
+          class="border-b-4 border-transparent px-2 pt-4 pb-3 text-center not-[&.active]:hover:border-neutral-300 focus-visible:ring focus-visible:outline-none not-[&.active]:active:border-neutral-300 not-[&.active]:dark:hover:border-neutral-700 not-[&.active]:active:dark:border-neutral-700 [&.active]:border-sky-500"
           class:list={[{ active: pathname.startsWith(page.path) }]}
         >
           {page.title}
