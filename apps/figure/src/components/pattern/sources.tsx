@@ -67,7 +67,7 @@ function SourceSetter(props: {
             [ Length (×<var>λ</var>):
           </span>
           <input
-            class="w-12"
+            class="w-14"
             type="number"
             required
             min="0"
@@ -112,7 +112,7 @@ function SourceSetter(props: {
           [ Phase (×<var>π</var>):
         </span>
         <input
-          class="w-12"
+          class="w-16"
           type="number"
           required
           step="0.5"
@@ -135,7 +135,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         Theta:
         <input
-          class="w-12"
+          class="w-16"
           type="number"
           required
           step="0.5"
@@ -154,7 +154,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         Phi:
         <input
-          class="w-12"
+          class="w-16"
           type="number"
           required
           step="0.5"
@@ -177,7 +177,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         x:
         <input
-          class="w-12"
+          class="w-16"
           type="number"
           required
           step="0.25"
@@ -196,7 +196,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         y:
         <input
-          class="w-12"
+          class="w-16"
           type="number"
           required
           step="0.25"
@@ -215,7 +215,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         z:
         <input
-          class="w-12"
+          class="w-16"
           type="number"
           required
           step="0.25"
