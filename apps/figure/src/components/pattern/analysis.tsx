@@ -37,9 +37,6 @@ export default function (props: { cIdx: Accessor<number> }) {
       </div>
       <div class="overflow-x-auto">
         <div class="mx-auto flex w-fit gap-4 p-1">
-          {
-            // <DebugPlot data={debugTraces} />
-          }
           <Plane cIdx={props.cIdx} title="Φ = 0" coordinates={planePhi0} />
           <Plane cIdx={props.cIdx} title="Φ = π / 2" coordinates={planePhi90} />
           <Plane

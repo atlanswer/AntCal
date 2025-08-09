@@ -4,61 +4,25 @@ layout: layouts/Markdown.astro
 
 # AntCal Documentation
 
-## Field
-
-Visualize vector fields in an interactive SVG.
-
-**TODOs:**
-
-- [x] &nbsp; Fix arrow stroke and tail when it's too small
-- [x] &nbsp; Quick link to different views
-- [x] &nbsp; Vector arrow
-- [x] &nbsp; Vector length control
-- [x] &nbsp; Figure height control
-- [x] &nbsp; Vector arrow tail length control
-- [x] &nbsp; Colorbar
-- [x] &nbsp; Normal and dark color variant
-- [x] &nbsp; Map vector size
-- [ ] &nbsp; Vector arrow shape selection
-- [ ] &nbsp; Represent scalar fields with contour plots
-
-**Notes:**
-
-- Figure width is fixed to 3.5 inches with a DPI of 72 according to the IEEE guidance
-- Vector positions are normalized to be evenly distributed around the origin
-- Vector arrows are facing the user by default
-- The color map is the dark variant of the Mathematica rainbow
-
-**Limitations:**
-
-- Only supports field data files (`.fld`) exported from ANSYS HFSS
-- Currently, only grid-based vector field is supported (vector shape: `[x, y, z, u, v, w]`)
-- Pan motion is not implemented. The figure only rotates around its center
-
-### How to export vector fields in ANSYS HFSS
-
-1. Measure the bounding box (in Cartesian coordinate system) of the area of interest
-2. Open the Field Calculator (e.g., right click Field Overlays)
-3. Select the desired quantity (e.g., `Vector_E`) and copy it to the stack (or construct your own vector quantity)
-4. Select the correct context (especially the phase)
-5. Click "Export..."
-6. Use "Calculate grid points", fill in the grid dimensions based on the bounding box
-7. Check "Include points in output file" to include vector starting positions in the file
-8. Save the `.fld` file
-
-## Report (TODO)
-
-Upload data files to generate figures.
-
-## Radiation Pattern (WIP)
+## Radiation Pattern Analysis
 
 Simulate radiation pattern based on electric or magnetic sources.
 
-**Limitations:**
+**Limitations**
 
-- Currently all sources are positioned at the origin
-- Amplitudes are normalized to the maximum radiation of E-/M-dipole respectively
-- Far fields are sampled with limited resolution of 1°
+- Normalization is performed per plane. Gliches could emgerge if the values are too small
+- Amplitudes are not normalized and have no relation with the actual gain. Should be fixed soon<sup>TM</sup>
+- Electric fields are sampled with limited resolution of 1°
+
+**TODOs**
+
+- [ ] &nbsp;Legend
+- [ ] &nbsp;Per plane or global normalization
+- [ ] &nbsp;Split theta and phi components or view total
+- [ ] &nbsp;Stats for the pattern, e.g., max gain, HPBW
+- [ ] &nbsp;Rectangular figure
+- [ ] &nbsp;UI for creating arrays
+- [ ] &nbsp;3D spherical pattern
 
 ### Vector Potentials
 
@@ -206,6 +170,52 @@ $$
 [^phase-shift]: [Trigonometric Identities](https://en.wikipedia.org/wiki/List_of_trigonometric_identities#Arbitrary_phase_shift)
 
 [^phasor-addition]: [Phasor Addition](https://en.wikipedia.org/wiki/Phasor#Addition)
+
+## Field
+
+Visualize vector fields in an interactive SVG.
+
+**TODOs:**
+
+- [x] &nbsp; Fix arrow stroke and tail when it's too small
+- [x] &nbsp; Quick link to different views
+- [x] &nbsp; Vector arrow
+- [x] &nbsp; Vector length control
+- [x] &nbsp; Figure height control
+- [x] &nbsp; Vector arrow tail length control
+- [x] &nbsp; Colorbar
+- [x] &nbsp; Normal and dark color variant
+- [x] &nbsp; Map vector size
+- [ ] &nbsp; Vector arrow shape selection
+- [ ] &nbsp; Represent scalar fields with contour plots
+
+**Notes:**
+
+- Figure width is fixed to 3.5 inches with a DPI of 72 according to the IEEE guidance
+- Vector positions are normalized to be evenly distributed around the origin
+- Vector arrows are facing the user by default
+- The color map is the dark variant of the Mathematica rainbow
+
+**Limitations:**
+
+- Only supports field data files (`.fld`) exported from ANSYS HFSS
+- Currently, only grid-based vector field is supported (vector shape: `[x, y, z, u, v, w]`)
+- Pan motion is not implemented. The figure only rotates around its center
+
+### How to export vector fields in ANSYS HFSS
+
+1. Measure the bounding box (in Cartesian coordinate system) of the area of interest
+2. Open the Field Calculator (e.g., right click Field Overlays)
+3. Select the desired quantity (e.g., `Vector_E`) and copy it to the stack (or construct your own vector quantity)
+4. Select the correct context (especially the phase)
+5. Click "Export..."
+6. Use "Calculate grid points", fill in the grid dimensions based on the bounding box
+7. Check "Include points in output file" to include vector starting positions in the file
+8. Save the `.fld` file
+
+## Report (TODO)
+
+Upload data files to generate figures.
 
 ## Reference
 

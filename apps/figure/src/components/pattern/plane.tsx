@@ -31,17 +31,11 @@ export default function (props: {
   const uVecTheta: Vec3[] = props.coordinates.map((p) => unitVecTheta(p));
   const uVecPhi: Vec3[] = props.coordinates.map((p) => unitVecPhi(p));
 
-  const calculation = () => {
+  function calculation() {
     const sources = configs[props.cIdx()]!;
 
-    const thetaPhasor1: Phasor[] = props.coordinates.map((_) => ({
-      amplitude: 0,
-      phase: 0,
-    }));
-    const phiPhasor1: Phasor[] = props.coordinates.map((_) => ({
-      amplitude: 0,
-      phase: 0,
-    }));
+    const thetaPhasor1: Phasor[] = props.coordinates.map((_) => [0, 0]);
+    const phiPhasor1: Phasor[] = props.coordinates.map((_) => [0, 0]);
 
     for (const s of sources) {
       const rotation: Coordinate = {
@@ -88,6 +82,8 @@ export default function (props: {
         thetaComp.push(dotProdVec3(eDir[i]!, uVecTheta[i]!));
         phiComp.push(dotProdVec3(eDir[i]!, uVecPhi[i]!));
       }
+      // console.debug("phicomp");
+      // console.debug(JSON.stringify(phiComp.slice(0, 91)));
       for (let i = 0; i < props.coordinates.length; i++) {
         eAmpTheta2.push(eAmp[i]! * thetaComp[i]!);
         eAmpPhi2.push(eAmp[i]! * phiComp[i]!);
@@ -120,44 +116,76 @@ export default function (props: {
           phasePhi += Math.PI;
         }
 
-        thetaPhasor2.push({ amplitude: eAmpTheta, phase: phaseTheta });
-        phiPhasor2.push({ amplitude: eAmpPhi, phase: phasePhi });
+        thetaPhasor2.push([eAmpTheta, phaseTheta]);
+        phiPhasor2.push([eAmpPhi, phasePhi]);
       }
+
+      // console.debug(s);
+      // console.debug("Before");
+      // console.debug("phiphasor1");
+      // console.debug(JSON.stringify(phiPhasor1.slice(0, 91)));
+      // console.debug("phiphasor2");
+      // console.debug(JSON.stringify(phiPhasor2.slice(0, 91)));
+
       for (let i = 0; i < props.coordinates.length; i++) {
         thetaPhasor1[i] = addPhasor(thetaPhasor1[i]!, thetaPhasor2[i]!);
         phiPhasor1[i] = addPhasor(phiPhasor1[i]!, phiPhasor2[i]!);
       }
+
+      // console.debug("After");
+      // console.debug("phiphasor1");
+      // console.debug(JSON.stringify(phiPhasor1.slice(0, 91)));
     }
+
+    const rangeMin = -40;
+    const rangeMax = 0;
+    const epsilon = 1e-16;
 
     // Finishing
     let rIntensityTheta: number[] = thetaPhasor1.map(
-      (p) => 10 * Math.log10(p.amplitude * p.amplitude),
+      (p) => 10 * Math.log10(p[0] * p[0]),
     );
     let rIntensityPhi: number[] = phiPhasor1.map(
-      (p) => 10 * Math.log10(p.amplitude * p.amplitude),
+      (p) => 10 * Math.log10(p[0] * p[0]),
     );
 
-    const rIntensityThetaMax = Math.max(...rIntensityTheta);
-    const rIntensityPhiMax = Math.max(...rIntensityPhi);
-    const rIntensityMax = Math.max(rIntensityThetaMax, rIntensityPhiMax);
-    rIntensityTheta = rIntensityTheta.map((v) => v - rIntensityMax);
-    rIntensityPhi = rIntensityPhi.map((v) => v - rIntensityMax);
-    rIntensityTheta = rIntensityTheta.map((v) => (v < -40 ? -40 : v));
-    rIntensityPhi = rIntensityPhi.map((v) => (v < -40 ? -40 : v));
+    const rIntensityMax = Math.max(...rIntensityTheta, ...rIntensityPhi);
+
+    function normalize(v: number): number {
+      if (v === -Infinity) return rangeMin;
+      const res = v - rIntensityMax;
+      return res < rangeMin ? rangeMin : res;
+    }
+
+    rIntensityTheta = rIntensityTheta.map(normalize);
+    rIntensityPhi = rIntensityPhi.map(normalize);
+
+    return [rIntensityTheta, rIntensityPhi];
+  }
+
+  const logData = () => {
+    const [rIntensityTheta, rIntensityPhi] = calculation();
+
+    console.debug("Theta: " + JSON.stringify(rIntensityTheta));
+    console.debug("Phi: " + JSON.stringify(rIntensityPhi));
+  };
+
+  function tracesData() {
+    const [rIntensityTheta, rIntensityPhi] = calculation();
 
     const mapRange = d3.scaleLinear([-40, 0], [0, rMax]);
 
-    const rThetaData: [number, number][] = rIntensityTheta.map((v, i) => [
+    const rThetaData: [number, number][] = rIntensityTheta!.map((v, i) => [
       (i * Math.PI) / 180,
       mapRange(v),
     ]);
-    const rPhiData: [number, number][] = rIntensityPhi.map((v, i) => [
+    const rPhiData: [number, number][] = rIntensityPhi!.map((v, i) => [
       (i * Math.PI) / 180,
       mapRange(v),
     ]);
 
     return [rThetaData, rPhiData];
-  };
+  }
 
   function draw() {
     const svg = d3.select(svgRef!);
@@ -214,7 +242,7 @@ export default function (props: {
       .join("g")
       .classed("traces", true);
     tg.selectAll("path")
-      .data(calculation())
+      .data(tracesData())
       .join("path")
       .attr("fill", "none")
       .attr("stroke", (_, i) => d3.schemeCategory10[i]!)
@@ -235,6 +263,13 @@ export default function (props: {
           preserveAspectRatio="xMidYMid meet"
         ></svg>
       </div>
+      <button
+        type="button"
+        class="cursor-pointer hover:text-red-500"
+        onClick={logData}
+      >
+        (Debug)
+      </button>
     </div>
   );
 }

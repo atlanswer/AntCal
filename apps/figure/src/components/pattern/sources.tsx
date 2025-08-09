@@ -39,7 +39,7 @@ function SourceSetter(props: {
 
   return (
     <div class="flex flex-wrap gap-x-4">
-      <span>Source {props.sIdx() + 1}</span>
+      <span class="w-20">Source {props.sIdx() + 1}</span>
       <label class="flex gap-1">
         Type:
         <select
@@ -175,7 +175,7 @@ function SourceSetter(props: {
           class="w-16"
           type="number"
           required
-          step="0.5"
+          step="0.25"
           value={source().position[0]}
           onChange={(event) =>
             setConfigs(
@@ -194,7 +194,7 @@ function SourceSetter(props: {
           class="w-16"
           type="number"
           required
-          step="0.5"
+          step="0.25"
           value={source().position[1]}
           onChange={(event) =>
             setConfigs(
@@ -213,7 +213,7 @@ function SourceSetter(props: {
           class="w-16"
           type="number"
           required
-          step="0.5"
+          step="0.25"
           value={source().position[2]}
           onChange={(event) =>
             setConfigs(

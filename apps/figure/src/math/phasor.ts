@@ -1,18 +1,14 @@
-export type Phasor = { amplitude: number; phase: number };
+export type Phasor = [number, number];
 
 export function addPhasor(a: Phasor, b: Phasor): Phasor {
-  const a1 = a.amplitude;
-  const theta1 = a.phase;
-  const a2 = b.amplitude;
-  const theta2 = b.phase;
+  const [a1, theta1] = a;
+  const [a2, theta2] = b;
 
-  const a3 = Math.sqrt(
-    a1 * a1 + a2 * a2 + 2 * a1 * a2 * Math.cos(theta1 - theta2),
-  );
-  const theta3 = Math.atan2(
-    a1 * Math.sin(theta1) + a2 * Math.sin(theta2),
-    a1 * Math.cos(theta1) + a2 * Math.cos(theta2),
-  );
+  const x = a1 * Math.cos(theta1) + a2 * Math.cos(theta2);
+  const y = a1 * Math.sin(theta1) + a2 * Math.sin(theta2);
 
-  return { amplitude: a3, phase: theta3 };
+  const a3 = Math.hypot(x, y);
+  const theta3 = a3 === 0 ? 0 : Math.atan2(y, x);
+
+  return [a3, theta3];
 }
