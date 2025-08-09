@@ -63,7 +63,7 @@ function SourceSetter(props: {
       {source().type === "J" && (
         <label class="flex gap-1">
           <span>
-            Length (<var>λ</var> <sup>-1</sup>):
+            Length (×<var>λ</var>):
           </span>
           <input
             class="w-16"
