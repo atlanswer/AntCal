@@ -1,14 +1,9 @@
 import Plane from "components/pattern/plane";
 import * as d3 from "d3";
-import { createEffect, onCleanup, type Accessor } from "solid-js";
+import { type Accessor } from "solid-js";
 import { produce } from "solid-js/store";
-import {
-  debugTraces,
-  setConfigs,
-  type Coordinate,
-} from "src/components/pattern/contexts";
+import { setConfigs, type Coordinate } from "src/components/pattern/contexts";
 import Sources from "src/components/pattern/sources";
-import * as Plot from "@observablehq/plot";
 
 export default function (props: { cIdx: Accessor<number> }) {
   const precision = 1;
@@ -58,38 +53,3 @@ export default function (props: { cIdx: Accessor<number> }) {
     </div>
   );
 }
-
-const DebugPlot = (props: { data: Accessor<number[][]> }) => {
-  let plotRef: HTMLDivElement | undefined;
-
-  function draw() {
-    const plot = Plot.plot({
-      height: 360,
-      grid: true,
-      marks: props
-        .data()
-        .map((line, i) =>
-          Plot.lineY(line, { strokeWidth: 5, stroke: d3.schemeCategory10[i]! }),
-        ),
-    });
-    while (plotRef?.firstChild) {
-      plotRef.removeChild(plotRef.firstChild);
-    }
-    plotRef?.appendChild(plot);
-  }
-
-  createEffect(() => draw());
-
-  onCleanup(() => {
-    while (plotRef?.firstChild) {
-      plotRef.removeChild(plotRef.firstChild);
-    }
-  });
-
-  return (
-    <div>
-      <p>Debug</p>
-      <div ref={plotRef} class="aspect-video h-80 rounded outline"></div>
-    </div>
-  );
-};

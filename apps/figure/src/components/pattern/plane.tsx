@@ -13,8 +13,6 @@ import { configs, type Coordinate } from "src/components/pattern/contexts";
 import { dotProdVec3, type Vec3 } from "src/math/linearAlgebra";
 import { addPhasor, type Phasor } from "src/math/phasor";
 
-import { setDebugTraces } from "components/pattern/contexts";
-
 export default function (props: {
   cIdx: Accessor<number>;
   title: string;
@@ -95,12 +93,6 @@ export default function (props: {
         eAmpPhi2.push(eAmp[i]! * phiComp[i]!);
       }
 
-      setDebugTraces([
-        eAmp.map((v) => v),
-        eAmpTheta2.map((v) => v),
-        eAmpPhi2.map((v) => v),
-      ]);
-
       const vecObservation: Vec3[] = props.coordinates.map((c) =>
         spherical2Cartesian(c),
       );
@@ -108,7 +100,7 @@ export default function (props: {
         dotProdVec3(v, s.position),
       );
       const phaseDiff: number[] = pathDiff.map((d) => d * 2 * Math.PI);
-      const phase2: number[] = phaseDiff.map((p) => s.phase + p);
+      const phase2: number[] = phaseDiff.map((p) => s.phase * Math.PI + p);
 
       const thetaPhasor2: Phasor[] = [];
       const phiPhasor2: Phasor[] = [];

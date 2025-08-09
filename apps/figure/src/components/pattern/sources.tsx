@@ -62,7 +62,9 @@ function SourceSetter(props: {
       </label>
       {source().type === "J" && (
         <label class="flex gap-1">
-          Length:
+          <span>
+            Length (<var>λ</var> <sup>-1</sup>):
+          </span>
           <input
             class="w-16"
             type="number"
@@ -103,7 +105,9 @@ function SourceSetter(props: {
         />
       </label>
       <label class="flex gap-1">
-        Phase:
+        <span>
+          Phase (×<var>π</var>):
+        </span>
         <input
           class="w-16"
           type="number"
@@ -121,7 +125,9 @@ function SourceSetter(props: {
           }
         />
       </label>
-      <span>Orientation:</span>
+      <span>
+        Orientation (×<var>π</var>):
+      </span>
       <label class="flex gap-1">
         Theta:
         <input
@@ -160,7 +166,9 @@ function SourceSetter(props: {
           }
         />
       </label>
-      <span>Position:</span>
+      <span>
+        Position (×<var>λ</var>):
+      </span>
       <label class="flex gap-1">
         x:
         <input
