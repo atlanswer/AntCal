@@ -7,7 +7,7 @@ import {
 } from "components/pattern/calculations";
 import { verticalEDipole, verticalMDipole } from "components/pattern/dipoles";
 import * as d3 from "d3";
-import type { Accessor } from "solid-js";
+import type { Accessor, JSXElement } from "solid-js";
 import { createEffect } from "solid-js";
 import { configs, type Coordinate } from "src/components/pattern/contexts";
 import { dotProdVec3, type Vec3 } from "src/math/linearAlgebra";
@@ -15,7 +15,7 @@ import { addPhasor, type Phasor } from "src/math/phasor";
 
 export default function (props: {
   cIdx: Accessor<number>;
-  title: string;
+  title: JSXElement;
   coordinates: Coordinate[];
 }) {
   let svgRef: SVGSVGElement | undefined;

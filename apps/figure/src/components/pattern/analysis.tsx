@@ -37,14 +37,42 @@ export default function (props: { cIdx: Accessor<number> }) {
       </div>
       <div class="overflow-x-auto">
         <div class="mx-auto flex w-fit gap-4 p-1">
-          <Plane cIdx={props.cIdx} title="Φ = 0" coordinates={planePhi0} />
-          <Plane cIdx={props.cIdx} title="Φ = π / 2" coordinates={planePhi90} />
           <Plane
             cIdx={props.cIdx}
-            title="θ = π / 2"
+            title={
+              <span>
+                <em>Φ</em> = 0
+              </span>
+            }
+            coordinates={planePhi0}
+          />
+          <Plane
+            cIdx={props.cIdx}
+            title={
+              <span>
+                <em>Φ</em> = π / 2
+              </span>
+            }
+            coordinates={planePhi90}
+          />
+          <Plane
+            cIdx={props.cIdx}
+            title={
+              <span>
+                <em>θ</em> = π / 2
+              </span>
+            }
             coordinates={planeTheta90}
           />
         </div>
+      </div>
+      <div class="mx-auto w-fit">
+        <span class="px-2 before:mx-2 before:inline-block before:h-1 before:w-10 before:rounded before:bg-[#1f77b4] before:align-middle">
+          <em>θ</em> Component
+        </span>
+        <span class="px-2 before:mx-2 before:inline-block before:h-1 before:w-10 before:rounded before:bg-[#ff7f0e] before:align-middle">
+          <em>ϕ</em> Component
+        </span>
       </div>
       <Sources cIdx={props.cIdx} />
     </div>
