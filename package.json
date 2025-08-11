@@ -25,14 +25,14 @@
     "preview": "turbo preview"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.19",
+    "@types/bun": "^1.2.20",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "turbo": "^2.5.5",
     "typescript": "^5.9.2"
   },
-  "packageManager": "bun@1.2.19",
+  "packageManager": "bun@1.2.20",
   "engines": {
     "bun": ">=1.2"
   }
