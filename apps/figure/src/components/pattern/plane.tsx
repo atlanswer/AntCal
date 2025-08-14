@@ -147,7 +147,7 @@ export default function (props: {
     console.debug("retrace");
 
     const [eTheta, ePhi] = calculation();
-    const num = Math.floor(360 / analysis().settings.precision);
+    const num = Math.floor(360 / analysis().settings.resolution);
 
     if (analysis().settings.dB) {
       const dBRangeMin = -40;

@@ -6,22 +6,25 @@ layout: layouts/Markdown.astro
 
 ## Radiation Pattern Analysis
 
-Simulate radiation pattern based on electric or magnetic sources.
+Analyze radiation pattern based on electric or magnetic sources.
 
 **Limitations**
 
-- Normalization is performed per plane. Gliches could emgerge if the values are too small
 - Amplitudes are not normalized and have no relation with the actual gain. Should be fixed soon<sup>TM</sup>
-- Electric fields are sampled with limited resolution of 1°
+- If the normalization is performed per plane. Glitches could emerge if the values are too small
+- Computation is not optimized. If the resolution is high, the update could be slow
 
 **TODOs**
 
 - [x] &nbsp;Legend
 - [x] &nbsp;Per plane or global normalization
 - [x] &nbsp;Split theta and phi components or view total
-- [ ] &nbsp;Stats for the pattern, e.g., max gain, HPBW
+- [ ] &nbsp;Ticks on the figure
+- [ ] &nbsp;Stats for the pattern, e.g., max gain direction, HPBW
+- [ ] &nbsp;UI update
 - [ ] &nbsp;Rectangular figure
 - [ ] &nbsp;UI for creating arrays
+- [ ] &nbsp;Source placement visualization
 - [ ] &nbsp;3D spherical pattern
 
 ### Vector Potentials

@@ -11,8 +11,8 @@ import Sources from "src/components/pattern/sources";
 
 export default function (props: { cIdx: Accessor<number> }) {
   const analysis = () => analyses[props.cIdx()]!;
-  const precision = () => analysis().settings.precision;
-  const nPoints = () => Math.floor(360 / precision()) + 1;
+  const resolution = () => analysis().settings.resolution;
+  const nPoints = () => Math.floor(360 / resolution()) + 1;
 
   const maxQueue: [number, number, number] = [-Infinity, -Infinity, -Infinity];
   const [globalMax, setGlobalMax] = createSignal(-Infinity);
@@ -114,7 +114,7 @@ export default function (props: { cIdx: Accessor<number> }) {
           />
         </label>
         <label class="flex gap-1">
-          Angular Precision (deg)
+          Angular Resolution (deg)
           <input
             class="w-16 rounded pl-2 outline"
             type="number"
@@ -122,12 +122,12 @@ export default function (props: { cIdx: Accessor<number> }) {
             min="0.1"
             max="360"
             step="0.1"
-            value={analysis().settings.precision}
+            value={analysis().settings.resolution}
             onChange={(event) =>
               setAnalyses(
                 produce(
                   (analyses) =>
-                    (analyses[props.cIdx()]!.settings.precision =
+                    (analyses[props.cIdx()]!.settings.resolution =
                       event.target.valueAsNumber),
                 ),
               )
