@@ -1,9 +1,9 @@
 import {
+  getUnitVecPhi,
+  getUnitVecTheta,
   rollBackCoordinate,
   rotateVec3,
   spherical2Cartesian,
-  getUnitVecPhi,
-  getUnitVecTheta,
 } from "components/pattern/calculations";
 import { verticalEDipole, verticalMDipole } from "components/pattern/dipoles";
 import * as d3 from "d3";
@@ -21,8 +21,12 @@ export default function (props: {
   cIdx: Accessor<number>;
   title: JSXElement;
   coordinates: () => Coordinate[];
+  globalMax: Accessor<number>;
+  updateGlobalMax: (v: number) => void;
 }) {
   let svgRef: SVGSVGElement | undefined;
+
+  const analysis = () => analyses[props.cIdx()]!;
 
   const DPI = 72;
   const widthIn = 3.5 / 2;
@@ -38,6 +42,8 @@ export default function (props: {
     props.coordinates().map((p) => getUnitVecPhi(p));
 
   const calculation = createMemo(() => {
+    console.debug("recalculate");
+
     const coordinates: Coordinate[] = props.coordinates();
     const sources: Source[] = analyses[props.cIdx()]!.sources;
 
@@ -131,53 +137,77 @@ export default function (props: {
       }
     }
 
-    const rangeMin = -40;
-    const rangeMax = 0;
-    const epsilon = 1e-16;
+    let eTheta: number[] = thetaPhasor1.map((p) => p[0]);
+    let ePhi: number[] = phiPhasor1.map((p) => p[0]);
 
-    let rIntensityTheta: number[] = thetaPhasor1.map(
-      (p) => 10 * Math.log10(p[0] * p[0]),
-    );
-    let rIntensityPhi: number[] = phiPhasor1.map(
-      (p) => 10 * Math.log10(p[0] * p[0]),
-    );
-
-    const rIntensityMax = Math.max(...rIntensityTheta, ...rIntensityPhi);
-
-    function normalize(v: number): number {
-      if (v === -Infinity) return rangeMin;
-      const res = v - rIntensityMax;
-      return res < rangeMin ? rangeMin : res;
-    }
-
-    rIntensityTheta = rIntensityTheta.map(normalize);
-    rIntensityPhi = rIntensityPhi.map(normalize);
-
-    return [rIntensityTheta, rIntensityPhi];
+    return [eTheta, ePhi];
   });
 
-  const logData = () => {
-    const [rIntensityTheta, rIntensityPhi] = calculation();
-
-    console.debug("Theta: " + JSON.stringify(rIntensityTheta));
-    console.debug("Phi: " + JSON.stringify(rIntensityPhi));
-  };
-
   const tracesData = createMemo(() => {
-    const [rIntensityTheta, rIntensityPhi] = calculation();
+    console.debug("retrace");
 
-    const mapRange = d3.scaleLinear([-40, 0], [0, rMax]);
+    const [eTheta, ePhi] = calculation();
+    const num = Math.floor(360 / analysis().settings.precision);
 
-    const rThetaData: [number, number][] = rIntensityTheta!.map((v, i) => [
-      (i * Math.PI) / 180,
-      mapRange(v),
-    ]);
-    const rPhiData: [number, number][] = rIntensityPhi!.map((v, i) => [
-      (i * Math.PI) / 180,
-      mapRange(v),
-    ]);
+    if (analysis().settings.dB) {
+      const dBRangeMin = -40;
+      const rIntensityTheta = eTheta!.map((v) => 10 * Math.log10(v * v));
+      const rIntensityPhi = ePhi!.map((v) => 10 * Math.log10(v * v));
+      const rIntensityMax = Math.max(...rIntensityTheta, ...rIntensityPhi);
+      props.updateGlobalMax(rIntensityMax);
 
-    return [rThetaData, rPhiData];
+      function normalize(v: number): number {
+        if (v === -Infinity) return dBRangeMin;
+
+        let res: number;
+
+        if (analysis().settings.normalization === "global") {
+          res = v - props.globalMax();
+        } else {
+          res = v - rIntensityMax;
+        }
+        return res < dBRangeMin ? dBRangeMin : res;
+      }
+
+      const rTheta = rIntensityTheta!.map(normalize);
+      const rPhi = rIntensityPhi!.map(normalize);
+
+      const mapRange = d3.scaleLinear([dBRangeMin, 0], [0, rMax]);
+
+      const rThetaData: [number, number][] = rTheta.map((v, i) => [
+        (i / num) * 2 * Math.PI,
+        mapRange(v),
+      ]);
+      const rPhiData: [number, number][] = rPhi.map((v, i) => [
+        (i / num) * 2 * Math.PI,
+        mapRange(v),
+      ]);
+
+      return [rThetaData, rPhiData];
+    } else {
+      const rIntensityTheta = eTheta!.map((v) => v * v);
+      const rIntensityPhi = ePhi!.map((v) => v * v);
+      const rIntensityMax = Math.max(...rIntensityTheta, ...rIntensityPhi);
+      props.updateGlobalMax(rIntensityMax);
+
+      let mapRange;
+      if (analysis().settings.normalization === "global") {
+        mapRange = d3.scaleLinear([0, props.globalMax()], [0, rMax]);
+      } else {
+        mapRange = d3.scaleLinear([0, rIntensityMax], [0, rMax]);
+      }
+
+      const rThetaData: [number, number][] = rIntensityTheta!.map((v, i) => [
+        (i / num) * 2 * Math.PI,
+        mapRange(v),
+      ]);
+      const rPhiData: [number, number][] = rIntensityPhi!.map((v, i) => [
+        (i / num) * 2 * Math.PI,
+        mapRange(v),
+      ]);
+
+      return [rThetaData, rPhiData];
+    }
   });
 
   function draw() {
@@ -257,13 +287,6 @@ export default function (props: {
           preserveAspectRatio="xMidYMid meet"
         ></svg>
       </div>
-      <button
-        type="button"
-        class="cursor-pointer hover:text-red-500"
-        onClick={logData}
-      >
-        (Debug)
-      </button>
     </div>
   );
 }

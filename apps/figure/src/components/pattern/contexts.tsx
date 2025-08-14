@@ -15,14 +15,14 @@ export type Source = {
 export type FigureSettings = {
   normalization: "off" | "global" | "plane";
   dB: boolean;
-  total: boolean;
+  split: boolean;
   precision: number;
 };
 
 export const defaultFigureSettings: FigureSettings = {
   normalization: "global",
   dB: true,
-  total: false,
+  split: true,
   precision: 1,
 };
 

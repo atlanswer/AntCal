@@ -42,12 +42,12 @@ function SourceSetter(props: {
   const source = () => analyses[props.cIdx()]!.sources[props.sIdx()]!;
 
   return (
-    <div class="flex flex-wrap gap-x-2">
+    <div class="flex flex-wrap gap-x-2 gap-y-1">
       <span class="w-20">Source {props.sIdx() + 1}</span>
       <label class="flex gap-1">
-        [ Type:
+        Type:
         <select
-          class="cursor-pointer"
+          class="cursor-pointer rounded pl-2 outline"
           required
           value={source().type}
           onChange={(event) =>
@@ -63,15 +63,14 @@ function SourceSetter(props: {
           <option value="J">J</option>
           <option value="M">M</option>
         </select>
-        ]
       </label>
       {source().type === "J" && (
         <label class="flex gap-1">
           <span>
-            [ Length (×<var>λ</var>):
+            Length (×<var>λ</var>):
           </span>
           <input
-            class="w-14"
+            class="w-16 rounded pl-2 outline"
             type="number"
             required
             min="0"
@@ -87,13 +86,12 @@ function SourceSetter(props: {
               )
             }
           />
-          ]
         </label>
       )}
       <label class="flex gap-1">
-        [ Amplitude:
+        Amplitude:
         <input
-          class="w-12"
+          class="w-14 rounded pl-2 outline"
           type="number"
           required
           min="0"
@@ -109,14 +107,13 @@ function SourceSetter(props: {
             )
           }
         />
-        ]
       </label>
       <label class="flex gap-1">
         <span>
-          [ Phase (×<var>π</var>):
+          Phase (×<var>π</var>):
         </span>
         <input
-          class="w-16"
+          class="w-16 rounded pl-2 outline"
           type="number"
           required
           step="0.5"
@@ -131,15 +128,14 @@ function SourceSetter(props: {
             )
           }
         />
-        ]
       </label>
       <span>
-        [ Orientation (×<var>π</var>):
+        Orientation (×<var>π</var>):
       </span>
       <label class="flex gap-1">
         Theta:
         <input
-          class="w-16"
+          class="w-16 rounded pl-2 outline"
           type="number"
           required
           step="0.5"
@@ -159,7 +155,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         Phi:
         <input
-          class="w-16"
+          class="w-16 rounded pl-2 outline"
           type="number"
           required
           step="0.5"
@@ -175,15 +171,14 @@ function SourceSetter(props: {
             )
           }
         />
-        ]
       </label>
       <span>
-        [ Position (×<var>λ</var>):
+        Position (×<var>λ</var>):
       </span>
       <label class="flex gap-1">
         x:
         <input
-          class="w-16"
+          class="w-16 rounded pl-2 outline"
           type="number"
           required
           step="0.25"
@@ -202,7 +197,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         y:
         <input
-          class="w-16"
+          class="w-16 rounded pl-2 outline"
           type="number"
           required
           step="0.25"
@@ -221,7 +216,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         z:
         <input
-          class="w-16"
+          class="w-16 rounded pl-2 outline"
           type="number"
           required
           step="0.25"
@@ -236,7 +231,6 @@ function SourceSetter(props: {
             )
           }
         />
-        ]
       </label>
       <button
         class="cursor-pointer hover:text-red-500"
