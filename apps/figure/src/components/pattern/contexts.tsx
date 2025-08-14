@@ -12,33 +12,62 @@ export type Source = {
   position: Vec3;
 };
 
-export const halfWaveEDipole: Source = {
-  type: "J",
-  length: 0.5,
-  amplitude: 1,
-  phase: 0,
-  orientation: { theta: 0.5, phi: 0.5 },
-  position: [0, 0, 0],
+export type FigureSettings = {
+  normalization: "off" | "global" | "plane";
+  dB: boolean;
+  total: boolean;
+  precision: number;
 };
 
-export const halfWaveMDipole: Source = {
-  type: "M",
-  length: 0.5,
-  amplitude: 1,
-  phase: 0,
-  orientation: { theta: 0.5, phi: 0 },
-  position: [0, 0, 0],
+export const defaultFigureSettings: FigureSettings = {
+  normalization: "global",
+  dB: true,
+  total: false,
+  precision: 1,
 };
 
-export const mEDipole: Source[] = structuredClone([
+export type Analysis = {
+  sources: Source[];
+  settings: FigureSettings;
+};
+
+export const halfWaveEDipole: Analysis = {
+  sources: [
+    {
+      type: "J",
+      length: 0.5,
+      amplitude: 1,
+      phase: 0,
+      orientation: { theta: 0.5, phi: 0.5 },
+      position: [0, 0, 0],
+    },
+  ],
+  settings: structuredClone(defaultFigureSettings),
+};
+
+export const halfWaveMDipole: Analysis = {
+  sources: [
+    {
+      type: "M",
+      length: 0.5,
+      amplitude: 1,
+      phase: 0,
+      orientation: { theta: 0.5, phi: 0 },
+      position: [0, 0, 0],
+    },
+  ],
+  settings: structuredClone(defaultFigureSettings),
+};
+
+export const mEDipole: Analysis = structuredClone({
+  sources: [...halfWaveEDipole.sources, ...halfWaveMDipole.sources],
+  settings: defaultFigureSettings,
+});
+
+export const analysesDefault: Analysis[] = structuredClone([
+  mEDipole,
   halfWaveEDipole,
   halfWaveMDipole,
 ]);
 
-export const configsDefault: Source[][] = structuredClone([
-  // mEDipole,
-  [halfWaveEDipole],
-  // [halfWaveMDipole],
-]);
-
-export const [configs, setConfigs] = createStore(configsDefault);
+export const [analyses, setAnalyses] = createStore(analysesDefault);

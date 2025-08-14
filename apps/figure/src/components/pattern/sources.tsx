@@ -2,15 +2,17 @@ import type { Accessor } from "solid-js";
 import { For } from "solid-js";
 import { produce } from "solid-js/store";
 import {
-  configs,
+  analyses,
   halfWaveEDipole,
-  setConfigs,
+  setAnalyses,
 } from "src/components/pattern/contexts";
 
 export default function (props: { cIdx: Accessor<number> }) {
+  const sources = () => analyses[props.cIdx()]!.sources;
+
   return (
     <div>
-      <For each={configs[props.cIdx()]}>
+      <For each={sources()}>
         {(_, sIdx) => <SourceSetter cIdx={props.cIdx} sIdx={sIdx} />}
       </For>
       <button
@@ -18,9 +20,11 @@ export default function (props: { cIdx: Accessor<number> }) {
         type="button"
         title="Add new source"
         onClick={() =>
-          setConfigs(
-            produce((conf) =>
-              conf[props.cIdx()]!.push(structuredClone(halfWaveEDipole)),
+          setAnalyses(
+            produce((analyses) =>
+              analyses[props.cIdx()]!.sources.push(
+                structuredClone(halfWaveEDipole.sources[0]!),
+              ),
             ),
           )
         }
@@ -35,7 +39,7 @@ function SourceSetter(props: {
   cIdx: Accessor<number>;
   sIdx: Accessor<number>;
 }) {
-  const source = () => configs[props.cIdx()]![props.sIdx()]!;
+  const source = () => analyses[props.cIdx()]!.sources[props.sIdx()]!;
 
   return (
     <div class="flex flex-wrap gap-x-2">
@@ -47,11 +51,11 @@ function SourceSetter(props: {
           required
           value={source().type}
           onChange={(event) =>
-            setConfigs(
+            setAnalyses(
               produce(
-                (conf) =>
-                  (conf[props.cIdx()]![props.sIdx()]!.type = event.target
-                    .value as "J" | "M"),
+                (analyses) =>
+                  (analyses[props.cIdx()]!.sources[props.sIdx()]!.type = event
+                    .target.value as "J" | "M"),
               ),
             )
           }
@@ -74,10 +78,10 @@ function SourceSetter(props: {
             step="0.1"
             value={source().length}
             onChange={(event) =>
-              setConfigs(
+              setAnalyses(
                 produce(
-                  (conf) =>
-                    (conf[props.cIdx()]![props.sIdx()]!.length =
+                  (analyses) =>
+                    (analyses[props.cIdx()]!.sources[props.sIdx()]!.length =
                       event.target.valueAsNumber),
                 ),
               )
@@ -96,10 +100,10 @@ function SourceSetter(props: {
           step="0.1"
           value={source().amplitude}
           onChange={(event) =>
-            setConfigs(
+            setAnalyses(
               produce(
-                (conf) =>
-                  (conf[props.cIdx()]![props.sIdx()]!.amplitude =
+                (analyses) =>
+                  (analyses[props.cIdx()]!.sources[props.sIdx()]!.amplitude =
                     event.target.valueAsNumber),
               ),
             )
@@ -118,10 +122,10 @@ function SourceSetter(props: {
           step="0.5"
           value={source().phase}
           onChange={(event) =>
-            setConfigs(
+            setAnalyses(
               produce(
-                (conf) =>
-                  (conf[props.cIdx()]![props.sIdx()]!.phase =
+                (analyses) =>
+                  (analyses[props.cIdx()]!.sources[props.sIdx()]!.phase =
                     event.target.valueAsNumber),
               ),
             )
@@ -141,11 +145,12 @@ function SourceSetter(props: {
           step="0.5"
           value={source().orientation.theta}
           onChange={(event) =>
-            setConfigs(
+            setAnalyses(
               produce(
-                (conf) =>
-                  (conf[props.cIdx()]![props.sIdx()]!.orientation.theta =
-                    event.target.valueAsNumber),
+                (analyses) =>
+                  (analyses[props.cIdx()]!.sources[
+                    props.sIdx()
+                  ]!.orientation.theta = event.target.valueAsNumber),
               ),
             )
           }
@@ -160,11 +165,12 @@ function SourceSetter(props: {
           step="0.5"
           value={source().orientation.phi}
           onChange={(event) =>
-            setConfigs(
+            setAnalyses(
               produce(
-                (conf) =>
-                  (conf[props.cIdx()]![props.sIdx()]!.orientation.phi =
-                    event.target.valueAsNumber),
+                (analyses) =>
+                  (analyses[props.cIdx()]!.sources[
+                    props.sIdx()
+                  ]!.orientation.phi = event.target.valueAsNumber),
               ),
             )
           }
@@ -183,10 +189,10 @@ function SourceSetter(props: {
           step="0.25"
           value={source().position[0]}
           onChange={(event) =>
-            setConfigs(
+            setAnalyses(
               produce(
-                (conf) =>
-                  (conf[props.cIdx()]![props.sIdx()]!.position[0] =
+                (analyses) =>
+                  (analyses[props.cIdx()]!.sources[props.sIdx()]!.position[0] =
                     event.target.valueAsNumber),
               ),
             )
@@ -202,10 +208,10 @@ function SourceSetter(props: {
           step="0.25"
           value={source().position[1]}
           onChange={(event) =>
-            setConfigs(
+            setAnalyses(
               produce(
-                (conf) =>
-                  (conf[props.cIdx()]![props.sIdx()]!.position[1] =
+                (analyses) =>
+                  (analyses[props.cIdx()]!.sources[props.sIdx()]!.position[1] =
                     event.target.valueAsNumber),
               ),
             )
@@ -221,10 +227,10 @@ function SourceSetter(props: {
           step="0.25"
           value={source().position[2]}
           onChange={(event) =>
-            setConfigs(
+            setAnalyses(
               produce(
-                (conf) =>
-                  (conf[props.cIdx()]![props.sIdx()]!.position[2] =
+                (analyses) =>
+                  (analyses[props.cIdx()]!.sources[props.sIdx()]!.position[2] =
                     event.target.valueAsNumber),
               ),
             )
@@ -237,8 +243,10 @@ function SourceSetter(props: {
         type="button"
         title="Remove this source"
         onClick={() =>
-          setConfigs(
-            produce((conf) => conf[props.cIdx()]!.splice(props.sIdx(), 1)),
+          setAnalyses(
+            produce((analyses) =>
+              analyses[props.cIdx()]!.sources.splice(props.sIdx(), 1),
+            ),
           )
         }
       >

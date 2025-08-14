@@ -1,7 +1,7 @@
 import type { Coordinate } from "src/components/pattern/contexts";
 import type { Vec3 } from "src/math/linearAlgebra";
 
-export function unitVecTheta(coordinate: Coordinate): Vec3 {
+export function getUnitVecTheta(coordinate: Coordinate): Vec3 {
   const { theta, phi } = coordinate;
 
   const x = Math.cos(theta) * Math.cos(phi);
@@ -11,7 +11,7 @@ export function unitVecTheta(coordinate: Coordinate): Vec3 {
   return [x, y, z];
 }
 
-export function unitVecPhi(coordinate: Coordinate): Vec3 {
+export function getUnitVecPhi(coordinate: Coordinate): Vec3 {
   const { phi } = coordinate;
 
   const x = -Math.sin(phi);

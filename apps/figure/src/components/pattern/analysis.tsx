@@ -1,25 +1,34 @@
 import Plane from "components/pattern/plane";
 import * as d3 from "d3";
-import { type Accessor } from "solid-js";
+import { createMemo, type Accessor } from "solid-js";
 import { produce } from "solid-js/store";
-import { setConfigs, type Coordinate } from "src/components/pattern/contexts";
+import {
+  analyses,
+  setAnalyses,
+  type Coordinate,
+} from "src/components/pattern/contexts";
 import Sources from "src/components/pattern/sources";
 
 export default function (props: { cIdx: Accessor<number> }) {
-  const precision = 1;
+  const analysis = () => analyses[props.cIdx()]!;
+  const precision = () => analysis().settings.precision;
 
-  const planePhi0: Coordinate[] = d3
-    .range(Math.floor(360 / precision) + 1)
-    .map((v) => ({ theta: (v / 180) * Math.PI, phi: v < 180 ? 0 : Math.PI }));
-  const planePhi90: Coordinate[] = d3
-    .range(Math.round(360 / precision) + 1)
-    .map((v) => ({
+  const planePhi0: () => Coordinate[] = createMemo(() =>
+    d3
+      .range(Math.floor(360 / precision()) + 1)
+      .map((v) => ({ theta: (v / 180) * Math.PI, phi: v < 180 ? 0 : Math.PI })),
+  );
+  const planePhi90: () => Coordinate[] = createMemo(() =>
+    d3.range(Math.round(360 / precision()) + 1).map((v) => ({
       theta: (v / 180) * Math.PI,
       phi: v < 180 ? Math.PI / 2 : -Math.PI / 2,
-    }));
-  const planeTheta90: Coordinate[] = d3
-    .range(Math.round(360 / precision + 1))
-    .map((v) => ({ theta: 0.5 * Math.PI, phi: (v / 180) * Math.PI }));
+    })),
+  );
+  const planeTheta90: () => Coordinate[] = createMemo(() =>
+    d3
+      .range(Math.round(360 / precision() + 1))
+      .map((v) => ({ theta: 0.5 * Math.PI, phi: (v / 180) * Math.PI })),
+  );
 
   return (
     <div class="w-full rounded p-4 outline">
@@ -29,7 +38,7 @@ export default function (props: { cIdx: Accessor<number> }) {
           class="cursor-pointer hover:text-red-500"
           type="button"
           onClick={() =>
-            setConfigs(produce((conf) => conf.splice(props.cIdx(), 1)))
+            setAnalyses(produce((analyses) => analyses.splice(props.cIdx(), 1)))
           }
         >
           (Remove)

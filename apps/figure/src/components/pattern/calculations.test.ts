@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import {
+  getUnitVecTheta,
   rollBackCoordinate,
   rollbackVec3,
   rotateVec3,
-  unitVecTheta,
 } from "components/pattern/calculations";
 import type { Coordinate } from "components/pattern/contexts";
 import type { Vec3 } from "src/math/linearAlgebra";
@@ -11,19 +11,19 @@ import type { Vec3 } from "src/math/linearAlgebra";
 describe("Unit Vectors", () => {
   describe("Theta", () => {
     test("North Pole", () => {
-      const [x, y, z] = unitVecTheta({ theta: 0, phi: 0 });
+      const [x, y, z] = getUnitVecTheta({ theta: 0, phi: 0 });
       expect(x).toBeCloseTo(1);
       expect(y).toBeCloseTo(0);
       expect(z).toBeCloseTo(0);
     });
     test("Front", () => {
-      const [x, y, z] = unitVecTheta({ theta: 0.5 * Math.PI, phi: 0 });
+      const [x, y, z] = getUnitVecTheta({ theta: 0.5 * Math.PI, phi: 0 });
       expect(x).toBeCloseTo(0);
       expect(y).toBeCloseTo(0);
       expect(z).toBeCloseTo(-1);
     });
     test("Front Half", () => {
-      const [x, y, z] = unitVecTheta({ theta: 0.25 * Math.PI, phi: 0 });
+      const [x, y, z] = getUnitVecTheta({ theta: 0.25 * Math.PI, phi: 0 });
       expect(x).toBeCloseTo(Math.sqrt(2) / 2);
       expect(y).toBeCloseTo(0);
       expect(z).toBeCloseTo(-Math.sqrt(2) / 2);
