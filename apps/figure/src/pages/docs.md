@@ -17,8 +17,8 @@ Simulate radiation pattern based on electric or magnetic sources.
 **TODOs**
 
 - [x] &nbsp;Legend
-- [ ] &nbsp;Per plane or global normalization
-- [ ] &nbsp;Split theta and phi components or view total
+- [x] &nbsp;Per plane or global normalization
+- [x] &nbsp;Split theta and phi components or view total
 - [ ] &nbsp;Stats for the pattern, e.g., max gain, HPBW
 - [ ] &nbsp;Rectangular figure
 - [ ] &nbsp;UI for creating arrays

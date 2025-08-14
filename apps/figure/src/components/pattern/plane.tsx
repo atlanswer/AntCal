@@ -151,8 +151,21 @@ export default function (props: {
 
     if (analysis().settings.dB) {
       const dBRangeMin = -40;
-      const rIntensityTheta = eTheta!.map((v) => 10 * Math.log10(v * v));
-      const rIntensityPhi = ePhi!.map((v) => 10 * Math.log10(v * v));
+      let rIntensityTheta;
+      let rIntensityPhi;
+      if (analysis().settings.split) {
+        rIntensityTheta = eTheta!.map((v) => 10 * Math.log10(v * v));
+        rIntensityPhi = ePhi!.map((v) => 10 * Math.log10(v * v));
+      } else {
+        rIntensityTheta = [];
+        rIntensityPhi = [];
+        for (let i = 0; i < eTheta!.length; i++) {
+          rIntensityTheta.push(
+            10 * Math.log10(eTheta![i]! * eTheta![i]! + ePhi![i]! * ePhi![i]!),
+          );
+          rIntensityPhi.push(-Infinity);
+        }
+      }
       const rIntensityMax = Math.max(...rIntensityTheta, ...rIntensityPhi);
       props.updateGlobalMax(rIntensityMax);
 
@@ -185,8 +198,21 @@ export default function (props: {
 
       return [rThetaData, rPhiData];
     } else {
-      const rIntensityTheta = eTheta!.map((v) => v * v);
-      const rIntensityPhi = ePhi!.map((v) => v * v);
+      let rIntensityTheta;
+      let rIntensityPhi;
+      if (analysis().settings.split) {
+        rIntensityTheta = eTheta!.map((v) => v * v);
+        rIntensityPhi = ePhi!.map((v) => v * v);
+      } else {
+        rIntensityTheta = [];
+        rIntensityPhi = [];
+        for (let i = 0; i < eTheta!.length; i++) {
+          rIntensityTheta.push(
+            eTheta![i]! * eTheta![i]! + ePhi![i]! * ePhi![i]!,
+          );
+          rIntensityPhi.push(0);
+        }
+      }
       const rIntensityMax = Math.max(...rIntensityTheta, ...rIntensityPhi);
       props.updateGlobalMax(rIntensityMax);
 
