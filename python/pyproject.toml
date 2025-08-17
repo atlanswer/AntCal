@@ -9,14 +9,13 @@ readme = "README.md"
 keywords = [ "antenna", "DRA", "simulation" ]
 license = { file = "LICENSE" }
 authors = [ { name = "Atlanswer", email = "atlanswer@gmail.com" } ]
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
   "Intended Audience :: Science/Research",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Software Development :: Libraries",
@@ -58,16 +57,13 @@ dev = [
 ]
 
 [tool.ruff]
-target-version = "py312"
+target-version = "py313"
 
 line-length = 80
 lint.select = [ "B", "E", "F", "I", "SIM", "UP" ]
 
 [tool.pyright]
 typeCheckingMode = "standard"
-
-[tool.uv]
-cache-dir = "F:/uv/cache"
 
 [[tool.uv.index]]
 name = "testpypi"

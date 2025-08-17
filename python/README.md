@@ -8,7 +8,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/antcal?logo=pypi)
 [![MIT license](https://img.shields.io/pypi/l/antcal?logo=pypi)](https://opensource.org/licenses/MIT)
 
-Figure (Radiation Pattern Tool): https://antcal.atlanswer.com<br>
+AntCal web app: https://antcal.atlanswer.com<br>
 Dev version: https://dev.antcal.atlanswer.com
 
 ## Roadmap
