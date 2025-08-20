@@ -4,6 +4,7 @@ from collections.abc import Mapping
 from typing import Literal
 
 from ansys.aedt.core.application.variables import Variable, VariableManager
+from ansys.aedt.core.generic.constants import Axis
 from ansys.aedt.core.generic.file_utils import generate_unique_name
 from ansys.aedt.core.hfss import Hfss
 from ansys.aedt.core.modeler.cad.object_3d import Object3d
@@ -26,11 +27,11 @@ class MyVariable(Variable):
     """
 
     def __init__(self, expression: str, name: str, hfss: Hfss):
-        super().__init__(expression, name=name, app=hfss)  # pyright: ignore
+        super().__init__(expression, name=name, app=hfss)
         self.expression = expression
 
     def __str__(self) -> str:
-        name = self.name  # pyright: ignore
+        name = self.name
         assert isinstance(name, str)
 
         return name
@@ -49,7 +50,7 @@ def get_variables(hfss: Hfss) -> dict[str, str]:
     vm = hfss.variable_manager
     if not vm:
         return {}
-    return {k: v.evaluated_value for k, v in vm.design_variables.items()}  # pyright: ignore
+    return {k: v.evaluated_value for k, v in vm.design_variables.items()}
 
 
 def update_variables(
@@ -61,23 +62,23 @@ def update_variables(
     assert isinstance(vm, VariableManager)
 
     for item in variables.items():
-        vm.set_variable(*item)  # pyright: ignore
+        vm.set_variable(*item)
     if not constants:
         return
     for item in constants.items():
-        vm.set_variable(*item)  # pyright: ignore
+        vm.set_variable(*item)
 
 
 def check_materials(hfss: Hfss, materials: str | list[str]) -> None:
     """If the material exists and is not in the materials database,
     it is added to this database."""
 
-    mat = hfss.materials  # pyright: ignore
+    mat = hfss.materials
     assert isinstance(mat, Materials)
     if isinstance(materials, str):
         materials = [materials]
     for material in materials:
-        mat.checkifmaterialexists(material)  # pyright: ignore
+        mat.checkifmaterialexists(material)
 
 
 def create_linear_structure(
@@ -113,7 +114,7 @@ def create_linear_structure(
         Object3d: Generated linear structure
     """
 
-    modeler = hfss.modeler  # pyright: ignore
+    modeler = hfss.modeler
     assert isinstance(modeler, Modeler3D)
 
     material = "vacuum" if type == "hole" else "copper"
@@ -142,10 +143,10 @@ def create_linear_structure(
                         sp_x += f" + {c2c_item}"
                     case "Y":
                         sp_y += f" + {c2c_item}"
-            item1 = modeler.create_box(  # pyright: ignore
+            item1 = modeler.create_box(
                 [sp_x, sp_y, 0],
                 [f"{size}", f"{size}", "zl_sub2"],
-                generate_unique_name(type),  # pyright: ignore
+                generate_unique_name(type),
                 material,
             )
         case "cylindrical":
@@ -163,12 +164,12 @@ def create_linear_structure(
                         sp_x += f" + {c2c_item}"
                     case "Y":
                         sp_y += f" + {c2c_item}"
-            item1 = modeler.create_cylinder(  # pyright: ignore
-                hfss.AXIS.Z,
+            item1 = modeler.create_cylinder(
+                Axis.Z,
                 [sp_x, sp_y, 0],
                 f"{size} / 2",
                 "zl_sub2",
-                name=generate_unique_name(type),  # pyright: ignore
+                name=generate_unique_name(type),
                 material=material,
             )
     assert isinstance(item1, Object3d)
