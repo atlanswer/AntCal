@@ -14,7 +14,7 @@
     },
     "apps/figure": {
       "name": "@antcal/figure",
-      "version": "0.27.4",
+      "version": "0.27.5",
       "devDependencies": {
         "@astrojs/check": "^0.9.4",
         "@astrojs/solid-js": "^5.1.0",
@@ -26,7 +26,7 @@
         "@types/d3-3d": "^1.0.0",
         "@vercel/analytics": "^1.5.0",
         "@vercel/speed-insights": "^1.2.0",
-        "astro": "^5.13.2",
+        "astro": "^5.13.3",
         "d3": "^7.9.0",
         "d3-3d": "^1.0.0",
         "geist": "^1.4.2",
