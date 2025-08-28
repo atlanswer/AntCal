@@ -12,6 +12,17 @@ export type Source = {
   position: Vec3;
 };
 
+export type LinearArray = {
+  type: "J" | "M";
+  length: number;
+  amplitude: number;
+  startingPhase: number;
+  deltaPhase: number;
+  startingOrientation: Coordinate;
+  startingPosition: Vec3;
+  deltaPosition: Vec3;
+};
+
 export type FigureSettings = {
   normalization: "off" | "global" | "plane";
   dB: boolean;
