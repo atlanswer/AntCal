@@ -295,7 +295,7 @@ export default function (props: {
     at.selectAll("text")
       .data(
         [0, 45, 90, 135, 180, 135, 90, 45].map((v, i) =>
-          i === 0 ? `${props.primary} = ${v}` : v,
+          i === 0 ? `${props.primary} = ${v}°` : `${v}°`,
         ),
       )
       .join("text")

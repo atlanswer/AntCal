@@ -4,8 +4,8 @@ const pathname = Astro.url.pathname;
 const pages: { title: string; path: string }[] =
   import.meta.env.VERCEL_ENV === "production" ?
     [
-      { title: "Field", path: "/field" },
       { title: "Pattern", path: "/pattern" },
+      { title: "Field", path: "/field" },
       { title: "Docs", path: "/docs" },
       { title: "About", path: "/about" },
     ]
