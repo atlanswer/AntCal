@@ -20,6 +20,7 @@ import { addPhasor, type Phasor } from "src/math/phasor";
 export default function (props: {
   cIdx: Accessor<number>;
   title: JSXElement;
+  primary: string;
   coordinates: () => Coordinate[];
   globalMax: Accessor<number>;
   updateGlobalMax: (v: number) => void;
@@ -284,6 +285,28 @@ export default function (props: {
           [d, rMax],
         ]),
       );
+
+    // Angle Ticks
+    const at = grid
+      .selectAll("g.angle-ticks")
+      .data([null])
+      .join("g")
+      .classed("angle-ticks", true);
+    at.selectAll("text")
+      .data(
+        [0, 45, 90, 135, 180, 135, 90, 45].map((v, i) =>
+          i === 0 ? `${props.primary} = ${v}` : v,
+        ),
+      )
+      .join("text")
+      .attr("x", (_, i) => (rMax + 5) * Math.sin((i * Math.PI) / 4))
+      .attr("y", (_, i) => -(rMax + 5) * Math.cos((i * Math.PI) / 4))
+      .text((d) => d)
+      .attr("font-size", 6)
+      .attr("text-anchor", "middle")
+      .attr("dominant-baseline", "middle")
+      .attr("font-family", "Arial")
+      .classed("fill-black dark:fill-white", true);
 
     // Traces
     const tg = svg

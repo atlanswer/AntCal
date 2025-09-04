@@ -150,9 +150,10 @@ export default function (props: { cIdx: Accessor<number> }) {
             cIdx={props.cIdx}
             title={
               <span>
-                <em>Φ</em> = 0
+                <var>Φ</var> = 0
               </span>
             }
+            primary="θ"
             coordinates={planePhi0}
             globalMax={globalMax}
             updateGlobalMax={updateGlobalMax}
@@ -161,9 +162,10 @@ export default function (props: { cIdx: Accessor<number> }) {
             cIdx={props.cIdx}
             title={
               <span>
-                <em>Φ</em> = π / 2
+                <var>Φ</var> = π / 2
               </span>
             }
+            primary="θ"
             coordinates={planePhi90}
             globalMax={globalMax}
             updateGlobalMax={updateGlobalMax}
@@ -172,9 +174,10 @@ export default function (props: { cIdx: Accessor<number> }) {
             cIdx={props.cIdx}
             title={
               <span>
-                <em>θ</em> = π / 2
+                <var>θ</var> = π / 2
               </span>
             }
+            primary="Φ"
             coordinates={planeTheta90}
             globalMax={globalMax}
             updateGlobalMax={updateGlobalMax}
@@ -184,10 +187,10 @@ export default function (props: { cIdx: Accessor<number> }) {
       {analysis().settings.split && (
         <div class="mx-auto w-fit">
           <span class="px-2 before:mx-2 before:inline-block before:h-1 before:w-10 before:rounded before:bg-[#1f77b4] before:align-middle">
-            <em>θ</em> Component
+            <var>θ</var> Component
           </span>
           <span class="px-2 before:mx-2 before:inline-block before:h-1 before:w-10 before:rounded before:bg-[#ff7f0e] before:align-middle">
-            <em>ϕ</em> Component
+            <var>ϕ</var> Component
           </span>
         </div>
       )}
