@@ -212,18 +212,21 @@ export default function Field() {
       zAxisTicks(),
     ]) as unknown as [d3d.Point3D[], d3d.Point3D[], d3d.Point3D[]];
 
-    const g = d3.select(svgRef!).selectAll("g").data([null]).join("g");
+    const svg = d3.select(svgRef!);
+
+    const g = svg.selectAll("g").data([null]).join("g");
 
     // Axes
-    g.selectAll("path.x-axis")
+    g.selectAll("path.axes")
       .data(axesEnabled() ? axesData : [])
       .join("path")
-      .classed("x-axis", true)
+      .classed("axes", true)
       // @ts-expect-error
       .attr("d", axis3d.draw)
       .attr("stroke", "black")
       .attr("stroke-width", 0.2)
-      .classed("stroke-black dark:stroke-white", true)
+      .classed("stroke-black", colorScheme() === "rainbow")
+      .classed("stroke-white", colorScheme() === "rainbow-dark")
       .classed("d3-3d", true);
 
     const axisEnds = axesData.map((axis) => axis.at(-1)!);
@@ -237,7 +240,8 @@ export default function Field() {
       .attr("font-style", "italic")
       .attr("font-size", "10pt")
       .attr("dominant-baseline", "middle")
-      .classed("fill-black dark:fill-white", true)
+      .classed("fill-black", colorScheme() === "rainbow")
+      .classed("fill-white", colorScheme() === "rainbow-dark")
       .attr("x", (d) => d.projected.x)
       .attr("y", (d) => d.projected.y)
       .text(
@@ -260,7 +264,8 @@ export default function Field() {
       .attr("y", (d) => d.projected.y)
       .attr("font-family", "Arial")
       .attr("font-size", "4pt")
-      .classed("fill-black dark:fill-white", true)
+      .classed("fill-black", colorScheme() === "rainbow")
+      .classed("fill-white", colorScheme() === "rainbow-dark")
       .text((d) => f([d.x, d.y, d.z].find((v) => v !== 0) ?? 0));
 
     // Vector arrows
@@ -293,6 +298,8 @@ export default function Field() {
       .selectAll("g.colorbar")
       .data([null])
       .join("g")
+      .classed("fill-black", colorScheme() === "rainbow")
+      .classed("fill-white", colorScheme() === "rainbow-dark")
       .classed("colorbar", true);
     colorbar
       .selectAll("rect")
@@ -318,8 +325,11 @@ export default function Field() {
       .attr("text-anchor", "middle")
       .attr("font-family", "Arial")
       .attr("font-size", "4pt")
-      .classed("fill-black dark:fill-white", true)
       .text((d) => d);
+
+    svg
+      .classed("bg-white", colorScheme() === "rainbow")
+      .classed("bg-black", colorScheme() === "rainbow-dark");
   }
 
   function mapColor(_: any, i: number): string {
@@ -414,7 +424,7 @@ export default function Field() {
         <span>Y span: {stats.ySpan === 0 ? "-" : stats.ySpan} m</span>
         <span>Z span: {stats.zSpan === 0 ? "-" : stats.zSpan} m</span>
       </div>
-      <div class="grid w-full max-w-3xl grid-cols-1 grid-rows-1 rounded bg-white outline dark:bg-black">
+      <div class="grid w-full max-w-3xl grid-cols-1 grid-rows-1 rounded outline">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           ref={svgRef}
