@@ -16,7 +16,6 @@ export default defineConfig({
   vite: {
     plugins: [
       tailwindcss(),
-      // @ts-expect-error: wtf is going on
       visualizer({
         emitFile: true,
         filename: "bundle.html",
@@ -52,7 +51,7 @@ export default defineConfig({
           {
             weight: "100 900",
             src: [
-              "../../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2",
+              "./node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2",
             ],
           },
         ],
@@ -74,7 +73,7 @@ export default defineConfig({
           {
             weight: "100 900",
             src: [
-              "../../node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2",
+              "./node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2",
             ],
           },
         ],
