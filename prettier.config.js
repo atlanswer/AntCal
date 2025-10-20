@@ -11,5 +11,5 @@ export default {
       },
     },
   ],
-  tailwindStylesheet: "./apps/figure/src/styles/global.css",
+  tailwindStylesheet: "./apps/web/src/styles/global.css",
 };

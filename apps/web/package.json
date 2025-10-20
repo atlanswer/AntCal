@@ -1,6 +1,6 @@
 {
-  "name": "@antcal/figure",
-  "version": "0.27.9",
+  "name": "@antcal/web",
+  "version": "0.28.0",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": true,
@@ -21,12 +21,12 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.4",
+    "@astrojs/check": "^0.9.5",
     "@astrojs/solid-js": "^5.1.1",
     "@astrojs/ts-plugin": "^1.10.5",
     "@solidjs/meta": "^0.29.4",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.1.14",
+    "@tailwindcss/vite": "^4.1.15",
     "@types/d3": "^7.4.3",
     "@types/d3-3d": "^1.0.0",
     "@vercel/analytics": "^1.5.0",
@@ -40,7 +40,7 @@
     "remark-math": "^6.0.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "solid-js": "^1.9.9",
-    "tailwindcss": "^4.1.14",
+    "tailwindcss": "^4.1.15",
     "valibot": "^1.1.0"
   }
 }
