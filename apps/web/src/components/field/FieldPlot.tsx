@@ -62,6 +62,10 @@ export default function Field() {
     null,
   );
 
+  const [figConf, setFigConf] = createStore({
+    hasColorbar: true,
+  });
+
   const DPI = 72;
   /** Figure width is fixed to 3.5 in */
   const widthInPoints = DPI * 3.5;
@@ -304,43 +308,45 @@ export default function Field() {
     g.selectAll(".d3-3d").sort(poly3d.sort);
 
     // Colorbar
-    const cbWidth = 64;
-    const cbHeight = 8;
-    const cbMarginButtom = 30;
-    const cbLegendMargin = 2;
-    const colorbar = g
-      .selectAll("g.colorbar")
-      .data([null])
-      .join("g")
-      .classed("fill-black", colorScheme() === "rainbow")
-      .classed("fill-white", colorScheme() === "rainbow-dark")
-      .classed("colorbar", true);
-    colorbar
-      .selectAll("rect")
-      .data([null])
-      .join("rect")
-      .attr("preserveAspectRatio", "none")
-      .attr("x", widthInPoints / 2 - cbWidth / 2)
-      .attr("y", heightInPoints() - cbMarginButtom - cbHeight)
-      .attr("width", cbWidth)
-      .attr("height", cbHeight)
-      .attr(
-        "fill",
-        colorScheme() === "rainbow" ?
-          "url(#mathematica-rainbow)"
-        : "url(#mathematica-rainbow-dark)",
-      );
-    colorbar
-      .selectAll("text")
-      .data([vLenMin(), vLenMax()])
-      .join("text")
-      .attr("x", (_, i) => widthInPoints / 2 + cbWidth * (i - 0.5))
-      .attr("y", heightInPoints() - cbMarginButtom + cbLegendMargin)
-      .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "hanging")
-      .attr("font-family", "Arial")
-      .attr("font-size", "4pt")
-      .text((d) => d);
+    if (figConf.hasColorbar) {
+      const cbWidth = 64;
+      const cbHeight = 8;
+      const cbMarginButtom = 30;
+      const cbLegendMargin = 2;
+      const colorbar = g
+        .selectAll("g.colorbar")
+        .data([null])
+        .join("g")
+        .classed("fill-black", colorScheme() === "rainbow")
+        .classed("fill-white", colorScheme() === "rainbow-dark")
+        .classed("colorbar", true);
+      colorbar
+        .selectAll("rect")
+        .data([null])
+        .join("rect")
+        .attr("preserveAspectRatio", "none")
+        .attr("x", widthInPoints / 2 - cbWidth / 2)
+        .attr("y", heightInPoints() - cbMarginButtom - cbHeight)
+        .attr("width", cbWidth)
+        .attr("height", cbHeight)
+        .attr(
+          "fill",
+          colorScheme() === "rainbow" ?
+            "url(#mathematica-rainbow)"
+          : "url(#mathematica-rainbow-dark)",
+        );
+      colorbar
+        .selectAll("text")
+        .data([vLenMin(), vLenMax()])
+        .join("text")
+        .attr("x", (_, i) => widthInPoints / 2 + cbWidth * (i - 0.5))
+        .attr("y", heightInPoints() - cbMarginButtom + cbLegendMargin)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "hanging")
+        .attr("font-family", "Arial")
+        .attr("font-size", "4pt")
+        .text((d) => d);
+    }
 
     svg
       .classed("bg-white", colorScheme() === "rainbow")
@@ -613,7 +619,7 @@ export default function Field() {
 
       <dialog
         id={idLargeView}
-        class="fixed inset-0 flex h-full w-full rounded"
+        class="absolute m-auto h-screen w-screen"
       ></dialog>
 
       <p>You can zoom and rotate the viewport. Double click to reset.</p>
@@ -769,6 +775,18 @@ export default function Field() {
             required
             value={arrowTailLen()}
             onChange={(event) => setArrowTailLen(event.target.valueAsNumber)}
+          />
+        </label>
+        <label class="cursor-pointer" title="Include the colorbar or not">
+          Include Colorbar
+          <input
+            class="block translate-x-1 translate-y-1 scale-150"
+            type="checkbox"
+            required
+            checked
+            onChange={(event) =>
+              setFigConf("hasColorbar", event.target.checked)
+            }
           />
         </label>
         <label title="Change color scheme">
