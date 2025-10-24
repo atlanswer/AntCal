@@ -16,6 +16,7 @@ export default defineConfig({
   vite: {
     plugins: [
       tailwindcss(),
+      // @ts-expect-error: wtf
       visualizer({
         emitFile: true,
         filename: "bundle.html",

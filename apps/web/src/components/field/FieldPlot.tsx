@@ -62,7 +62,11 @@ export default function Field() {
     null,
   );
 
-  const [figConf, setFigConf] = createStore({
+  const [figConf, setFigConf] = createStore<{
+    colorScheme: "rainbow" | "rainbow-dark";
+    hasColorbar: boolean;
+  }>({
+    colorScheme: "rainbow-dark",
     hasColorbar: true,
   });
 
@@ -105,10 +109,6 @@ export default function Field() {
 
   const [vLenMin, setVLenMin] = createSignal(0);
   const [vLenMax, setVLenMax] = createSignal(0);
-
-  const [colorScheme, setColorScheme] = createSignal<
-    "rainbow" | "rainbow-dark"
-  >("rainbow-dark");
 
   const [largeViewOpened, setLargeViewOpened] = createSignal(false);
   const idNormalView = createUniqueId();
@@ -239,8 +239,8 @@ export default function Field() {
       .attr("d", axis3d.draw)
       .attr("stroke", "black")
       .attr("stroke-width", 0.2)
-      .classed("stroke-black", colorScheme() === "rainbow")
-      .classed("stroke-white", colorScheme() === "rainbow-dark")
+      .classed("stroke-black", figConf.colorScheme === "rainbow")
+      .classed("stroke-white", figConf.colorScheme === "rainbow-dark")
       .classed("d3-3d", true);
 
     const axisEnds = axesData.map((axis) => axis.at(-1)!);
@@ -254,8 +254,8 @@ export default function Field() {
       .attr("font-style", "italic")
       .attr("font-size", "10pt")
       .attr("dominant-baseline", "middle")
-      .classed("fill-black", colorScheme() === "rainbow")
-      .classed("fill-white", colorScheme() === "rainbow-dark")
+      .classed("fill-black", figConf.colorScheme === "rainbow")
+      .classed("fill-white", figConf.colorScheme === "rainbow-dark")
       .attr("x", (d) => d.projected.x)
       .attr("y", (d) => d.projected.y)
       .text(
@@ -278,8 +278,8 @@ export default function Field() {
       .attr("y", (d) => d.projected.y)
       .attr("font-family", "Arial")
       .attr("font-size", "4pt")
-      .classed("fill-black", colorScheme() === "rainbow")
-      .classed("fill-white", colorScheme() === "rainbow-dark")
+      .classed("fill-black", figConf.colorScheme === "rainbow")
+      .classed("fill-white", figConf.colorScheme === "rainbow-dark")
       .text((d) => f([d.x, d.y, d.z].find((v) => v !== 0) ?? 0));
 
     // Vector arrows
@@ -317,8 +317,8 @@ export default function Field() {
         .selectAll("g.colorbar")
         .data([null])
         .join("g")
-        .classed("fill-black", colorScheme() === "rainbow")
-        .classed("fill-white", colorScheme() === "rainbow-dark")
+        .classed("fill-black", figConf.colorScheme === "rainbow")
+        .classed("fill-white", figConf.colorScheme === "rainbow-dark")
         .classed("colorbar", true);
       colorbar
         .selectAll("rect")
@@ -331,7 +331,7 @@ export default function Field() {
         .attr("height", cbHeight)
         .attr(
           "fill",
-          colorScheme() === "rainbow" ?
+          figConf.colorScheme === "rainbow" ?
             "url(#mathematica-rainbow)"
           : "url(#mathematica-rainbow-dark)",
         );
@@ -349,8 +349,8 @@ export default function Field() {
     }
 
     svg
-      .classed("bg-white", colorScheme() === "rainbow")
-      .classed("bg-black", colorScheme() === "rainbow-dark");
+      .classed("bg-white", figConf.colorScheme === "rainbow")
+      .classed("bg-black", figConf.colorScheme === "rainbow-dark");
   }
 
   function mapColor(_: any, i: number): string {
@@ -362,7 +362,9 @@ export default function Field() {
     let idx = Math.floor(diff / step);
     idx = idx > 29 ? 29 : idx;
 
-    return colorScheme() === "rainbow" ? rainbow[idx]! : rainbowDark[idx]!;
+    return figConf.colorScheme === "rainbow" ?
+        rainbow[idx]!
+      : rainbowDark[idx]!;
   }
 
   // Redraw
@@ -795,7 +797,10 @@ export default function Field() {
             class="block cursor-pointer rounded px-2 py-0.5 outline"
             required
             onChange={(event) =>
-              setColorScheme(event.target.value as "rainbow" | "rainbow-dark")
+              setFigConf(
+                "colorScheme",
+                event.target.value as "rainbow" | "rainbow-dark",
+              )
             }
           >
             <option value="rainbow">Mathematica Rainbow</option>
