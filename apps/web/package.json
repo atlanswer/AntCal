@@ -1,6 +1,6 @@
 {
   "name": "@antcal/web",
-  "version": "0.28.1",
+  "version": "0.28.2",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": true,
@@ -26,12 +26,12 @@
     "@astrojs/ts-plugin": "^1.10.5",
     "@solidjs/meta": "^0.29.4",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.1.15",
+    "@tailwindcss/vite": "^4.1.16",
     "@types/d3": "^7.4.3",
     "@types/d3-3d": "^1.0.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
-    "astro": "^5.14.7",
+    "astro": "^5.15.1",
     "d3": "^7.9.0",
     "d3-3d": "^1.0.0",
     "geist": "^1.5.1",
@@ -40,7 +40,7 @@
     "remark-math": "^6.0.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "solid-js": "^1.9.9",
-    "tailwindcss": "^4.1.15",
+    "tailwindcss": "^4.1.16",
     "valibot": "^1.1.0"
   }
 }

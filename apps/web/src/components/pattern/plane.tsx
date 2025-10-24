@@ -306,7 +306,7 @@ export default function (props: {
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "middle")
       .attr("font-family", "Arial")
-      .classed("fill-black dark:fill-white", true);
+      .classed("fill-black", true);
 
     // Traces
     const tg = svg
@@ -328,7 +328,7 @@ export default function (props: {
   return (
     <div>
       <p>{props.title}</p>
-      <div class="aspect-square w-80 rounded outline">
+      <div class="aspect-square w-80 rounded bg-white outline">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           ref={svgRef}
