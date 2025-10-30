@@ -19,10 +19,10 @@
     "url": "https://github.com/atlanswer/AntCal/issues"
   },
   "scripts": {
-    "dev": "turbo dev",
-    "check": "turbo check",
-    "build": "turbo build",
-    "preview": "turbo preview"
+    "dev": "bun --bun turbo dev",
+    "check": "bun --bun turbo check",
+    "build": "bun --bun turbo build",
+    "preview": "bun --bun turbo preview"
   },
   "devDependencies": {
     "@types/bun": "^1.3.1",

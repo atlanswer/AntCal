@@ -14,15 +14,15 @@
     "url": "https://github.com/atlanswer/AntCal/issues"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "bun --bun astro dev",
     "dev:api": "uv run --env-file .env.development -- fastapi dev api/main.py",
-    "check": "astro check",
-    "build": "astro build",
-    "preview": "astro preview"
+    "check": "bun --bun astro check",
+    "build": "bun --bun astro build",
+    "preview": "bun --bun astro preview"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.5",
-    "@astrojs/solid-js": "^5.1.1",
+    "@astrojs/solid-js": "^5.1.2",
     "@astrojs/ts-plugin": "^1.10.5",
     "@solidjs/meta": "^0.29.4",
     "@tailwindcss/typography": "^0.5.19",
@@ -31,7 +31,7 @@
     "@types/d3-3d": "^1.0.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
-    "astro": "^5.15.1",
+    "astro": "^5.15.3",
     "d3": "^7.9.0",
     "d3-3d": "^1.0.0",
     "geist": "^1.5.1",
@@ -39,7 +39,7 @@
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "rollup-plugin-visualizer": "^6.0.5",
-    "solid-js": "^1.9.9",
+    "solid-js": "^1.9.10",
     "tailwindcss": "^4.1.16",
     "valibot": "^1.1.0"
   }
