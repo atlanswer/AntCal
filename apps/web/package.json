@@ -14,7 +14,7 @@
     "url": "https://github.com/atlanswer/AntCal/issues"
   },
   "scripts": {
-    "dev": "bun --bun astro dev",
+    "dev": "bun astro dev",
     "dev:api": "uv run --env-file .env.development -- fastapi dev api/main.py",
     "check": "bun --bun astro check",
     "build": "bun --bun astro build",

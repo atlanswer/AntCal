@@ -43,8 +43,6 @@ export default function (props: {
     props.coordinates().map((p) => getUnitVecPhi(p));
 
   const calculation = createMemo(() => {
-    console.debug("recalculate");
-
     const coordinates: Coordinate[] = props.coordinates();
     const sources: Source[] = analyses[props.cIdx()]!.sources;
 
@@ -145,8 +143,6 @@ export default function (props: {
   });
 
   const tracesData = createMemo(() => {
-    console.debug("retrace");
-
     const [eTheta, ePhi] = calculation();
     const num = Math.floor(360 / analysis().settings.resolution);
 

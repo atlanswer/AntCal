@@ -73,16 +73,18 @@ function SourceSetter(props: {
             class="w-16 rounded pl-2 outline"
             type="number"
             required
+            aria-required
             min="0"
             step="0.1"
             value={source().length}
             onChange={(event) =>
               setAnalyses(
-                produce(
-                  (analyses) =>
-                    (analyses[props.cIdx()]!.sources[props.sIdx()]!.length =
-                      event.target.valueAsNumber),
-                ),
+                produce((analyses) => {
+                  if (Number.isFinite(event.target.valueAsNumber)) {
+                    analyses[props.cIdx()]!.sources[props.sIdx()]!.length =
+                      event.target.valueAsNumber;
+                  }
+                }),
               )
             }
           />
@@ -94,18 +96,20 @@ function SourceSetter(props: {
           class="w-14 rounded pl-2 outline"
           type="number"
           required
+          aria-required
           min="0"
           step="0.1"
           value={source().amplitude}
-          onChange={(event) =>
+          onChange={(event) => {
             setAnalyses(
-              produce(
-                (analyses) =>
-                  (analyses[props.cIdx()]!.sources[props.sIdx()]!.amplitude =
-                    event.target.valueAsNumber),
-              ),
-            )
-          }
+              produce((analyses) => {
+                if (Number.isFinite(event.target.valueAsNumber)) {
+                  analyses[props.cIdx()]!.sources[props.sIdx()]!.amplitude =
+                    event.target.valueAsNumber;
+                }
+              }),
+            );
+          }}
         />
       </label>
       <label class="flex gap-1">
@@ -116,15 +120,17 @@ function SourceSetter(props: {
           class="w-16 rounded pl-2 outline"
           type="number"
           required
+          aria-required
           step="0.5"
           value={source().phase}
           onChange={(event) =>
             setAnalyses(
-              produce(
-                (analyses) =>
-                  (analyses[props.cIdx()]!.sources[props.sIdx()]!.phase =
-                    event.target.valueAsNumber),
-              ),
+              produce((analyses) => {
+                if (Number.isFinite(event.target.valueAsNumber)) {
+                  analyses[props.cIdx()]!.sources[props.sIdx()]!.phase =
+                    event.target.valueAsNumber;
+                }
+              }),
             )
           }
         />
@@ -138,16 +144,18 @@ function SourceSetter(props: {
           class="w-16 rounded pl-2 outline"
           type="number"
           required
+          aria-required
           step="0.5"
           value={source().orientation.theta}
           onChange={(event) =>
             setAnalyses(
-              produce(
-                (analyses) =>
-                  (analyses[props.cIdx()]!.sources[
+              produce((analyses) => {
+                if (Number.isFinite(event.target.valueAsNumber)) {
+                  analyses[props.cIdx()]!.sources[
                     props.sIdx()
-                  ]!.orientation.theta = event.target.valueAsNumber),
-              ),
+                  ]!.orientation.theta = event.target.valueAsNumber;
+                }
+              }),
             )
           }
         />
@@ -158,16 +166,18 @@ function SourceSetter(props: {
           class="w-16 rounded pl-2 outline"
           type="number"
           required
+          aria-required
           step="0.5"
           value={source().orientation.phi}
           onChange={(event) =>
             setAnalyses(
-              produce(
-                (analyses) =>
-                  (analyses[props.cIdx()]!.sources[
+              produce((analyses) => {
+                if (Number.isFinite(event.target.valueAsNumber)) {
+                  analyses[props.cIdx()]!.sources[
                     props.sIdx()
-                  ]!.orientation.phi = event.target.valueAsNumber),
-              ),
+                  ]!.orientation.phi = event.target.valueAsNumber;
+                }
+              }),
             )
           }
         />
@@ -181,15 +191,17 @@ function SourceSetter(props: {
           class="w-16 rounded pl-2 outline"
           type="number"
           required
+          aria-required
           step="0.25"
           value={source().position[0]}
           onChange={(event) =>
             setAnalyses(
-              produce(
-                (analyses) =>
-                  (analyses[props.cIdx()]!.sources[props.sIdx()]!.position[0] =
-                    event.target.valueAsNumber),
-              ),
+              produce((analyses) => {
+                if (Number.isFinite(event.target.valueAsNumber)) {
+                  analyses[props.cIdx()]!.sources[props.sIdx()]!.position[0] =
+                    event.target.valueAsNumber;
+                }
+              }),
             )
           }
         />
@@ -200,15 +212,17 @@ function SourceSetter(props: {
           class="w-16 rounded pl-2 outline"
           type="number"
           required
+          aria-required
           step="0.25"
           value={source().position[1]}
           onChange={(event) =>
             setAnalyses(
-              produce(
-                (analyses) =>
-                  (analyses[props.cIdx()]!.sources[props.sIdx()]!.position[1] =
-                    event.target.valueAsNumber),
-              ),
+              produce((analyses) => {
+                if (Number.isFinite(event.target.valueAsNumber)) {
+                  analyses[props.cIdx()]!.sources[props.sIdx()]!.position[1] =
+                    event.target.valueAsNumber;
+                }
+              }),
             )
           }
         />
@@ -219,15 +233,17 @@ function SourceSetter(props: {
           class="w-16 rounded pl-2 outline"
           type="number"
           required
+          aria-required
           step="0.25"
           value={source().position[2]}
           onChange={(event) =>
             setAnalyses(
-              produce(
-                (analyses) =>
-                  (analyses[props.cIdx()]!.sources[props.sIdx()]!.position[2] =
-                    event.target.valueAsNumber),
-              ),
+              produce((analyses) => {
+                if (Number.isFinite(event.target.valueAsNumber)) {
+                  analyses[props.cIdx()]!.sources[props.sIdx()]!.position[2] =
+                    event.target.valueAsNumber;
+                }
+              }),
             )
           }
         />
