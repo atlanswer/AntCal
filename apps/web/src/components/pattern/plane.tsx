@@ -34,7 +34,7 @@ export default function (props: {
   const heightIn = 3.5 / 2;
   const width = widthIn * DPI;
   const height = heightIn * DPI;
-  const padding = 10;
+  const padding = 12;
   const rMax = width / 2 - padding;
 
   const unitVecThetaArray: () => Vec3[] = () =>
@@ -283,6 +283,7 @@ export default function (props: {
       );
 
     // Angle Ticks
+    const ticksMargin = 7;
     const at = grid
       .selectAll("g.angle-ticks")
       .data([null])
@@ -295,8 +296,8 @@ export default function (props: {
         ),
       )
       .join("text")
-      .attr("x", (_, i) => (rMax + 5) * Math.sin((i * Math.PI) / 4))
-      .attr("y", (_, i) => -(rMax + 5) * Math.cos((i * Math.PI) / 4))
+      .attr("x", (_, i) => (rMax + ticksMargin) * Math.sin((i * Math.PI) / 4))
+      .attr("y", (_, i) => -(rMax + ticksMargin) * Math.cos((i * Math.PI) / 4))
       .text((d) => d)
       .attr("font-size", 6)
       .attr("text-anchor", "middle")
