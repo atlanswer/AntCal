@@ -1,6 +1,6 @@
 import Plane from "components/pattern/plane";
 import * as d3 from "d3";
-import { createMemo, createSignal, type Accessor } from "solid-js";
+import { createMemo, createSignal, Show, type Accessor } from "solid-js";
 import { produce } from "solid-js/store";
 import {
   analyses,
@@ -48,101 +48,105 @@ export default function (props: { cIdx: Accessor<number> }) {
 
   return (
     <div class="w-full rounded p-4 outline">
-      <div class="flex flex-wrap gap-x-4 gap-y-1">
-        <span>Analysis {props.cIdx() + 1}</span>
-        <label class="flex gap-1">
-          Normalization
-          <select
-            class="cursor-pointer rounded pl-2 outline"
-            required
-            value={analysis().settings.normalization}
-            onChange={(event) =>
+      <div class="overflow-x-auto">
+        <div class="flex w-max gap-x-4 py-2">
+          <span>Analysis {props.cIdx() + 1}</span>
+          <label class="flex gap-2">
+            Normalization
+            <select
+              class="cursor-pointer rounded pl-2 outline"
+              required
+              value={analysis().settings.normalization}
+              onChange={(event) =>
+                setAnalyses(
+                  produce(
+                    (analyses) =>
+                      (analyses[props.cIdx()]!.settings.normalization = event
+                        .target.value as "off" | "global" | "plane"),
+                  ),
+                )
+              }
+            >
+              <option value="global">Global</option>
+              <option value="plane">Per Plane</option>
+              {
+                // <option value="off">Off</option>
+              }
+            </select>
+          </label>
+          <label
+            class="flex cursor-pointer gap-2"
+            title="Display traces in decibel"
+          >
+            <input
+              type="checkbox"
+              required
+              checked={analysis().settings.dB}
+              onChange={(event) =>
+                setAnalyses(
+                  produce(
+                    (analyses) =>
+                      (analyses[props.cIdx()]!.settings.dB =
+                        event.target.checked),
+                  ),
+                )
+              }
+            />
+            dB
+          </label>
+          <label
+            class="flex cursor-pointer gap-2"
+            title="Split theta and phi components or not"
+          >
+            <input
+              type="checkbox"
+              required
+              checked={analysis().settings.split}
+              onChange={(event) =>
+                setAnalyses(
+                  produce(
+                    (analyses) =>
+                      (analyses[props.cIdx()]!.settings.split =
+                        event.target.checked),
+                  ),
+                )
+              }
+            />
+            Split Component
+          </label>
+          <label class="flex gap-2">
+            Angular Resolution (deg)
+            <input
+              class="w-16 rounded pl-2 outline"
+              type="number"
+              required
+              min="0.1"
+              max="360"
+              step="0.1"
+              value={analysis().settings.resolution}
+              onChange={(event) =>
+                setAnalyses(
+                  produce(
+                    (analyses) =>
+                      (analyses[props.cIdx()]!.settings.resolution =
+                        event.target.valueAsNumber),
+                  ),
+                )
+              }
+            />
+          </label>
+          <button
+            class="cursor-pointer hover:text-red-500"
+            type="button"
+            onClick={() =>
               setAnalyses(
-                produce(
-                  (analyses) =>
-                    (analyses[props.cIdx()]!.settings.normalization = event
-                      .target.value as "off" | "global" | "plane"),
-                ),
+                produce((analyses) => analyses.splice(props.cIdx(), 1)),
               )
             }
           >
-            <option value="global">Global</option>
-            <option value="plane">Per Plane</option>
-            {
-              // <option value="off">Off</option>
-            }
-          </select>
-        </label>
-        <label
-          class="flex cursor-pointer gap-1"
-          title="Display traces in decibel"
-        >
-          dB
-          <input
-            type="checkbox"
-            required
-            checked={analysis().settings.dB}
-            onChange={(event) =>
-              setAnalyses(
-                produce(
-                  (analyses) =>
-                    (analyses[props.cIdx()]!.settings.dB =
-                      event.target.checked),
-                ),
-              )
-            }
-          />
-        </label>
-        <label
-          class="flex cursor-pointer gap-1"
-          title="Split theta and phi components or not"
-        >
-          Split Component
-          <input
-            type="checkbox"
-            required
-            checked={analysis().settings.split}
-            onChange={(event) =>
-              setAnalyses(
-                produce(
-                  (analyses) =>
-                    (analyses[props.cIdx()]!.settings.split =
-                      event.target.checked),
-                ),
-              )
-            }
-          />
-        </label>
-        <label class="flex gap-1">
-          Angular Resolution (deg)
-          <input
-            class="w-16 rounded pl-2 outline"
-            type="number"
-            required
-            min="0.1"
-            max="360"
-            step="0.1"
-            value={analysis().settings.resolution}
-            onChange={(event) =>
-              setAnalyses(
-                produce(
-                  (analyses) =>
-                    (analyses[props.cIdx()]!.settings.resolution =
-                      event.target.valueAsNumber),
-                ),
-              )
-            }
-          />
-        </label>
-        <button
-          class="cursor-pointer hover:text-red-500"
-          type="button"
-          onClick={() =>
-            setAnalyses(produce((analyses) => analyses.splice(props.cIdx(), 1)))
-          }
-        >
-          (Remove)
-        </button>
+            (Remove)
+          </button>
+        </div>
       </div>
       <div class="overflow-x-auto">
         <div class="mx-auto flex w-fit gap-4 p-1">
@@ -184,8 +188,8 @@ export default function (props: { cIdx: Accessor<number> }) {
           />
         </div>
       </div>
-      {analysis().settings.split && (
-        <div class="mx-auto w-fit my-3">
+      <Show when={analysis().settings.split}>
+        <div class="mx-auto my-3 w-fit">
           <span class="px-2 before:mx-2 before:inline-block before:h-1 before:w-10 before:rounded before:bg-[#1f77b4] before:align-middle">
             <var>θ</var> Component
           </span>
@@ -193,7 +197,7 @@ export default function (props: { cIdx: Accessor<number> }) {
             <var>ϕ</var> Component
           </span>
         </div>
-      )}
+      </Show>
       <Sources cIdx={props.cIdx} />
     </div>
   );

@@ -12,12 +12,12 @@ export default function (props: { cIdx: Accessor<number> }) {
 
   return (
     <div class="overflow-x-auto">
-      <div class="mx-auto grid max-w-fit min-w-max grid-cols-[repeat(13,minmax(0,max-content))] gap-2 p-2">
+      <div class="mx-auto grid w-max grid-cols-[repeat(13,minmax(0,max-content))] gap-2 py-2">
         <For each={sources()}>
           {(_, sIdx) => <SourceSetter cIdx={props.cIdx} sIdx={sIdx} />}
         </For>
         <button
-          class="col-span-full w-fit cursor-pointer rounded px-2 outline hover:text-sky-500"
+          class="col-span-full mx-1 w-fit cursor-pointer rounded px-2 outline hover:text-sky-500"
           type="button"
           title="Add new source"
           onClick={() =>
