@@ -11,26 +11,28 @@ export default function (props: { cIdx: Accessor<number> }) {
   const sources = () => analyses[props.cIdx()]!.sources;
 
   return (
-    <div class="mx-auto grid max-w-fit">
-      <For each={sources()}>
-        {(_, sIdx) => <SourceSetter cIdx={props.cIdx} sIdx={sIdx} />}
-      </For>
-      <button
-        class="my-2 w-fit cursor-pointer rounded px-2 outline hover:text-sky-500"
-        type="button"
-        title="Add new source"
-        onClick={() =>
-          setAnalyses(
-            produce((analyses) =>
-              analyses[props.cIdx()]!.sources.push(
-                structuredClone(halfWaveEDipole.sources[0]!),
+    <div class="overflow-x-auto">
+      <div class="mx-auto grid max-w-fit min-w-max grid-cols-[repeat(13,minmax(0,max-content))] gap-2 p-2">
+        <For each={sources()}>
+          {(_, sIdx) => <SourceSetter cIdx={props.cIdx} sIdx={sIdx} />}
+        </For>
+        <button
+          class="col-span-full w-fit cursor-pointer rounded px-2 outline hover:text-sky-500"
+          type="button"
+          title="Add new source"
+          onClick={() =>
+            setAnalyses(
+              produce((analyses) =>
+                analyses[props.cIdx()]!.sources.push(
+                  structuredClone(halfWaveEDipole.sources[0]!),
+                ),
               ),
-            ),
-          )
-        }
-      >
-        ➕ Add Source 2
-      </button>
+            )
+          }
+        >
+          ➕ Add Source 2
+        </button>
+      </div>
     </div>
   );
 }
@@ -42,7 +44,7 @@ function SourceSetter(props: {
   const source = () => analyses[props.cIdx()]!.sources[props.sIdx()]!;
 
   return (
-    <div class="flex flex-wrap gap-x-2 gap-y-1">
+    <div class="col-span-full grid grid-cols-subgrid">
       <span class="text-nowrap">Source {props.sIdx() + 1} ➡️</span>
       <label class="flex gap-1">
         Type:
@@ -64,32 +66,33 @@ function SourceSetter(props: {
           <option value="M">M</option>
         </select>
       </label>
-      {source().type === "J" && (
-        <label class="flex gap-1">
-          <span>
-            Length (×<var>λ</var>):
-          </span>
-          <input
-            class="w-16 rounded pl-2 outline"
-            type="number"
-            required
-            aria-required
-            min="0"
-            step="0.1"
-            value={source().length}
-            onChange={(event) =>
-              setAnalyses(
-                produce((analyses) => {
-                  if (Number.isFinite(event.target.valueAsNumber)) {
-                    analyses[props.cIdx()]!.sources[props.sIdx()]!.length =
-                      event.target.valueAsNumber;
-                  }
-                }),
-              )
-            }
-          />
-        </label>
-      )}
+      <label
+        class="flex gap-1"
+        classList={{ invisible: source().type !== "J" }}
+      >
+        <span>
+          Length (×<var>λ</var>):
+        </span>
+        <input
+          class="w-16 rounded pl-2 outline"
+          type="number"
+          required
+          aria-required
+          min="0"
+          step="0.1"
+          value={source().length}
+          onChange={(event) =>
+            setAnalyses(
+              produce((analyses) => {
+                if (Number.isFinite(event.target.valueAsNumber)) {
+                  analyses[props.cIdx()]!.sources[props.sIdx()]!.length =
+                    event.target.valueAsNumber;
+                }
+              }),
+            )
+          }
+        />
+      </label>
       <label class="flex gap-1">
         Amplitude:
         <input
