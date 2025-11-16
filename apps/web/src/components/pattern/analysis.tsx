@@ -47,7 +47,7 @@ export default function (props: { cIdx: Accessor<number> }) {
   });
 
   return (
-    <div class="w-full rounded p-4 outline">
+    <div class="mx-auto w-full max-w-max rounded p-4 outline">
       <div class="overflow-x-auto">
         <div class="flex w-max gap-x-4 py-2">
           <span>Analysis {props.cIdx() + 1}</span>
@@ -189,7 +189,7 @@ export default function (props: { cIdx: Accessor<number> }) {
         </div>
       </div>
       <Show when={analysis().settings.split}>
-        <div class="mx-auto my-3 w-fit">
+        <div class="mx-auto my-2 w-fit">
           <span class="px-2 before:mx-2 before:inline-block before:h-1 before:w-10 before:rounded before:bg-[#1f77b4] before:align-middle">
             <var>θ</var> Component
           </span>
