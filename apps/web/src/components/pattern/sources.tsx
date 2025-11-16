@@ -1,5 +1,5 @@
 import type { Accessor } from "solid-js";
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
 import { produce } from "solid-js/store";
 import {
   analyses,
@@ -30,7 +30,7 @@ export default function (props: { cIdx: Accessor<number> }) {
             )
           }
         >
-          ➕ Add Source 2
+          ➕ Add Source
         </button>
       </div>
     </div>
@@ -66,33 +66,35 @@ function SourceSetter(props: {
           <option value="M">M</option>
         </select>
       </label>
-      <label
-        class="flex gap-1"
-        classList={{ invisible: source().type !== "J" }}
+      <Show
+        when={source().type === "J"}
+        fallback={<span class="my-auto h-px min-w-16 rounded bg-white"></span>}
       >
-        <span>
-          Length (×<var>λ</var>):
-        </span>
-        <input
-          class="w-16 rounded pl-2 outline"
-          type="number"
-          required
-          aria-required
-          min="0"
-          step="0.1"
-          value={source().length}
-          onChange={(event) =>
-            setAnalyses(
-              produce((analyses) => {
-                if (Number.isFinite(event.target.valueAsNumber)) {
-                  analyses[props.cIdx()]!.sources[props.sIdx()]!.length =
-                    event.target.valueAsNumber;
-                }
-              }),
-            )
-          }
-        />
-      </label>
+        <label class="flex gap-1">
+          <span>
+            Length (×<var>λ</var>):
+          </span>
+          <input
+            class="w-16 rounded pl-2 outline"
+            type="number"
+            required
+            aria-required
+            min="0"
+            step="0.1"
+            value={source().length}
+            onChange={(event) =>
+              setAnalyses(
+                produce((analyses) => {
+                  if (Number.isFinite(event.target.valueAsNumber)) {
+                    analyses[props.cIdx()]!.sources[props.sIdx()]!.length =
+                      event.target.valueAsNumber;
+                  }
+                }),
+              )
+            }
+          />
+        </label>
+      </Show>
       <label class="flex gap-1">
         Amplitude:
         <input
