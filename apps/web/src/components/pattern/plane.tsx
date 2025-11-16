@@ -283,7 +283,60 @@ export default function (props: {
       );
 
     // Angle Ticks
-    const ticksMargin = 7;
+    const angleTicks = [
+      { key: "t0", text: `${props.primary} = 0°`, x: 1.3, y: -rMax - 2 },
+      {
+        key: "t1",
+        text: "30°",
+        x: rMax * Math.sin(Math.PI / 6) + 4,
+        y: -rMax * Math.cos(Math.PI / 6) - 2,
+      },
+      {
+        key: "t2",
+        text: "60°",
+        x: rMax * Math.sin(Math.PI / 3) + 6,
+        y: -rMax * Math.cos(Math.PI / 3),
+      },
+      { key: "t3", text: "90°", x: rMax * Math.sin(Math.PI / 2) + 6, y: 2 },
+      {
+        key: "t4",
+        text: "120°",
+        x: rMax * Math.sin(Math.PI / 3) + 8,
+        y: rMax * Math.cos(Math.PI / 3) + 4,
+      },
+      {
+        key: "t5",
+        text: "150°",
+        x: rMax * Math.sin(Math.PI / 6) + 6,
+        y: rMax * Math.cos(Math.PI / 6) + 6,
+      },
+      { key: "t6", text: "180°", x: 0, y: rMax + 7 },
+      {
+        key: "t7",
+        text: "150°",
+        x: -rMax * Math.sin(Math.PI / 6) - 6,
+        y: rMax * Math.cos(Math.PI / 6) + 6,
+      },
+      {
+        key: "t8",
+        text: "120°",
+        x: -rMax * Math.sin(Math.PI / 3) - 8,
+        y: rMax * Math.cos(Math.PI / 3) + 4,
+      },
+      { key: "t9", text: "90°", x: -rMax * Math.sin(Math.PI / 2) - 6, y: 2 },
+      {
+        key: "t10",
+        text: "60°",
+        x: -rMax * Math.sin(Math.PI / 3) - 5,
+        y: -rMax * Math.cos(Math.PI / 3),
+      },
+      {
+        key: "t11",
+        text: "30°",
+        x: -rMax * Math.sin(Math.PI / 6) - 2,
+        y: -rMax * Math.cos(Math.PI / 6) - 2,
+      },
+    ];
     const at = grid
       .selectAll("g.angle-ticks")
       .data([null])
@@ -291,29 +344,15 @@ export default function (props: {
       .classed("angle-ticks", true)
       .classed("fill-black", true)
       .attr("font-size", 6)
-      .attr("font-family", "Arial");
-    // at.selectAll("text")
-    //   .data(
-    //     [0, 45, 90, 135, 180, 135, 90, 45].map((v, i) =>
-    //       i === 0 ? `${props.primary} = ${v}°` : `${v}°`,
-    //     ),
-    //   )
-    //   .join("text")
-    //   .attr("x", (_, i) => (rMax + ticksMargin) * Math.sin((i * Math.PI) / 4))
-    //   .attr("y", (_, i) => -(rMax + ticksMargin) * Math.cos((i * Math.PI) / 4))
-    //   .text((d) => d)
-    //   .attr("text-anchor", "middle")
-    //   .attr("dominant-baseline", "middle");
-    at.selectAll("text.t0")
-      .data([null])
-      .join("text")
-      .text(`${props.primary} = 0°`)
+      .attr("font-family", "Arial")
       .attr("text-anchor", "middle");
-    at.selectAll("text.t1")
-      .data([null])
+    at.selectAll("text")
+      .data(angleTicks, (d) => (d as (typeof angleTicks)[number]).key)
       .join("text")
-      .text("30°")
-      .attr("text-anchor", "middle");
+      .attr("class", (d) => d.key)
+      .text((d) => d.text)
+      .attr("x", (d) => d.x)
+      .attr("y", (d) => d.y);
 
     // Traces
     const tg = svg
