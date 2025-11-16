@@ -269,7 +269,7 @@ export default function (props: {
       .join("g")
       .classed("angle", true);
     ag.selectAll("path")
-      .data(d3.range(8).map((d) => (d * Math.PI) / 4))
+      .data(d3.range(12).map((d) => (d * Math.PI) / 6))
       .join("path")
       .attr("fill", "none")
       .attr("stroke", "oklch(55.6% 0 0)")
@@ -288,22 +288,32 @@ export default function (props: {
       .selectAll("g.angle-ticks")
       .data([null])
       .join("g")
-      .classed("angle-ticks", true);
-    at.selectAll("text")
-      .data(
-        [0, 45, 90, 135, 180, 135, 90, 45].map((v, i) =>
-          i === 0 ? `${props.primary} = ${v}°` : `${v}°`,
-        ),
-      )
-      .join("text")
-      .attr("x", (_, i) => (rMax + ticksMargin) * Math.sin((i * Math.PI) / 4))
-      .attr("y", (_, i) => -(rMax + ticksMargin) * Math.cos((i * Math.PI) / 4))
-      .text((d) => d)
+      .classed("angle-ticks", true)
+      .classed("fill-black", true)
       .attr("font-size", 6)
-      .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "middle")
-      .attr("font-family", "Arial")
-      .classed("fill-black", true);
+      .attr("font-family", "Arial");
+    // at.selectAll("text")
+    //   .data(
+    //     [0, 45, 90, 135, 180, 135, 90, 45].map((v, i) =>
+    //       i === 0 ? `${props.primary} = ${v}°` : `${v}°`,
+    //     ),
+    //   )
+    //   .join("text")
+    //   .attr("x", (_, i) => (rMax + ticksMargin) * Math.sin((i * Math.PI) / 4))
+    //   .attr("y", (_, i) => -(rMax + ticksMargin) * Math.cos((i * Math.PI) / 4))
+    //   .text((d) => d)
+    //   .attr("text-anchor", "middle")
+    //   .attr("dominant-baseline", "middle");
+    at.selectAll("text.t0")
+      .data([null])
+      .join("text")
+      .text(`${props.primary} = 0°`)
+      .attr("text-anchor", "middle");
+    at.selectAll("text.t1")
+      .data([null])
+      .join("text")
+      .text("30°")
+      .attr("text-anchor", "middle");
 
     // Traces
     const tg = svg

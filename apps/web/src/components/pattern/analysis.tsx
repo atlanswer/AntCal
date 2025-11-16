@@ -185,7 +185,7 @@ export default function (props: { cIdx: Accessor<number> }) {
         </div>
       </div>
       {analysis().settings.split && (
-        <div class="mx-auto w-fit">
+        <div class="mx-auto w-fit my-3">
           <span class="px-2 before:mx-2 before:inline-block before:h-1 before:w-10 before:rounded before:bg-[#1f77b4] before:align-middle">
             <var>θ</var> Component
           </span>

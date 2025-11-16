@@ -11,12 +11,12 @@ export default function (props: { cIdx: Accessor<number> }) {
   const sources = () => analyses[props.cIdx()]!.sources;
 
   return (
-    <div>
+    <div class="mx-auto grid max-w-fit">
       <For each={sources()}>
         {(_, sIdx) => <SourceSetter cIdx={props.cIdx} sIdx={sIdx} />}
       </For>
       <button
-        class="cursor-pointer hover:text-sky-500"
+        class="my-2 w-fit cursor-pointer rounded px-2 outline hover:text-sky-500"
         type="button"
         title="Add new source"
         onClick={() =>
@@ -29,7 +29,7 @@ export default function (props: { cIdx: Accessor<number> }) {
           )
         }
       >
-        + Add Source
+        ➕ Add Source 2
       </button>
     </div>
   );
@@ -43,7 +43,7 @@ function SourceSetter(props: {
 
   return (
     <div class="flex flex-wrap gap-x-2 gap-y-1">
-      <span class="w-20">Source {props.sIdx() + 1}</span>
+      <span class="text-nowrap">Source {props.sIdx() + 1} ➡️</span>
       <label class="flex gap-1">
         Type:
         <select
