@@ -625,7 +625,7 @@ export default function Field() {
       ></dialog>
 
       <p>You can zoom and rotate the viewport. Double click to reset.</p>
-      <div class="grid w-full max-w-3xl grid-cols-[repeat(auto-fit,_14rem)] justify-items-stretch gap-4">
+      <div class="grid w-full max-w-3xl grid-cols-[repeat(auto-fit,14rem)] justify-items-stretch gap-4">
         <label title="Scale the figure to zoom in and out">
           Scale
           <input
