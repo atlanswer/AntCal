@@ -19,7 +19,8 @@ Analyze radiation pattern based on electric or magnetic sources.
 - [x] &nbsp;Legend
 - [x] &nbsp;Per plane or global normalization
 - [x] &nbsp;Split theta and phi components or view total
-- [ ] &nbsp;Ticks on the figure
+- [x] &nbsp;Adjust angle tick positions
+- [ ] &nbsp;Radial ticks on the figure
 - [ ] &nbsp;Stats for the pattern, e.g., max gain direction, HPBW
 - [ ] &nbsp;UI update
 - [ ] &nbsp;Rectangular figure
@@ -260,12 +261,8 @@ See [IEEE Author Center](https://journals.ieeeauthorcenter.ieee.org).
 > Line art may be provided in grayscale
 > OR bitmap colorspace.
 >
-> When preparing your graphics IEEE suggests
-> that you use of one of the
-> following Open Type fonts:
+> When preparing your graphics, IEEE suggests
+> that you use one of the following Open Type fonts:
 > Times New Roman, Helvetica, Arial, Cambria, and Symbol.
 >
 > —Preparation of Papers for IEEE Transactions and Journals (April 2013)
-
-$$
-$$
