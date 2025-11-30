@@ -354,6 +354,59 @@ export default function (props: {
       .attr("x", (d) => d.x)
       .attr("y", (d) => d.y);
 
+    // r ticks
+    const rAngle = Math.PI / 4;
+    const rTicks =
+      analysis().settings.dB ?
+        [
+          {
+            key: "0",
+            text: "0",
+            x: rMax * Math.sin(rAngle),
+            y: -rMax * Math.cos(rAngle),
+          },
+          {
+            key: "m10",
+            text: "-10",
+            x: ((rMax * Math.sin(rAngle)) / 4) * 3,
+            y: -((rMax * Math.cos(rAngle)) / 4) * 3,
+          },
+          {
+            key: "m20",
+            text: "-20",
+            x: ((rMax * Math.sin(rAngle)) / 4) * 2,
+            y: -((rMax * Math.cos(rAngle)) / 4) * 2,
+          },
+          {
+            key: "m30",
+            text: "-30",
+            x: ((rMax * Math.sin(rAngle)) / 4) * 1,
+            y: -((rMax * Math.cos(rAngle)) / 4) * 1,
+          },
+          {
+            key: "m40",
+            text: "-40",
+            x: ((rMax * Math.sin(rAngle)) / 4) * 0,
+            y: -((rMax * Math.cos(rAngle)) / 4) * 0,
+          },
+        ]
+      : [];
+    const rt = grid
+      .selectAll("g.r-ticks")
+      .data([null])
+      .join("g")
+      .classed("r-ticks", true)
+      .classed("fill-black", true)
+      .attr("font-size", 6)
+      .attr("font-family", "Arial");
+    rt.selectAll("text")
+      .data(rTicks, (d) => (d as (typeof rTicks)[number]).key)
+      .join("text")
+      .attr("class", (d) => d.key)
+      .text((d) => d.text)
+      .attr("x", (d) => d.x)
+      .attr("y", (d) => d.y);
+
     // Traces
     const tg = svg
       .selectAll("g.traces")
