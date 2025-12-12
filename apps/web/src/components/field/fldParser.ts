@@ -1,9 +1,4 @@
-import { setErrBadge } from "components/field/contexts";
-import {
-  type Vec3,
-  type Vec6,
-  getUnitVec3,
-} from "src/math/linearAlgebra";
+import { type Vec3, type Vec6, getUnitVec3 } from "src/math/linearAlgebra";
 
 function* genLines(text: string) {
   const lines = text.split("\n");
@@ -21,22 +16,15 @@ function parseElementNumber(line: string): number {
   return parseInt(numPart ?? "NaN");
 }
 
-function parseVector(line: string): Vec6 | undefined {
+function parseVector(line: string): Vec6 | null {
   const parsed = line
     .trim()
     .split(/\s+/)
     .map((s) => parseFloat(s));
 
-  if (parsed.length !== 6) {
-    setErrBadge({
-      err: "Unexpected Vector Shape",
-      detail: "Currently, only vectors with a length of 6 are supported.",
-    });
-
-    return;
+  if (parsed.length !== 6 || parsed.some(Number.isNaN)) {
+    return null;
   }
-
-  if (parsed.length !== 6 || parsed.some(Number.isNaN)) return;
 
   return parsed as Vec6;
 }
@@ -81,7 +69,7 @@ export function parseFld(text: string) {
     }
     if (/^-?\d/.test(line)) {
       const v6 = parseVector(line);
-      if (v6 === undefined) {
+      if (v6 === null) {
         continue;
       }
 

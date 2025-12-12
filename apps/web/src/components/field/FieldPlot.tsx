@@ -1,10 +1,11 @@
 import { createArrow } from "components/field/arrow";
 import { rainbow, rainbowDark } from "components/field/colorScheme";
-import { errBadge, setErrBadge, setFilename } from "components/field/contexts";
+import { setFilename } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
 import SVGDownload from "components/field/SVGDownload";
 import ArrowsIn from "components/icons/ArrowsIn";
 import ArrowsOut from "components/icons/ArrowsOut";
+import { useNotifications } from "components/ui/useNotifications";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
 import {
@@ -433,7 +434,6 @@ export default function Field() {
   return (
     <>
       <FileUpload />
-      <ErrorBadge />
       <div class="flex max-w-3xl flex-wrap justify-center gap-4 *:rounded *:bg-slate-500 *:px-2 *:font-mono *:text-sm *:leading-relaxed *:text-white">
         <span class="">Figure Width: 3.5 in</span>
         <span>DPI: {DPI}</span>
@@ -815,6 +815,8 @@ export default function Field() {
 }
 
 const FileUpload = () => {
+  const { addError, addSuccess } = useNotifications();
+
   return (
     <label class="grid grid-cols-1 gap-2">
       <p>
@@ -825,20 +827,22 @@ const FileUpload = () => {
         accept=".fld"
         class="rounded bg-sky-500 px-4 py-2 text-white file:border-y-0 file:border-r file:border-l-0 file:border-solid file:border-r-white file:bg-transparent file:pr-2 file:font-sans file:font-semibold file:text-white hover:bg-sky-700"
         onChange={(event) => {
-          setErrBadge(undefined);
-
           if (event.target.files!.length === 0) {
-            setErrBadge({
-              err: "No file selected",
-              detail: "Select one field file to visualize.",
-            });
+            addError("No file selected", "Select one field file to visualize.");
             return;
           }
           if (event.target.files!.length > 1) {
-            setErrBadge({
-              err: "Multiple files selected",
-              detail: "Only one field file can be visualize at the time.",
-            });
+            addError(
+              "Multiple files selected",
+              "Only one field file can be visualize at the time.",
+            );
+            return;
+          }
+          if (event.target.files!.length > 1) {
+            addError(
+              "Multiple files selected",
+              "Only one field file can be visualize at the time.",
+            );
             return;
           }
 
@@ -846,29 +850,41 @@ const FileUpload = () => {
 
           setFilename(uploadedFile.name);
 
-          uploadedFile.text().then((content) => {
-            const { starts, units, lens, stats } = parseFld(content);
+          uploadedFile
+            .text()
+            .then((content) => {
+              const { starts, units, lens, stats } = parseFld(content);
 
-            batch(() => {
-              setStarts(starts);
-              setUnits(units);
-              setLens(lens);
-              setStats(stats);
+              // Check if parsing failed (empty arrays indicate parsing issues)
+              if (starts.length === 0) {
+                addError(
+                  "Parsing Failed",
+                  "No valid vector data found in the file. Please check the file format.",
+                );
+                return;
+              }
+
+              batch(() => {
+                setStarts(starts);
+                setUnits(units);
+                setLens(lens);
+                setStats(stats);
+              });
+
+              // Show success notification
+              addSuccess(
+                "File Loaded",
+                `Successfully loaded ${uploadedFile.name} with ${starts.length} vectors`,
+              );
+            })
+            .catch((error) => {
+              addError(
+                "File Read Error",
+                `Failed to read the file: ${error instanceof Error ? error.message : "Unknown error"}`,
+              );
             });
-          });
         }}
       />
     </label>
   );
 };
-
-function ErrorBadge() {
-  return (
-    <Show when={errBadge()}>
-      <div class="rounded bg-red-500 p-4 text-white">
-        <p class="text-lg font-bold">{errBadge()!.err}</p>
-        <p>{errBadge()!.detail}</p>
-      </div>
-    </Show>
-  );
-}

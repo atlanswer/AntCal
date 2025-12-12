@@ -1,7 +1,23 @@
 ---
 import BaseLayout from "layouts/Base.astro";
+import DragDropUpload from "components/report/DragDropUpload";
 ---
 
 <BaseLayout>
-  <h1 class="mx-auto w-fit p-16">Work in Progress...</h1>
+  <div class="container mx-auto p-8">
+    <div class="mx-auto max-w-2xl">
+      <DragDropUpload
+        multiple={true}
+        accept={["application/json"]}
+        onFilesDrop={(files) => {
+          console.log("Files dropped:", files);
+          files.forEach((file) => {
+            console.log(`- ${file.name}: ${file.size} bytes`);
+          });
+        }}
+        maxSize={10 * 1024 * 1024}
+        maxFiles={10}
+      />
+    </div>
+  </div>
 </BaseLayout>

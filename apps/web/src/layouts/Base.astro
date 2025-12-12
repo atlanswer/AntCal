@@ -16,6 +16,7 @@ import "styles/global.css";
 
 import Header from "components/Header.astro";
 import Footer from "components/Footer.astro";
+import NotificationProvider from "components/ui/NotificationProvider";
 
 if (title === undefined) {
   const pathnameParts = Astro.url.pathname.split("/");
@@ -117,5 +118,6 @@ if (title === undefined) {
       <slot />
     </main>
     <Footer />
+    <NotificationProvider client:only="solid-js" />
   </body>
 </html>
