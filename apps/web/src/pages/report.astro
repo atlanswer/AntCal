@@ -1,22 +1,27 @@
 ---
 import BaseLayout from "layouts/Base.astro";
-import DragDropUpload from "components/report/DragDropUpload";
+import FileUpload from "components/ui/FileUpload";
 ---
 
 <BaseLayout>
   <div class="container mx-auto p-8">
     <div class="mx-auto max-w-2xl">
-      <DragDropUpload
+      <FileUpload
+        accept={[".csv"]}
+        acceptMime={["text/csv"]}
         multiple={true}
-        accept={["application/json"]}
+        maxSize={10 * 1024 * 1024}
+        maxFiles={10}
+        dragDropText="Upload CSV Files"
+        buttonText="Browse Files"
+        showFileList={true}
+        hideFilesAfterUpload={false}
         onFilesDrop={(files) => {
           console.log("Files dropped:", files);
           files.forEach((file) => {
             console.log(`- ${file.name}: ${file.size} bytes`);
           });
         }}
-        maxSize={10 * 1024 * 1024}
-        maxFiles={10}
       />
     </div>
   </div>
