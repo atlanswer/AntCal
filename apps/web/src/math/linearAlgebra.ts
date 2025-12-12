@@ -1,4 +1,7 @@
-export type Vec3 = [number, number, number];
+import * as v from "valibot";
+
+export const vec3Schema = v.tuple([v.number(), v.number(), v.number()]);
+export type Vec3 = v.InferOutput<typeof vec3Schema>;
 export type Vec6 = [number, number, number, number, number, number];
 
 export function addVec3(a: Vec3, b: Vec3): Vec3 {
