@@ -16,15 +16,11 @@ Analyze radiation pattern based on electric or magnetic sources.
 
 **TODOs**
 
-- [x] &nbsp;Legend
-- [x] &nbsp;Per plane or global normalization
-- [x] &nbsp;Split theta and phi components or view total
-- [x] &nbsp;Adjust angle tick positions
-- [ ] &nbsp;Radial ticks on the figure
+- [ ] &nbsp;UI updates
+    - [ ] &nbsp;Array creation tool
+- [ ] &nbsp;Radial range control
 - [ ] &nbsp;Stats for the pattern, e.g., max gain direction, HPBW
-- [ ] &nbsp;UI update
 - [ ] &nbsp;Rectangular figure
-- [ ] &nbsp;UI for creating arrays
 - [ ] &nbsp;Source placement visualization
 - [ ] &nbsp;3D spherical pattern
 
