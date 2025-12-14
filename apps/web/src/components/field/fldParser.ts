@@ -118,7 +118,7 @@ export function parseFld(text: string) {
       continue;
     }
 
-    console.error("Unrecognized line:");
+    console.error("[parseFld] Unrecognized line:");
     console.error(line);
   }
 

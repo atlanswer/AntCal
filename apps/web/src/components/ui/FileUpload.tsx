@@ -1,6 +1,8 @@
+import ArrowUpOnSquare from "components/icons/ArrowUpOnSquare";
+import ArrowUpOnSquareStack from "components/icons/ArrowUpOnSquareStack";
+import DocumentChartBar from "components/icons/DocumentChartBar";
 import { useNotifications } from "components/ui/useNotifications";
-import type { JSX } from "solid-js";
-import { createSignal, onCleanup, onMount } from "solid-js";
+import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 
 export interface FileUploadProps {
   /** File types to accept by extension, e.g., [".fld", ".json"] */
@@ -35,13 +37,13 @@ export interface FileUploadProps {
   showFileList?: boolean;
 }
 
-export default function FileUpload(props: FileUploadProps): JSX.Element {
+export default function FileUpload(props: FileUploadProps) {
   const [isDragging, setIsDragging] = createSignal(false);
   const [fileInputRef, setFileInputRef] = createSignal<HTMLInputElement>();
   const [uploadedFiles, setUploadedFiles] = createSignal<File[]>([]);
   const { addError } = useNotifications();
 
-  const defaultAccept = props.accept || [".fld"];
+  const defaultAccept = props.accept || [".csv"];
   const defaultMime = props.acceptMime || [
     "text/plain",
     "application/octet-stream",
@@ -152,6 +154,8 @@ export default function FileUpload(props: FileUploadProps): JSX.Element {
     const target = e.target as HTMLInputElement;
     if (target.files) {
       handleFiles(target.files);
+      // Reset input value to allow re-selecting the same file
+      target.value = "";
     }
   };
 
@@ -219,54 +223,10 @@ export default function FileUpload(props: FileUploadProps): JSX.Element {
         class="hidden"
       />
 
-      {
-        props.compactMode && props.currentFileName ?
-          // Compact mode: show current file info and upload button
-          <div class="space-y-2">
-            <div class="flex items-center text-sm text-gray-600">
-              <svg
-                class="mr-2 h-4 w-4 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.707.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              <span class="font-medium">Current:</span>
-              <span class="ml-1">{props.currentFileName}</span>
-              {props.currentFileSize && (
-                <span class="ml-2 text-gray-500">
-                  ({formatFileSize(props.currentFileSize)})
-                </span>
-              )}
-            </div>
-
-            <div
-              class={`relative cursor-pointer rounded border border-dashed p-3 text-center transition-colors ${
-                props.uploadAreaClass || ""
-              }`}
-              classList={{
-                "border-sky-500 bg-sky-50": isDragging(),
-                "border-gray-300 hover:border-sky-400 hover:bg-gray-50":
-                  !isDragging(),
-              }}
-              onClick={openFileDialog}
-            >
-              <button
-                type="button"
-                class="text-sm font-medium text-sky-600 hover:text-sky-800"
-              >
-                {props.buttonText || "Upload New File"}
-              </button>
-            </div>
-          </div>
-          // Large mode: full drag-and-drop area
-        : <div
+      <Show
+        when={props.compactMode && props.currentFileName}
+        fallback={
+          <div
             class={`relative rounded-lg border-2 border-dashed bg-neutral-100 p-8 text-center transition-colors ${
               props.uploadAreaClass || ""
             }`}
@@ -280,42 +240,46 @@ export default function FileUpload(props: FileUploadProps): JSX.Element {
             <div class="space-y-4">
               {/* Upload icon */}
               <div class="flex justify-center">
-                <svg
-                  class="h-12 w-12"
-                  classList={{
-                    "text-sky-500": isDragging(),
-                    "text-gray-400": !isDragging(),
-                  }}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                <Show
+                  when={props.multiple}
+                  fallback={
+                    <ArrowUpOnSquare
+                      classList={{
+                        "text-sky-500": isDragging(),
+                        "text-gray-400": !isDragging(),
+                      }}
+                    />
+                  }
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  <ArrowUpOnSquareStack
+                    classList={{
+                      "text-sky-500": isDragging(),
+                      "text-gray-400": !isDragging(),
+                    }}
                   />
-                </svg>
+                </Show>
               </div>
 
               {/* Upload text */}
               <div>
                 <p class="text-lg font-medium text-gray-900">
-                  {isDragging() ?
-                    "Drop files here"
-                  : props.dragDropText || "Upload Files"}
+                  <Show
+                    when={isDragging()}
+                    fallback={props.dragDropText || "Upload Files"}
+                  >
+                    Drop files here
+                  </Show>
                 </p>
                 <p class="text-sm text-gray-500">
                   Drag and drop {props.accept?.join(", ") || "files"} here, or
                   click to select files
                 </p>
-                {props.multiple && (
+                <Show when={props.multiple}>
                   <p class="text-xs text-gray-400">
                     Up to {maxFiles()} files, max{" "}
                     {Math.round(maxSize() / 1024 / 1024)} MB each
                   </p>
-                )}
+                </Show>
               </div>
 
               {/* Browse button */}
@@ -327,17 +291,123 @@ export default function FileUpload(props: FileUploadProps): JSX.Element {
               </button>
             </div>
           </div>
+        }
+      >
+        <div
+          class="relative flex items-center gap-3 rounded-lg border-2 border-dashed bg-neutral-100 p-4 transition-colors"
+          classList={{
+            "border-sky-500 bg-sky-50": isDragging(),
+            "border-neutral-300 hover:border-sky-400 hover:bg-neutral-300":
+              !isDragging(),
+          }}
+          onClick={openFileDialog}
+        >
+          {/* Left: File Section */}
+          <div class="min-w-0 flex-1">
+            {/* Current File Info */}
+            <div class="mb-1 flex items-center space-x-2">
+              <DocumentChartBar
+                classList={{
+                  "text-gray-400": true,
+                  "shrink-0": true,
+                }}
+              />
+              <div class="min-w-0">
+                <p class="truncate text-sm font-medium text-gray-900">
+                  Current: <code>{props.currentFileName}</code>
+                  {props.currentFileSize && (
+                    <span class="ml-1 text-xs text-gray-500">
+                      ({formatFileSize(props.currentFileSize)})
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
 
-      }
+            {/* Uploaded Files List */}
+            <Show when={props.showFileList && uploadedFiles().length > 0}>
+              <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-gray-600">
+                  <span>Uploaded ({uploadedFiles().length})</span>
+                  <Show when={props.multiple}>
+                    <button
+                      type="button"
+                      onClick={clearAllFiles}
+                      class="text-red-600 hover:text-red-800"
+                    >
+                      Clear All
+                    </button>
+                  </Show>
+                </div>
+                <div class="max-h-24 space-y-1 overflow-y-auto">
+                  <For each={uploadedFiles()}>
+                    {(file, index) => (
+                      <div class="flex items-center space-x-1 rounded bg-gray-50 p-1">
+                        <DocumentChartBar
+                          classList={{
+                            "text-gray-400": true,
+                            "shrink-0": true,
+                          }}
+                        />
+                        <div class="min-w-0 flex-1">
+                          <p class="truncate text-xs font-medium text-gray-900">
+                            <code>{file.name}</code>
+                          </p>
+                          <p class="text-xs text-gray-500">
+                            {formatFileSize(file.size)}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeFile(index())}
+                          class="shrink-0 rounded p-0.5 text-red-600 hover:bg-red-50 hover:text-red-800"
+                        >
+                          <svg
+                            class="h-3 w-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                  </For>
+                </div>
+              </div>
+            </Show>
+          </div>
+
+          {/* Right: Upload Section */}
+          <div class="shrink-0">
+            <button
+              type="button"
+              class="inline-flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-sky-500 px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-sky-700 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none"
+            >
+              {props.buttonText || "Upload"}
+            </button>
+          </div>
+        </div>
+      </Show>
 
       {/* File list */}
-      {props.showFileList && uploadedFiles().length > 0 && (
+      <Show
+        when={
+          props.showFileList && uploadedFiles().length > 0 && !props.compactMode
+        }
+      >
         <div class="mt-4 space-y-2">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-medium text-gray-900">
               Uploaded Files ({uploadedFiles().length})
             </h3>
-            {props.multiple && (
+            <Show when={props.multiple}>
               <button
                 type="button"
                 onClick={clearAllFiles}
@@ -345,58 +415,62 @@ export default function FileUpload(props: FileUploadProps): JSX.Element {
               >
                 Clear All
               </button>
-            )}
+            </Show>
           </div>
 
           <div class="space-y-2">
-            {uploadedFiles().map((file, index) => (
-              <div class="flex items-center justify-between rounded-md bg-gray-50 p-3">
-                <div class="flex items-center space-x-3">
-                  <svg
-                    class="h-5 w-5 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.707.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  <div>
-                    <p class="text-sm font-medium text-gray-900">{file.name}</p>
-                    <p class="text-xs text-gray-500">
-                      {formatFileSize(file.size)}
-                    </p>
+            <For each={uploadedFiles()}>
+              {(file, index) => (
+                <div class="flex items-center justify-between rounded-md bg-gray-50 p-3">
+                  <div class="flex items-center space-x-3">
+                    <svg
+                      class="h-5 w-5 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.707.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                    <div>
+                      <p class="text-sm font-medium text-gray-900">
+                        <code>{file.name}</code>
+                      </p>
+                      <p class="text-xs text-gray-500">
+                        {formatFileSize(file.size)}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <button
-                  type="button"
-                  onClick={() => removeFile(index)}
-                  class="rounded p-1 text-red-600 hover:bg-red-50 hover:text-red-800"
-                >
-                  <svg
-                    class="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                  <button
+                    type="button"
+                    onClick={() => removeFile(index())}
+                    class="rounded p-1 text-red-600 hover:bg-red-50 hover:text-red-800"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            ))}
+                    <svg
+                      class="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              )}
+            </For>
           </div>
         </div>
-      )}
+      </Show>
     </div>
   );
 }
