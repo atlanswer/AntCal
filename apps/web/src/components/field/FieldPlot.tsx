@@ -3,12 +3,12 @@ import { rainbow, rainbowDark } from "components/field/colorScheme";
 import { setFilename } from "components/field/contexts";
 import { parseFld } from "components/field/fldParser";
 import SVGDownload from "components/field/SVGDownload";
-import { useNotifications } from "components/ui/useNotifications";
 import ArrowsIn from "components/icons/ArrowsIn";
 import ArrowsOut from "components/icons/ArrowsOut";
+import FileUpload from "components/ui/FileUpload";
+import { useNotifications } from "components/ui/useNotifications";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
-import FileUpload from "components/ui/FileUpload";
 import {
   batch,
   createEffect,
@@ -438,7 +438,7 @@ export default function Field() {
     );
   });
 
-  // File upload handler
+  /** File upload handler */
   const handleFieldUpload = (files: File[]) => {
     const file = files[0];
     if (!file) return;
@@ -496,396 +496,425 @@ export default function Field() {
 
   return (
     <>
-      <FileUpload
-        accept={[".fld"]}
-        multiple={false}
-        hideFilesAfterUpload={true}
-        compactMode={hasFile()}
-        showCurrentFile={hasFile()}
-        currentFileName={currentFileName()}
-        currentFileSize={currentFileSize()}
-        dragDropText={hasFile() ? "" : "Upload Field Data (.fld) to visualize"}
-        buttonText={hasFile() ? "Upload New File" : "Choose .fld File"}
-        uploadAreaClass={hasFile() ? "p-3" : "p-8"}
-        onFilesDrop={handleFieldUpload}
-      />
-      <div class="flex max-w-3xl flex-wrap justify-center gap-4 *:rounded *:bg-slate-500 *:px-2 *:font-mono *:text-sm *:leading-relaxed *:text-white">
-        <span class="">Figure Width: 3.5 in</span>
-        <span>DPI: {DPI}</span>
-        <span>#Vectors: {lens().length === 0 ? "-" : lens().length}</span>
-        <span>
-          Min Vector Len: {stats.vLenMin === -1 ? "-" : stats.vLenMin}
-        </span>
-        <span>
-          Max Vector Len: {stats.vLenMax === -1 ? "-" : stats.vLenMax}
-        </span>
-        <span>X span: {stats.xSpan === 0 ? "-" : stats.xSpan} m</span>
-        <span>Y span: {stats.ySpan === 0 ? "-" : stats.ySpan} m</span>
-        <span>Z span: {stats.zSpan === 0 ? "-" : stats.zSpan} m</span>
+      <div class="mx-auto w-full max-w-3xl">
+        <FileUpload
+          accept={[".fld"]}
+          multiple={false}
+          hideFilesAfterUpload={true}
+          compactMode={hasFile()}
+          showCurrentFile={hasFile()}
+          currentFileName={currentFileName()}
+          currentFileSize={currentFileSize()}
+          dragDropText={
+            hasFile() ? "" : "Upload Field Data (.fld) to visualize"
+          }
+          buttonText={hasFile() ? "Upload New File" : "Choose .fld File"}
+          uploadAreaClass={hasFile() ? "p-3" : "p-8"}
+          onFilesDrop={handleFieldUpload}
+        />
       </div>
-      <div class="mx-auto w-full max-w-3xl" id={idNormalView}>
-        <Portal mount={svgContainer()!}>
-          <div class="grid w-full max-w-3xl grid-cols-1 grid-rows-1 rounded outline">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              ref={svgRef}
-              viewBox={`0 0 ${widthInPoints} ${heightInPoints()}`}
-              preserveAspectRatio="xMidYMid meet"
-              class="col-start-1 row-start-1 h-full w-full"
-            >
-              <defs>
-                <linearGradient
-                  id="mathematica-rainbow"
-                  x1="0"
-                  x2="1"
-                  y1="0"
-                  y2="0"
-                >
-                  <stop offset="0%" stop-color="#781b86" />
-                  <stop offset="3.448%" stop-color="#641c97" />
-                  <stop offset="6.896%" stop-color="#4e21ac" />
-                  <stop offset="10.344%" stop-color="#462eba" />
-                  <stop offset="13.793%" stop-color="#3f40c6" />
-                  <stop offset="17.241%" stop-color="#3e52cd" />
-                  <stop offset="20.689%" stop-color="#4066cf" />
-                  <stop offset="24.137%" stop-color="#4377cd" />
-                  <stop offset="27.586%" stop-color="#4886c7" />
-                  <stop offset="31.034%" stop-color="#4d94bd" />
-                  <stop offset="34.482%" stop-color="#559eb1" />
-                  <stop offset="37.931%" stop-color="#5da8a3" />
-                  <stop offset="41.379%" stop-color="#67ae95" />
-                  <stop offset="44.827%" stop-color="#72b585" />
-                  <stop offset="48.275%" stop-color="#7cb878" />
-                  <stop offset="51.724%" stop-color="#8bbb6a" />
-                  <stop offset="55.172%" stop-color="#96bd60" />
-                  <stop offset="58.620%" stop-color="#a5be55" />
-                  <stop offset="62.068%" stop-color="#b2be4d" />
-                  <stop offset="65.517%" stop-color="#c0bb47" />
-                  <stop offset="68.965%" stop-color="#ccb842" />
-                  <stop offset="72.413%" stop-color="#d6b03e" />
-                  <stop offset="75.862%" stop-color="#dea83b" />
-                  <stop offset="79.310%" stop-color="#e39b39" />
-                  <stop offset="82.758%" stop-color="#e68b35" />
-                  <stop offset="86.206%" stop-color="#e77a32" />
-                  <stop offset="89.655%" stop-color="#e4632d" />
-                  <stop offset="93.103%" stop-color="#e14e2a" />
-                  <stop offset="96.551%" stop-color="#de3525" />
-                  <stop offset="100%" stop-color="#db2121" />
-                </linearGradient>
-                <linearGradient
-                  id="mathematica-rainbow-dark"
-                  x1="0"
-                  x2="1"
-                  y1="0"
-                  y2="0"
-                >
-                  <stop offset="0%" stop-color="#3c5793" />
-                  <stop offset="3.448%" stop-color="#3e5791" />
-                  <stop offset="6.896%" stop-color="#3f5790" />
-                  <stop offset="10.344%" stop-color="#40588e" />
-                  <stop offset="13.793%" stop-color="#425f7e" />
-                  <stop offset="17.241%" stop-color="#42666f" />
-                  <stop offset="20.689%" stop-color="#446d60" />
-                  <stop offset="24.137%" stop-color="#467156" />
-                  <stop offset="27.586%" stop-color="#48764d" />
-                  <stop offset="31.034%" stop-color="#4d7c44" />
-                  <stop offset="34.482%" stop-color="#588342" />
-                  <stop offset="37.931%" stop-color="#648a3f" />
-                  <stop offset="41.379%" stop-color="#70923e" />
-                  <stop offset="44.827%" stop-color="#859d40" />
-                  <stop offset="48.275%" stop-color="#95a642" />
-                  <stop offset="51.724%" stop-color="#a9b145" />
-                  <stop offset="55.172%" stop-color="#b8b848" />
-                  <stop offset="58.620%" stop-color="#cac14c" />
-                  <stop offset="62.068%" stop-color="#d3c24e" />
-                  <stop offset="65.517%" stop-color="#d9be51" />
-                  <stop offset="68.965%" stop-color="#dfbc53" />
-                  <stop offset="72.413%" stop-color="#dcad51" />
-                  <stop offset="75.862%" stop-color="#d69a50" />
-                  <stop offset="79.310%" stop-color="#d1884e" />
-                  <stop offset="82.758%" stop-color="#c96f48" />
-                  <stop offset="86.206%" stop-color="#c25741" />
-                  <stop offset="89.655%" stop-color="#ba3d3b" />
-                  <stop offset="93.103%" stop-color="#ba3d3b" />
-                  <stop offset="96.551%" stop-color="#ba3d3b" />
-                  <stop offset="100%" stop-color="#ba3d3b" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <div class="pointer-events-none col-start-1 row-start-1 flex h-full w-full flex-col items-start justify-between p-4">
-              <div class="pointer-events-auto flex w-full gap-4 overflow-x-auto *:cursor-pointer *:rounded *:bg-slate-500 *:px-4 *:py-2 *:font-semibold *:text-white *:hover:bg-slate-700">
-                <button
-                  type="button"
-                  onClick={() =>
-                    batch(() => {
-                      setRotX(rotXDefault);
-                      setRotZ(rotZDefault);
-                      d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
-                    })
-                  }
-                >
-                  Isometric
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    batch(() => {
-                      setRotX(0.5);
-                      setRotZ(0);
-                      d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
-                    })
-                  }
-                >
-                  YZ
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    batch(() => {
-                      setRotX(0.5);
-                      setRotZ(-0.5);
-                      d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
-                    })
-                  }
-                >
-                  XZ
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    batch(() => {
-                      setRotX(0);
-                      setRotZ(0);
-                      d3.select(svgRef!).call(zoom.transform, d3.zoomIdentity);
-                    })
-                  }
-                >
-                  XY
-                </button>
-              </div>
-              <div class="pointer-events-auto flex w-full justify-between gap-4 overflow-x-auto">
-                <SVGDownload target={svgRef!} />
-                <button
-                  type="button"
-                  class="cursor-pointer rounded bg-slate-500 px-2 py-2 text-white hover:bg-slate-700"
-                  onClick={() => {
-                    const largeView = document.getElementById(idLargeView);
-                    const normalView = document.getElementById(idNormalView);
-                    if (largeView instanceof HTMLDialogElement) {
-                      if (largeViewOpened()) {
-                        largeView.close();
-                        setSvgContainer(normalView);
-                        setLargeViewOpened(false);
-                      } else {
-                        largeView.showModal();
-                        setSvgContainer(largeView);
-                        setLargeViewOpened(true);
-                      }
-                    }
-                  }}
-                >
-                  <Show when={largeViewOpened()} fallback={<ArrowsOut />}>
-                    <ArrowsIn />
-                  </Show>
-                </button>
-              </div>
-            </div>
+      <div class="flex flex-col gap-8 xl:flex-row xl:items-center">
+        <div class="flex flex-1 flex-col gap-4">
+          <div class="flex max-w-3xl flex-wrap justify-center gap-4 *:rounded *:bg-slate-500 *:px-2 *:font-mono *:text-sm *:leading-relaxed *:text-white">
+            <span class="">Figure Width: 3.5 in</span>
+            <span>DPI: {DPI}</span>
+            <span>#Vectors: {lens().length === 0 ? "-" : lens().length}</span>
+            <span>
+              Min Vector Len: {stats.vLenMin === -1 ? "-" : stats.vLenMin}
+            </span>
+            <span>
+              Max Vector Len: {stats.vLenMax === -1 ? "-" : stats.vLenMax}
+            </span>
+            <span>X span: {stats.xSpan === 0 ? "-" : stats.xSpan} m</span>
+            <span>Y span: {stats.ySpan === 0 ? "-" : stats.ySpan} m</span>
+            <span>Z span: {stats.zSpan === 0 ? "-" : stats.zSpan} m</span>
           </div>
-        </Portal>
-      </div>
+          <div class="mx-auto w-full max-w-3xl xl:max-w-5xl" id={idNormalView}>
+            <Portal mount={svgContainer()!}>
+              <div class="grid w-full max-w-3xl grid-cols-1 grid-rows-1 rounded outline">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  ref={svgRef}
+                  viewBox={`0 0 ${widthInPoints} ${heightInPoints()}`}
+                  preserveAspectRatio="xMidYMid meet"
+                  class="col-start-1 row-start-1 h-full w-full"
+                >
+                  <defs>
+                    <linearGradient
+                      id="mathematica-rainbow"
+                      x1="0"
+                      x2="1"
+                      y1="0"
+                      y2="0"
+                    >
+                      <stop offset="0%" stop-color="#781b86" />
+                      <stop offset="3.448%" stop-color="#641c97" />
+                      <stop offset="6.896%" stop-color="#4e21ac" />
+                      <stop offset="10.344%" stop-color="#462eba" />
+                      <stop offset="13.793%" stop-color="#3f40c6" />
+                      <stop offset="17.241%" stop-color="#3e52cd" />
+                      <stop offset="20.689%" stop-color="#4066cf" />
+                      <stop offset="24.137%" stop-color="#4377cd" />
+                      <stop offset="27.586%" stop-color="#4886c7" />
+                      <stop offset="31.034%" stop-color="#4d94bd" />
+                      <stop offset="34.482%" stop-color="#559eb1" />
+                      <stop offset="37.931%" stop-color="#5da8a3" />
+                      <stop offset="41.379%" stop-color="#67ae95" />
+                      <stop offset="44.827%" stop-color="#72b585" />
+                      <stop offset="48.275%" stop-color="#7cb878" />
+                      <stop offset="51.724%" stop-color="#8bbb6a" />
+                      <stop offset="55.172%" stop-color="#96bd60" />
+                      <stop offset="58.620%" stop-color="#a5be55" />
+                      <stop offset="62.068%" stop-color="#b2be4d" />
+                      <stop offset="65.517%" stop-color="#c0bb47" />
+                      <stop offset="68.965%" stop-color="#ccb842" />
+                      <stop offset="72.413%" stop-color="#d6b03e" />
+                      <stop offset="75.862%" stop-color="#dea83b" />
+                      <stop offset="79.310%" stop-color="#e39b39" />
+                      <stop offset="82.758%" stop-color="#e68b35" />
+                      <stop offset="86.206%" stop-color="#e77a32" />
+                      <stop offset="89.655%" stop-color="#e4632d" />
+                      <stop offset="93.103%" stop-color="#e14e2a" />
+                      <stop offset="96.551%" stop-color="#de3525" />
+                      <stop offset="100%" stop-color="#db2121" />
+                    </linearGradient>
+                    <linearGradient
+                      id="mathematica-rainbow-dark"
+                      x1="0"
+                      x2="1"
+                      y1="0"
+                      y2="0"
+                    >
+                      <stop offset="0%" stop-color="#3c5793" />
+                      <stop offset="3.448%" stop-color="#3e5791" />
+                      <stop offset="6.896%" stop-color="#3f5790" />
+                      <stop offset="10.344%" stop-color="#40588e" />
+                      <stop offset="13.793%" stop-color="#425f7e" />
+                      <stop offset="17.241%" stop-color="#42666f" />
+                      <stop offset="20.689%" stop-color="#446d60" />
+                      <stop offset="24.137%" stop-color="#467156" />
+                      <stop offset="27.586%" stop-color="#48764d" />
+                      <stop offset="31.034%" stop-color="#4d7c44" />
+                      <stop offset="34.482%" stop-color="#588342" />
+                      <stop offset="37.931%" stop-color="#648a3f" />
+                      <stop offset="41.379%" stop-color="#70923e" />
+                      <stop offset="44.827%" stop-color="#859d40" />
+                      <stop offset="48.275%" stop-color="#95a642" />
+                      <stop offset="51.724%" stop-color="#a9b145" />
+                      <stop offset="55.172%" stop-color="#b8b848" />
+                      <stop offset="58.620%" stop-color="#cac14c" />
+                      <stop offset="62.068%" stop-color="#d3c24e" />
+                      <stop offset="65.517%" stop-color="#d9be51" />
+                      <stop offset="68.965%" stop-color="#dfbc53" />
+                      <stop offset="72.413%" stop-color="#dcad51" />
+                      <stop offset="75.862%" stop-color="#d69a50" />
+                      <stop offset="79.310%" stop-color="#d1884e" />
+                      <stop offset="82.758%" stop-color="#c96f48" />
+                      <stop offset="86.206%" stop-color="#c25741" />
+                      <stop offset="89.655%" stop-color="#ba3d3b" />
+                      <stop offset="93.103%" stop-color="#ba3d3b" />
+                      <stop offset="96.551%" stop-color="#ba3d3b" />
+                      <stop offset="100%" stop-color="#ba3d3b" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="pointer-events-none col-start-1 row-start-1 flex h-full w-full flex-col items-start justify-between p-4">
+                  <div class="pointer-events-auto flex w-full gap-4 overflow-x-auto *:cursor-pointer *:rounded *:bg-slate-500 *:px-4 *:py-2 *:font-semibold *:text-white *:hover:bg-slate-700">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        batch(() => {
+                          setRotX(rotXDefault);
+                          setRotZ(rotZDefault);
+                          d3.select(svgRef!).call(
+                            zoom.transform,
+                            d3.zoomIdentity,
+                          );
+                        })
+                      }
+                    >
+                      Isometric
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        batch(() => {
+                          setRotX(0.5);
+                          setRotZ(0);
+                          d3.select(svgRef!).call(
+                            zoom.transform,
+                            d3.zoomIdentity,
+                          );
+                        })
+                      }
+                    >
+                      YZ
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        batch(() => {
+                          setRotX(0.5);
+                          setRotZ(-0.5);
+                          d3.select(svgRef!).call(
+                            zoom.transform,
+                            d3.zoomIdentity,
+                          );
+                        })
+                      }
+                    >
+                      XZ
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        batch(() => {
+                          setRotX(0);
+                          setRotZ(0);
+                          d3.select(svgRef!).call(
+                            zoom.transform,
+                            d3.zoomIdentity,
+                          );
+                        })
+                      }
+                    >
+                      XY
+                    </button>
+                  </div>
+                  <div class="pointer-events-auto flex w-full justify-between gap-4 overflow-x-auto">
+                    <SVGDownload target={svgRef!} />
+                    <button
+                      type="button"
+                      class="cursor-pointer rounded bg-slate-500 px-2 py-2 text-white hover:bg-slate-700"
+                      onClick={() => {
+                        const largeView = document.getElementById(idLargeView);
+                        const normalView =
+                          document.getElementById(idNormalView);
+                        if (largeView instanceof HTMLDialogElement) {
+                          if (largeViewOpened()) {
+                            largeView.close();
+                            setSvgContainer(normalView);
+                            setLargeViewOpened(false);
+                          } else {
+                            largeView.showModal();
+                            setSvgContainer(largeView);
+                            setLargeViewOpened(true);
+                          }
+                        }
+                      }}
+                    >
+                      <Show when={largeViewOpened()} fallback={<ArrowsOut />}>
+                        <ArrowsIn />
+                      </Show>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </Portal>
+          </div>
 
-      <dialog
-        id={idLargeView}
-        class="absolute m-auto h-screen w-screen"
-      ></dialog>
+          <dialog
+            id={idLargeView}
+            class="absolute m-auto h-screen w-screen"
+          ></dialog>
 
-      <p>You can zoom and rotate the viewport. Double click to reset.</p>
-      <div class="grid w-full max-w-3xl grid-cols-[repeat(auto-fit,14rem)] justify-items-stretch gap-4">
-        <label title="Scale the figure to zoom in and out">
-          Scale
-          <input
-            class="w-full rounded pl-2 outline"
-            type="number"
-            required
-            value={scale()}
-            onChange={(event) => setScale(event.target.valueAsNumber)}
-          />
-        </label>
-        <label title="Rotate the figure in the θ direction">
-          <em>θ</em> Rotation (π)
-          <input
-            class="w-full rounded pl-2 outline"
-            type="number"
-            required
-            min="0"
-            step="0.01"
-            value={rotX()}
-            onChange={(event) => setRotX(event.target.valueAsNumber)}
-          />
-        </label>
-        <label title="Rotate the figure around the Z axis">
-          <em>ϕ</em> Rotation (π)
-          <input
-            class="w-full rounded pl-2 outline"
-            type="number"
-            required
-            min="0"
-            step="0.01"
-            value={rotZ()}
-            onChange={(event) => setRotZ(event.target.valueAsNumber)}
-          />
-        </label>
-        <label title="Change the figure height, the width is fixed at 3.5 in">
-          Figure Height (in)
-          <input
-            class="w-full rounded pl-2 outline"
-            type="number"
-            required
-            min="0.5"
-            step="0.5"
-            value={height()}
-            onChange={(event) => setHeight(event.target.valueAsNumber)}
-          />
-        </label>
-        <label class="cursor-pointer" title="Toggle the axes on and off">
-          Enable Axes
-          <input
-            class="block translate-x-1 translate-y-1 scale-150"
-            type="checkbox"
-            required
-            checked
-            onChange={(event) => setAxesEnabled(event.target.checked)}
-          />
-        </label>
-        <label class="cursor-pointer" title="Map Vector Size">
-          Map Vector Size
-          <input
-            class="block translate-x-1 translate-y-1 scale-150"
-            type="checkbox"
-            required
-            checked
-            onChange={(event) => setMapSize(event.target.checked)}
-          />
-        </label>
-        <label title="Change the size of the vector arrows">
-          Vector Arrow Size
-          <input
-            class="w-full rounded pl-2 outline"
-            type="number"
-            required
-            min="0"
-            step="0.1"
-            value={vScale()}
-            onChange={(event) => setVScale(event.target.valueAsNumber)}
-          />
-        </label>
-        <label title="Limit the minimum length of vectors">
-          Min Vector Length
-          <input
-            class="w-full rounded pl-2 outline"
-            type="number"
-            required
-            min="0"
-            step="0.01"
-            value={vLenMin()}
-            onChange={(event) => setVLenMin(event.target.valueAsNumber)}
-          />
-        </label>
-        <label title="Limit the maximum length of vectors">
-          Max Vector Length
-          <input
-            class="w-full rounded pl-2 outline"
-            type="number"
-            required
-            min="0"
-            step="0.01"
-            value={vLenMax()}
-            onChange={(event) => setVLenMax(event.target.valueAsNumber)}
-          />
-        </label>
-        <label title="Rotate the vector arrows">
-          Arrow Rotation:
-          <input
-            class="w-full"
-            type="range"
-            required
-            min="0"
-            max="2"
-            step="0.05"
-            value={rotArrow()}
-            onInput={(event) => setRotArrow(event.target.valueAsNumber)}
-          />
-        </label>
-        <label title="Change the vector arrow placement relating to its staring position">
-          Arrow Alignment
-          <select
-            class="block cursor-pointer rounded px-2 py-0.5 outline"
-            required
-            onChange={(event) =>
-              setArrowAlign(event.target.value as "start" | "middle" | "end")
-            }
-          >
-            <option value="start">Start</option>
-            <option value="middle" selected>
-              Middle
-            </option>
-            <option value="end">End</option>
-          </select>
-        </label>
-        <label class="cursor-pointer" title="Include the vector tails or not">
-          Include Arrow Tail
-          <input
-            class="block translate-x-1 translate-y-1 scale-150"
-            type="checkbox"
-            required
-            checked
-            onChange={(event) => setArrowTail(event.target.checked)}
-          />
-        </label>
-        <label title="Change the length of the arrow tails">
-          Arrow Tail Length
-          <input
-            class="w-full rounded pl-2 outline"
-            type="number"
-            min="0"
-            step="0.1"
-            required
-            value={arrowTailLen()}
-            onChange={(event) => setArrowTailLen(event.target.valueAsNumber)}
-          />
-        </label>
-        <label class="cursor-pointer" title="Include the colorbar or not">
-          Include Colorbar
-          <input
-            class="block translate-x-1 translate-y-1 scale-150"
-            type="checkbox"
-            required
-            checked
-            onChange={(event) =>
-              setFigConf("hasColorbar", event.target.checked)
-            }
-          />
-        </label>
-        <label title="Change color scheme">
-          Color Scheme
-          <select
-            class="block cursor-pointer rounded px-2 py-0.5 outline"
-            required
-            onChange={(event) =>
-              setFigConf(
-                "colorScheme",
-                event.target.value as "rainbow" | "rainbow-dark",
-              )
-            }
-          >
-            <option value="rainbow">Mathematica Rainbow</option>
-            <option value="rainbow-dark" selected>
-              Mathematica Dark Rainbow
-            </option>
-          </select>
-        </label>
+          <p>You can zoom and rotate the viewport. Double click to reset.</p>
+        </div>
+        <div class="shrink-0 xl:w-2xl">
+          <div class="grid w-full grid-cols-1 justify-items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <label title="Scale the figure to zoom in and out">
+              Scale
+              <input
+                class="w-full rounded pl-2 outline"
+                type="number"
+                required
+                value={scale()}
+                onChange={(event) => setScale(event.target.valueAsNumber)}
+              />
+            </label>
+            <label title="Rotate the figure in the θ direction">
+              <em>θ</em> Rotation (π)
+              <input
+                class="w-full rounded pl-2 outline"
+                type="number"
+                required
+                min="0"
+                step="0.01"
+                value={rotX()}
+                onChange={(event) => setRotX(event.target.valueAsNumber)}
+              />
+            </label>
+            <label title="Rotate the figure around the Z axis">
+              <em>ϕ</em> Rotation (π)
+              <input
+                class="w-full rounded pl-2 outline"
+                type="number"
+                required
+                min="0"
+                step="0.01"
+                value={rotZ()}
+                onChange={(event) => setRotZ(event.target.valueAsNumber)}
+              />
+            </label>
+            <label title="Change the figure height, the width is fixed at 3.5 in">
+              Figure Height (in)
+              <input
+                class="w-full rounded pl-2 outline"
+                type="number"
+                required
+                min="0.5"
+                step="0.5"
+                value={height()}
+                onChange={(event) => setHeight(event.target.valueAsNumber)}
+              />
+            </label>
+            <label class="cursor-pointer" title="Toggle the axes on and off">
+              Enable Axes
+              <input
+                class="block translate-x-1 translate-y-1 scale-150"
+                type="checkbox"
+                required
+                checked
+                onChange={(event) => setAxesEnabled(event.target.checked)}
+              />
+            </label>
+            <label class="cursor-pointer" title="Map Vector Size">
+              Map Vector Size
+              <input
+                class="block translate-x-1 translate-y-1 scale-150"
+                type="checkbox"
+                required
+                checked
+                onChange={(event) => setMapSize(event.target.checked)}
+              />
+            </label>
+            <label title="Change the size of the vector arrows">
+              Vector Arrow Size
+              <input
+                class="w-full rounded pl-2 outline"
+                type="number"
+                required
+                min="0"
+                step="0.1"
+                value={vScale()}
+                onChange={(event) => setVScale(event.target.valueAsNumber)}
+              />
+            </label>
+            <label title="Limit the minimum length of vectors">
+              Min Vector Length
+              <input
+                class="w-full rounded pl-2 outline"
+                type="number"
+                required
+                min="0"
+                step="0.01"
+                value={vLenMin()}
+                onChange={(event) => setVLenMin(event.target.valueAsNumber)}
+              />
+            </label>
+            <label title="Limit the maximum length of vectors">
+              Max Vector Length
+              <input
+                class="w-full rounded pl-2 outline"
+                type="number"
+                required
+                min="0"
+                step="0.01"
+                value={vLenMax()}
+                onChange={(event) => setVLenMax(event.target.valueAsNumber)}
+              />
+            </label>
+            <label title="Rotate the vector arrows">
+              Arrow Rotation:
+              <input
+                class="w-full"
+                type="range"
+                required
+                min="0"
+                max="2"
+                step="0.05"
+                value={rotArrow()}
+                onInput={(event) => setRotArrow(event.target.valueAsNumber)}
+              />
+            </label>
+            <label title="Change the vector arrow placement relating to its staring position">
+              Arrow Alignment
+              <select
+                class="block cursor-pointer rounded px-2 py-0.5 outline"
+                required
+                onChange={(event) =>
+                  setArrowAlign(
+                    event.target.value as "start" | "middle" | "end",
+                  )
+                }
+              >
+                <option value="start">Start</option>
+                <option value="middle" selected>
+                  Middle
+                </option>
+                <option value="end">End</option>
+              </select>
+            </label>
+            <label
+              class="cursor-pointer"
+              title="Include the vector tails or not"
+            >
+              Include Arrow Tail
+              <input
+                class="block translate-x-1 translate-y-1 scale-150"
+                type="checkbox"
+                required
+                checked
+                onChange={(event) => setArrowTail(event.target.checked)}
+              />
+            </label>
+            <label title="Change the length of the arrow tails">
+              Arrow Tail Length
+              <input
+                class="w-full rounded pl-2 outline"
+                type="number"
+                min="0"
+                step="0.1"
+                required
+                value={arrowTailLen()}
+                onChange={(event) =>
+                  setArrowTailLen(event.target.valueAsNumber)
+                }
+              />
+            </label>
+            <label class="cursor-pointer" title="Include the colorbar or not">
+              Include Colorbar
+              <input
+                class="block translate-x-1 translate-y-1 scale-150"
+                type="checkbox"
+                required
+                checked
+                onChange={(event) =>
+                  setFigConf("hasColorbar", event.target.checked)
+                }
+              />
+            </label>
+            <label title="Change color scheme">
+              Color Scheme
+              <select
+                class="block cursor-pointer rounded px-2 py-0.5 outline"
+                required
+                onChange={(event) =>
+                  setFigConf(
+                    "colorScheme",
+                    event.target.value as "rainbow" | "rainbow-dark",
+                  )
+                }
+              >
+                <option value="rainbow">Mathematica Rainbow</option>
+                <option value="rainbow-dark" selected>
+                  Mathematica Dark Rainbow
+                </option>
+              </select>
+            </label>
+          </div>
+        </div>
       </div>
     </>
   );
 }
-
