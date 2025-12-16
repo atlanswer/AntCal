@@ -177,15 +177,7 @@ Visualize vector fields in an interactive SVG.
 
 **TODOs:**
 
-- [x] &nbsp; Fix arrow stroke and tail when it's too small
-- [x] &nbsp; Quick link to different views
-- [x] &nbsp; Vector arrow
-- [x] &nbsp; Vector length control
-- [x] &nbsp; Figure height control
-- [x] &nbsp; Vector arrow tail length control
-- [x] &nbsp; Colorbar
-- [x] &nbsp; Normal and dark color variant
-- [x] &nbsp; Map vector size
+- [x] &nbsp; Fix arrow stroke and tail when it's too small (not sure if it's possible)
 - [ ] &nbsp; Vector arrow shape selection
 - [ ] &nbsp; Represent scalar fields with contour plots
 
