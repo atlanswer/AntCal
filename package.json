@@ -32,6 +32,24 @@
     "turbo": "^2.7.1",
     "typescript": "^5.9.3"
   },
+  "prettier": {
+    "experimentalTernaries": true,
+    "experimentalOperatorPosition": "start",
+    "trailingComma": "all",
+    "plugins": [
+      "prettier-plugin-astro",
+      "prettier-plugin-tailwindcss"
+    ],
+    "overrides": [
+      {
+        "files": "*.astro",
+        "options": {
+          "parser": "astro"
+        }
+      }
+    ],
+    "tailwindStylesheet": "./apps/web/src/styles/global.css"
+  },
   "packageManager": "bun@1.3.2",
   "engines": {
     "bun": ">=1.3"

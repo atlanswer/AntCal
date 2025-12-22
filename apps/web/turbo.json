@@ -2,16 +2,8 @@
   "$schema": "https://turborepo.com/schema.json",
   "extends": ["//"],
   "tasks": {
-    "dev:api": {
-      "cache": false,
-      "persistent": true
-    },
-    "check": {},
     "build": {
       "outputs": ["dist/**", ".astro/**"]
-    },
-    "preview": {
-      "dependsOn": ["build"]
     }
   }
 }
