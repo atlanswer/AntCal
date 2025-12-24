@@ -16,11 +16,9 @@ This site is built with the following tools:
 - [Solid](https://www.solidjs.com)
 - [D3](https://d3js.org)
 - [d3-3d](https://github.com/Niekes/d3-3d)
+- [Turborepo](https://turbo.build)
 - [KaTeX](https://katex.org)
 - [Valibot](https://valibot.dev)
-- [FastAPI](https://fastapi.tiangolo.com)
-- [Numpy](https://numpy.org)
-- [Matplotlib](https://matplotlib.org)
 - [PatternCraft](https://patterncraft.fun)
 
 This site is hosted on [Vercel](https://vercel.com)

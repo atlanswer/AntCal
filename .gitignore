@@ -1,5 +1,3 @@
-# https://help.github.com/articles/ignoring-files
-
 # Node
 node_modules
 
@@ -11,8 +9,9 @@ build
 dist
 .vercel
 
-# Generated types
-.astro/
+# Cache
+.astro
+.turbo
 
 # Python
 .venv
@@ -20,15 +19,3 @@ __pycache__
 .ruff_cache
 typings
 *.egg-info
-
-# PyPi
-.pypirc
-
-# autodoc2
-apidocs
-
-# log
-*.log*
-
-# Turbo
-.turbo
