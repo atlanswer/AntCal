@@ -1,6 +1,6 @@
 {
   "name": "@antcal/web",
-  "version": "0.30.3",
+  "version": "0.31.0",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": true,
@@ -14,11 +14,11 @@
     "url": "https://github.com/atlanswer/AntCal/issues"
   },
   "scripts": {
-    "dev": "bun --bun astro dev",
+    "dev": "bun astro dev",
     "dev:api": "uv run --env-file .env.development -- fastapi dev api/main.py",
-    "check": "bun --bun astro check",
-    "build": "bun --bun astro build",
-    "preview": "bun --bun astro preview"
+    "check": "bun astro check",
+    "build": "bun astro build",
+    "preview": "bun astro preview"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",

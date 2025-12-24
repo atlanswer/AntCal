@@ -37,9 +37,9 @@ for (let i = -4; i <= 4; i++) {
       ]);
       lensDefault.push(
         Math.cos(
-          (((Math.abs(i) * Math.abs(i) + Math.abs(j) * Math.abs(j)) / 20) *
-            Math.PI) /
-            2,
+          (((Math.abs(i) * Math.abs(i) + Math.abs(j) * Math.abs(j)) / 20)
+            * Math.PI)
+            / 2,
         ),
       );
     }
@@ -513,8 +513,8 @@ export default function Field() {
           onFilesDrop={handleFieldUpload}
         />
       </div>
-      <div class="flex flex-col gap-8 xl:flex-row xl:items-center">
-        <div class="flex flex-1 flex-col gap-4">
+      <div class="flex flex-col items-center-safe gap-8 min-[74rem]:flex-row min-[74rem]:justify-stretch">
+        <div class="max[74rem]:w-full flex flex-col items-center-safe gap-4 min-[74rem]:shrink-0">
           <div class="flex max-w-3xl flex-wrap justify-center gap-4 *:rounded *:bg-slate-500 *:px-2 *:font-mono *:text-sm *:leading-relaxed *:text-white">
             <span class="">Figure Width: 3.5 in</span>
             <span>DPI: {DPI}</span>
@@ -529,9 +529,9 @@ export default function Field() {
             <span>Y span: {stats.ySpan === 0 ? "-" : stats.ySpan} m</span>
             <span>Z span: {stats.zSpan === 0 ? "-" : stats.zSpan} m</span>
           </div>
-          <div class="mx-auto w-full max-w-3xl xl:max-w-5xl" id={idNormalView}>
+          <div class="w-full max-w-3xl min-[74rem]:max-w-5xl" id={idNormalView}>
             <Portal mount={svgContainer()!}>
-              <div class="grid w-full max-w-3xl grid-cols-1 grid-rows-1 rounded outline">
+              <div class="grid w-full grid-cols-1 grid-rows-1 rounded outline">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   ref={svgRef}
@@ -720,8 +720,9 @@ export default function Field() {
 
           <p>You can zoom and rotate the viewport. Double click to reset.</p>
         </div>
-        <div class="shrink-0 xl:w-2xl">
-          <div class="grid w-full grid-cols-1 justify-items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3">
+
+        <div class="@container/controls max-w-5xl min-w-60 max-[74rem]:w-full min-[74rem]:flex-1">
+          <div class="grid flex-1 grid-cols-1 justify-items-stretch gap-4 @min-[31rem]/controls:grid-cols-2 @min-[47rem]/controls:grid-cols-3">
             <label title="Scale the figure to zoom in and out">
               Scale
               <input
@@ -897,7 +898,7 @@ export default function Field() {
             <label title="Change color scheme">
               Color Scheme
               <select
-                class="block cursor-pointer rounded px-2 py-0.5 outline"
+                class="block w-full cursor-pointer rounded px-2 py-0.5 outline"
                 required
                 onChange={(event) =>
                   setFigConf(
