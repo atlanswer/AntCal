@@ -1,6 +1,6 @@
 {
   "name": "@antcal/web",
-  "version": "0.31.0",
+  "version": "0.31.1",
   "description": "Generate publication quality figures",
   "license": "MIT",
   "private": true,
@@ -15,9 +15,9 @@
   },
   "scripts": {
     "dev": "bun astro dev",
-    "check": "bun astro check",
-    "build": "bun astro build",
-    "preview": "bun astro preview"
+    "check": "bun --bun astro check",
+    "build": "bun --bun astro build",
+    "preview": "bun --bun astro preview"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",

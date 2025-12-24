@@ -529,9 +529,15 @@ export default function Field() {
             <span>Y span: {stats.ySpan === 0 ? "-" : stats.ySpan} m</span>
             <span>Z span: {stats.zSpan === 0 ? "-" : stats.zSpan} m</span>
           </div>
-          <div class="w-full max-w-3xl min-[74rem]:max-w-5xl" id={idNormalView}>
+          <div
+            class="h-full w-full max-w-3xl min-[74rem]:max-w-5xl"
+            id={idNormalView}
+          >
             <Portal mount={svgContainer()!}>
-              <div class="grid w-full grid-cols-1 grid-rows-1 rounded outline">
+              <div
+                class="grid h-full w-full grid-cols-1 grid-rows-1 rounded outline"
+                classList={{ "outline-4": largeViewOpened() }}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   ref={svgRef}
@@ -692,9 +698,9 @@ export default function Field() {
                           document.getElementById(idNormalView);
                         if (largeView instanceof HTMLDialogElement) {
                           if (largeViewOpened()) {
-                            largeView.close();
                             setSvgContainer(normalView);
                             setLargeViewOpened(false);
+                            largeView.close();
                           } else {
                             largeView.showModal();
                             setSvgContainer(largeView);
@@ -715,7 +721,7 @@ export default function Field() {
 
           <dialog
             id={idLargeView}
-            class="absolute m-auto h-screen w-screen"
+            class="m-auto backdrop:bg-black/50 [&>div]:h-[90vh] [&>div]:w-[90vw] [&>div]:p-1"
           ></dialog>
 
           <p>You can zoom and rotate the viewport. Double click to reset.</p>
