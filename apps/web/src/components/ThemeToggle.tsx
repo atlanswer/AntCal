@@ -19,6 +19,9 @@ export default function ThemeToggle() {
       class="h-8 w-8 cursor-pointer rounded p-1 text-neutral-500 hover:text-neutral-700 focus-visible:ring focus-visible:outline-none active:text-neutral-700 dark:hover:text-neutral-300 active:dark:text-neutral-300"
       onClick={() => {
         const html = document.documentElement;
+        const colorSchemeMeta = document.querySelector(
+          'meta[name="color-scheme"]',
+        );
         const preferDark = globalThis.matchMedia(
           "(prefers-color-scheme: dark)",
         ).matches;
@@ -31,6 +34,7 @@ export default function ThemeToggle() {
               setTheme("dark");
             }
             html.classList.add("dark");
+            colorSchemeMeta?.setAttribute("content", "dark");
             return;
           case "dark":
             if (preferDark) {
@@ -39,14 +43,17 @@ export default function ThemeToggle() {
               setTheme("system");
             }
             html.classList.remove("dark");
+            colorSchemeMeta?.setAttribute("content", "light");
             return;
           default:
             if (preferDark) {
               setTheme("light");
               html.classList.remove("dark");
+              colorSchemeMeta?.setAttribute("content", "light");
             } else {
               setTheme("dark");
               html.classList.add("dark");
+              colorSchemeMeta?.setAttribute("content", "dark");
             }
         }
       }}

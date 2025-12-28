@@ -85,18 +85,23 @@ if (title === undefined) {
     <Font cssVariable="--font-geist-mono" />
     <script is:inline>
       function syncTheme() {
+        const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
         switch (localStorage.getItem("theme")) {
           case "dark":
             document.documentElement.classList.add("dark");
+            colorSchemeMeta.setAttribute("content", "dark");
             break;
           case "light":
             document.documentElement.classList.remove("dark");
+            colorSchemeMeta.setAttribute("content", "light");
             break;
           default:
             if (globalThis.matchMedia("(prefers-color-scheme: dark)").matches) {
               document.documentElement.classList.add("dark");
+              colorSchemeMeta.setAttribute("content", "dark");
             } else {
               document.documentElement.classList.remove("dark");
+              colorSchemeMeta.setAttribute("content", "light");
             }
             localStorage.setItem("theme", "system");
         }
