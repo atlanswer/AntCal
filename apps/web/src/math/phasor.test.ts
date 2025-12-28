@@ -8,12 +8,12 @@ describe("Phasor", () => {
       expect(amplitude).toBeCloseTo(0);
       expect(phase).toBeCloseTo(0);
     });
-    test("1 + (-1))", () => {
+    test("1 + (-1)", () => {
       const [amplitude, phase] = addPhasor([1, 0], [1, Math.PI]);
       expect(amplitude).toBeCloseTo(0);
       expect(phase).toBeCloseTo(Math.PI / 2);
     });
-    test("i + (-i))", () => {
+    test("i + (-i)", () => {
       const [amplitude, phase] = addPhasor(
         [1, Math.PI / 2],
         [1, (Math.PI / 2) * 3],
