@@ -25,6 +25,8 @@ export default function (props: {
   globalMax: Accessor<number>;
   updateGlobalMax: (v: number) => void;
 }) {
+  console.log(props.coordinates());
+
   let svgRef: SVGSVGElement | undefined;
 
   const analysis = () => analyses[props.cIdx()]!;

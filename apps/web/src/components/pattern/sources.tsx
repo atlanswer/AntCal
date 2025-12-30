@@ -17,7 +17,7 @@ export default function (props: { cIdx: Accessor<number> }) {
           {(_, sIdx) => <SourceSetter cIdx={props.cIdx} sIdx={sIdx} />}
         </For>
         <button
-          class="col-span-full mx-1 w-fit cursor-pointer rounded px-2 outline hover:text-sky-500"
+          class="col-span-full mx-1 w-fit cursor-pointer rounded px-2 outline hover:bg-sky-300 dark:hover:bg-sky-700"
           type="button"
           title="Add new source"
           onClick={() =>
@@ -30,7 +30,7 @@ export default function (props: { cIdx: Accessor<number> }) {
             )
           }
         >
-          ➕ Add Source
+          Add Source
         </button>
       </div>
     </div>
@@ -45,7 +45,7 @@ function SourceSetter(props: {
 
   return (
     <div class="col-span-full grid grid-cols-subgrid">
-      <span class="text-nowrap">Source {props.sIdx() + 1} ➡️</span>
+      <span class="text-nowrap">Source {props.sIdx() + 1}</span>
       <label class="flex gap-1">
         Type:
         <select
@@ -68,14 +68,16 @@ function SourceSetter(props: {
       </label>
       <Show
         when={source().type === "J"}
-        fallback={<span class="my-auto h-px min-w-16 rounded bg-white"></span>}
+        fallback={
+          <span class="my-auto h-px min-w-12 rounded bg-black dark:bg-white"></span>
+        }
       >
         <label class="flex gap-1">
           <span>
             Length (×<var>λ</var>):
           </span>
           <input
-            class="w-16 rounded pl-2 outline"
+            class="w-18 rounded pl-2 outline"
             type="number"
             required
             aria-required
@@ -98,7 +100,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         Amplitude:
         <input
-          class="w-14 rounded pl-2 outline"
+          class="w-16 rounded pl-2 outline"
           type="number"
           required
           aria-required
@@ -122,7 +124,7 @@ function SourceSetter(props: {
           Phase (×<var>π</var>):
         </span>
         <input
-          class="w-16 rounded pl-2 outline"
+          class="w-18 rounded pl-2 outline"
           type="number"
           required
           aria-required
@@ -146,7 +148,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         Theta:
         <input
-          class="w-16 rounded pl-2 outline"
+          class="w-18 rounded pl-2 outline"
           type="number"
           required
           aria-required
@@ -168,7 +170,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         Phi:
         <input
-          class="w-16 rounded pl-2 outline"
+          class="w-18 rounded pl-2 outline"
           type="number"
           required
           aria-required
@@ -193,7 +195,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         x:
         <input
-          class="w-16 rounded pl-2 outline"
+          class="w-18 rounded pl-2 outline"
           type="number"
           required
           aria-required
@@ -214,7 +216,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         y:
         <input
-          class="w-16 rounded pl-2 outline"
+          class="w-18 rounded pl-2 outline"
           type="number"
           required
           aria-required
@@ -235,7 +237,7 @@ function SourceSetter(props: {
       <label class="flex gap-1">
         z:
         <input
-          class="w-16 rounded pl-2 outline"
+          class="w-18 rounded pl-2 outline"
           type="number"
           required
           aria-required
@@ -254,7 +256,7 @@ function SourceSetter(props: {
         />
       </label>
       <button
-        class="cursor-pointer hover:text-red-500"
+        class="cursor-pointer rounded px-2 outline hover:bg-red-500"
         type="button"
         title="Remove this source"
         onClick={() =>
@@ -265,7 +267,7 @@ function SourceSetter(props: {
           )
         }
       >
-        (Remove)
+        Remove
       </button>
     </div>
   );

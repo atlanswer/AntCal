@@ -27,14 +27,20 @@ export default function (props: { cIdx: Accessor<number> }) {
   const planePhi0: () => Coordinate[] = createMemo(() => {
     const n = nPoints();
     return d3.range(n).map((v) => ({
-      theta: (v / (n - 1)) * 2 * Math.PI,
+      theta:
+        v < n / 2 ?
+          (v / ((n - 1) / 2)) * Math.PI
+        : ((v - (n - 1)) / ((n - 1) / 2)) * -Math.PI,
       phi: v < n / 2 ? 0 : Math.PI,
     }));
   });
   const planePhi90: () => Coordinate[] = createMemo(() => {
     const n = nPoints();
     return d3.range(n).map((v) => ({
-      theta: (v / (n - 1)) * 2 * Math.PI,
+      theta:
+        v < n / 2 ?
+          (v / ((n - 1) / 2)) * Math.PI
+        : ((v - (n - 1)) / ((n - 1) / 2)) * -Math.PI,
       phi: v < n / 2 ? Math.PI / 2 : -Math.PI / 2,
     }));
   });
@@ -47,7 +53,7 @@ export default function (props: { cIdx: Accessor<number> }) {
   });
 
   return (
-    <div class="mx-auto w-full max-w-max rounded p-4 outline">
+    <div class="w-full max-w-max rounded bg-slate-100 p-4 outline dark:bg-slate-900">
       <div class="overflow-x-auto">
         <div class="flex w-max gap-x-4 py-2">
           <span>Analysis {props.cIdx() + 1}</span>
@@ -136,7 +142,7 @@ export default function (props: { cIdx: Accessor<number> }) {
             />
           </label>
           <button
-            class="cursor-pointer hover:text-red-500"
+            class="cursor-pointer rounded px-2 outline hover:bg-red-500"
             type="button"
             onClick={() =>
               setAnalyses(
@@ -144,7 +150,7 @@ export default function (props: { cIdx: Accessor<number> }) {
               )
             }
           >
-            (Remove)
+            Remove
           </button>
         </div>
       </div>
@@ -190,10 +196,10 @@ export default function (props: { cIdx: Accessor<number> }) {
       </div>
       <Show when={analysis().settings.split}>
         <div class="mx-auto my-2 w-fit">
-          <span class="px-2 before:mx-2 before:inline-block before:h-1 before:w-10 before:rounded before:bg-[#1f77b4] before:align-middle">
+          <span class="inline-block px-2 before:mx-2 before:inline-block before:h-1 before:w-10 before:rounded before:bg-[#1f77b4] before:align-middle">
             <var>θ</var> Component
           </span>
-          <span class="px-2 before:mx-2 before:inline-block before:h-1 before:w-10 before:rounded before:bg-[#ff7f0e] before:align-middle">
+          <span class="inline-block px-2 before:mx-2 before:inline-block before:h-1 before:w-10 before:rounded before:bg-[#ff7f0e] before:align-middle">
             <var>ϕ</var> Component
           </span>
         </div>
