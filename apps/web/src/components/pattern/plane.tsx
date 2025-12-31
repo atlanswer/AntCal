@@ -25,8 +25,6 @@ export default function (props: {
   globalMax: Accessor<number>;
   updateGlobalMax: (v: number) => void;
 }) {
-  console.log(props.coordinates());
-
   let svgRef: SVGSVGElement | undefined;
 
   const analysis = () => analyses[props.cIdx()]!;
@@ -360,38 +358,12 @@ export default function (props: {
     const rAngle = Math.PI / 4;
     const rTicks =
       analysis().settings.dB ?
-        [
-          {
-            key: "0",
-            text: "0",
-            x: rMax * Math.sin(rAngle),
-            y: -rMax * Math.cos(rAngle),
-          },
-          {
-            key: "m10",
-            text: "-10",
-            x: ((rMax * Math.sin(rAngle)) / 4) * 3,
-            y: -((rMax * Math.cos(rAngle)) / 4) * 3,
-          },
-          {
-            key: "m20",
-            text: "-20",
-            x: ((rMax * Math.sin(rAngle)) / 4) * 2,
-            y: -((rMax * Math.cos(rAngle)) / 4) * 2,
-          },
-          {
-            key: "m30",
-            text: "-30",
-            x: ((rMax * Math.sin(rAngle)) / 4) * 1,
-            y: -((rMax * Math.cos(rAngle)) / 4) * 1,
-          },
-          {
-            key: "m40",
-            text: "-40",
-            x: ((rMax * Math.sin(rAngle)) / 4) * 0,
-            y: -((rMax * Math.cos(rAngle)) / 4) * 0,
-          },
-        ]
+        d3.range(0, -50, -10).map((v, i) => ({
+          key: `tick-${v}`,
+          text: d3.format("d")(v),
+          x: ((rMax * Math.sin(rAngle)) / 4) * (4 - i),
+          y: ((-rMax * Math.cos(rAngle)) / 4) * (4 - i),
+        }))
       : [];
     const rt = grid
       .selectAll("g.r-ticks")
