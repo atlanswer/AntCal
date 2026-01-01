@@ -54,7 +54,7 @@ export default function (props: { cIdx: Accessor<number> }) {
 
   return (
     <div class="w-full max-w-max rounded bg-slate-100 p-4 outline dark:bg-slate-900">
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto p-1">
         <div class="flex w-max gap-x-4 py-2">
           <span>Analysis {props.cIdx() + 1}</span>
           <label class="flex gap-2">
@@ -154,7 +154,7 @@ export default function (props: { cIdx: Accessor<number> }) {
           </button>
         </div>
       </div>
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto p-1">
         <div class="mx-auto flex w-fit gap-4 p-1">
           <Plane
             cIdx={props.cIdx}

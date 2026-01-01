@@ -11,13 +11,13 @@ export default function (props: { cIdx: Accessor<number> }) {
   const sources = () => analyses[props.cIdx()]!.sources;
 
   return (
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto p-1">
       <div class="mx-auto grid w-max grid-cols-[repeat(13,minmax(0,max-content))] gap-2 py-2">
         <For each={sources()}>
           {(_, sIdx) => <SourceSetter cIdx={props.cIdx} sIdx={sIdx} />}
         </For>
         <button
-          class="col-span-full mx-1 w-fit cursor-pointer rounded px-2 outline hover:bg-sky-300 dark:hover:bg-sky-700"
+          class="col-span-full w-fit cursor-pointer rounded px-2 outline hover:bg-sky-300 dark:hover:bg-sky-700"
           type="button"
           title="Add new source"
           onClick={() =>
