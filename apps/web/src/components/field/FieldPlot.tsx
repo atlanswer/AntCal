@@ -83,7 +83,7 @@ export default function Field() {
   const widthInPoints = DPI * 3.5;
   const [height, setHeight] = createSignal(3.5);
   const heightInPoints = () => height() * DPI;
-  const origin: () => d3d.Coordinate2D = () => ({
+  const origin: () => d3d.Point2D = () => ({
     x: widthInPoints / 2,
     y: heightInPoints() / 2,
   });
@@ -156,11 +156,11 @@ export default function Field() {
   const vView = () => [viewX(), viewY(), viewZ()] as Vec3;
 
   const polygons: () => {
-    arrows: d3d.Polygon3DInput[];
-    tails: d3d.Point3DInput[][];
+    arrows: d3d.Point3D[][];
+    tails: d3d.Point3D[][];
   } = createMemo(() => {
-    const arrows: d3d.Polygon3DInput[] = [];
-    const tails: d3d.Point3DInput[][] = [];
+    const arrows: d3d.Point3D[][] = [];
+    const tails: d3d.Point3D[][] = [];
 
     for (let i = 0; i < starts().length; i++) {
       let len = mapSize() ? lens()[i]! : (vLenMax() + vLenMin()) / 2;
@@ -187,13 +187,13 @@ export default function Field() {
   });
 
   const xAxisRange = () => d3.nice(-stats.xSpan / 2, stats.xSpan / 2, 5);
-  const xAxisTicks: () => d3d.Point3DInput[] = () =>
+  const xAxisTicks: () => d3d.Point3D[] = () =>
     d3.ticks(...xAxisRange(), 5).map((x) => ({ x: x, y: 0, z: 0 }));
   const yAxisRange = () => d3.nice(-stats.ySpan / 2, stats.ySpan / 2, 5);
-  const yAxisTicks: () => d3d.Point3DInput[] = () =>
+  const yAxisTicks: () => d3d.Point3D[] = () =>
     d3.ticks(...yAxisRange(), 5).map((y) => ({ x: 0, y: y, z: 0 }));
   const zAxisRange = () => d3.nice(-stats.zSpan / 2, stats.zSpan / 2, 5);
-  const zAxisTicks: () => d3d.Point3DInput[] = () =>
+  const zAxisTicks: () => d3d.Point3D[] = () =>
     d3.ticks(...zAxisRange(), 5).map((z) => ({ x: 0, y: 0, z: z }));
 
   const f = d3.format(".2s");
@@ -210,29 +210,24 @@ export default function Field() {
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
-      .rotateZ(rotZRad())(arrows);
+      .rotateZ(rotZRad())
+      .data(arrows);
 
     const tailsData = line3d
       .origin(origin())
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
-      // @ts-expect-error
-      .rotateZ(rotZRad())(tails);
+      .rotateZ(rotZRad())
+      .data(tails);
 
     const axesData = axis3d
       .origin(origin())
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
-      .rotateZ(rotZRad())([
-      // @ts-expect-error
-      xAxisTicks(),
-      // @ts-expect-error
-      yAxisTicks(),
-      // @ts-expect-error
-      zAxisTicks(),
-    ]) as unknown as [d3d.Point3D[], d3d.Point3D[], d3d.Point3D[]];
+      .rotateZ(rotZRad())
+      .data([xAxisTicks(), yAxisTicks(), zAxisTicks()]);
 
     const svg = d3.select(svgRef!);
 
@@ -243,7 +238,6 @@ export default function Field() {
       .data(axesEnabled() ? axesData : [])
       .join("path")
       .classed("axes", true)
-      // @ts-expect-error
       .attr("d", axis3d.draw)
       .attr("stroke", "black")
       .attr("stroke-width", 0.2)
@@ -295,7 +289,6 @@ export default function Field() {
       .data(arrowsData)
       .join("path")
       .classed("arrow", true)
-      // @ts-expect-error
       .attr("d", poly3d.draw)
       .attr("fill", mapColor)
       .classed("d3-3d", true);
@@ -305,15 +298,14 @@ export default function Field() {
       .data(tailsData)
       .join("line")
       .classed("tail", true)
-      .attr("x1", (d) => (d as unknown as d3d.Point3D[])[0]!.projected.x)
-      .attr("y1", (d) => (d as unknown as d3d.Point3D[])[0]!.projected.y)
-      .attr("x2", (d) => (d as unknown as d3d.Point3D[])[1]!.projected.x)
-      .attr("y2", (d) => (d as unknown as d3d.Point3D[])[1]!.projected.y)
+      .attr("x1", (d) => d[0]!.projected.x)
+      .attr("y1", (d) => d[0]!.projected.y)
+      .attr("x2", (d) => d[1]!.projected.x)
+      .attr("y2", (d) => d[1]!.projected.y)
       .attr("stroke", mapColor)
       .classed("d3-3d", true);
 
-    // @ts-expect-error
-    g.selectAll(".d3-3d").sort(poly3d.sort);
+    g.selectAll(".d3-3d").sort(d3d.sort);
 
     // Colorbar
     if (figConf.hasColorbar) {

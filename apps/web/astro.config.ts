@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import solid from "@astrojs/solid-js";
 import remarkMath from "remark-math";
@@ -46,16 +46,18 @@ export default defineConfig({
     fonts: [
       {
         name: "Geist Sans",
-        provider: "local",
+        provider: fontProviders.local(),
         cssVariable: "--font-geist-sans",
-        variants: [
-          {
-            weight: "100 900",
-            src: [
-              "./node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2",
-            ],
-          },
-        ],
+        options: {
+          variants: [
+            {
+              weight: "100 900",
+              src: [
+                "./node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2",
+              ],
+            },
+          ],
+        },
         fallbacks: [
           "ui-sans-serif",
           "system-ui",
@@ -68,16 +70,18 @@ export default defineConfig({
       },
       {
         name: "Geist",
-        provider: "local",
+        provider: fontProviders.local(),
         cssVariable: "--font-geist-mono",
-        variants: [
-          {
-            weight: "100 900",
-            src: [
-              "./node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2",
-            ],
-          },
-        ],
+        options: {
+          variants: [
+            {
+              weight: "100 900",
+              src: [
+                "./node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2",
+              ],
+            },
+          ],
+        },
         fallbacks: [
           "ui-monospace",
           "SFMono-Regular",
