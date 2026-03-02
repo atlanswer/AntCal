@@ -1,9 +1,6 @@
-import type { Coordinate } from "components/pattern/contexts";
+import type { Coordinate } from "~/components/pattern/contexts";
 
-export function verticalEDipole(
-  coordinate: Coordinate,
-  L: number = 0.5,
-): number {
+function verticalEDipole(coordinate: Coordinate, L: number = 0.5): number {
   const { theta } = coordinate;
 
   const numerator =
@@ -13,8 +10,10 @@ export function verticalEDipole(
   return denominator === 0 ? 0 : numerator / denominator;
 }
 
-export function verticalMDipole(coordinate: Coordinate): number {
+function verticalMDipole(coordinate: Coordinate): number {
   const { theta } = coordinate;
 
   return Math.sin(theta);
 }
+
+export { verticalEDipole, verticalMDipole };

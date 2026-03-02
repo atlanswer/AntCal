@@ -1,5 +1,5 @@
-import { filename } from "components/field/contexts";
-import { useNotifications } from "components/ui/useNotifications";
+import { filename } from "~/components/field/contexts";
+import { useNotifications } from "~/components/ui/useNotifications";
 
 export default function SVGDownload(props: {
   target: SVGSVGElement | undefined;

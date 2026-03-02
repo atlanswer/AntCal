@@ -1,4 +1,4 @@
-import { type Vec3, type Vec6, getUnitVec3 } from "src/math/linearAlgebra";
+import { type Vec3, type Vec6, getUnitVec3 } from "~/src/math/linearAlgebra";
 
 function* genLines(text: string) {
   const lines = text.split("\n");

@@ -4,9 +4,9 @@ import {
   rollBackCoordinate,
   rollbackVec3,
   rotateVec3,
-} from "components/pattern/calculations";
-import type { Coordinate } from "components/pattern/contexts";
-import type { Vec3 } from "src/math/linearAlgebra";
+} from "~/components/pattern/calculations";
+import type { Coordinate } from "~/components/pattern/contexts";
+import type { Vec3 } from "~/src/math/linearAlgebra";
 
 describe("Unit Vectors", () => {
   describe("Theta", () => {

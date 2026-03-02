@@ -1,5 +1,5 @@
-import type { Coordinate } from "src/components/pattern/contexts";
-import type { Vec3 } from "src/math/linearAlgebra";
+import type { Coordinate } from "~/components/pattern/contexts";
+import type { Vec3 } from "~/src/math/linearAlgebra";
 
 export function getUnitVecTheta(coordinate: Coordinate): Vec3 {
   const { theta, phi } = coordinate;
@@ -38,12 +38,12 @@ export function rollBackCoordinate(
   const phi0 = rotation.phi;
 
   const x =
-    Math.cos(theta0) * Math.sin(v.theta) * Math.cos(v.phi - phi0) -
-    Math.sin(theta0) * Math.cos(v.theta);
+    Math.cos(theta0) * Math.sin(v.theta) * Math.cos(v.phi - phi0)
+    - Math.sin(theta0) * Math.cos(v.theta);
   const y = Math.sin(v.theta) * Math.sin(v.phi - phi0);
   let z =
-    Math.sin(theta0) * Math.sin(v.theta) * Math.cos(v.phi - phi0) +
-    Math.cos(theta0) * Math.cos(v.theta);
+    Math.sin(theta0) * Math.sin(v.theta) * Math.cos(v.phi - phi0)
+    + Math.cos(theta0) * Math.cos(v.theta);
 
   z = z > 1 ? 1 : z;
   z = z < -1 ? -1 : z;
@@ -62,13 +62,13 @@ export function rotateVec3(v: Vec3, rotation: Coordinate): Vec3 {
   const phi0 = rotation.phi;
 
   const xp =
-    Math.cos(theta0) * Math.cos(phi0) * x +
-    Math.sin(theta0) * Math.cos(phi0) * z -
-    Math.sin(phi0) * y;
+    Math.cos(theta0) * Math.cos(phi0) * x
+    + Math.sin(theta0) * Math.cos(phi0) * z
+    - Math.sin(phi0) * y;
   const yp =
-    Math.cos(theta0) * Math.sin(phi0) * x +
-    Math.sin(theta0) * Math.sin(phi0) * z +
-    Math.cos(phi0) * y;
+    Math.cos(theta0) * Math.sin(phi0) * x
+    + Math.sin(theta0) * Math.sin(phi0) * z
+    + Math.cos(phi0) * y;
   const zp = -Math.sin(theta0) * x + Math.cos(theta0) * z;
 
   return [xp, yp, zp];
@@ -80,14 +80,14 @@ export function rollbackVec3(v: Vec3, rotation: Coordinate): Vec3 {
   const phi0 = rotation.phi;
 
   const x =
-    Math.cos(theta0) * Math.cos(phi0) * xp +
-    Math.cos(theta0) * Math.sin(phi0) * yp -
-    Math.sin(theta0) * zp;
+    Math.cos(theta0) * Math.cos(phi0) * xp
+    + Math.cos(theta0) * Math.sin(phi0) * yp
+    - Math.sin(theta0) * zp;
   const y = -Math.sin(phi0) * xp + Math.cos(phi0) * yp;
   const z =
-    Math.sin(theta0) * Math.cos(phi0) * xp +
-    Math.sin(theta0) * Math.sin(phi0) * yp +
-    Math.cos(theta0) * zp;
+    Math.sin(theta0) * Math.cos(phi0) * xp
+    + Math.sin(theta0) * Math.sin(phi0) * yp
+    + Math.cos(theta0) * zp;
 
   return [x, y, z];
 }

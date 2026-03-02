@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { addPhasor } from "src/math/phasor";
+import { addPhasor } from "~/src/math/phasor";
 
 describe("Phasor", () => {
   describe("Addition", () => {

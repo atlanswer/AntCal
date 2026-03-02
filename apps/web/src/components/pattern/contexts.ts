@@ -1,7 +1,7 @@
 import { createStore } from "solid-js/store";
 import { createEffect } from "solid-js";
 import * as v from "valibot";
-import { vec3Schema } from "src/math/linearAlgebra";
+import { vec3Schema } from "~/src/math/linearAlgebra";
 
 const coordinateSchema = v.object({
   theta: v.number(),
@@ -87,7 +87,7 @@ export const analysesDefault: Analysis[] = structuredClone([
 
 const STORAGE_KEY = "antcal-pattern-analyses";
 
-const loadAnalyses = (): Analysis[] => {
+function loadAnalyses(): Analysis[] {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return structuredClone(analysesDefault);
@@ -99,14 +99,14 @@ const loadAnalyses = (): Analysis[] => {
   } catch {
     return structuredClone(analysesDefault);
   }
-};
+}
 
 export const [analyses, setAnalyses] = createStore(loadAnalyses());
 
 createEffect(() => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(analyses));
-  } catch {
-    // Silently fail if storage is full or unavailable
+  } catch (err) {
+    console.error(err);
   }
 });

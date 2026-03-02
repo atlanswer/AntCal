@@ -1,12 +1,12 @@
-import { createArrow } from "components/field/arrow";
-import { rainbow, rainbowDark } from "components/field/colorScheme";
-import { setFilename } from "components/field/contexts";
-import { parseFld } from "components/field/fldParser";
-import SVGDownload from "components/field/SVGDownload";
-import ArrowsIn from "components/icons/ArrowsIn";
-import ArrowsOut from "components/icons/ArrowsOut";
-import FileUpload from "components/ui/FileUpload";
-import { useNotifications } from "components/ui/useNotifications";
+import { createArrow } from "~/components/field/arrow";
+import { rainbow, rainbowDark } from "~/components/field/colorScheme";
+import { setFilename } from "~/components/field/contexts";
+import { parseFld } from "~/components/field/fldParser";
+import SVGDownload from "~/components/field/SVGDownload";
+import ArrowsIn from "~/components/icons/ArrowsIn";
+import ArrowsOut from "~/components/icons/ArrowsOut";
+import FileUpload from "~/components/ui/FileUpload";
+import { useNotifications } from "~/components/ui/useNotifications";
 import * as d3 from "d3";
 import * as d3d from "d3-3d";
 import {
@@ -20,7 +20,7 @@ import {
 } from "solid-js";
 import { createStore } from "solid-js/store";
 import { Portal } from "solid-js/web";
-import { type Vec3 } from "src/math/linearAlgebra";
+import { type Vec3 } from "~/src/math/linearAlgebra";
 
 const startsDefault: Vec3[] = [];
 const unitsDefault: Vec3[] = [];

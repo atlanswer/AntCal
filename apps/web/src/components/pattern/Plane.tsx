@@ -4,20 +4,18 @@ import {
   rollBackCoordinate,
   rotateVec3,
   spherical2Cartesian,
-} from "components/pattern/calculations";
-import { verticalEDipole, verticalMDipole } from "components/pattern/dipoles";
+} from "./calculations";
+import { verticalEDipole, verticalMDipole } from "./dipoles";
 import * as d3 from "d3";
 import type { Accessor, JSXElement } from "solid-js";
 import { createEffect, createMemo } from "solid-js";
-import {
-  analyses,
-  type Coordinate,
-  type Source,
-} from "src/components/pattern/contexts";
-import { dotProdVec3, type Vec3 } from "src/math/linearAlgebra";
-import { addPhasor, type Phasor } from "src/math/phasor";
+import { analyses, type Coordinate, type Source } from "./contexts";
+import { dotProdVec3, type Vec3 } from "~/src/math/linearAlgebra";
+import { addPhasor, type Phasor } from "~/src/math/phasor";
 
-export default function (props: {
+export { Plane };
+
+function Plane(props: {
   cIdx: Accessor<number>;
   title: JSXElement;
   primary: string;

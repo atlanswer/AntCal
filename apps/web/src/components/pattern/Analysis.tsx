@@ -1,15 +1,13 @@
-import Plane from "components/pattern/plane";
+import { Plane } from "./Plane";
 import * as d3 from "d3";
 import { createMemo, createSignal, Show, type Accessor } from "solid-js";
 import { produce } from "solid-js/store";
-import {
-  analyses,
-  setAnalyses,
-  type Coordinate,
-} from "src/components/pattern/contexts";
-import Sources from "src/components/pattern/sources";
+import { analyses, setAnalyses, type Coordinate } from "./contexts";
+import { Sources } from "./Sources";
 
-export default function (props: { cIdx: Accessor<number> }) {
+export { Analysis };
+
+function Analysis(props: { cIdx: Accessor<number> }) {
   const analysis = () => analyses[props.cIdx()]!;
   const resolution = () => analysis().settings.resolution;
   const nPoints = () => Math.floor(360 / resolution()) + 1;

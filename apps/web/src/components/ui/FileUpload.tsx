@@ -1,7 +1,7 @@
-import ArrowUpOnSquare from "components/icons/ArrowUpOnSquare";
-import ArrowUpOnSquareStack from "components/icons/ArrowUpOnSquareStack";
-import DocumentChartBar from "components/icons/DocumentChartBar";
-import { useNotifications } from "components/ui/useNotifications";
+import ArrowUpOnSquare from "~/components/icons/ArrowUpOnSquare";
+import ArrowUpOnSquareStack from "~/components/icons/ArrowUpOnSquareStack";
+import DocumentChartBar from "~/components/icons/DocumentChartBar";
+import { useNotifications } from "~/components/ui/useNotifications";
 import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 
 export interface FileUploadProps {

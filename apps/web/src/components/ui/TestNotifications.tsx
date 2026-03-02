@@ -1,7 +1,7 @@
 // Example: Using the global notification system in any component
 // This can be used in any route/component throughout the application
 
-import { useNotifications } from "components/ui/useNotifications";
+import { useNotifications } from "~/components/ui/useNotifications";
 
 export function TestNotifications() {
   const { addError, addWarning, addInfo, addSuccess } = useNotifications();

@@ -1,13 +1,11 @@
 import type { Accessor } from "solid-js";
 import { For, Show } from "solid-js";
 import { produce } from "solid-js/store";
-import {
-  analyses,
-  halfWaveEDipole,
-  setAnalyses,
-} from "src/components/pattern/contexts";
+import { analyses, halfWaveEDipole, setAnalyses } from "./contexts";
 
-export default function (props: { cIdx: Accessor<number> }) {
+export { Sources };
+
+function Sources(props: { cIdx: Accessor<number> }) {
   const sources = () => analyses[props.cIdx()]!.sources;
 
   return (

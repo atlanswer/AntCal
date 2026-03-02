@@ -1,6 +1,6 @@
 import { expect, test, describe } from "bun:test";
-import type { Vec3 } from "src/math/linearAlgebra";
-import { crossProdVec3 } from "src/math/linearAlgebra";
+import type { Vec3 } from "~/src/math/linearAlgebra";
+import { crossProdVec3 } from "~/src/math/linearAlgebra";
 
 describe("Linear Algrbra", async () => {
   describe("Cross Product", () => {

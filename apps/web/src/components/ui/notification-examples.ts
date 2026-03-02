@@ -1,6 +1,6 @@
 // Example of how to use the global notification system in any component
 
-import { useNotifications } from "components/ui/useNotifications";
+import { useNotifications } from "~/components/ui/useNotifications";
 
 export function exampleUsage() {
   const { addError, addWarning, addInfo, addSuccess } = useNotifications();

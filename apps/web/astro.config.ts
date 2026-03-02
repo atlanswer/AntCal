@@ -12,6 +12,7 @@ export default defineConfig({
     import.meta.env.VERCEL_ENV === "production" ?
       "https://antcal.atlanswer.com"
     : "https://dev.antcal.atlanswer.com",
+  output: "static",
   integrations: [solid()],
   vite: {
     plugins: [
@@ -25,6 +26,7 @@ export default defineConfig({
   },
   prefetch: {
     prefetchAll: true,
+    defaultStrategy: "viewport",
   },
   markdown: {
     remarkPlugins: [remarkMath],
@@ -40,59 +42,61 @@ export default defineConfig({
       ],
     ],
   },
+  fonts: [
+    {
+      name: "Geist Sans",
+      provider: fontProviders.local(),
+      cssVariable: "--font-geist-sans",
+      options: {
+        variants: [
+          {
+            weight: "100 900",
+            src: [
+              "./node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2",
+            ],
+          },
+        ],
+      },
+      fallbacks: [
+        "ui-sans-serif",
+        "system-ui",
+        "sans-serif",
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji",
+      ],
+    },
+    {
+      name: "Geist",
+      provider: fontProviders.local(),
+      cssVariable: "--font-geist-mono",
+      options: {
+        variants: [
+          {
+            weight: "100 900",
+            src: [
+              "./node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2",
+            ],
+          },
+        ],
+      },
+      fallbacks: [
+        "ui-monospace",
+        "SFMono-Regular",
+        "Menlo",
+        "Monaco",
+        "Consolas",
+        "Liberation Mono",
+        "Courier New",
+        "monospace",
+      ],
+    },
+  ],
   experimental: {
-    contentIntellisense: true,
+    chromeDevtoolsWorkspace: true,
     clientPrerender: true,
-    fonts: [
-      {
-        name: "Geist Sans",
-        provider: fontProviders.local(),
-        cssVariable: "--font-geist-sans",
-        options: {
-          variants: [
-            {
-              weight: "100 900",
-              src: [
-                "./node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2",
-              ],
-            },
-          ],
-        },
-        fallbacks: [
-          "ui-sans-serif",
-          "system-ui",
-          "sans-serif",
-          "Apple Color Emoji",
-          "Segoe UI Emoji",
-          "Segoe UI Symbol",
-          "Noto Color Emoji",
-        ],
-      },
-      {
-        name: "Geist",
-        provider: fontProviders.local(),
-        cssVariable: "--font-geist-mono",
-        options: {
-          variants: [
-            {
-              weight: "100 900",
-              src: [
-                "./node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2",
-              ],
-            },
-          ],
-        },
-        fallbacks: [
-          "ui-monospace",
-          "SFMono-Regular",
-          "Menlo",
-          "Monaco",
-          "Consolas",
-          "Liberation Mono",
-          "Courier New",
-          "monospace",
-        ],
-      },
-    ],
+    contentIntellisense: true,
+    svgo: true,
   },
 });

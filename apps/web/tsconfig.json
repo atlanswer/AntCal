@@ -5,13 +5,13 @@
   "compilerOptions": {
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "baseUrl": ".",
     "paths": {
-      "src/*": ["src/*"],
-      "components/*": ["src/components/*"],
-      "layouts/*": ["src/layouts/*"],
-      "styles/*": ["src/styles/*"],
-      "public/*": ["public/*"]
+      "~/*": ["./*"],
+      "~/public/*": ["./public/*"],
+      "~/src/*": ["./src/*"],
+      "~/components/*": ["./src/components/*"],
+      "~/layouts/*": ["./src/layouts/*"],
+      "~/styles/*": ["./src/styles/*"]
     },
     "plugins": [{ "name": "@astrojs/ts-plugin" }]
   }
