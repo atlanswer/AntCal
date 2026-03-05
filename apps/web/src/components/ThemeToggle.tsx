@@ -1,8 +1,9 @@
+import { createEffect, createSignal, Match, Switch } from "solid-js";
+
 import Desktop from "~/components/icons/Desktop";
 import Moon from "~/components/icons/Moon";
 import Sun from "~/components/icons/Sun";
 import { getLocalTheme } from "~/components/theme";
-import { createEffect, createSignal, Match, Switch } from "solid-js";
 
 export default function ThemeToggle() {
   const [theme, setTheme] = createSignal(getLocalTheme());

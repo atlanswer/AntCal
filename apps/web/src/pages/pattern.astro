@@ -2,10 +2,8 @@
 import BaseLayout from "~/layouts/Base.astro";
 
 import { Analyses } from "~/components/pattern";
-import { TwoStateSwitch } from "~/components/TwoStatesSwitch";
 ---
 
 <BaseLayout>
-  <TwoStateSwitch client:only="solid-js" a={"Explore"} />
   <Analyses client:only="solid-js" />
 </BaseLayout>

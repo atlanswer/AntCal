@@ -1,0 +1,49 @@
+---
+import BaseLayout from "~/layouts/Base.astro";
+---
+
+<BaseLayout>
+  <div class="flex place-content-center-safe p-16">
+    <canvas id="scene" width="800" height="800"></canvas>
+  </div>
+</BaseLayout>
+
+<script>
+  type Point = { x: number; y: number };
+
+  const scene = document.querySelector<HTMLCanvasElement>("#scene")!;
+  const ctx = scene.getContext("2d")!;
+
+  const BACKGROUND = "oklch(26.9% 0 0)";
+  const FOREGROUND = "oklch(72.3% 0.219 149.579)";
+
+  function clear() {
+    ctx.fillStyle = BACKGROUND;
+    ctx.fillRect(0, 0, scene.width, scene.height);
+  }
+
+  function point({ x, y }: Point) {
+    const size = 20;
+    ctx.fillStyle = FOREGROUND;
+    ctx.fillRect(x - size / 2, y - size / 2, size, size);
+  }
+
+  function screen(p: Point) {
+    return {
+      x: ((p.x + 1) / 2) * scene.width,
+      y: (1 - (p.y + 1) / 2) * scene.height,
+    };
+  }
+
+  function project({ x, y, z }: { x: number; y: number; z: number }) {
+    return { x: x / z, y: y / z };
+  }
+
+  function frame(ts: number) {
+    clear();
+    point(screen(project({ x: 1, y: 0, z: 1 + ts / 1000 })));
+    point(screen(project({ x: -1, y: 0, z: 1 + ts / 1000 })));
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+</script>
