@@ -121,7 +121,11 @@ if (title === undefined) {
   >
     <noscript>AntCal: You need to enable JavaScript to run this app.</noscript>
     <Header />
-    <main class="flex-1" transition:name="main" transition:animate="slide">
+    <main
+      class="flex-1 pt-16"
+      transition:name="main"
+      transition:animate="slide"
+    >
       <slot />
     </main>
     <Footer />
