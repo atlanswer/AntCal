@@ -11,9 +11,6 @@ const ARROW_LEN = 0.724;
 const ARROW_WID = 0.362;
 const ARROW_INSET = 0.07;
 
-type ArrowPoints = d3d.Point3D[];
-type TailPoints = [d3d.Point3D, d3d.Point3D];
-
 export function createArrow(
   start: Vec3,
   unit: Vec3,
@@ -23,7 +20,7 @@ export function createArrow(
   align: "middle" | "start" | "end" = "middle",
   hasTail: boolean = true,
   tailLen: number = 0.5,
-): [ArrowPoints, TailPoints | undefined] {
+): [d3d.Polygon3DInput, [d3d.Point3DInput, d3d.Point3DInput] | undefined] {
   const v: Vec3 = [unit[0] * scale, unit[1] * scale, unit[2] * scale];
   const ofsValues: { [key in typeof align]: number } = {
     start: 0.5,
@@ -45,14 +42,14 @@ export function createArrow(
   const p3: Vec3 = addVec3(addVec3(sclMulVec3(v, ARROW_LEN), start), ofs);
   const p4: Vec3 = addVec3(addVec3(sclMulVec3(w, ARROW_WID / 2), start), ofs);
 
-  const arrow: ArrowPoints = [
+  const arrow: d3d.Polygon3DInput = [
     { x: p1[0], y: p1[1], z: p1[2] },
     { x: p2[0], y: p2[1], z: p2[2] },
     { x: p3[0], y: p3[1], z: p3[2] },
     { x: p4[0], y: p4[1], z: p4[2] },
   ];
 
-  let tail: TailPoints | undefined = undefined;
+  let tail: [d3d.Point3DInput, d3d.Point3DInput] | undefined = undefined;
 
   if (hasTail) {
     const p5 = p1;

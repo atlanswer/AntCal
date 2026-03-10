@@ -98,5 +98,9 @@ export default defineConfig({
     clientPrerender: true,
     contentIntellisense: true,
     svgo: true,
+    rustCompiler: true,
+    queuedRendering: {
+      enabled: true,
+    },
   },
 });
