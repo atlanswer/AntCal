@@ -1,4 +1,6 @@
 ---
-// return Astro.rewrite("/pattern");
-return Astro.rewrite("/experiment");
+if (import.meta.env.VERCEL_ENV !== "production") {
+  return Astro.rewrite("/experiment");
+}
+return Astro.rewrite("/pattern");
 ---
