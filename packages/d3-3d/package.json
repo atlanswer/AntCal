@@ -1,0 +1,19 @@
+{
+  "name": "d3-3d",
+  "version": "2.0.2",
+  "description": "D3.js plugin for 3d visualization written in Typescript",
+  "license": "BSD-3-Clause",
+  "homepage": "https://github.com/Niekes/d3-3d",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Niekes/d3-3d.git"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts"
+    }
+  }
+}

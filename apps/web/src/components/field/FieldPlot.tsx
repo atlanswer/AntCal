@@ -22,6 +22,19 @@ import { createStore } from "solid-js/store";
 import { Portal } from "solid-js/web";
 import { type Vec3 } from "~/src/math/linearAlgebra";
 
+type PlotPoint = d3d.Point3D;
+type PlotLine = [PlotPoint, PlotPoint];
+type PlotPolygon = PlotPoint[];
+type ProjectedPlotPoint = d3d.TransformedPoint<PlotPoint>;
+type ProjectedPlotLine = ProjectedPlotPoint[] & {
+  centroid: d3d.Point3D;
+};
+type HasCentroid = {
+  centroid: {
+    z: number;
+  };
+};
+
 const startsDefault: Vec3[] = [];
 const unitsDefault: Vec3[] = [];
 const lensDefault: number[] = [];
@@ -83,7 +96,7 @@ export default function Field() {
   const widthInPoints = DPI * 3.5;
   const [height, setHeight] = createSignal(3.5);
   const heightInPoints = () => height() * DPI;
-  const origin: () => d3d.Coordinate2D = () => ({
+  const origin: () => d3d.Point2D = () => ({
     x: widthInPoints / 2,
     y: heightInPoints() / 2,
   });
@@ -156,11 +169,11 @@ export default function Field() {
   const vView = () => [viewX(), viewY(), viewZ()] as Vec3;
 
   const polygons: () => {
-    arrows: d3d.Polygon3DInput[];
-    tails: d3d.Point3DInput[][];
+    arrows: PlotPolygon[];
+    tails: PlotLine[];
   } = createMemo(() => {
-    const arrows: d3d.Polygon3DInput[] = [];
-    const tails: d3d.Point3DInput[][] = [];
+    const arrows: PlotPolygon[] = [];
+    const tails: PlotLine[] = [];
 
     for (let i = 0; i < starts().length; i++) {
       let len = mapSize() ? lens()[i]! : (vLenMax() + vLenMin()) / 2;
@@ -187,20 +200,20 @@ export default function Field() {
   });
 
   const xAxisRange = () => d3.nice(-stats.xSpan / 2, stats.xSpan / 2, 5);
-  const xAxisTicks: () => d3d.Point3DInput[] = () =>
+  const xAxisTicks: () => PlotPoint[] = () =>
     d3.ticks(...xAxisRange(), 5).map((x) => ({ x: x, y: 0, z: 0 }));
   const yAxisRange = () => d3.nice(-stats.ySpan / 2, stats.ySpan / 2, 5);
-  const yAxisTicks: () => d3d.Point3DInput[] = () =>
+  const yAxisTicks: () => PlotPoint[] = () =>
     d3.ticks(...yAxisRange(), 5).map((y) => ({ x: 0, y: y, z: 0 }));
   const zAxisRange = () => d3.nice(-stats.zSpan / 2, stats.zSpan / 2, 5);
-  const zAxisTicks: () => d3d.Point3DInput[] = () =>
+  const zAxisTicks: () => PlotPoint[] = () =>
     d3.ticks(...zAxisRange(), 5).map((z) => ({ x: 0, y: 0, z: z }));
 
   const f = d3.format(".2s");
 
-  const line3d = d3d.lines3D();
-  const poly3d = d3d.polygons3D();
-  const axis3d = d3d.lineStrips3D();
+  const line3d = d3d.lines3D<PlotPoint>();
+  const poly3d = d3d.polygons3D<PlotPoint>();
+  const axis3d = d3d.lineStrips3D<PlotPoint>();
 
   function draw() {
     const { arrows, tails } = polygons();
@@ -210,29 +223,24 @@ export default function Field() {
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
-      .rotateZ(rotZRad())(arrows);
+      .rotateZ(rotZRad())
+      .data(arrows);
 
     const tailsData = line3d
       .origin(origin())
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
-      // @ts-expect-error
-      .rotateZ(rotZRad())(tails);
+      .rotateZ(rotZRad())
+      .data(tails);
 
     const axesData = axis3d
       .origin(origin())
       .scale(scale())
       .rotateX(rotXRad())
       .rotateY(rotYRad())
-      .rotateZ(rotZRad())([
-      // @ts-expect-error
-      xAxisTicks(),
-      // @ts-expect-error
-      yAxisTicks(),
-      // @ts-expect-error
-      zAxisTicks(),
-    ]) as unknown as [d3d.Point3D[], d3d.Point3D[], d3d.Point3D[]];
+      .rotateZ(rotZRad())
+      .data([xAxisTicks(), yAxisTicks(), zAxisTicks()]);
 
     const svg = d3.select(svgRef!);
 
@@ -243,7 +251,6 @@ export default function Field() {
       .data(axesEnabled() ? axesData : [])
       .join("path")
       .classed("axes", true)
-      // @ts-expect-error
       .attr("d", axis3d.draw)
       .attr("stroke", "black")
       .attr("stroke-width", 0.2)
@@ -251,7 +258,7 @@ export default function Field() {
       .classed("stroke-white", figConf.colorScheme === "rainbow-dark")
       .classed("d3-3d", true);
 
-    const axisEnds = axesData.map((axis) => axis.at(-1)!);
+    const axisEnds: ProjectedPlotPoint[] = axesData.map((axis) => axis.at(-1)!);
 
     // Axis end text
     g.selectAll("text.axis-text")
@@ -295,7 +302,6 @@ export default function Field() {
       .data(arrowsData)
       .join("path")
       .classed("arrow", true)
-      // @ts-expect-error
       .attr("d", poly3d.draw)
       .attr("fill", mapColor)
       .classed("d3-3d", true);
@@ -305,15 +311,14 @@ export default function Field() {
       .data(tailsData)
       .join("line")
       .classed("tail", true)
-      .attr("x1", (d) => (d as unknown as d3d.Point3D[])[0]!.projected.x)
-      .attr("y1", (d) => (d as unknown as d3d.Point3D[])[0]!.projected.y)
-      .attr("x2", (d) => (d as unknown as d3d.Point3D[])[1]!.projected.x)
-      .attr("y2", (d) => (d as unknown as d3d.Point3D[])[1]!.projected.y)
+      .attr("x1", (d: ProjectedPlotLine) => d[0]!.projected.x)
+      .attr("y1", (d: ProjectedPlotLine) => d[0]!.projected.y)
+      .attr("x2", (d: ProjectedPlotLine) => d[1]!.projected.x)
+      .attr("y2", (d: ProjectedPlotLine) => d[1]!.projected.y)
       .attr("stroke", mapColor)
       .classed("d3-3d", true);
 
-    // @ts-expect-error
-    g.selectAll(".d3-3d").sort(poly3d.sort);
+    g.selectAll<SVGElement, HasCentroid>(".d3-3d").sort(d3d.sort);
 
     // Colorbar
     if (figConf.hasColorbar) {
@@ -513,7 +518,7 @@ export default function Field() {
           onFilesDrop={handleFieldUpload}
         />
       </div>
-      <div class="flex flex-col items-center-safe gap-8 min-[74rem]:flex-row min-[74rem]:justify-stretch">
+      <div class="flex flex-col items-center-safe gap-8 min-[74rem]:flex-row min-[74rem]:justify-center-safe">
         <div class="max[74rem]:w-full flex flex-col items-center-safe gap-4 min-[74rem]:shrink-0">
           <div class="flex max-w-3xl flex-wrap justify-center gap-4 *:rounded *:bg-slate-500 *:px-2 *:font-mono *:text-sm *:leading-relaxed *:text-white">
             <span class="">Figure Width: 3.5 in</span>
