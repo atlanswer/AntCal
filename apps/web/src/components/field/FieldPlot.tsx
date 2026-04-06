@@ -15,6 +15,7 @@ import {
   createMemo,
   createSignal,
   createUniqueId,
+  onCleanup,
   onMount,
   Show,
 } from "solid-js";
@@ -23,11 +24,18 @@ import { Portal } from "solid-js/web";
 import { type Vec3 } from "~/src/math/linearAlgebra";
 
 type PlotPoint = d3d.Point3D;
-type PlotLine = [PlotPoint, PlotPoint];
 type PlotPolygon = PlotPoint[];
 type ProjectedPlotPoint = d3d.TransformedPoint<PlotPoint>;
-type ProjectedPlotLine = ProjectedPlotPoint[] & {
+type ArrowDatum = {
+  id: number;
+  color: string;
+  points: PlotPolygon;
+};
+type ProjectedArrowPolygon = d3d.TransformedPoint<PlotPoint>[] & {
+  ccw: boolean;
   centroid: d3d.Point3D;
+  id: number;
+  color: string;
 };
 type HasCentroid = {
   centroid: {
@@ -127,6 +135,7 @@ export default function Field() {
   );
   const [mapSize, setMapSize] = createSignal(true);
   const [arrowTailLen, setArrowTailLen] = createSignal(0.5);
+  const [arrowTailWidth, setArrowTailWidth] = createSignal(0.04);
 
   const [vLenMin, setVLenMin] = createSignal(0);
   const [vLenMax, setVLenMax] = createSignal(0);
@@ -168,109 +177,156 @@ export default function Field() {
   /** Unit vector that is the normal vector of the screen */
   const vView = () => [viewX(), viewY(), viewZ()] as Vec3;
 
-  const polygons: () => {
-    arrows: PlotPolygon[];
-    tails: PlotLine[];
-  } = createMemo(() => {
-    const arrows: PlotPolygon[] = [];
-    const tails: PlotLine[] = [];
+  const arrowData: () => ArrowDatum[] = createMemo(() => {
+    const startsValue = starts();
+    const unitsValue = units();
+    const lensValue = lens();
+    const minLen = vLenMin();
+    const maxLen = vLenMax();
+    const scaleByMagnitude = mapSize();
+    const arrowScale = vScale();
+    const view = vView();
+    const arrowRotation = rotArrowRad();
+    const align = arrowAlign();
+    const includeTail = arrowTail();
+    const tailLen = arrowTailLen();
+    const tailWidth = arrowTailWidth();
+    const palette = figConf.colorScheme === "rainbow" ? rainbow : rainbowDark;
+    const colorStep = (maxLen - minLen) / 30;
+    const fallbackLen = (maxLen + minLen) / 2;
 
-    for (let i = 0; i < starts().length; i++) {
-      let len = mapSize() ? lens()[i]! : (vLenMax() + vLenMin()) / 2;
-      len = len < vLenMin() ? vLenMin() : len;
-      len = len > vLenMax() ? vLenMax() : len;
+    const arrows: ArrowDatum[] = [];
 
-      const [arrow, tail] = createArrow(
-        starts()[i]!,
-        units()[i]!,
-        len * vScale(),
-        vView(),
-        rotArrowRad(),
-        arrowAlign(),
-        arrowTail(),
-        arrowTailLen(),
-      );
+    for (let i = 0; i < startsValue.length; i++) {
+      const rawLen = lensValue[i]!;
+      const scaledLen = scaleByMagnitude ? rawLen : fallbackLen;
+      const len = Math.min(maxLen, Math.max(minLen, scaledLen));
+      const colorIndex =
+        colorStep > 0 ?
+          Math.min(
+            29,
+            Math.max(0, Math.floor(Math.max(rawLen - minLen, 0) / colorStep)),
+          )
+        : 0;
 
-      arrows.push(arrow);
-      if (tail) {
-        tails.push(tail);
-      }
+      arrows.push({
+        id: i,
+        color: palette[colorIndex]!,
+        points: createArrow(
+          startsValue[i]!,
+          unitsValue[i]!,
+          len * arrowScale,
+          view,
+          arrowRotation,
+          align,
+          includeTail,
+          tailLen,
+          tailWidth,
+        ),
+      });
     }
-    return { arrows, tails };
+
+    return arrows;
   });
 
   const xAxisRange = () => d3.nice(-stats.xSpan / 2, stats.xSpan / 2, 5);
-  const xAxisTicks: () => PlotPoint[] = () =>
-    d3.ticks(...xAxisRange(), 5).map((x) => ({ x: x, y: 0, z: 0 }));
+  const xAxisTicks: () => PlotPoint[] = createMemo(() =>
+    d3.ticks(...xAxisRange(), 5).map((x) => ({ x: x, y: 0, z: 0 })),
+  );
   const yAxisRange = () => d3.nice(-stats.ySpan / 2, stats.ySpan / 2, 5);
-  const yAxisTicks: () => PlotPoint[] = () =>
-    d3.ticks(...yAxisRange(), 5).map((y) => ({ x: 0, y: y, z: 0 }));
+  const yAxisTicks: () => PlotPoint[] = createMemo(() =>
+    d3.ticks(...yAxisRange(), 5).map((y) => ({ x: 0, y: y, z: 0 })),
+  );
   const zAxisRange = () => d3.nice(-stats.zSpan / 2, stats.zSpan / 2, 5);
-  const zAxisTicks: () => PlotPoint[] = () =>
-    d3.ticks(...zAxisRange(), 5).map((z) => ({ x: 0, y: 0, z: z }));
+  const zAxisTicks: () => PlotPoint[] = createMemo(() =>
+    d3.ticks(...zAxisRange(), 5).map((z) => ({ x: 0, y: 0, z: z })),
+  );
 
   const f = d3.format(".2s");
 
-  const line3d = d3d.lines3D<PlotPoint>();
   const poly3d = d3d.polygons3D<PlotPoint>();
   const axis3d = d3d.lineStrips3D<PlotPoint>();
+  let drawFrame = 0;
+
+  function scheduleDraw() {
+    if (drawFrame) return;
+
+    drawFrame = requestAnimationFrame(() => {
+      drawFrame = 0;
+      draw();
+    });
+  }
 
   function draw() {
-    const { arrows, tails } = polygons();
+    if (!svgRef) return;
+
+    const arrows = arrowData();
+    const originValue = origin();
+    const scaleValue = scale();
+    const rotateX = rotXRad();
+    const rotateY = rotYRad();
+    const rotateZ = rotZRad();
+    const axesOn = axesEnabled();
+    const colorScheme = figConf.colorScheme;
+    const showColorbar = figConf.hasColorbar;
+    const minVectorLen = vLenMin();
+    const maxVectorLen = vLenMax();
+    const plotHeight = heightInPoints();
 
     const arrowsData = poly3d
-      .origin(origin())
-      .scale(scale())
-      .rotateX(rotXRad())
-      .rotateY(rotYRad())
-      .rotateZ(rotZRad())
-      .data(arrows);
+      .origin(originValue)
+      .scale(scaleValue)
+      .rotateX(rotateX)
+      .rotateY(rotateY)
+      .rotateZ(rotateZ)
+      .data(arrows.map((arrow) => arrow.points))
+      .map((polygon, index) =>
+        Object.assign(polygon, {
+          id: arrows[index]!.id,
+          color: arrows[index]!.color,
+        }),
+      ) as ProjectedArrowPolygon[];
 
-    const tailsData = line3d
-      .origin(origin())
-      .scale(scale())
-      .rotateX(rotXRad())
-      .rotateY(rotYRad())
-      .rotateZ(rotZRad())
-      .data(tails);
+    const axesData =
+      axesOn ?
+        axis3d
+          .origin(originValue)
+          .scale(scaleValue)
+          .rotateX(rotateX)
+          .rotateY(rotateY)
+          .rotateZ(rotateZ)
+          .data([xAxisTicks(), yAxisTicks(), zAxisTicks()])
+      : [];
 
-    const axesData = axis3d
-      .origin(origin())
-      .scale(scale())
-      .rotateX(rotXRad())
-      .rotateY(rotYRad())
-      .rotateZ(rotZRad())
-      .data([xAxisTicks(), yAxisTicks(), zAxisTicks()]);
-
-    const svg = d3.select(svgRef!);
+    const svg = d3.select(svgRef);
 
     const g = svg.selectAll("g").data([null]).join("g");
 
     // Axes
     g.selectAll("path.axes")
-      .data(axesEnabled() ? axesData : [])
+      .data(axesOn ? axesData : [])
       .join("path")
       .classed("axes", true)
       .attr("d", axis3d.draw)
       .attr("stroke", "black")
       .attr("stroke-width", 0.2)
-      .classed("stroke-black", figConf.colorScheme === "rainbow")
-      .classed("stroke-white", figConf.colorScheme === "rainbow-dark")
+      .classed("stroke-black", colorScheme === "rainbow")
+      .classed("stroke-white", colorScheme === "rainbow-dark")
       .classed("d3-3d", true);
 
     const axisEnds: ProjectedPlotPoint[] = axesData.map((axis) => axis.at(-1)!);
 
     // Axis end text
     g.selectAll("text.axis-text")
-      .data(axesEnabled() ? axisEnds : [])
+      .data(axesOn ? axisEnds : [])
       .join("text")
       .classed("axis-text", true)
       .attr("font-family", "Times New Roman")
       .attr("font-style", "italic")
       .attr("font-size", "10pt")
       .attr("dominant-baseline", "middle")
-      .classed("fill-black", figConf.colorScheme === "rainbow")
-      .classed("fill-white", figConf.colorScheme === "rainbow-dark")
+      .classed("fill-black", colorScheme === "rainbow")
+      .classed("fill-white", colorScheme === "rainbow-dark")
       .attr("x", (d) => d.projected.x)
       .attr("y", (d) => d.projected.y)
       .text(
@@ -282,7 +338,7 @@ export default function Field() {
 
     // Axis ticks
     g.selectAll("g.axis-ticks")
-      .data(axesEnabled() ? axesData : [])
+      .data(axesOn ? axesData : [])
       .join("g")
       .classed("axis-ticks", true)
       .selectAll("text.axis-ticks")
@@ -293,35 +349,23 @@ export default function Field() {
       .attr("y", (d) => d.projected.y)
       .attr("font-family", "Arial")
       .attr("font-size", "4pt")
-      .classed("fill-black", figConf.colorScheme === "rainbow")
-      .classed("fill-white", figConf.colorScheme === "rainbow-dark")
+      .classed("fill-black", colorScheme === "rainbow")
+      .classed("fill-white", colorScheme === "rainbow-dark")
       .text((d) => f([d.x, d.y, d.z].find((v) => v !== 0) ?? 0));
 
     // Vector arrows
     g.selectAll("path.arrow")
-      .data(arrowsData)
+      .data(arrowsData, (d) => String((d as ProjectedArrowPolygon).id))
       .join("path")
       .classed("arrow", true)
       .attr("d", poly3d.draw)
-      .attr("fill", mapColor)
-      .classed("d3-3d", true);
-
-    // Vector tails
-    g.selectAll("line.tail")
-      .data(tailsData)
-      .join("line")
-      .classed("tail", true)
-      .attr("x1", (d: ProjectedPlotLine) => d[0]!.projected.x)
-      .attr("y1", (d: ProjectedPlotLine) => d[0]!.projected.y)
-      .attr("x2", (d: ProjectedPlotLine) => d[1]!.projected.x)
-      .attr("y2", (d: ProjectedPlotLine) => d[1]!.projected.y)
-      .attr("stroke", mapColor)
+      .attr("fill", (d) => d.color)
       .classed("d3-3d", true);
 
     g.selectAll<SVGElement, HasCentroid>(".d3-3d").sort(d3d.sort);
 
     // Colorbar
-    if (figConf.hasColorbar) {
+    if (showColorbar) {
       const cbWidth = 64;
       const cbHeight = 8;
       const cbMarginButtom = 30;
@@ -330,8 +374,8 @@ export default function Field() {
         .selectAll("g.colorbar")
         .data([null])
         .join("g")
-        .classed("fill-black", figConf.colorScheme === "rainbow")
-        .classed("fill-white", figConf.colorScheme === "rainbow-dark")
+        .classed("fill-black", colorScheme === "rainbow")
+        .classed("fill-white", colorScheme === "rainbow-dark")
         .classed("colorbar", true);
       colorbar
         .selectAll("rect")
@@ -339,21 +383,21 @@ export default function Field() {
         .join("rect")
         .attr("preserveAspectRatio", "none")
         .attr("x", widthInPoints / 2 - cbWidth / 2)
-        .attr("y", heightInPoints() - cbMarginButtom - cbHeight)
+        .attr("y", plotHeight - cbMarginButtom - cbHeight)
         .attr("width", cbWidth)
         .attr("height", cbHeight)
         .attr(
           "fill",
-          figConf.colorScheme === "rainbow" ?
+          colorScheme === "rainbow" ?
             "url(#mathematica-rainbow)"
           : "url(#mathematica-rainbow-dark)",
         );
       colorbar
         .selectAll("text")
-        .data([vLenMin(), vLenMax()])
+        .data([minVectorLen, maxVectorLen])
         .join("text")
         .attr("x", (_, i) => widthInPoints / 2 + cbWidth * (i - 0.5))
-        .attr("y", heightInPoints() - cbMarginButtom + cbLegendMargin)
+        .attr("y", plotHeight - cbMarginButtom + cbLegendMargin)
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "hanging")
         .attr("font-family", "Arial")
@@ -362,26 +406,35 @@ export default function Field() {
     }
 
     svg
-      .classed("bg-white", figConf.colorScheme === "rainbow")
-      .classed("bg-black", figConf.colorScheme === "rainbow-dark");
-  }
-
-  function mapColor(_: any, i: number): string {
-    const len = lens()[i]!;
-    let diff = len - vLenMin();
-    diff = diff < 0 ? 0 : diff;
-
-    const step = (vLenMax() - vLenMin()) / 30;
-    let idx = Math.floor(diff / step);
-    idx = idx > 29 ? 29 : idx;
-
-    return figConf.colorScheme === "rainbow" ?
-        rainbow[idx]!
-      : rainbowDark[idx]!;
+      .classed("bg-white", colorScheme === "rainbow")
+      .classed("bg-black", colorScheme === "rainbow-dark");
   }
 
   // Redraw
-  createEffect(() => draw());
+  createEffect(() => {
+    arrowData();
+    xAxisTicks();
+    yAxisTicks();
+    zAxisTicks();
+    origin();
+    scale();
+    rotXRad();
+    rotYRad();
+    rotZRad();
+    axesEnabled();
+    heightInPoints();
+    figConf.colorScheme;
+    figConf.hasColorbar;
+    vLenMin();
+    vLenMax();
+    scheduleDraw();
+  });
+
+  onCleanup(() => {
+    if (drawFrame) {
+      cancelAnimationFrame(drawFrame);
+    }
+  });
 
   // Pan and zoom
   const zoom = d3.zoom<SVGSVGElement, unknown>().on("zoom", function (event) {
@@ -432,6 +485,7 @@ export default function Field() {
   onMount(() => {
     setSvgContainer(document.getElementById(idNormalView));
     const svg = d3.select(svgRef!);
+    scheduleDraw();
     svg.call(zoom).on("dblclick.zoom", () =>
       batch(() => {
         setScale(defaultScale);
@@ -891,6 +945,20 @@ export default function Field() {
                 value={arrowTailLen()}
                 onChange={(event) =>
                   setArrowTailLen(event.target.valueAsNumber)
+                }
+              />
+            </label>
+            <label title="Change the width of the arrow tails">
+              Arrow Tail Width
+              <input
+                class="w-full rounded pl-2 outline"
+                type="number"
+                min="0"
+                step="0.01"
+                required
+                value={arrowTailWidth()}
+                onChange={(event) =>
+                  setArrowTailWidth(event.target.valueAsNumber)
                 }
               />
             </label>
