@@ -1,9 +1,13 @@
 ---
 import BaseLayout from "~/layouts/Base.astro";
+import FileUpload from "~/components/ui/FileUpload";
 ---
 
 <BaseLayout>
-  <div class="flex place-content-center-safe p-16">
+  <div class="flex flex-col place-items-center-safe gap-16 p-16">
+    <div class="mx-auto max-w-prose min-w-md">
+      <FileUpload client:only="solid-js" onFiles={() => {}} />
+    </div>
     <canvas id="scene" width="800" height="800"></canvas>
   </div>
 </BaseLayout>

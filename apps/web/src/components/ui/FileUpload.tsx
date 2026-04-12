@@ -5,18 +5,20 @@ import { useNotifications } from "~/components/ui/useNotifications";
 import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 
 export interface FileUploadProps {
+  /** Additional classes */
+  class?: string;
   /** File types to accept by extension, e.g., [".fld", ".json"] */
   accept?: string[];
   /** MIME types to accept as fallback */
   acceptMime?: string[];
   /** Whether multiple files can be uploaded */
-  multiple?: boolean;
-  /** Maximum file size in bytes (default: 10MB) */
+  acceptMultiple?: boolean;
+  /** Maximum file size in bytes */
   maxSize?: number;
-  /** Maximum number of files allowed (default: 10) */
+  /** Maximum number of files allowed */
   maxFiles?: number;
   /** Callback when files are successfully uploaded and validated */
-  onFilesDrop: (files: File[]) => void;
+  onFiles: (files: File[]) => void;
   /** Drag drop text override */
   dragDropText?: string;
   /** Button text override */
@@ -94,7 +96,7 @@ export default function FileUpload(props: FileUploadProps) {
     const fileArray = Array.from(files);
 
     // Check file count
-    if (!props.multiple && fileArray.length > 1) {
+    if (!props.acceptMultiple && fileArray.length > 1) {
       addError(
         "Multiple Files Detected",
         "Please upload only one file at a time.",
@@ -102,7 +104,7 @@ export default function FileUpload(props: FileUploadProps) {
       return [];
     }
 
-    if (props.multiple && fileArray.length > maxFiles()) {
+    if (props.acceptMultiple && fileArray.length > maxFiles()) {
       addError(
         "Too Many Files",
         `Maximum ${maxFiles()} files allowed. Please select fewer files.`,
@@ -127,10 +129,10 @@ export default function FileUpload(props: FileUploadProps) {
     if (validFiles.length > 0) {
       setUploadedFiles((prev) =>
         props.hideFilesAfterUpload ? []
-        : props.multiple ? [...prev, ...validFiles]
+        : props.acceptMultiple ? [...prev, ...validFiles]
         : validFiles,
       );
-      props.onFilesDrop(validFiles);
+      props.onFiles(validFiles);
     }
   };
 
@@ -218,7 +220,7 @@ export default function FileUpload(props: FileUploadProps) {
         ref={setFileInputRef}
         type="file"
         accept={accept()}
-        multiple={props.multiple}
+        multiple={props.acceptMultiple}
         onChange={handleFileInput}
         class="hidden"
       />
@@ -241,7 +243,7 @@ export default function FileUpload(props: FileUploadProps) {
               {/* Upload icon */}
               <div class="flex justify-center">
                 <Show
-                  when={props.multiple}
+                  when={props.acceptMultiple}
                   fallback={
                     <ArrowUpOnSquare
                       classList={{
@@ -274,21 +276,13 @@ export default function FileUpload(props: FileUploadProps) {
                   Drag and drop {props.accept?.join(", ") || "files"} here, or
                   click to select files
                 </p>
-                <Show when={props.multiple}>
+                <Show when={props.acceptMultiple}>
                   <p class="text-xs text-gray-400">
                     Up to {maxFiles()} files, max{" "}
                     {Math.round(maxSize() / 1024 / 1024)} MB each
                   </p>
                 </Show>
               </div>
-
-              {/* Browse button */}
-              <button
-                type="button"
-                class="inline-flex cursor-pointer items-center rounded-md border border-transparent bg-sky-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-sky-700 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none"
-              >
-                {props.buttonText || "Browse Files"}
-              </button>
             </div>
           </div>
         }
@@ -329,7 +323,7 @@ export default function FileUpload(props: FileUploadProps) {
               <div class="space-y-1">
                 <div class="flex items-center justify-between text-xs text-gray-600">
                   <span>Uploaded ({uploadedFiles().length})</span>
-                  <Show when={props.multiple}>
+                  <Show when={props.acceptMultiple}>
                     <button
                       type="button"
                       onClick={clearAllFiles}
@@ -407,7 +401,7 @@ export default function FileUpload(props: FileUploadProps) {
             <h3 class="text-sm font-medium text-gray-900">
               Uploaded Files ({uploadedFiles().length})
             </h3>
-            <Show when={props.multiple}>
+            <Show when={props.acceptMultiple}>
               <button
                 type="button"
                 onClick={clearAllFiles}

@@ -558,7 +558,7 @@ export default function Field() {
       <div class="mx-auto w-full max-w-3xl">
         <FileUpload
           accept={[".fld"]}
-          multiple={false}
+          acceptMultiple={false}
           hideFilesAfterUpload={true}
           compactMode={hasFile()}
           showCurrentFile={hasFile()}
@@ -569,7 +569,7 @@ export default function Field() {
           }
           buttonText={hasFile() ? "Upload New File" : "Choose .fld File"}
           uploadAreaClass={hasFile() ? "p-3" : "p-8"}
-          onFilesDrop={handleFieldUpload}
+          onFiles={handleFieldUpload}
         />
       </div>
       <div class="flex flex-col items-center-safe gap-8 min-[74rem]:flex-row min-[74rem]:justify-center-safe">

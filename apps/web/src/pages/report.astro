@@ -10,14 +10,14 @@ import FileUpload from "~/components/ui/FileUpload";
         compactMode={true}
         accept={[".csv"]}
         acceptMime={["text/csv"]}
-        multiple={true}
+        acceptMultiple={true}
         maxSize={10 * 1024 * 1024}
         maxFiles={10}
         dragDropText="Upload CSV Files"
         buttonText="Browse Files"
         showFileList={true}
         hideFilesAfterUpload={false}
-        onFilesDrop={(files) => {
+        onFiles={(files) => {
           console.log("Files dropped:", files);
           files.forEach((file) => {
             console.log(`- ${file.name}: ${file.size} bytes`);
