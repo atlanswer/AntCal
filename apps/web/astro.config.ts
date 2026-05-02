@@ -1,4 +1,4 @@
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig, fontProviders, svgoOptimizer } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import solid from "@astrojs/solid-js";
 import remarkMath from "remark-math";
@@ -98,7 +98,7 @@ export default defineConfig({
     chromeDevtoolsWorkspace: true,
     clientPrerender: true,
     contentIntellisense: true,
-    svgo: true,
+    svgOptimizer: svgoOptimizer(),
     // rustCompiler: true,
     queuedRendering: {
       enabled: true,
