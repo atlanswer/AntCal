@@ -16,7 +16,6 @@ export default defineConfig({
   integrations: [solid()],
   vite: {
     plugins: [
-      // @ts-expect-error: wtf
       tailwindcss(),
       // @ts-expect-error: wtf
       visualizer({
