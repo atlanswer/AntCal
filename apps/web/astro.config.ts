@@ -5,6 +5,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeExternalLinks from "rehype-external-links";
 import { visualizer } from "rollup-plugin-visualizer";
+import { unified } from "@astrojs/markdown-remark";
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,9 +17,7 @@ export default defineConfig({
   integrations: [solid()],
   vite: {
     plugins: [
-      // @ts-expect-error: wtf
       tailwindcss(),
-      // @ts-expect-error: wtf
       visualizer({
         emitFile: true,
         filename: "bundle.html",
@@ -30,18 +29,20 @@ export default defineConfig({
     defaultStrategy: "viewport",
   },
   markdown: {
-    remarkPlugins: [remarkMath],
-    rehypePlugins: [
-      rehypeKatex,
-      [
-        rehypeExternalLinks,
-        {
-          target: "_blank",
-          rel: ["noopener"],
-          content: { type: "text", value: " ↗" },
-        },
+    processor: unified({
+      remarkPlugins: [remarkMath],
+      rehypePlugins: [
+        rehypeKatex,
+        [
+          rehypeExternalLinks,
+          {
+            target: "_blank",
+            rel: ["noopener"],
+            content: { type: "text", value: " ↗" },
+          },
+        ],
       ],
-    ],
+    }),
   },
   fonts: [
     {
@@ -100,8 +101,5 @@ export default defineConfig({
     contentIntellisense: true,
     svgOptimizer: svgoOptimizer(),
     // rustCompiler: true,
-    queuedRendering: {
-      enabled: true,
-    },
   },
 });
